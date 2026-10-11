@@ -1,5 +1,8 @@
 import Link from "next/link";
+import { AnalysisResult } from "@/components/analysis-result";
+import { DemoChart } from "@/components/demo-chart";
 import { SiteHeader } from "@/components/site-header";
+import { DEMO_ANALYSIS } from "@/lib/demo";
 
 const features = [
   { title: "Importez une capture", text: "Un screenshot de n'importe quel graphique : crypto, forex, actions, matières premières." },
@@ -35,6 +38,23 @@ export default function Home() {
               <p className="mt-2 text-sm text-muted">{feature.text}</p>
             </div>
           ))}
+        </section>
+        <section className="mx-auto max-w-6xl px-4 pb-24">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold tracking-tight">Exemple d&apos;analyse</h2>
+            <p className="mt-3 text-muted">Voici ce que vous obtenez à partir d&apos;une simple capture d&apos;écran.</p>
+          </div>
+          <div className="mt-10 grid items-start gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+            <figure className="rounded-2xl border border-border bg-surface p-4">
+              <DemoChart />
+              <figcaption className="mt-3 text-center text-xs text-muted">Capture envoyée : BTC/USDT · 4H</figcaption>
+            </figure>
+            <AnalysisResult analysis={DEMO_ANALYSIS} />
+          </div>
+          <p className="mt-4 text-center text-xs text-muted">Exemple illustratif, ne reflète pas le marché actuel.</p>
+          <div className="mt-10 text-center">
+            <Link href="/pricing" className="btn-primary px-6 py-3 text-base">Voir les offres</Link>
+          </div>
         </section>
       </main>
       <footer className="border-t border-border px-4 py-6 text-center text-xs text-muted">
