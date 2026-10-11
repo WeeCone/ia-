@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FREE_CREDITS, PRO_MONTHLY_CREDITS, PRO_PRICE_LABEL } from "@/lib/plans";
+import { MONTHLY_CREDITS, OFFERS, type Offer } from "@/lib/plans";
 import { useAuth } from "./auth-provider";
 import { BillingButton } from "./billing-button";
 
@@ -11,59 +11,68 @@ const check = (
   </svg>
 );
 
-function Features({ items }: { items: string[] }) {
+const common = [
+  `${MONTHLY_CREDITS} analyses de graphiques par mois`,
+  "Crypto, forex, actions, matières premières",
+  "Scénarios haussier et baissier probabilisés",
+  "Entrée, stop et objectifs pour chaque scénario",
+  "Historique de vos analyses",
+];
+
+const details: Record<Offer, { features: string[]; cta: string; highlight?: string }> = {
+  monthly: { features: [...common, "Sans engagement, résiliable en un clic"], cta: "S'abonner" },
+  lifetime: {
+    features: [...common, "Un seul paiement, aucun renouvellement"],
+    cta: "Obtenir l'accès à vie",
+    highlight: "Meilleure offre",
+  },
+};
+
+function OfferCard({ offer }: { offer: Offer }) {
+  const { user } = useAuth();
+  const { name, price, period } = OFFERS[offer];
+  const { features, cta, highlight } = details[offer];
+
   return (
-    <ul className="mt-6 space-y-3 text-sm">
-      {items.map((item) => (
-        <li key={item} className="flex gap-2">
-          {check}
-          {item}
-        </li>
-      ))}
-    </ul>
+    <div
+      className={`relative flex flex-col rounded-2xl border bg-surface p-8 ${
+        highlight ? "border-brand shadow-[0_0_40px_-12px] shadow-brand/40" : "border-border"
+      }`}
+    >
+      {highlight && (
+        <span className="absolute -top-3 left-8 rounded-full bg-brand px-3 py-0.5 text-xs font-semibold text-background">{highlight}</span>
+      )}
+      <h2 className="text-lg font-semibold">{name}</h2>
+      <p className="mt-4">
+        <span className="text-4xl font-bold">{price}</span>
+        <span className="text-muted"> {period}</span>
+      </p>
+      <ul className="mt-6 flex-1 space-y-3 text-sm">
+        {features.map((feature) => (
+          <li key={feature} className="flex gap-2">
+            {check}
+            {feature}
+          </li>
+        ))}
+      </ul>
+      {user ? (
+        <BillingButton route="checkout" offer={offer} className={`${highlight ? "btn-primary" : "btn-secondary"} mt-8 w-full`}>
+          {cta}
+        </BillingButton>
+      ) : (
+        <Link href="/auth/signup" className={`${highlight ? "btn-primary" : "btn-secondary"} mt-8`}>
+          {cta}
+        </Link>
+      )}
+    </div>
   );
 }
 
 export function PricingPlans() {
-  const { user } = useAuth();
-
   return (
     <div className="grid gap-6 md:grid-cols-2">
-      <div className="flex flex-col rounded-2xl border border-border bg-surface p-8">
-        <h2 className="text-lg font-semibold">Gratuit</h2>
-        <p className="mt-4">
-          <span className="text-4xl font-bold">0 €</span>
-        </p>
-        <Features items={[`${FREE_CREDITS} analyses offertes`, "Scénarios haussier et baissier", "Historique des analyses"]} />
-        <Link href={user ? "/dashboard" : "/auth/signup"} className="btn-secondary mt-8">
-          {user ? "Aller au tableau de bord" : "Créer un compte"}
-        </Link>
-      </div>
-      <div className="relative flex flex-col rounded-2xl border border-brand bg-surface p-8 shadow-[0_0_40px_-12px] shadow-brand/40">
-        <span className="absolute -top-3 left-8 rounded-full bg-brand px-3 py-0.5 text-xs font-semibold text-background">Populaire</span>
-        <h2 className="text-lg font-semibold">Pro</h2>
-        <p className="mt-4">
-          <span className="text-4xl font-bold">{PRO_PRICE_LABEL}</span>
-          <span className="text-muted"> / mois</span>
-        </p>
-        <Features
-          items={[
-            `${PRO_MONTHLY_CREDITS} analyses par mois`,
-            "Crédits renouvelés à chaque échéance",
-            "Toutes les fonctionnalités du plan Gratuit",
-            "Sans engagement, résiliable en un clic",
-          ]}
-        />
-        {user ? (
-          <BillingButton route="checkout" className="btn-primary mt-8 w-full">
-            Passer Pro
-          </BillingButton>
-        ) : (
-          <Link href="/auth/signup" className="btn-primary mt-8">
-            Commencer
-          </Link>
-        )}
-      </div>
+      <OfferCard offer="monthly" />
+      <OfferCard offer="lifetime" />
     </div>
   );
 }

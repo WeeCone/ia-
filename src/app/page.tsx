@@ -23,7 +23,7 @@ export default function Home() {
             Envoyez une capture de votre chart et recevez une analyse claire avec des scénarios de trading concrets.
           </p>
           <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link href="/auth/signup" className="btn-primary px-6 py-3 text-base">Commencer gratuitement</Link>
+            <Link href="/auth/signup" className="btn-primary px-6 py-3 text-base">Commencer maintenant</Link>
             <Link href="/auth/login" className="btn-secondary px-6 py-3 text-base">J&apos;ai déjà un compte</Link>
           </div>
         </section>

@@ -8,7 +8,7 @@ export function SiteHeader() {
       <nav className="flex items-center gap-1 sm:gap-2">
         <Link href="/pricing" className="btn-ghost">Tarifs</Link>
         <Link href="/auth/login" className="btn-ghost">Connexion</Link>
-        <Link href="/auth/signup" className="btn-primary">Essai gratuit</Link>
+        <Link href="/auth/signup" className="btn-primary">Commencer</Link>
       </nav>
     </header>
   );

@@ -1,14 +1,15 @@
 import type { User } from "firebase/auth";
 import { doc, getDoc, onSnapshot, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "./firebase";
-import { FREE_CREDITS } from "./plans";
+import type { Plan } from "./plans";
 
 export type UserProfile = {
   uid: string;
   email: string | null;
   displayName: string | null;
-  plan: "free" | "pro";
+  plan: Plan;
   credits: number;
+  creditsPeriod?: string;
   stripeCustomerId?: string;
 };
 
@@ -21,8 +22,8 @@ export async function ensureUserProfile(user: User, displayName?: string) {
     uid: user.uid,
     email: user.email,
     displayName: displayName ?? user.displayName,
-    plan: "free",
-    credits: FREE_CREDITS,
+    plan: "none",
+    credits: 0,
     createdAt: serverTimestamp(),
   });
 }

@@ -8,7 +8,6 @@ import { AuthCard, Divider, FormError } from "@/components/auth-card";
 import { GoogleButton } from "@/components/google-button";
 import { authErrorMessage } from "@/lib/auth-errors";
 import { auth } from "@/lib/firebase";
-import { FREE_CREDITS } from "@/lib/plans";
 import { ensureUserProfile } from "@/lib/users";
 
 export default function SignupPage() {
@@ -46,7 +45,7 @@ export default function SignupPage() {
   }
 
   return (
-    <AuthCard title="Créer un compte" subtitle={`Commencez gratuitement avec ${FREE_CREDITS} analyses offertes.`}>
+    <AuthCard title="Créer un compte" subtitle="Créez votre compte, puis choisissez votre offre.">
       <GoogleButton onError={setError} />
       <Divider />
       <form onSubmit={handleSubmit} className="space-y-4">

@@ -1,9 +1,18 @@
 import type Stripe from "stripe";
 import { adminDb } from "@/lib/firebase-admin";
-import { PRO_MONTHLY_CREDITS } from "@/lib/plans";
+import { creditPeriod, MONTHLY_CREDITS } from "@/lib/plans";
 import { getStripe } from "@/lib/stripe";
 
 const ACTIVE_STATUSES: Stripe.Subscription.Status[] = ["active", "trialing"];
+
+const userRef = (uid: string) => adminDb.collection("users").doc(uid);
+
+// Credits are always set to an absolute value, so Stripe retrying an event never double-credits.
+async function grantLifetime(session: Stripe.Checkout.Session) {
+  const uid = session.metadata?.uid;
+  if (!uid || session.metadata?.offer !== "lifetime" || session.payment_status !== "paid") return;
+  await userRef(uid).update({ plan: "lifetime", credits: MONTHLY_CREDITS, creditsPeriod: creditPeriod() });
+}
 
 export async function POST(request: Request) {
   const signature = request.headers.get("stripe-signature");
@@ -17,28 +26,37 @@ export async function POST(request: Request) {
   }
 
   switch (event.type) {
-    // Each paid subscription invoice (first payment and every renewal) resets the monthly credits.
-    // Setting an absolute value keeps this idempotent when Stripe retries the event.
+    // One-off lifetime purchase (async methods such as SEPA confirm later).
+    case "checkout.session.completed":
+    case "checkout.session.async_payment_succeeded":
+      await grantLifetime(event.data.object);
+      break;
+
+    // Each paid monthly invoice (first payment and every renewal) resets the monthly credits.
     case "invoice.paid": {
       const details = event.data.object.parent?.subscription_details;
       const uid = details?.metadata?.uid;
       if (!uid) break;
       const subscription = details.subscription;
-      await adminDb.collection("users").doc(uid).update({
-        plan: "pro",
-        credits: PRO_MONTHLY_CREDITS,
+      await userRef(uid).update({
+        plan: "monthly",
+        credits: MONTHLY_CREDITS,
+        creditsPeriod: creditPeriod(),
         stripeSubscriptionId: typeof subscription === "string" ? subscription : subscription.id,
       });
       break;
     }
+
     case "customer.subscription.updated":
     case "customer.subscription.deleted": {
       const subscription = event.data.object;
       const uid = subscription.metadata.uid;
       if (!uid) break;
+      // Never let a subscription event touch an account that has since bought lifetime access.
+      if ((await userRef(uid).get()).get("plan") === "lifetime") break;
       const active = event.type === "customer.subscription.updated" && ACTIVE_STATUSES.includes(subscription.status);
-      // Downgrading keeps whatever credits are left; they simply stop being refilled.
-      await adminDb.collection("users").doc(uid).update({ plan: active ? "pro" : "free" });
+      // Losing the subscription keeps any credits left; they simply stop being refilled.
+      await userRef(uid).update({ plan: active ? "monthly" : "none" });
       break;
     }
   }

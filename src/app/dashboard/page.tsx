@@ -9,8 +9,10 @@ import { useAuth } from "@/components/auth-provider";
 import { BillingButton } from "@/components/billing-button";
 import { ChartUploader } from "@/components/chart-uploader";
 import { Logo } from "@/components/logo";
+import Link from "next/link";
 import type { ChartAnalysis } from "@/lib/analysis";
 import { auth } from "@/lib/firebase";
+import { availableCredits, PLAN_LABELS } from "@/lib/plans";
 import { subscribeUserProfile, type UserProfile } from "@/lib/users";
 
 export default function DashboardPage() {
@@ -38,6 +40,8 @@ export default function DashboardPage() {
     requestAnimationFrame(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
   }
 
+  const credits = profile ? availableCredits(profile) : null;
+
   if (loading || !user) {
     return <div className="flex flex-1 items-center justify-center text-muted">Chargement…</div>;
   }
@@ -49,14 +53,17 @@ export default function DashboardPage() {
           <Logo />
           <div className="flex items-center gap-3">
             <span className="hidden rounded-full border border-border px-3 py-1 text-sm text-muted sm:inline">
-              {profile?.credits ?? "–"} crédits · {profile?.plan === "pro" ? "Pro" : "Gratuit"}
+              {credits ?? "–"} crédits · {profile ? PLAN_LABELS[profile.plan] : "–"}
             </span>
-            {profile?.plan === "pro" ? (
+            {profile?.plan === "monthly" && (
               <BillingButton route="portal" className="btn-ghost">
                 Mon abonnement
               </BillingButton>
-            ) : (
-              <BillingButton route="checkout">Passer Pro</BillingButton>
+            )}
+            {profile?.plan === "none" && (
+              <Link href="/pricing" className="btn-primary">
+                Choisir une offre
+              </Link>
             )}
             <button onClick={() => signOut(auth)} className="btn-secondary">
               Déconnexion
@@ -68,8 +75,8 @@ export default function DashboardPage() {
         {checkoutDone && (
           <div className="mb-6 flex items-center justify-between gap-4 rounded-xl border border-brand/30 bg-brand/10 px-4 py-3 text-sm text-brand">
             <span>
-              {profile?.plan === "pro"
-                ? "Bienvenue dans NeuralTrade Pro 🎉 Vos crédits ont été rechargés."
+              {profile && profile.plan !== "none"
+                ? "Paiement confirmé 🎉 Vos crédits sont disponibles."
                 : "Paiement reçu, activation de votre abonnement en cours…"}
             </span>
             <button onClick={() => setCheckoutDone(false)} aria-label="Fermer" className="text-lg leading-none">
@@ -78,16 +85,24 @@ export default function DashboardPage() {
           </div>
         )}
         <h1 className="text-3xl font-semibold">Bonjour {user.displayName ?? user.email} 👋</h1>
-        {profile && profile.credits < 1 && profile.plan === "free" && (
+        {profile && credits !== null && credits < 1 && (
           <div className="mt-6 flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm">Vous avez utilisé vos analyses gratuites. Passez Pro pour continuer.</p>
-            <BillingButton route="checkout">Passer Pro</BillingButton>
+            <p className="text-sm">
+              {profile.plan === "none"
+                ? "Choisissez une offre pour lancer votre première analyse."
+                : "Vous avez utilisé toutes vos analyses du mois. Elles seront rechargées au prochain renouvellement."}
+            </p>
+            {profile.plan === "none" && (
+              <Link href="/pricing" className="btn-primary">
+                Voir les offres
+              </Link>
+            )}
           </div>
         )}
         <p className="mt-2 text-muted">Importez une capture de graphique pour obtenir une analyse technique et deux scénarios.</p>
         <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
           <ChartUploader
-            disabled={profile !== null && profile.credits < 1}
+            disabled={credits !== null && credits < 1}
             onAnalyzed={(next) => {
               show(next);
               setRefreshKey((key) => key + 1);

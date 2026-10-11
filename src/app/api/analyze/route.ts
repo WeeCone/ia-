@@ -2,10 +2,13 @@ import Anthropic from "@anthropic-ai/sdk";
 import { FieldValue } from "firebase-admin/firestore";
 import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_BYTES, type AllowedImageType } from "@/lib/analysis";
 import { analyzeChart, AnalysisRefusedError } from "@/lib/claude";
+import { availableCredits, creditPeriod } from "@/lib/plans";
 import { adminDb } from "@/lib/firebase-admin";
 import { getRequestUid } from "@/lib/server-auth";
 
 export const maxDuration = 120;
+
+const NO_CREDITS_MESSAGE = "Plus de crédits d'analyse disponibles.";
 
 const error = (message: string, status: number) => Response.json({ error: message }, { status });
 
@@ -25,7 +28,7 @@ export async function POST(request: Request) {
 
   const userRef = adminDb.collection("users").doc(uid);
   const userSnap = await userRef.get();
-  if ((userSnap.get("credits") ?? 0) < 1) return error("Plus de crédits d'analyse disponibles.", 402);
+  if (availableCredits(userSnap.data() ?? {}) < 1) return error(NO_CREDITS_MESSAGE, 402);
 
   let result: Awaited<ReturnType<typeof analyzeChart>>;
   try {
@@ -43,9 +46,10 @@ export async function POST(request: Request) {
   const analysisRef = userRef.collection("analyses").doc();
   try {
     await adminDb.runTransaction(async (tx) => {
-      const credits = (await tx.get(userRef)).get("credits") ?? 0;
+      const credits = availableCredits((await tx.get(userRef)).data() ?? {});
       if (charged && credits < 1) throw new Error("NO_CREDITS");
-      if (charged) tx.update(userRef, { credits: FieldValue.increment(-1) });
+      // Absolute write (not increment) so a lifetime monthly refill and the debit land together.
+      if (charged) tx.update(userRef, { credits: credits - 1, creditsPeriod: creditPeriod() });
       tx.set(analysisRef, {
         ...result.analysis,
         note: note || null,
@@ -55,7 +59,7 @@ export async function POST(request: Request) {
     });
   } catch (err) {
     if (err instanceof Error && err.message === "NO_CREDITS") {
-      return error("Plus de crédits d'analyse disponibles.", 402);
+      return error(NO_CREDITS_MESSAGE, 402);
     }
     throw err;
   }

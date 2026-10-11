@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { redirectToBilling } from "@/lib/billing-client";
+import type { Offer } from "@/lib/plans";
 
-type Props = { route: "checkout" | "portal"; className?: string; children: React.ReactNode };
+type Props = { route: "checkout" | "portal"; offer?: Offer; className?: string; children: React.ReactNode };
 
-export function BillingButton({ route, className = "btn-primary", children }: Props) {
+export function BillingButton({ route, offer, className = "btn-primary", children }: Props) {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -13,7 +14,7 @@ export function BillingButton({ route, className = "btn-primary", children }: Pr
     setPending(true);
     setError(null);
     try {
-      await redirectToBilling(route);
+      await redirectToBilling(route, offer);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Paiement indisponible pour le moment.");
       setPending(false);

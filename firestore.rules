@@ -3,10 +3,10 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /users/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;
-      // Clients may only create their own free profile; plan and credits are server-managed afterwards.
+      // Clients may only create their own profile, without any offer; plan and credits are server-managed afterwards.
       allow create: if request.auth != null && request.auth.uid == uid
-        && request.resource.data.plan == "free"
-        && request.resource.data.credits == 3;
+        && request.resource.data.plan == "none"
+        && request.resource.data.credits == 0;
       allow update, delete: if false;
 
       // Analyses are written by the /api/analyze route (Admin SDK) only.
