@@ -1,13 +1,15 @@
 @import "tailwindcss";
 
+/* "Terminal × journal financier" — warm ink, paper text, phosphor amber. */
 :root {
-  --background: #0b0f14;
-  --foreground: #e8edf2;
-  --surface: #121821;
-  --border: #222b37;
-  --muted: #8b97a6;
-  --brand: #22c55e;
-  --bear: #f05252;
+  --background: #0d0c0a;
+  --foreground: #ede6d6;
+  --surface: #14120f;
+  --border: #2c2822;
+  --muted: #8e8576;
+  --brand: #ffb000;
+  --bull: #a6e05f;
+  --bear: #ff5b3a;
 }
 
 @theme inline {
@@ -17,37 +19,66 @@
   --color-border: var(--border);
   --color-muted: var(--muted);
   --color-brand: var(--brand);
+  --color-bull: var(--bull);
   --color-bear: var(--bear);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-plex-sans);
+  --font-mono: var(--font-plex-mono);
+  --font-display: var(--font-instrument-serif);
+
+  /* Sharp corners everywhere: no rounded SaaS cards. */
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
 }
 
 body {
   background-color: var(--background);
-  background-image: radial-gradient(60rem 30rem at 50% -10rem, color-mix(in srgb, var(--brand) 12%, transparent), transparent);
-  background-repeat: no-repeat;
+  /* Faint chart-paper grid. */
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--foreground) 3%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--foreground) 3%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
   color: var(--foreground);
 }
 
+::selection {
+  background: var(--brand);
+  color: var(--background);
+}
+
+@keyframes ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 @layer components {
+  .label {
+    @apply font-mono text-[11px] uppercase tracking-[0.18em] text-muted;
+  }
+  .panel {
+    @apply border border-border bg-surface;
+  }
   .btn-primary,
   .btn-secondary,
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 px-5 py-3 font-mono text-xs font-medium uppercase tracking-[0.14em] transition-colors disabled:cursor-not-allowed disabled:opacity-50;
   }
   .btn-primary {
-    @apply bg-brand text-background hover:brightness-110;
+    @apply bg-brand text-background hover:bg-foreground;
   }
   .btn-secondary {
-    @apply border border-border bg-surface hover:border-muted;
+    @apply border border-foreground/25 hover:border-brand hover:text-brand;
   }
   .btn-ghost {
-    @apply text-muted hover:text-foreground;
+    @apply px-3 text-muted hover:text-brand;
   }
   .field {
-    @apply flex flex-col gap-1.5 text-sm font-medium;
+    @apply flex flex-col gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-muted;
   }
   .field input {
-    @apply rounded-lg border border-border bg-background px-3 py-2.5 font-normal outline-none transition placeholder:text-muted/60 focus:border-brand focus:ring-2 focus:ring-brand/30;
+    @apply border border-border bg-background px-3 py-3 font-sans text-sm normal-case tracking-normal text-foreground outline-none transition-colors placeholder:text-muted/50 focus:border-brand;
   }
 }

@@ -20,23 +20,23 @@ export function AnalysisHistory({ uid, refreshKey, onSelect }: Props) {
   if (!items.length) return null;
 
   return (
-    <section className="mt-12">
-      <h2 className="text-lg font-semibold">Historique</h2>
-      <ul className="mt-4 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface">
+    <section className="mt-16">
+      <p className="label">§ Historique</p>
+      <ul className="mt-4 divide-y divide-border border-y border-border">
         {items.map((item) => (
           <li key={item.id}>
             <button
               type="button"
               onClick={() => onSelect(item)}
-              className="flex w-full items-center justify-between gap-4 px-4 py-3 text-left text-sm hover:bg-background/50"
+              className="group flex w-full items-center justify-between gap-4 py-4 text-left text-sm transition-colors hover:bg-surface"
             >
-              <span className="font-medium">
+              <span className="font-display text-2xl group-hover:text-brand">
                 {item.is_chart ? item.asset : "Image non reconnue"}{" "}
                 {item.is_chart && <span className="font-mono text-xs text-muted">{item.timeframe}</span>}
               </span>
-              <span className="flex items-center gap-3 text-muted">
+              <span className="flex items-center gap-4 font-mono text-xs uppercase tracking-[0.12em] text-muted">
                 {item.is_chart && (
-                  <span className={item.trend === "haussière" ? "text-brand" : item.trend === "baissière" ? "text-bear" : ""}>
+                  <span className={item.trend === "haussière" ? "text-bull" : item.trend === "baissière" ? "text-bear" : ""}>
                     {item.trend}
                   </span>
                 )}

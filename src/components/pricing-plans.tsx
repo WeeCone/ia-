@@ -5,12 +5,6 @@ import { MONTHLY_CREDITS, OFFERS, type Offer } from "@/lib/plans";
 import { useAuth } from "./auth-provider";
 import { BillingButton } from "./billing-button";
 
-const check = (
-  <svg viewBox="0 0 20 20" className="mt-0.5 size-4 shrink-0 text-brand" fill="currentColor" aria-hidden>
-    <path fillRule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z" clipRule="evenodd" />
-  </svg>
-);
-
 const common = [
   `${MONTHLY_CREDITS} analyses de graphiques par mois`,
   "Crypto, forex, actions, matières premières",
@@ -28,39 +22,37 @@ const details: Record<Offer, { features: string[]; cta: string; highlight?: stri
   },
 };
 
-function OfferCard({ offer }: { offer: Offer }) {
+function OfferCard({ offer, index }: { offer: Offer; index: number }) {
   const { user } = useAuth();
   const { name, price, period } = OFFERS[offer];
   const { features, cta, highlight } = details[offer];
+  const button = highlight ? "btn-primary" : "btn-secondary";
 
   return (
-    <div
-      className={`relative flex flex-col rounded-2xl border bg-surface p-8 ${
-        highlight ? "border-brand shadow-[0_0_40px_-12px] shadow-brand/40" : "border-border"
-      }`}
-    >
-      {highlight && (
-        <span className="absolute -top-3 left-8 rounded-full bg-brand px-3 py-0.5 text-xs font-semibold text-background">{highlight}</span>
-      )}
-      <h2 className="text-lg font-semibold">{name}</h2>
-      <p className="mt-4">
-        <span className="text-4xl font-bold">{price}</span>
-        <span className="text-muted"> {period}</span>
+    <div className={`relative flex flex-col p-8 ${highlight ? "bg-surface outline outline-1 outline-brand" : ""}`}>
+      <div className="flex items-center justify-between">
+        <span className="label">Offre {String(index + 1).padStart(2, "0")}</span>
+        {highlight && <span className="bg-brand px-2 py-0.5 font-mono text-[11px] uppercase tracking-[0.18em] text-background">{highlight}</span>}
+      </div>
+      <h2 className="mt-8 font-display text-4xl">{name}</h2>
+      <p className="mt-2 flex items-baseline gap-3">
+        <span className="font-display text-7xl leading-none">{price}</span>
+        <span className="label">{period}</span>
       </p>
-      <ul className="mt-6 flex-1 space-y-3 text-sm">
+      <ul className="mt-8 flex-1 divide-y divide-border border-y border-border text-sm">
         {features.map((feature) => (
-          <li key={feature} className="flex gap-2">
-            {check}
+          <li key={feature} className="flex gap-3 py-2.5">
+            <span className="font-mono text-brand">+</span>
             {feature}
           </li>
         ))}
       </ul>
       {user ? (
-        <BillingButton route="checkout" offer={offer} className={`${highlight ? "btn-primary" : "btn-secondary"} mt-8 w-full`}>
+        <BillingButton route="checkout" offer={offer} className={`${button} mt-8 w-full`}>
           {cta}
         </BillingButton>
       ) : (
-        <Link href="/auth/signup" className={`${highlight ? "btn-primary" : "btn-secondary"} mt-8`}>
+        <Link href="/auth/signup" className={`${button} mt-8`}>
           {cta}
         </Link>
       )}
@@ -70,9 +62,9 @@ function OfferCard({ offer }: { offer: Offer }) {
 
 export function PricingPlans() {
   return (
-    <div className="grid gap-6 md:grid-cols-2">
-      <OfferCard offer="monthly" />
-      <OfferCard offer="lifetime" />
+    <div className="grid border border-border md:grid-cols-2 md:divide-x md:divide-border">
+      <OfferCard offer="monthly" index={0} />
+      <OfferCard offer="lifetime" index={1} />
     </div>
   );
 }

@@ -29,7 +29,7 @@ export default function LoginPage() {
   }
 
   return (
-    <AuthCard title="Bon retour 👋" subtitle="Connectez-vous pour analyser vos graphiques.">
+    <AuthCard title="Bon retour." subtitle="Connectez-vous pour analyser vos graphiques.">
       <GoogleButton onError={setError} />
       <Divider />
       <form onSubmit={handleSubmit} className="space-y-4">

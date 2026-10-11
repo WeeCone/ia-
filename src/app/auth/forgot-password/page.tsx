@@ -28,9 +28,9 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <AuthCard title="Mot de passe oublié" subtitle="Recevez un lien de réinitialisation par email.">
+    <AuthCard title="Mot de passe oublié." subtitle="Recevez un lien de réinitialisation par email.">
       {sent ? (
-        <p className="rounded-lg border border-brand/30 bg-brand/10 px-3 py-2 text-sm text-brand">
+        <p className="border-l-2 border-bull bg-bull/10 px-3 py-2 text-sm text-bull">
           Si un compte existe pour cet email, un lien de réinitialisation vient d&apos;être envoyé.
         </p>
       ) : (

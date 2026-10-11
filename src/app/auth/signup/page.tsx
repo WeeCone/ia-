@@ -45,7 +45,7 @@ export default function SignupPage() {
   }
 
   return (
-    <AuthCard title="Créer un compte" subtitle="Créez votre compte, puis choisissez votre offre.">
+    <AuthCard title="Ouvrir un compte." subtitle="Créez votre compte, puis choisissez votre offre.">
       <GoogleButton onError={setError} />
       <Divider />
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -65,7 +65,7 @@ export default function SignupPage() {
           <span>Confirmer le mot de passe</span>
           <input name="confirm" type="password" autoComplete="new-password" minLength={6} required placeholder="••••••••" />
         </label>
-        <label className="flex items-start gap-2 text-sm text-muted">
+        <label className="flex items-start gap-2 text-xs leading-relaxed text-muted">
           <input name="terms" type="checkbox" className="mt-0.5 accent-brand" />
           <span>
             J&apos;accepte les conditions d&apos;utilisation et je comprends que les analyses ne constituent pas un conseil en investissement.

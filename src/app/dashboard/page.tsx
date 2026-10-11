@@ -43,16 +43,16 @@ export default function DashboardPage() {
   const credits = profile ? availableCredits(profile) : null;
 
   if (loading || !user) {
-    return <div className="flex flex-1 items-center justify-center text-muted">Chargement…</div>;
+    return <div className="label flex flex-1 items-center justify-center">Chargement…</div>;
   }
 
   return (
     <div className="flex flex-1 flex-col">
-      <header className="border-b border-border">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4">
+      <header className="border-b border-border bg-background/80 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
           <Logo />
-          <div className="flex items-center gap-3">
-            <span className="hidden rounded-full border border-border px-3 py-1 text-sm text-muted sm:inline">
+          <div className="flex items-center gap-2">
+            <span className="label hidden border border-border px-3 py-2.5 sm:inline">
               {credits ?? "–"} crédits · {profile ? PLAN_LABELS[profile.plan] : "–"}
             </span>
             {profile?.plan === "monthly" && (
@@ -61,22 +61,22 @@ export default function DashboardPage() {
               </BillingButton>
             )}
             {profile?.plan === "none" && (
-              <Link href="/pricing" className="btn-primary">
+              <Link href="/pricing" className="btn-primary py-2.5">
                 Choisir une offre
               </Link>
             )}
-            <button onClick={() => signOut(auth)} className="btn-secondary">
+            <button onClick={() => signOut(auth)} className="btn-ghost">
               Déconnexion
             </button>
           </div>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-12">
         {checkoutDone && (
-          <div className="mb-6 flex items-center justify-between gap-4 rounded-xl border border-brand/30 bg-brand/10 px-4 py-3 text-sm text-brand">
+          <div className="mb-8 flex items-center justify-between gap-4 border-l-2 border-bull bg-bull/10 px-4 py-3 text-sm text-bull">
             <span>
               {profile && profile.plan !== "none"
-                ? "Paiement confirmé 🎉 Vos crédits sont disponibles."
+                ? "Paiement confirmé. Vos crédits sont disponibles."
                 : "Paiement reçu, activation de votre abonnement en cours…"}
             </span>
             <button onClick={() => setCheckoutDone(false)} aria-label="Fermer" className="text-lg leading-none">
@@ -84,9 +84,12 @@ export default function DashboardPage() {
             </button>
           </div>
         )}
-        <h1 className="text-3xl font-semibold">Bonjour {user.displayName ?? user.email} 👋</h1>
+        <p className="label">§ Poste d&apos;analyse</p>
+        <h1 className="mt-3 font-display text-5xl leading-none sm:text-6xl">
+          Bonjour, <em className="text-brand">{user.displayName ?? user.email}</em>.
+        </h1>
         {profile && credits !== null && credits < 1 && (
-          <div className="mt-6 flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="panel mt-6 flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm">
               {profile.plan === "none"
                 ? "Choisissez une offre pour lancer votre première analyse."
@@ -99,8 +102,8 @@ export default function DashboardPage() {
             )}
           </div>
         )}
-        <p className="mt-2 text-muted">Importez une capture de graphique pour obtenir une analyse technique et deux scénarios.</p>
-        <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+        <p className="mt-4 text-muted">Importez une capture de graphique pour obtenir une analyse technique et deux scénarios.</p>
+        <div className="mt-10 space-y-6">
           <ChartUploader
             disabled={credits !== null && credits < 1}
             onAnalyzed={(next) => {
@@ -112,7 +115,7 @@ export default function DashboardPage() {
             {analysis ? (
               <AnalysisResult analysis={analysis} />
             ) : (
-              <div className="grid h-full min-h-56 place-items-center rounded-2xl border border-border bg-surface/50 p-6 text-center text-sm text-muted">
+              <div className="label grid min-h-32 place-items-center border border-dashed border-border p-6 text-center">
                 Le résultat de l&apos;analyse s&apos;affichera ici.
               </div>
             )}

@@ -68,7 +68,7 @@ export function ChartUploader({ disabled, onAnalyzed }: Props) {
   }
 
   return (
-    <div className="space-y-4 rounded-2xl border border-border bg-surface p-6">
+    <div className="panel grid gap-6 p-6 md:grid-cols-2">
       <button
         type="button"
         onClick={() => inputRef.current?.click()}
@@ -82,17 +82,17 @@ export function ChartUploader({ disabled, onAnalyzed }: Props) {
           setDragging(false);
           pick(event.dataTransfer.files[0]);
         }}
-        className={`grid min-h-56 w-full place-items-center overflow-hidden rounded-xl border-2 border-dashed p-4 text-center transition ${
-          dragging ? "border-brand bg-brand/5" : "border-border hover:border-muted"
+        className={`grid min-h-56 w-full place-items-center overflow-hidden border border-dashed p-4 text-center transition-colors md:row-span-3 ${
+          dragging ? "border-brand bg-brand/5" : "border-foreground/25 hover:border-brand"
         }`}
       >
         {preview ? (
           // eslint-disable-next-line @next/next/no-img-element -- local object URL preview
-          <img src={preview} alt="Aperçu du graphique" className="max-h-80 rounded-lg object-contain" />
+          <img src={preview} alt="Aperçu du graphique" className="max-h-80 object-contain" />
         ) : (
           <span>
-            <span className="block font-medium">Déposez une capture de graphique</span>
-            <span className="mt-1 block text-sm text-muted">ou cliquez pour choisir · collez avec Ctrl+V · 5 Mo max</span>
+            <span className="block font-display text-3xl">Déposez votre capture</span>
+            <span className="label mt-3 block">Clic · glisser-déposer · Ctrl+V — 5 Mo max</span>
           </span>
         )}
       </button>
@@ -113,7 +113,7 @@ export function ChartUploader({ disabled, onAnalyzed }: Props) {
         />
       </label>
       <FormError message={error} />
-      <button type="button" onClick={submit} disabled={!file || pending || disabled} className="btn-primary w-full">
+      <button type="button" onClick={submit} disabled={!file || pending || disabled} className="btn-primary w-full self-end">
         {pending ? "Analyse en cours… (jusqu'à 1 min)" : disabled ? "Plus de crédits" : "Analyser le graphique (1 crédit)"}
       </button>
     </div>

@@ -12,7 +12,7 @@ const CANDLES: Candle[] = [
 
 const LEVELS = [
   { price: 67.0, tone: "bear" }, { price: 65.4, tone: "bear" },
-  { price: 63.2, tone: "brand" }, { price: 61.8, tone: "brand" },
+  { price: 63.2, tone: "bull" }, { price: 61.8, tone: "bull" },
 ] as const;
 
 const W = 520, H = 320, PAD_L = 4, PAD_R = 64, PAD_Y = 16, MIN = 61.4, MAX = 67.4;
@@ -23,7 +23,7 @@ export function DemoChart() {
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label="Graphique BTC/USDT 4H annoté avec supports et résistances">
       {LEVELS.map(({ price, tone }) => (
-        <g key={price} className={tone === "brand" ? "text-brand" : "text-bear"}>
+        <g key={price} className={tone === "bull" ? "text-bull" : "text-bear"}>
           <line x1={PAD_L} x2={W - PAD_R} y1={y(price)} y2={y(price)} stroke="currentColor" strokeDasharray="4 4" strokeOpacity={0.6} />
           <text x={W - PAD_R + 6} y={y(price) + 4} fill="currentColor" fontSize={14} fontFamily="var(--font-geist-mono)">
             {(price * 1000).toLocaleString("fr-FR")}
@@ -34,15 +34,14 @@ export function DemoChart() {
         const x = PAD_L + index * step + step / 2;
         const up = close >= open;
         return (
-          <g key={index} className={up ? "text-brand" : "text-bear"}>
+          <g key={index} className={up ? "text-bull" : "text-bear"}>
             <line x1={x} x2={x} y1={y(high)} y2={y(low)} stroke="currentColor" strokeWidth={1.5} />
             <rect
               x={x - step * 0.3}
               width={step * 0.6}
               y={y(Math.max(open, close))}
               height={Math.max(1.5, Math.abs(y(open) - y(close)))}
-              rx={1}
-              fill="currentColor"
+                            fill="currentColor"
             />
           </g>
         );
