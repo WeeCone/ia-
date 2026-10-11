@@ -24,11 +24,11 @@ env:
     value: 1:190863139139:web:b00ca34632e08b7e104ff6
     availability: [BUILD, RUNTIME]
 
-  # --- Paiement (à réactiver quand Stripe est configuré) -------------------------------
+  # --- Paiement (Stripe, mode test) ----------------------------------------------------
   # URL publique de l'app, pour les redirections Stripe (sinon : l'adresse de la requête).
-  # - variable: APP_URL
-  #   value: https://REMPLACER
-  #   availability: [RUNTIME]
+  - variable: APP_URL
+    value: https://scanvizo--scanzivo.europe-west4.hosted.app
+    availability: [RUNTIME]
   - variable: STRIPE_PRICE_MONTHLY
     value: price_1UPRavAeyb88TK1kfidsAU3j # mode test
     availability: [RUNTIME]
@@ -40,13 +40,12 @@ env:
   - variable: ANTHROPIC_API_KEY
     secret: anthropicApiKey
     availability: [RUNTIME]
-  # À réactiver avec Stripe : chaque secret référencé doit exister, sinon le déploiement échoue.
-  # - variable: STRIPE_SECRET_KEY
-  #   secret: stripeSecretKey
-  #   availability: [RUNTIME]
-  # - variable: STRIPE_WEBHOOK_SECRET
-  #   secret: stripeWebhookSecret
-  #   availability: [RUNTIME]
+  - variable: STRIPE_SECRET_KEY
+    secret: stripeSecretKey
+    availability: [RUNTIME]
+  - variable: STRIPE_WEBHOOK_SECRET
+    secret: stripeWebhookSecret
+    availability: [RUNTIME]
   # À réactiver avec Resend (email de bienvenue) :
   # - variable: RESEND_API_KEY
   #   secret: resendApiKey
