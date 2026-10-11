@@ -3,6 +3,7 @@ import { AnalysisResult } from "@/components/analysis-result";
 import { DemoChart } from "@/components/demo-chart";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { Testimonials } from "@/components/testimonials";
 import { DEMO_ANALYSIS } from "@/lib/demo";
 
 const steps = [
@@ -92,6 +93,8 @@ export default function Home() {
             <AnalysisResult analysis={DEMO_ANALYSIS} />
           </div>
         </section>
+
+        <Testimonials />
 
         {/* Closing CTA */}
         <section className="border-t-2 border-border bg-brand text-background">
