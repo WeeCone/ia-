@@ -71,7 +71,8 @@ export default function ConfidentialitePage() {
       <h2>Vos droits</h2>
       <p>
         Vous disposez d&apos;un droit d&apos;accès, de rectification, d&apos;effacement, de limitation, d&apos;opposition et de
-        portabilité de vos données. Pour les exercer, écrivez à {COMPANY.email}. Vous pouvez également introduire une
+        portabilité de vos données. Vous pouvez supprimer vous-même votre compte et toutes vos analyses depuis votre tableau de
+        bord (rubrique « Compte »). Pour exercer vos autres droits, écrivez à {COMPANY.email}. Vous pouvez également introduire une
         réclamation auprès de la CNIL (www.cnil.fr).
       </p>
     </LegalPage>

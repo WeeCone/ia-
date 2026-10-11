@@ -8,6 +8,7 @@ import { AnalysisResult } from "@/components/analysis-result";
 import { useAuth } from "@/components/auth-provider";
 import { BillingButton } from "@/components/billing-button";
 import { ChartUploader } from "@/components/chart-uploader";
+import { DeleteAccount } from "@/components/delete-account";
 import { Logo } from "@/components/logo";
 import Link from "next/link";
 import type { ChartAnalysis } from "@/lib/analysis";
@@ -121,6 +122,7 @@ export default function DashboardPage() {
           </div>
         </div>
         <AnalysisHistory uid={user.uid} refreshKey={refreshKey} onSelect={show} />
+        <DeleteAccount plan={profile?.plan} />
       </main>
     </div>
   );

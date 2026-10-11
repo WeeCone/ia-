@@ -7,11 +7,17 @@ const ACTIVE_STATUSES: Stripe.Subscription.Status[] = ["active", "trialing"];
 
 const userRef = (uid: string) => adminDb.collection("users").doc(uid);
 
+// The account may have been deleted since the event was emitted (e.g. its subscription is cancelled on deletion).
+async function updateUser(uid: string, data: Record<string, unknown>) {
+  const ref = userRef(uid);
+  if ((await ref.get()).exists) await ref.update(data);
+}
+
 // Credits are always set to an absolute value, so Stripe retrying an event never double-credits.
 async function grantLifetime(session: Stripe.Checkout.Session) {
   const uid = session.metadata?.uid;
   if (!uid || session.metadata?.offer !== "lifetime" || session.payment_status !== "paid") return;
-  await userRef(uid).update({ plan: "lifetime", credits: MONTHLY_CREDITS, creditsPeriod: creditPeriod() });
+  await updateUser(uid, { plan: "lifetime", credits: MONTHLY_CREDITS, creditsPeriod: creditPeriod() });
 }
 
 export async function POST(request: Request) {
@@ -38,7 +44,7 @@ export async function POST(request: Request) {
       const uid = details?.metadata?.uid;
       if (!uid) break;
       const subscription = details.subscription;
-      await userRef(uid).update({
+      await updateUser(uid, {
         plan: "monthly",
         credits: MONTHLY_CREDITS,
         creditsPeriod: creditPeriod(),
@@ -56,7 +62,7 @@ export async function POST(request: Request) {
       if ((await userRef(uid).get()).get("plan") === "lifetime") break;
       const active = event.type === "customer.subscription.updated" && ACTIVE_STATUSES.includes(subscription.status);
       // Losing the subscription keeps any credits left; they simply stop being refilled.
-      await userRef(uid).update({ plan: active ? "monthly" : "none" });
+      await updateUser(uid, { plan: active ? "monthly" : "none" });
       break;
     }
   }
