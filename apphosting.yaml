@@ -24,31 +24,34 @@ env:
     value: 1:190863139139:web:b00ca34632e08b7e104ff6
     availability: [BUILD, RUNTIME]
 
-  # URL publique de l'app (redirections Stripe).
-  - variable: APP_URL
-    value: https://REMPLACER
-    availability: [RUNTIME]
-  - variable: STRIPE_PRICE_MONTHLY
-    value: price_REMPLACER
-    availability: [RUNTIME]
-  - variable: STRIPE_PRICE_LIFETIME
-    value: price_REMPLACER
-    availability: [RUNTIME]
+  # --- Paiement (à réactiver quand Stripe est configuré) -------------------------------
+  # URL publique de l'app, pour les redirections Stripe (sinon : l'adresse de la requête).
+  # - variable: APP_URL
+  #   value: https://REMPLACER
+  #   availability: [RUNTIME]
+  # - variable: STRIPE_PRICE_MONTHLY
+  #   value: price_REMPLACER
+  #   availability: [RUNTIME]
+  # - variable: STRIPE_PRICE_LIFETIME
+  #   value: price_REMPLACER
+  #   availability: [RUNTIME]
 
   # Secrets (Cloud Secret Manager) : firebase apphosting:secrets:set <nom>
   - variable: ANTHROPIC_API_KEY
     secret: anthropicApiKey
     availability: [RUNTIME]
-  - variable: STRIPE_SECRET_KEY
-    secret: stripeSecretKey
-    availability: [RUNTIME]
-  - variable: STRIPE_WEBHOOK_SECRET
-    secret: stripeWebhookSecret
-    availability: [RUNTIME]
-  - variable: RESEND_API_KEY
-    secret: resendApiKey
-    availability: [RUNTIME]
-  - variable: EMAIL_FROM
-    value: "Scanzivo <bonjour@REMPLACER>"
-    availability: [RUNTIME]
+  # À réactiver avec Stripe : chaque secret référencé doit exister, sinon le déploiement échoue.
+  # - variable: STRIPE_SECRET_KEY
+  #   secret: stripeSecretKey
+  #   availability: [RUNTIME]
+  # - variable: STRIPE_WEBHOOK_SECRET
+  #   secret: stripeWebhookSecret
+  #   availability: [RUNTIME]
+  # À réactiver avec Resend (email de bienvenue) :
+  # - variable: RESEND_API_KEY
+  #   secret: resendApiKey
+  #   availability: [RUNTIME]
+  # - variable: EMAIL_FROM
+  #   value: "Scanzivo <bonjour@REMPLACER>"
+  #   availability: [RUNTIME]
   # FIREBASE_SERVICE_ACCOUNT est inutile ici : le SDK Admin utilise les identifiants par défaut.
