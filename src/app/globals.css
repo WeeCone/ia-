@@ -1,26 +1,53 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0b0f14;
+  --foreground: #e8edf2;
+  --surface: #121821;
+  --border: #222b37;
+  --muted: #8b97a6;
+  --brand: #22c55e;
+  --bear: #f05252;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-bear: var(--bear);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background:
+    radial-gradient(60rem 30rem at 50% -10rem, color-mix(in srgb, var(--brand) 12%, transparent), transparent),
+    var(--background);
+  color: var(--foreground);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply bg-brand text-background hover:brightness-110;
+  }
+  .btn-secondary {
+    @apply border border-border bg-surface hover:border-muted;
+  }
+  .btn-ghost {
+    @apply text-muted hover:text-foreground;
+  }
+  .field {
+    @apply flex flex-col gap-1.5 text-sm font-medium;
+  }
+  .field input {
+    @apply rounded-lg border border-border bg-background px-3 py-2.5 font-normal outline-none transition placeholder:text-muted/60 focus:border-brand focus:ring-2 focus:ring-brand/30;
+  }
 }

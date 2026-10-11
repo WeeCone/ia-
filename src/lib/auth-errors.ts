@@ -1,0 +1,20 @@
+import { FirebaseError } from "firebase/app";
+
+const messages: Record<string, string> = {
+  "auth/email-already-in-use": "Un compte existe déjà avec cet email.",
+  "auth/invalid-email": "Adresse email invalide.",
+  "auth/weak-password": "Le mot de passe doit contenir au moins 6 caractères.",
+  "auth/invalid-credential": "Email ou mot de passe incorrect.",
+  "auth/user-not-found": "Aucun compte trouvé avec cet email.",
+  "auth/wrong-password": "Email ou mot de passe incorrect.",
+  "auth/too-many-requests": "Trop de tentatives. Réessayez dans quelques minutes.",
+  "auth/popup-closed-by-user": "Connexion Google annulée.",
+  "auth/network-request-failed": "Problème de connexion réseau.",
+};
+
+export function authErrorMessage(error: unknown): string {
+  if (error instanceof FirebaseError && messages[error.code]) {
+    return messages[error.code];
+  }
+  return "Une erreur est survenue. Veuillez réessayer.";
+}
