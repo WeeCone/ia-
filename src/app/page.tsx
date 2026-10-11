@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AnalysisResult } from "@/components/analysis-result";
-import { DemoChart } from "@/components/demo-chart";
+import { Faq } from "@/components/faq";
+import { HeroBackdrop } from "@/components/hero-backdrop";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Testimonials } from "@/components/testimonials";
@@ -19,11 +20,19 @@ export default function Home() {
     <div className="flex flex-1 flex-col">
       <SiteHeader />
       <main className="flex-1">
-        {/* Hero */}
-        <section className="mx-auto grid max-w-6xl items-center gap-14 px-4 pb-20 pt-14 sm:pt-20 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-7">
-            <span className="label inline-block border-2 border-border bg-card px-3 py-1">Analyse technique par IA</span>
-            <h1 className="display mt-6 text-6xl sm:text-8xl">
+        {/* Hero: live-drawn chart backdrop with an AI scan sweeping across it. */}
+        <section className="relative isolate overflow-hidden border-b-2 border-border">
+          <HeroBackdrop />
+          <div
+            className="absolute inset-0 -z-0 bg-[linear-gradient(90deg,var(--background)_8%,color-mix(in_srgb,var(--background)_70%,transparent)_45%,transparent_80%),linear-gradient(0deg,var(--background),transparent_30%)]"
+            aria-hidden
+          />
+          <div className="relative mx-auto max-w-6xl px-4 pb-24 pt-20 sm:pb-32 sm:pt-32">
+            <span className="label inline-flex items-center gap-2 border-2 border-border bg-card px-3 py-1">
+              <span className="size-2 animate-pulse bg-brand" aria-hidden />
+              Analyse technique par IA
+            </span>
+            <h1 className="display mt-6 max-w-4xl text-6xl sm:text-8xl">
               Lisez le marché <span className="mark">avant</span> qu&apos;il bouge.
             </h1>
             <p className="mt-8 max-w-xl text-xl leading-relaxed">
@@ -33,36 +42,23 @@ export default function Home() {
               <Link href="/auth/signup" className="btn-primary text-base">Analyser mon graphique →</Link>
               <Link href="/pricing" className="btn-secondary text-base">Voir les offres</Link>
             </div>
-          </div>
-
-          <div className="relative lg:col-span-5">
-            <div className="panel">
-              <div className="flex items-center justify-between border-b-2 border-border bg-surface px-4 py-2">
-                <span className="label">btcusdt_4h.png</span>
-                <span className="label text-brand">● Analysé</span>
-              </div>
-              <div className="p-4">
-                <DemoChart />
-              </div>
-              <div className="grid grid-cols-2 border-t-2 border-border">
-                <div className="border-r-2 border-border bg-bull p-4 text-background">
-                  <p className="label">Haussier</p>
-                  <p className="display mt-1 text-5xl">{bullish.probability}%</p>
+            <dl className="mt-14 flex flex-wrap gap-3">
+              {[
+                ["Haussier", `${bullish.probability}%`, "bg-bull"],
+                ["Baissier", `${bearish.probability}%`, "bg-bear"],
+              ].map(([term, value, tone]) => (
+                <div key={term} className={`flex items-baseline gap-3 border-2 border-border px-4 py-2 text-background ${tone}`}>
+                  <dt className="label">{term}</dt>
+                  <dd className="display text-3xl">{value}</dd>
                 </div>
-                <div className="bg-bear p-4 text-background">
-                  <p className="label">Baissier</p>
-                  <p className="display mt-1 text-5xl">{bearish.probability}%</p>
-                </div>
-              </div>
-            </div>
-            <span className="absolute -bottom-5 -right-3 -rotate-6 border-2 border-border bg-brand px-3 py-1 font-display text-sm uppercase shadow-[4px_4px_0_0_var(--border)] text-background">
-              Exemple
-            </span>
+              ))}
+              <div className="label flex items-center px-2 text-muted">Exemple de résultat · BTC/USDT 4H</div>
+            </dl>
           </div>
         </section>
 
         {/* Method */}
-        <section className="border-y-2 border-border bg-[repeating-linear-gradient(-45deg,transparent_0_12px,#ffffff08_12px_14px)]">
+        <section id="methode" className="scroll-mt-4 border-b-2 border-border bg-[repeating-linear-gradient(-45deg,transparent_0_12px,#ffffff08_12px_14px)]">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <h2 className="display text-5xl sm:text-6xl">
               Trois étapes, <span className="mark">pas une de plus.</span>
@@ -95,6 +91,7 @@ export default function Home() {
         </section>
 
         <Testimonials />
+        <Faq />
 
         {/* Closing CTA */}
         <section className="border-t-2 border-border bg-brand text-background">

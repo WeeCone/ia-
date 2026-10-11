@@ -1,23 +1,58 @@
 import Link from "next/link";
 import { LEGAL_LINKS } from "@/lib/legal";
+import { Logo } from "./logo";
+
+const COLUMNS = [
+  {
+    title: "Produit",
+    links: [
+      { href: "/#methode", label: "Comment ça marche" },
+      { href: "/pricing", label: "Tarifs" },
+      { href: "/#faq", label: "FAQ" },
+    ],
+  },
+  {
+    title: "Compte",
+    links: [
+      { href: "/auth/signup", label: "Créer un compte" },
+      { href: "/auth/login", label: "Connexion" },
+      { href: "/dashboard", label: "Tableau de bord" },
+    ],
+  },
+  { title: "Légal", links: [...LEGAL_LINKS] },
+];
 
 export function SiteFooter() {
   return (
     <footer className="border-t-2 border-border bg-surface">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-8 sm:flex-row sm:items-center sm:justify-between">
-        <span className="label">© NeuralTrade</span>
-        <nav className="flex flex-wrap gap-x-6 gap-y-2">
-          {LEGAL_LINKS.map(({ href, label }) => (
-            <Link key={href} href={href} className="label text-muted hover:text-brand">
-              {label}
-            </Link>
-          ))}
-        </nav>
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-12">
+        <div className="md:col-span-5">
+          <Logo />
+          <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
+            L&apos;analyse technique par IA, à partir d&apos;une simple capture de graphique.
+          </p>
+        </div>
+        {COLUMNS.map((column) => (
+          <nav key={column.title} className="md:col-span-2" aria-label={column.title}>
+            <p className="label">{column.title}</p>
+            <ul className="mt-4 space-y-3 text-sm">
+              {column.links.map(({ href, label }) => (
+                <li key={href}>
+                  <Link href={href} className="text-muted hover:text-brand">
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
       </div>
-      <p className="mx-auto max-w-6xl px-4 pb-8 text-xs text-muted">
-        Les analyses sont fournies à titre informatif et pédagogique et ne constituent pas un conseil en investissement. Le
-        trading comporte un risque de perte en capital.
-      </p>
+      <div className="border-t-2 border-border">
+        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-xs text-muted sm:flex-row sm:justify-between">
+          <span>© 2026 NeuralTrade. Tous droits réservés.</span>
+          <span>Ceci n&apos;est pas un conseil en investissement. Le trading comporte un risque de perte en capital.</span>
+        </div>
+      </div>
     </footer>
   );
 }
