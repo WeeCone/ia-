@@ -4,24 +4,24 @@ runConfig:
   maxInstances: 10
 
 env:
-  # Config web Firebase (publique). Remplacez les valeurs par celles de votre projet.
+  # Config web Firebase du projet « scanzivo » (publique par nature : elle est incluse dans le code du site).
   - variable: NEXT_PUBLIC_FIREBASE_API_KEY
-    value: REMPLACER
+    value: AIzaSyCw23KxJdB4MjDG_vps9xFBIGZb5YIoZus
     availability: [BUILD, RUNTIME]
   - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
-    value: REMPLACER.firebaseapp.com
+    value: scanzivo.firebaseapp.com
     availability: [BUILD, RUNTIME]
   - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
-    value: REMPLACER
+    value: scanzivo
     availability: [BUILD, RUNTIME]
   - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
-    value: REMPLACER.firebasestorage.app
+    value: scanzivo.firebasestorage.app
     availability: [BUILD, RUNTIME]
   - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
-    value: REMPLACER
+    value: 190863139139
     availability: [BUILD, RUNTIME]
   - variable: NEXT_PUBLIC_FIREBASE_APP_ID
-    value: REMPLACER
+    value: 1:190863139139:web:b00ca34632e08b7e104ff6
     availability: [BUILD, RUNTIME]
 
   # URL publique de l'app (redirections Stripe).
