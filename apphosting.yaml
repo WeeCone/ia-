@@ -32,9 +32,9 @@ env:
   # - variable: STRIPE_PRICE_MONTHLY
   #   value: price_REMPLACER
   #   availability: [RUNTIME]
-  # - variable: STRIPE_PRICE_LIFETIME
-  #   value: price_REMPLACER
-  #   availability: [RUNTIME]
+  - variable: STRIPE_PRICE_LIFETIME
+    value: price_1UPRZYAeyb88TK1ksRQteZMb # mode test
+    availability: [RUNTIME]
 
   # Secrets (Cloud Secret Manager) : firebase apphosting:secrets:set <nom>
   - variable: ANTHROPIC_API_KEY
