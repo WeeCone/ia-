@@ -54,7 +54,7 @@ function welcomeHtml(name: string | null, appUrl: string) {
       <tr><td align="center">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#151d2c;border:2px solid #263247">
           <tr><td style="padding:20px 28px;border-bottom:2px solid #263247;font-weight:900;font-size:18px;letter-spacing:0.5px">
-            <span style="display:inline-block;background:#4f8cff;color:#0b0f19;padding:2px 8px;margin-right:8px">S</span>SCANZIVO
+            <img src="${appUrl}/brand/scanzivo-logo-transparent.png" alt="Scanzivo" width="180" height="52" style="display:block;border:0">
           </td></tr>
           <tr><td style="padding:32px 28px">
             <h1 style="margin:0 0 20px;font-size:30px;line-height:1.1;text-transform:uppercase">
