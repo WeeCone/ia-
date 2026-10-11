@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ChartPilot — Analyse de graphiques par IA",
+  title: "NeuralTrade — Analyse de graphiques par IA",
   description: "Importez une capture de graphique et obtenez une analyse technique et des scénarios de trading générés par IA.",
 };
 

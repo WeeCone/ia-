@@ -9,7 +9,7 @@ export function Logo() {
           <path d="M14 7h7v7" />
         </svg>
       </span>
-      ChartPilot
+      NeuralTrade
     </Link>
   );
 }

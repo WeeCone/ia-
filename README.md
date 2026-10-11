@@ -1,4 +1,4 @@
-# ChartPilot
+# NeuralTrade
 
 Application web d'analyse de graphiques de trading par IA (concept inspiré de BullGPT).
 
