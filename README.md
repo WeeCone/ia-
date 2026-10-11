@@ -35,6 +35,13 @@ appelle Claude Opus 5.5 avec sortie structurée (schéma Zod dans `src/lib/analy
    copiez le secret de signature dans `STRIPE_WEBHOOK_SECRET`.
    En local : `stripe listen --forward-to localhost:3000/api/billing/webhook`.
 
+## Emails
+
+- **Bienvenue** : envoyé une seule fois après l'inscription, via [Resend](https://resend.com).
+  Vérifiez votre domaine dans Resend puis renseignez `RESEND_API_KEY` et `EMAIL_FROM`. Sans eux, l'envoi est ignoré sans bloquer l'inscription.
+- **Paiement** : activez les reçus Stripe (Paramètres → **Emails clients** → paiements réussis et remboursements).
+  Stripe envoie aussi les rappels de renouvellement et d'échec de paiement de l'abonnement si vous les activez dans Billing → Emails.
+
 ## Pages légales
 
 `/legal/mentions`, `/legal/cgv` et `/legal/confidentialite` sont prêtes, mais **complétez les champs `[À COMPLÉTER]`**
@@ -50,6 +57,7 @@ et faites-les relire par un professionnel avant le lancement.
    firebase apphosting:secrets:set anthropicApiKey
    firebase apphosting:secrets:set stripeSecretKey
    firebase apphosting:secrets:set stripeWebhookSecret
+   firebase apphosting:secrets:set resendApiKey
    ```
 4. Console Firebase → App Hosting → **Créer un backend**, reliez ce dépôt GitHub (branche `main`) :
    chaque push sur `main` redéploie automatiquement.

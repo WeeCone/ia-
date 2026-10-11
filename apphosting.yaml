@@ -45,4 +45,10 @@ env:
   - variable: STRIPE_WEBHOOK_SECRET
     secret: stripeWebhookSecret
     availability: [RUNTIME]
+  - variable: RESEND_API_KEY
+    secret: resendApiKey
+    availability: [RUNTIME]
+  - variable: EMAIL_FROM
+    value: "NeuralTrade <bonjour@REMPLACER>"
+    availability: [RUNTIME]
   # FIREBASE_SERVICE_ACCOUNT est inutile ici : le SDK Admin utilise les identifiants par défaut.

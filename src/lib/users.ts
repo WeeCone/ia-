@@ -26,6 +26,11 @@ export async function ensureUserProfile(user: User, displayName?: string) {
     credits: 0,
     createdAt: serverTimestamp(),
   });
+  // Fire-and-forget: a failed welcome email must never block sign-up.
+  user
+    .getIdToken()
+    .then((token) => fetch("/api/emails/welcome", { method: "POST", headers: { Authorization: `Bearer ${token}` } }))
+    .catch(() => {});
 }
 
 /** Live profile updates, so credits refresh after an analysis or a Stripe webhook. */
