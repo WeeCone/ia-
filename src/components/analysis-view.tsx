@@ -2,20 +2,35 @@
 
 import { useState } from "react";
 import type { ChartAnalysis } from "@/lib/analysis";
+import { formatRatio, rewardRatios } from "@/lib/risk";
 import { AnalysisResult } from "./analysis-result";
 import { AnnotatedChart } from "./annotated-chart";
 
 function summaryText(analysis: ChartAnalysis) {
-  const scenario = (title: string, s: ChartAnalysis["bullish"]) =>
-    `${title} (${Math.round(s.probability)} %) : ${s.thesis}\nEntrée ${s.entry} · Stop ${s.stop_loss} · Objectifs ${s.targets.join(" → ")}`;
+  const scenario = (title: string, s: ChartAnalysis["bullish"], direction: "long" | "short") => {
+    const ratios = rewardRatios(s, direction);
+    return [
+      `${title} (${Math.round(s.probability)} %) : ${s.thesis}`,
+      `Entrée ${s.entry} · Stop ${s.stop_loss} · Objectifs ${s.targets.join(" → ")}`,
+      ratios ? `Gain/risque ${ratios.map(formatRatio).join(" · ")}` : null,
+      s.invalidation ? `Invalidé si : ${s.invalidation}` : null,
+    ]
+      .filter(Boolean)
+      .join("\n");
+  };
   return [
-    `${analysis.asset} · ${analysis.timeframe} · tendance ${analysis.trend}`,
+    `${analysis.asset} · ${analysis.timeframe} · tendance ${analysis.trend}` +
+      (analysis.confidence ? ` · confiance ${analysis.confidence.level}` : "") +
+      (analysis.horizon ? ` · horizon ${analysis.horizon}` : ""),
     analysis.summary,
     `Supports : ${analysis.supports.join(", ") || "—"} · Résistances : ${analysis.resistances.join(", ") || "—"}`,
-    scenario("Haussier", analysis.bullish),
-    scenario("Baissier", analysis.bearish),
+    scenario("Haussier", analysis.bullish, "long"),
+    scenario("Baissier", analysis.bearish, "short"),
+    analysis.risk_notes?.length ? `Gestion du risque :\n- ${analysis.risk_notes.join("\n- ")}` : null,
     "Analyse Scanzivo, à titre informatif. Pas un conseil en investissement.",
-  ].join("\n\n");
+  ]
+    .filter(Boolean)
+    .join("\n\n");
 }
 
 /** A finished analysis: the annotated screenshot (when available), the report, and what to do next. */

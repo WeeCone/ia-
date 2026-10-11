@@ -1,4 +1,11 @@
 import type { ChartAnalysis } from "@/lib/analysis";
+import { formatRatio, rewardRatios } from "@/lib/risk";
+
+const confidenceStyle = {
+  faible: "border-bear text-bear",
+  moyenne: "border-brand text-brand",
+  élevée: "border-bull text-bull",
+} as const;
 
 const trendStyle = {
   haussière: "bg-bull text-background",
@@ -29,6 +36,27 @@ function Levels({ title, levels, tone }: { title: string; levels: string[]; tone
 }
 
 function ScenarioCard({ title, scenario, tone }: { title: string; scenario: ChartAnalysis["bullish"]; tone: "bull" | "bear" }) {
+  // Older analyses (before numeric prices were requested) simply have no ratio.
+  const ratios = rewardRatios(scenario, tone === "bull" ? "long" : "short");
+  const rows: [string, React.ReactNode][] = [
+    ["Entrée", scenario.entry],
+    ["Stop", scenario.stop_loss],
+    ["Objectifs", scenario.targets.join(" → ") || "—"],
+  ];
+  if (ratios) {
+    rows.push([
+      "Gain / risque",
+      <span key="rr" className="flex flex-wrap gap-x-3">
+        {ratios.map((ratio, index) => (
+          <span key={index} className={ratio >= 2 ? "text-bull" : ratio < 1 ? "text-bear" : ""}>
+            {formatRatio(ratio)}
+          </span>
+        ))}
+      </span>,
+    ]);
+  }
+  if (scenario.invalidation) rows.push(["Invalidé si", <span key="inv" className="font-sans font-medium">{scenario.invalidation}</span>]);
+
   return (
     <div className="flex flex-col">
       <div className={`flex items-end justify-between gap-4 border-b-2 border-border px-5 py-4 text-background ${tone === "bull" ? "bg-bull" : "bg-bear"}`}>
@@ -38,12 +66,8 @@ function ScenarioCard({ title, scenario, tone }: { title: string; scenario: Char
       <div className="flex flex-1 flex-col p-5">
         <p className="text-lg font-semibold leading-snug">{scenario.thesis}</p>
         <dl className="mt-5 grid grid-cols-[auto_1fr] border-2 border-border text-sm">
-          {[
-            ["Entrée", scenario.entry],
-            ["Stop", scenario.stop_loss],
-            ["Objectifs", scenario.targets.join(" → ") || "—"],
-          ].map(([term, value], index) => (
-            <div key={term} className={`contents ${index > 0 ? "[&>*]:border-t-2 [&>*]:border-border" : ""}`}>
+          {rows.map(([term, value], index) => (
+            <div key={String(term)} className={`contents ${index > 0 ? "[&>*]:border-t-2 [&>*]:border-border" : ""}`}>
               <dt className="label border-r-2 border-border bg-brand px-3 py-2 text-background">{term}</dt>
               <dd className="px-3 py-2 font-mono font-bold">{value}</dd>
             </div>
@@ -66,14 +90,25 @@ export function AnalysisResult({ analysis }: { analysis: ChartAnalysis }) {
   return (
     <article className="panel">
       <header className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-border bg-surface px-5 py-3">
-        <span className="label">Rapport · {analysis.asset} · {analysis.timeframe}</span>
-        <span className={`label border-2 border-background px-2 py-0.5 ${trendStyle[analysis.trend]}`}>Tendance {analysis.trend}</span>
+        <span className="label">
+          Rapport · {analysis.asset} · {analysis.timeframe}
+          {analysis.horizon && <span className="text-muted"> · horizon {analysis.horizon}</span>}
+        </span>
+        <span className="flex flex-wrap gap-2">
+          {analysis.confidence && (
+            <span className={`label border-2 px-2 py-0.5 ${confidenceStyle[analysis.confidence.level]}`}>
+              Confiance {analysis.confidence.level}
+            </span>
+          )}
+          <span className={`label border-2 border-background px-2 py-0.5 ${trendStyle[analysis.trend]}`}>Tendance {analysis.trend}</span>
+        </span>
       </header>
 
       <div className="grid lg:grid-cols-12">
         <div className="border-b-2 border-border p-5 lg:col-span-6 lg:border-b-0 lg:border-r-2">
           <h2 className="display text-5xl">{analysis.asset}</h2>
           <p className="mt-4 text-lg leading-relaxed">{analysis.summary}</p>
+          {analysis.confidence?.reason && <p className="mt-3 text-sm text-muted">{analysis.confidence.reason}</p>}
           {analysis.patterns.length > 0 && (
             <ul className="mt-5 flex flex-wrap gap-2">
               {analysis.patterns.map((pattern) => (
@@ -96,6 +131,20 @@ export function AnalysisResult({ analysis }: { analysis: ChartAnalysis }) {
           <ScenarioCard title="Scénario baissier" scenario={analysis.bearish} tone="bear" />
         </div>
       </div>
+
+      {analysis.risk_notes?.length > 0 && (
+        <section className="border-t-2 border-border p-5">
+          <h3 className="label">Gestion du risque</h3>
+          <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+            {analysis.risk_notes.map((note) => (
+              <li key={note} className="flex gap-2 text-sm">
+                <span className="font-bold text-brand">!</span>
+                {note}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <footer className="border-t-2 border-border px-5 py-3 text-xs font-semibold">
         Analyse générée par IA, à titre informatif uniquement. Ce n&apos;est pas un conseil en investissement.
