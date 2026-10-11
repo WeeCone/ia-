@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AnalysisResult } from "@/components/analysis-result";
 import { DemoChart } from "@/components/demo-chart";
+import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { DEMO_ANALYSIS } from "@/lib/demo";
 
@@ -100,12 +101,7 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <footer className="border-t-2 border-border bg-surface">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 sm:flex-row sm:justify-between">
-          <span className="label">© NeuralTrade</span>
-          <span className="text-xs">Les analyses sont fournies à titre informatif et ne constituent pas un conseil en investissement.</span>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

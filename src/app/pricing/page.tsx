@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PricingPlans } from "@/components/pricing-plans";
+import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
 export const metadata: Metadata = { title: "Tarifs — NeuralTrade" };
@@ -22,6 +23,7 @@ export default function PricingPage() {
           Paiement sécurisé par Stripe. Les analyses sont fournies à titre informatif et ne constituent pas un conseil en investissement.
         </p>
       </main>
+      <SiteFooter />
     </div>
   );
 }

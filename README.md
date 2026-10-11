@@ -26,12 +26,20 @@ appelle Claude Opus 5.5 avec sortie structurée (schéma Zod dans `src/lib/analy
 
 1. Créez deux prix : un **récurrent mensuel** (`STRIPE_PRICE_MONTHLY`) et un **paiement unique** (`STRIPE_PRICE_LIFETIME`).
    Les montants affichés et le quota sont dans `src/lib/plans.ts` (`OFFERS`, `MONTHLY_CREDITS`).
-2. Activez le **portail client** (Dashboard Stripe → Paramètres → Billing → Portail client).
-3. Webhook vers `https://<votre-domaine>/api/billing/webhook` avec les événements
+2. Renseignez l'URL des conditions générales (`https://<domaine>/legal/cgv`) dans Paramètres → **Informations publiques** :
+   la page de paiement demande l'acceptation des CGV et la renonciation au droit de rétractation, et refuse de s'ouvrir sans cette URL.
+3. Activez le **portail client** (Dashboard Stripe → Paramètres → Billing → Portail client).
+4. Webhook vers `https://<votre-domaine>/api/billing/webhook` avec les événements
    `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `invoice.paid`,
    `customer.subscription.updated`, `customer.subscription.deleted` ;
    copiez le secret de signature dans `STRIPE_WEBHOOK_SECRET`.
    En local : `stripe listen --forward-to localhost:3000/api/billing/webhook`.
+
+## Pages légales
+
+`/legal/mentions`, `/legal/cgv` et `/legal/confidentialite` sont prêtes, mais **complétez les champs `[À COMPLÉTER]`**
+(société, adresse, SIREN, TVA, contact, médiateur de la consommation) dans `src/lib/legal.ts` et `src/app/legal/cgv/page.tsx`,
+et faites-les relire par un professionnel avant le lancement.
 
 ## Mise en production (Firebase App Hosting)
 

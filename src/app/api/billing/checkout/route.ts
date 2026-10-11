@@ -52,6 +52,14 @@ export async function POST(request: Request) {
     success_url: `${base}/dashboard?checkout=success`,
     cancel_url: `${base}/pricing`,
     metadata,
+    // Express consent required by art. L221-28 13° Code de la consommation for immediate digital access.
+    // Needs a Terms of Service URL set in Stripe (Settings → Public details) pointing to /legal/cgv.
+    consent_collection: { terms_of_service: "required" },
+    custom_text: {
+      terms_of_service_acceptance: {
+        message: `J'accepte les [conditions générales](${base}/legal/cgv), je demande l'accès immédiat au service et je renonce à mon droit de rétractation.`,
+      },
+    },
     ...(offer === "monthly"
       ? { mode: "subscription", subscription_data: { metadata } }
       : { mode: "payment", invoice_creation: { enabled: true } }),

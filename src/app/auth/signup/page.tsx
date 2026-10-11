@@ -68,7 +68,15 @@ export default function SignupPage() {
         <label className="flex items-start gap-2 text-xs leading-relaxed text-muted">
           <input name="terms" type="checkbox" className="mt-0.5 size-4 accent-brand" />
           <span>
-            J&apos;accepte les conditions d&apos;utilisation et je comprends que les analyses ne constituent pas un conseil en investissement.
+            J&apos;accepte les{" "}
+            <Link href="/legal/cgv" target="_blank" className="underline underline-offset-2 hover:text-brand">
+              conditions générales
+            </Link>{" "}
+            et la{" "}
+            <Link href="/legal/confidentialite" target="_blank" className="underline underline-offset-2 hover:text-brand">
+              politique de confidentialité
+            </Link>
+            , et je comprends que les analyses ne constituent pas un conseil en investissement.
           </span>
         </label>
         <FormError message={error} />

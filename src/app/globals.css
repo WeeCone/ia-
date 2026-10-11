@@ -84,3 +84,37 @@ body {
     @apply border-2 border-border bg-background px-3 py-3 font-sans text-base font-normal normal-case tracking-normal text-foreground outline-none transition-all placeholder:text-muted/60 focus:border-brand focus:shadow-[4px_4px_0_0_var(--brand)];
   }
 }
+
+/* Long-form legal text. */
+.legal {
+  line-height: 1.75;
+  color: var(--muted);
+}
+.legal h2 {
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--foreground);
+}
+.legal p,
+.legal ul {
+  margin-top: 1rem;
+}
+.legal ul {
+  list-style: square;
+  padding-left: 1.25rem;
+}
+.legal li + li {
+  margin-top: 0.5rem;
+}
+.legal strong {
+  color: var(--foreground);
+}
+.legal a {
+  color: var(--brand);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
