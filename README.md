@@ -32,3 +32,18 @@ appelle Claude Opus 5.5 avec sortie structurée (schéma Zod dans `src/lib/analy
    `customer.subscription.updated`, `customer.subscription.deleted` ;
    copiez le secret de signature dans `STRIPE_WEBHOOK_SECRET`.
    En local : `stripe listen --forward-to localhost:3000/api/billing/webhook`.
+
+## Mise en production (Firebase App Hosting)
+
+1. Passez le projet Firebase en offre **Blaze** (requise par App Hosting).
+2. Remplissez les valeurs `REMPLACER` de `apphosting.yaml`.
+3. Créez les secrets :
+   ```bash
+   firebase apphosting:secrets:set anthropicApiKey
+   firebase apphosting:secrets:set stripeSecretKey
+   firebase apphosting:secrets:set stripeWebhookSecret
+   ```
+4. Console Firebase → App Hosting → **Créer un backend**, reliez ce dépôt GitHub (branche `main`) :
+   chaque push sur `main` redéploie automatiquement.
+5. Ajoutez le domaine du backend dans Authentication → Paramètres → **Domaines autorisés**,
+   puis pointez le webhook Stripe vers `https://<domaine>/api/billing/webhook`.

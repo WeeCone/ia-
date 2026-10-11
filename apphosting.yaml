@@ -1,0 +1,48 @@
+# Firebase App Hosting — https://firebase.google.com/docs/app-hosting/configure
+runConfig:
+  minInstances: 0
+  maxInstances: 10
+
+env:
+  # Config web Firebase (publique). Remplacez les valeurs par celles de votre projet.
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: REMPLACER
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: REMPLACER.firebaseapp.com
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: REMPLACER
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: REMPLACER.firebasestorage.app
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    value: REMPLACER
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: REMPLACER
+    availability: [BUILD, RUNTIME]
+
+  # URL publique de l'app (redirections Stripe).
+  - variable: APP_URL
+    value: https://REMPLACER
+    availability: [RUNTIME]
+  - variable: STRIPE_PRICE_MONTHLY
+    value: price_REMPLACER
+    availability: [RUNTIME]
+  - variable: STRIPE_PRICE_LIFETIME
+    value: price_REMPLACER
+    availability: [RUNTIME]
+
+  # Secrets (Cloud Secret Manager) : firebase apphosting:secrets:set <nom>
+  - variable: ANTHROPIC_API_KEY
+    secret: anthropicApiKey
+    availability: [RUNTIME]
+  - variable: STRIPE_SECRET_KEY
+    secret: stripeSecretKey
+    availability: [RUNTIME]
+  - variable: STRIPE_WEBHOOK_SECRET
+    secret: stripeWebhookSecret
+    availability: [RUNTIME]
+  # FIREBASE_SERVICE_ACCOUNT est inutile ici : le SDK Admin utilise les identifiants par défaut.
