@@ -122,6 +122,7 @@ export default function DashboardPage() {
           ) : (
             <ChartUploader
               disabled={credits !== null && credits < 1}
+              disabledLabel={profile?.plan === "none" ? "Choisissez une offre" : "Plus de crédits ce mois-ci"}
               onAnalyzed={(outcome: AnalysisOutcome) => {
                 show(outcome);
                 setRefreshKey((key) => key + 1);

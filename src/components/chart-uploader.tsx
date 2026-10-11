@@ -8,7 +8,7 @@ import { FormError } from "./auth-card";
 
 export type AnalysisOutcome = { analysis: ChartAnalysis; imageUrl: string };
 
-type Props = { disabled: boolean; onAnalyzed: (outcome: AnalysisOutcome) => void };
+type Props = { disabled: boolean; disabledLabel?: string; onAnalyzed: (outcome: AnalysisOutcome) => void };
 
 // Shown while the request runs, to make a ~30-60 s wait legible. Purely cosmetic: the model works in one pass.
 const STEPS = [
@@ -20,7 +20,7 @@ const STEPS = [
 ];
 const STEP_SECONDS = 6;
 
-export function ChartUploader({ disabled, onAnalyzed }: Props) {
+export function ChartUploader({ disabled, disabledLabel = "Plus de crédits", onAnalyzed }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -214,7 +214,7 @@ export function ChartUploader({ disabled, onAnalyzed }: Props) {
               </button>
               <FormError message={error} />
               <button type="button" onClick={submit} disabled={!file || preparing || disabled} className="btn-primary mt-auto w-full">
-                {disabled ? "Plus de crédits" : error && file ? "Réessayer" : "Analyser (1 crédit)"}
+                {disabled ? disabledLabel : error && file ? "Réessayer" : "Analyser (1 crédit)"}
               </button>
             </>
           )}
