@@ -1,8 +1,7 @@
 import type { User } from "firebase/auth";
-import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "./firebase";
-
-export const FREE_CREDITS = 3;
+import { FREE_CREDITS } from "./plans";
 
 export type UserProfile = {
   uid: string;
@@ -10,6 +9,7 @@ export type UserProfile = {
   displayName: string | null;
   plan: "free" | "pro";
   credits: number;
+  stripeCustomerId?: string;
 };
 
 /** Creates users/{uid} on first sign-in; leaves existing profiles untouched. */
@@ -27,7 +27,7 @@ export async function ensureUserProfile(user: User, displayName?: string) {
   });
 }
 
-export async function getUserProfile(uid: string): Promise<UserProfile | null> {
-  const snap = await getDoc(doc(db, "users", uid));
-  return snap.exists() ? (snap.data() as UserProfile) : null;
+/** Live profile updates, so credits refresh after an analysis or a Stripe webhook. */
+export function subscribeUserProfile(uid: string, onChange: (profile: UserProfile | null) => void) {
+  return onSnapshot(doc(db, "users", uid), (snap) => onChange(snap.exists() ? (snap.data() as UserProfile) : null));
 }

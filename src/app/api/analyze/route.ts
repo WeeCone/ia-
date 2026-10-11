@@ -2,22 +2,16 @@ import Anthropic from "@anthropic-ai/sdk";
 import { FieldValue } from "firebase-admin/firestore";
 import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_BYTES, type AllowedImageType } from "@/lib/analysis";
 import { analyzeChart, AnalysisRefusedError } from "@/lib/claude";
-import { adminAuth, adminDb } from "@/lib/firebase-admin";
+import { adminDb } from "@/lib/firebase-admin";
+import { getRequestUid } from "@/lib/server-auth";
 
 export const maxDuration = 120;
 
 const error = (message: string, status: number) => Response.json({ error: message }, { status });
 
 export async function POST(request: Request) {
-  const token = request.headers.get("authorization")?.replace(/^Bearer /, "");
-  if (!token) return error("Non authentifié.", 401);
-
-  let uid: string;
-  try {
-    uid = (await adminAuth.verifyIdToken(token)).uid;
-  } catch {
-    return error("Session expirée, reconnectez-vous.", 401);
-  }
+  const uid = await getRequestUid(request);
+  if (!uid) return error("Session expirée, reconnectez-vous.", 401);
 
   const form = await request.formData();
   const image = form.get("image");

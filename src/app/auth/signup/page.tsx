@@ -8,7 +8,8 @@ import { AuthCard, Divider, FormError } from "@/components/auth-card";
 import { GoogleButton } from "@/components/google-button";
 import { authErrorMessage } from "@/lib/auth-errors";
 import { auth } from "@/lib/firebase";
-import { ensureUserProfile, FREE_CREDITS } from "@/lib/users";
+import { FREE_CREDITS } from "@/lib/plans";
+import { ensureUserProfile } from "@/lib/users";
 
 export default function SignupPage() {
   const router = useRouter();

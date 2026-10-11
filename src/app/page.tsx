@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Logo } from "@/components/logo";
+import { SiteHeader } from "@/components/site-header";
 
 const features = [
   { title: "Importez une capture", text: "Un screenshot de n'importe quel graphique : crypto, forex, actions, matières premières." },
@@ -10,13 +10,7 @@ const features = [
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col">
-      <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-5">
-        <Logo />
-        <nav className="flex items-center gap-2">
-          <Link href="/auth/login" className="btn-ghost">Connexion</Link>
-          <Link href="/auth/signup" className="btn-primary">Essai gratuit</Link>
-        </nav>
-      </header>
+      <SiteHeader />
       <main className="flex-1">
         <section className="mx-auto max-w-4xl px-4 pb-16 pt-20 text-center sm:pt-28">
           <span className="inline-block rounded-full border border-brand/30 bg-brand/10 px-3 py-1 text-xs font-medium text-brand">
