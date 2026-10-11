@@ -29,7 +29,7 @@ appelle Claude Opus 5.5 avec sortie structurée (schéma Zod dans `src/lib/analy
 2. Renseignez l'URL des conditions générales (`https://<domaine>/legal/cgv`) dans Paramètres → **Informations publiques** :
    la page de paiement demande l'acceptation des CGV et la renonciation au droit de rétractation, et refuse de s'ouvrir sans cette URL.
 3. Activez le **portail client** (Dashboard Stripe → Paramètres → Billing → Portail client).
-4. Webhook vers `https://<votre-domaine>/api/billing/webhook` (actuellement `https://scanvizo--scanzivo.europe-west4.hosted.app/api/billing/webhook`) avec les événements
+4. Webhook vers `https://<votre-domaine>/api/billing/webhook` (production : `https://scanzivo.com/api/billing/webhook`) avec les événements
    `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `invoice.paid`,
    `customer.subscription.updated`, `customer.subscription.deleted` ;
    copiez le secret de signature dans `STRIPE_WEBHOOK_SECRET`.

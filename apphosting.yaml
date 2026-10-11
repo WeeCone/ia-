@@ -27,7 +27,7 @@ env:
   # --- Paiement (Stripe, mode test) ----------------------------------------------------
   # URL publique de l'app, pour les redirections Stripe (sinon : l'adresse de la requête).
   - variable: APP_URL
-    value: https://scanvizo--scanzivo.europe-west4.hosted.app
+    value: https://scanzivo.com
     availability: [RUNTIME]
   - variable: STRIPE_PRICE_MONTHLY
     value: price_1UPRavAeyb88TK1kfidsAU3j # LIVE (mode réel) — à remplacer par le prix de test pendant les essais
