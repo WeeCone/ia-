@@ -1,20 +1,22 @@
 import type { ChartAnalysis } from "@/lib/analysis";
 
 const trendStyle = {
-  haussière: "border-bull text-bull",
-  baissière: "border-bear text-bear",
-  neutre: "border-muted text-muted",
+  haussière: "bg-bull text-white",
+  baissière: "bg-bear text-white",
+  neutre: "bg-white",
 } as const;
 
 function Levels({ title, levels, tone }: { title: string; levels: string[]; tone: "bull" | "bear" }) {
   return (
     <div className="p-5">
       <h3 className="label">{title}</h3>
-      <ul className="mt-3 space-y-1.5 font-mono text-lg">
+      <ul className="mt-3 space-y-2">
         {levels.length ? (
           levels.map((level) => (
-            <li key={level} className="flex items-center gap-3">
-              <span className={`h-px w-6 ${tone === "bull" ? "bg-bull" : "bg-bear"}`} />
+            <li
+              key={level}
+              className={`inline-block w-full border-[3px] border-foreground px-3 py-1 font-mono text-lg font-bold ${tone === "bull" ? "bg-bull/15" : "bg-bear/15"}`}
+            >
               {level}
             </li>
           ))
@@ -27,22 +29,27 @@ function Levels({ title, levels, tone }: { title: string; levels: string[]; tone
 }
 
 function ScenarioCard({ title, scenario, tone }: { title: string; scenario: ChartAnalysis["bullish"]; tone: "bull" | "bear" }) {
-  const color = tone === "bull" ? "text-bull" : "text-bear";
   return (
-    <div className="flex flex-col p-5">
-      <div className="flex items-baseline justify-between gap-4">
-        <h3 className={`label ${color}`}>{title}</h3>
-        <span className={`font-display text-6xl leading-none ${color}`}>{Math.round(scenario.probability)}%</span>
+    <div className="flex flex-col">
+      <div className={`flex items-end justify-between gap-4 border-b-[3px] border-foreground px-5 py-4 text-white ${tone === "bull" ? "bg-bull" : "bg-bear"}`}>
+        <h3 className="label">{title}</h3>
+        <span className="display text-6xl">{Math.round(scenario.probability)}%</span>
       </div>
-      <p className="mt-4 font-display text-2xl leading-snug">{scenario.thesis}</p>
-      <dl className="mt-5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 border-t border-border pt-4 text-sm">
-        <dt className="label leading-5">Entrée</dt>
-        <dd className="font-mono">{scenario.entry}</dd>
-        <dt className="label leading-5">Stop</dt>
-        <dd className="font-mono">{scenario.stop_loss}</dd>
-        <dt className="label leading-5">Objectifs</dt>
-        <dd className="font-mono">{scenario.targets.join("  →  ") || "—"}</dd>
-      </dl>
+      <div className="flex flex-1 flex-col p-5">
+        <p className="text-lg font-semibold leading-snug">{scenario.thesis}</p>
+        <dl className="mt-5 grid grid-cols-[auto_1fr] border-[3px] border-foreground text-sm">
+          {[
+            ["Entrée", scenario.entry],
+            ["Stop", scenario.stop_loss],
+            ["Objectifs", scenario.targets.join(" → ") || "—"],
+          ].map(([term, value], index) => (
+            <div key={term} className={`contents ${index > 0 ? "[&>*]:border-t-[3px] [&>*]:border-foreground" : ""}`}>
+              <dt className="label border-r-[3px] border-foreground bg-brand px-3 py-2">{term}</dt>
+              <dd className="px-3 py-2 font-mono font-bold">{value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
     </div>
   );
 }
@@ -50,55 +57,47 @@ function ScenarioCard({ title, scenario, tone }: { title: string; scenario: Char
 export function AnalysisResult({ analysis }: { analysis: ChartAnalysis }) {
   if (!analysis.is_chart) {
     return (
-      <div className="panel p-6 text-sm text-muted">
+      <div className="panel p-6 font-semibold">
         Cette image ne semble pas être un graphique de prix. Aucun crédit n&apos;a été débité.
       </div>
     );
   }
 
-  const bull = Math.min(100, Math.max(0, analysis.bullish.probability));
-
   return (
     <article className="panel">
-      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-3">
+      <header className="flex flex-wrap items-center justify-between gap-3 border-b-[3px] border-foreground bg-foreground px-5 py-3 text-white">
         <span className="label">Rapport · {analysis.asset} · {analysis.timeframe}</span>
-        <span className={`border px-2 py-0.5 font-mono text-[11px] uppercase tracking-[0.18em] ${trendStyle[analysis.trend]}`}>
-          Tendance {analysis.trend}
-        </span>
+        <span className={`label border-2 border-white px-2 py-0.5 ${trendStyle[analysis.trend]}`}>Tendance {analysis.trend}</span>
       </header>
 
       <div className="grid lg:grid-cols-12">
-        <div className="border-b border-border p-5 lg:col-span-6 lg:border-b-0 lg:border-r">
-          <h2 className="font-display text-5xl leading-none">{analysis.asset}</h2>
-          <p className="mt-4 leading-relaxed">{analysis.summary}</p>
+        <div className="border-b-[3px] border-foreground p-5 lg:col-span-6 lg:border-b-0 lg:border-r-[3px]">
+          <h2 className="display text-5xl">{analysis.asset}</h2>
+          <p className="mt-4 text-lg leading-relaxed">{analysis.summary}</p>
           {analysis.patterns.length > 0 && (
-            <ul className="mt-5 space-y-2 text-sm text-muted">
+            <ul className="mt-5 flex flex-wrap gap-2">
               {analysis.patterns.map((pattern) => (
-                <li key={pattern} className="flex gap-2">
-                  <span className="text-brand">◆</span>
+                <li key={pattern} className="border-2 border-foreground bg-brand px-2 py-1 text-sm font-semibold">
                   {pattern}
                 </li>
               ))}
             </ul>
           )}
         </div>
-        <div className="grid grid-cols-2 divide-x divide-border lg:col-span-6">
+        <div className="grid grid-cols-2 divide-x-[3px] divide-foreground lg:col-span-6">
           <Levels title="Résistances" levels={analysis.resistances} tone="bear" />
           <Levels title="Supports" levels={analysis.supports} tone="bull" />
         </div>
       </div>
 
-      <div className="flex h-1.5" aria-hidden>
-        <div className="bg-bull" style={{ width: `${bull}%` }} />
-        <div className="flex-1 bg-bear" />
-      </div>
-
-      <div className="grid divide-y divide-border sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+      <div className="grid border-t-[3px] border-foreground sm:grid-cols-2 sm:divide-x-[3px] sm:divide-foreground">
         <ScenarioCard title="Scénario haussier" scenario={analysis.bullish} tone="bull" />
-        <ScenarioCard title="Scénario baissier" scenario={analysis.bearish} tone="bear" />
+        <div className="border-t-[3px] border-foreground sm:border-t-0">
+          <ScenarioCard title="Scénario baissier" scenario={analysis.bearish} tone="bear" />
+        </div>
       </div>
 
-      <footer className="border-t border-border px-5 py-3 text-xs text-muted">
+      <footer className="border-t-[3px] border-foreground px-5 py-3 text-xs font-semibold">
         Analyse générée par IA, à titre informatif uniquement. Ce n&apos;est pas un conseil en investissement.
       </footer>
     </article>

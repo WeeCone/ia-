@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
-/* "Terminal × journal financier" — warm ink, paper text, phosphor amber. */
+/* Neo-brutalist: white paper, black ink, electric yellow, thick borders, hard offset shadows. */
 :root {
-  --background: #0d0c0a;
-  --foreground: #ede6d6;
-  --surface: #14120f;
-  --border: #2c2822;
-  --muted: #8e8576;
-  --brand: #ffb000;
-  --bull: #a6e05f;
-  --bear: #ff5b3a;
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --surface: #ffffff;
+  --border: #0a0a0a;
+  --muted: #545454;
+  --brand: #ffe600;
+  --bull: #00a651;
+  --bear: #ff3d2e;
 }
 
 @theme inline {
@@ -21,11 +21,10 @@
   --color-brand: var(--brand);
   --color-bull: var(--bull);
   --color-bear: var(--bear);
-  --font-sans: var(--font-plex-sans);
-  --font-mono: var(--font-plex-mono);
-  --font-display: var(--font-instrument-serif);
+  --font-sans: var(--font-archivo);
+  --font-mono: var(--font-jetbrains-mono);
+  --font-display: var(--font-archivo-black);
 
-  /* Sharp corners everywhere: no rounded SaaS cards. */
   --radius-sm: 0;
   --radius-md: 0;
   --radius-lg: 0;
@@ -35,17 +34,12 @@
 
 body {
   background-color: var(--background);
-  /* Faint chart-paper grid. */
-  background-image:
-    linear-gradient(color-mix(in srgb, var(--foreground) 3%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--foreground) 3%, transparent) 1px, transparent 1px);
-  background-size: 56px 56px;
   color: var(--foreground);
 }
 
 ::selection {
   background: var(--brand);
-  color: var(--background);
+  color: var(--foreground);
 }
 
 @keyframes ticker {
@@ -56,29 +50,35 @@ body {
 
 @layer components {
   .label {
-    @apply font-mono text-[11px] uppercase tracking-[0.18em] text-muted;
+    @apply font-mono text-xs font-bold uppercase tracking-wider;
+  }
+  .display {
+    @apply font-display uppercase leading-[0.9] tracking-tight;
+  }
+  /* Yellow marker highlight for the key words of a headline. */
+  .mark {
+    @apply bg-brand px-2 [box-decoration-break:clone];
   }
   .panel {
-    @apply border border-border bg-surface;
+    @apply border-[3px] border-foreground bg-surface shadow-[8px_8px_0_0_var(--foreground)];
   }
   .btn-primary,
-  .btn-secondary,
-  .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 px-5 py-3 font-mono text-xs font-medium uppercase tracking-[0.14em] transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 border-[3px] border-foreground px-6 py-3 font-display text-sm uppercase tracking-wide shadow-[4px_4px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_var(--foreground)] active:translate-x-1 active:translate-y-1 active:shadow-none disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-0 disabled:hover:shadow-[4px_4px_0_0_var(--foreground)];
   }
   .btn-primary {
-    @apply bg-brand text-background hover:bg-foreground;
+    @apply bg-brand;
   }
   .btn-secondary {
-    @apply border border-foreground/25 hover:border-brand hover:text-brand;
+    @apply bg-white;
   }
   .btn-ghost {
-    @apply px-3 text-muted hover:text-brand;
+    @apply inline-flex items-center px-3 py-2 font-display text-sm uppercase decoration-[3px] underline-offset-4 hover:underline;
   }
   .field {
-    @apply flex flex-col gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-muted;
+    @apply flex flex-col gap-2 font-mono text-xs font-bold uppercase tracking-wider;
   }
   .field input {
-    @apply border border-border bg-background px-3 py-3 font-sans text-sm normal-case tracking-normal text-foreground outline-none transition-colors placeholder:text-muted/50 focus:border-brand;
+    @apply border-[3px] border-foreground bg-white px-3 py-3 font-sans text-base font-normal normal-case tracking-normal outline-none transition-shadow placeholder:text-muted/60 focus:bg-brand/20 focus:shadow-[4px_4px_0_0_var(--foreground)];
   }
 }

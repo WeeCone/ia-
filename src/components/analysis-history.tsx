@@ -21,20 +21,20 @@ export function AnalysisHistory({ uid, refreshKey, onSelect }: Props) {
 
   return (
     <section className="mt-16">
-      <p className="label">§ Historique</p>
-      <ul className="mt-4 divide-y divide-border border-y border-border">
+      <h2 className="display text-4xl">Historique</h2>
+      <ul className="panel mt-6 divide-y-[3px] divide-foreground">
         {items.map((item) => (
           <li key={item.id}>
             <button
               type="button"
               onClick={() => onSelect(item)}
-              className="group flex w-full items-center justify-between gap-4 py-4 text-left text-sm transition-colors hover:bg-surface"
+              className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm transition-colors hover:bg-brand"
             >
-              <span className="font-display text-2xl group-hover:text-brand">
+              <span className="display text-2xl">
                 {item.is_chart ? item.asset : "Image non reconnue"}{" "}
                 {item.is_chart && <span className="font-mono text-xs text-muted">{item.timeframe}</span>}
               </span>
-              <span className="flex items-center gap-4 font-mono text-xs uppercase tracking-[0.12em] text-muted">
+              <span className="label flex items-center gap-4">
                 {item.is_chart && (
                   <span className={item.trend === "haussière" ? "text-bull" : item.trend === "baissière" ? "text-bear" : ""}>
                     {item.trend}

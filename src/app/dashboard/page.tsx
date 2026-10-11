@@ -48,11 +48,11 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <header className="border-b border-border bg-background/80 backdrop-blur">
+      <header className="border-b-[3px] border-foreground bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
           <Logo />
           <div className="flex items-center gap-2">
-            <span className="label hidden border border-border px-3 py-2.5 sm:inline">
+            <span className="label hidden border-[3px] border-foreground bg-brand px-3 py-2 sm:inline">
               {credits ?? "–"} crédits · {profile ? PLAN_LABELS[profile.plan] : "–"}
             </span>
             {profile?.plan === "monthly" && (
@@ -61,7 +61,7 @@ export default function DashboardPage() {
               </BillingButton>
             )}
             {profile?.plan === "none" && (
-              <Link href="/pricing" className="btn-primary py-2.5">
+              <Link href="/pricing" className="btn-primary px-4 py-2">
                 Choisir une offre
               </Link>
             )}
@@ -73,7 +73,7 @@ export default function DashboardPage() {
       </header>
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-12">
         {checkoutDone && (
-          <div className="mb-8 flex items-center justify-between gap-4 border-l-2 border-bull bg-bull/10 px-4 py-3 text-sm text-bull">
+          <div className="mb-8 flex items-center justify-between gap-4 border-[3px] border-foreground bg-bull px-4 py-3 font-semibold text-white">
             <span>
               {profile && profile.plan !== "none"
                 ? "Paiement confirmé. Vos crédits sont disponibles."
@@ -84,9 +84,8 @@ export default function DashboardPage() {
             </button>
           </div>
         )}
-        <p className="label">§ Poste d&apos;analyse</p>
-        <h1 className="mt-3 font-display text-5xl leading-none sm:text-6xl">
-          Bonjour, <em className="text-brand">{user.displayName ?? user.email}</em>.
+        <h1 className="display text-5xl sm:text-7xl">
+          Salut, <span className="mark">{user.displayName ?? user.email}</span>
         </h1>
         {profile && credits !== null && credits < 1 && (
           <div className="panel mt-6 flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
@@ -102,7 +101,7 @@ export default function DashboardPage() {
             )}
           </div>
         )}
-        <p className="mt-4 text-muted">Importez une capture de graphique pour obtenir une analyse technique et deux scénarios.</p>
+        <p className="mt-6 text-lg">Importez une capture de graphique pour obtenir une analyse technique et deux scénarios.</p>
         <div className="mt-10 space-y-6">
           <ChartUploader
             disabled={credits !== null && credits < 1}
@@ -115,7 +114,7 @@ export default function DashboardPage() {
             {analysis ? (
               <AnalysisResult analysis={analysis} />
             ) : (
-              <div className="label grid min-h-32 place-items-center border border-dashed border-border p-6 text-center">
+              <div className="label grid min-h-32 place-items-center border-[3px] border-dashed border-foreground p-6 text-center">
                 Le résultat de l&apos;analyse s&apos;affichera ici.
               </div>
             )}

@@ -24,8 +24,8 @@ export function DemoChart() {
     <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label="Graphique BTC/USDT 4H annoté avec supports et résistances">
       {LEVELS.map(({ price, tone }) => (
         <g key={price} className={tone === "bull" ? "text-bull" : "text-bear"}>
-          <line x1={PAD_L} x2={W - PAD_R} y1={y(price)} y2={y(price)} stroke="currentColor" strokeDasharray="4 4" strokeOpacity={0.6} />
-          <text x={W - PAD_R + 6} y={y(price) + 4} fill="currentColor" fontSize={14} fontFamily="var(--font-geist-mono)">
+          <line x1={PAD_L} x2={W - PAD_R} y1={y(price)} y2={y(price)} stroke="currentColor" strokeWidth={2} strokeDasharray="6 4" />
+          <text x={W - PAD_R + 6} y={y(price) + 4} fill="currentColor" fontSize={14} fontWeight={700} fontFamily="var(--font-jetbrains-mono)">
             {(price * 1000).toLocaleString("fr-FR")}
           </text>
         </g>
@@ -35,13 +35,15 @@ export function DemoChart() {
         const up = close >= open;
         return (
           <g key={index} className={up ? "text-bull" : "text-bear"}>
-            <line x1={x} x2={x} y1={y(high)} y2={y(low)} stroke="currentColor" strokeWidth={1.5} />
+            <line x1={x} x2={x} y1={y(high)} y2={y(low)} stroke="var(--foreground)" strokeWidth={1.5} />
             <rect
               x={x - step * 0.3}
               width={step * 0.6}
               y={y(Math.max(open, close))}
               height={Math.max(1.5, Math.abs(y(open) - y(close)))}
-                            fill="currentColor"
+              fill="currentColor"
+              stroke="var(--foreground)"
+              strokeWidth={1.5}
             />
           </g>
         );

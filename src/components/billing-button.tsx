@@ -26,7 +26,7 @@ export function BillingButton({ route, offer, className = "btn-primary", childre
       <button type="button" onClick={handleClick} disabled={pending} className={className}>
         {pending ? "Redirection…" : children}
       </button>
-      {error && <span role="alert" className="text-xs text-bear">{error}</span>}
+      {error && <span role="alert" className="text-xs font-semibold text-bear">{error}</span>}
     </span>
   );
 }

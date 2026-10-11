@@ -82,8 +82,8 @@ export function ChartUploader({ disabled, onAnalyzed }: Props) {
           setDragging(false);
           pick(event.dataTransfer.files[0]);
         }}
-        className={`grid min-h-56 w-full place-items-center overflow-hidden border border-dashed p-4 text-center transition-colors md:row-span-3 ${
-          dragging ? "border-brand bg-brand/5" : "border-foreground/25 hover:border-brand"
+        className={`grid min-h-56 w-full place-items-center overflow-hidden border-[3px] border-dashed border-foreground p-4 text-center transition-colors md:row-span-3 ${
+          dragging ? "bg-brand" : "bg-white hover:bg-brand/40"
         }`}
       >
         {preview ? (
@@ -91,7 +91,7 @@ export function ChartUploader({ disabled, onAnalyzed }: Props) {
           <img src={preview} alt="Aperçu du graphique" className="max-h-80 object-contain" />
         ) : (
           <span>
-            <span className="block font-display text-3xl">Déposez votre capture</span>
+            <span className="display block text-4xl">Déposez votre capture</span>
             <span className="label mt-3 block">Clic · glisser-déposer · Ctrl+V — 5 Mo max</span>
           </span>
         )}
