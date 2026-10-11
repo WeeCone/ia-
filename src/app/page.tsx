@@ -5,9 +5,9 @@ import { SiteHeader } from "@/components/site-header";
 import { DEMO_ANALYSIS } from "@/lib/demo";
 
 const steps = [
-  { title: "Capturez", text: "Un screenshot de votre graphique, sur n'importe quelle plateforme : TradingView, Binance, MetaTrader…", tone: "bg-brand" },
-  { title: "Déposez", text: "Glissez l'image ou collez-la avec Ctrl+V. Ajoutez un mot de contexte si vous voulez.", tone: "bg-white" },
-  { title: "Décidez", text: "Tendance, niveaux clés, figures, et deux scénarios chiffrés avec entrée, stop et objectifs.", tone: "bg-foreground text-white" },
+  { title: "Capturez", text: "Un screenshot de votre graphique, sur n'importe quelle plateforme : TradingView, Binance, MetaTrader…", tone: "bg-brand text-background" },
+  { title: "Déposez", text: "Glissez l'image ou collez-la avec Ctrl+V. Ajoutez un mot de contexte si vous voulez.", tone: "bg-card" },
+  { title: "Décidez", text: "Tendance, niveaux clés, figures, et deux scénarios chiffrés avec entrée, stop et objectifs.", tone: "bg-surface" },
 ];
 
 export default function Home() {
@@ -20,7 +20,7 @@ export default function Home() {
         {/* Hero */}
         <section className="mx-auto grid max-w-6xl items-center gap-14 px-4 pb-20 pt-14 sm:pt-20 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-7">
-            <span className="label inline-block border-[3px] border-foreground bg-white px-3 py-1">Analyse technique par IA</span>
+            <span className="label inline-block border-2 border-border bg-card px-3 py-1">Analyse technique par IA</span>
             <h1 className="display mt-6 text-6xl sm:text-8xl">
               Lisez le marché <span className="mark">avant</span> qu&apos;il bouge.
             </h1>
@@ -35,32 +35,32 @@ export default function Home() {
 
           <div className="relative lg:col-span-5">
             <div className="panel">
-              <div className="flex items-center justify-between border-b-[3px] border-foreground bg-foreground px-4 py-2 text-white">
+              <div className="flex items-center justify-between border-b-2 border-border bg-surface px-4 py-2">
                 <span className="label">btcusdt_4h.png</span>
                 <span className="label text-brand">● Analysé</span>
               </div>
               <div className="p-4">
                 <DemoChart />
               </div>
-              <div className="grid grid-cols-2 border-t-[3px] border-foreground">
-                <div className="border-r-[3px] border-foreground bg-bull p-4 text-white">
+              <div className="grid grid-cols-2 border-t-2 border-border">
+                <div className="border-r-2 border-border bg-bull p-4 text-background">
                   <p className="label">Haussier</p>
                   <p className="display mt-1 text-5xl">{bullish.probability}%</p>
                 </div>
-                <div className="bg-bear p-4 text-white">
+                <div className="bg-bear p-4 text-background">
                   <p className="label">Baissier</p>
                   <p className="display mt-1 text-5xl">{bearish.probability}%</p>
                 </div>
               </div>
             </div>
-            <span className="absolute -left-3 -top-5 -rotate-6 border-[3px] border-foreground bg-brand px-3 py-1 font-display text-sm uppercase shadow-[4px_4px_0_0_var(--foreground)]">
+            <span className="absolute -bottom-5 -right-3 -rotate-6 border-2 border-border bg-brand px-3 py-1 font-display text-sm uppercase shadow-[4px_4px_0_0_var(--border)] text-background">
               Exemple
             </span>
           </div>
         </section>
 
         {/* Method */}
-        <section className="border-y-[3px] border-foreground bg-[repeating-linear-gradient(-45deg,transparent_0_12px,#0000000a_12px_14px)]">
+        <section className="border-y-2 border-border bg-[repeating-linear-gradient(-45deg,transparent_0_12px,#ffffff08_12px_14px)]">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <h2 className="display text-5xl sm:text-6xl">
               Trois étapes, <span className="mark">pas une de plus.</span>
@@ -83,7 +83,7 @@ export default function Home() {
             <h2 className="display text-5xl sm:text-6xl">
               Le rapport, <span className="mark">tel quel.</span>
             </h2>
-            <p className="max-w-xs border-l-[3px] border-foreground pl-3 text-sm">
+            <p className="max-w-xs border-l-2 border-border pl-3 text-sm">
               Exemple illustratif, rédigé pour la démonstration. Il ne reflète pas le marché actuel.
             </p>
           </div>
@@ -93,14 +93,14 @@ export default function Home() {
         </section>
 
         {/* Closing CTA */}
-        <section className="border-t-[3px] border-foreground bg-brand">
+        <section className="border-t-2 border-border bg-brand text-background">
           <div className="mx-auto flex max-w-6xl flex-col items-start gap-10 px-4 py-20 sm:flex-row sm:items-end sm:justify-between">
             <h2 className="display max-w-3xl text-5xl sm:text-7xl">Arrêtez de deviner. Analysez.</h2>
             <Link href="/auth/signup" className="btn-secondary shrink-0 text-base">Commencer →</Link>
           </div>
         </section>
       </main>
-      <footer className="border-t-[3px] border-foreground bg-foreground text-white">
+      <footer className="border-t-2 border-border bg-surface">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 sm:flex-row sm:justify-between">
           <span className="label">© NeuralTrade</span>
           <span className="text-xs">Les analyses sont fournies à titre informatif et ne constituent pas un conseil en investissement.</span>

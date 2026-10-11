@@ -29,9 +29,9 @@ function OfferCard({ offer }: { offer: Offer }) {
   const button = highlight ? "btn-secondary" : "btn-primary";
 
   return (
-    <div className={`panel relative flex flex-col p-8 ${highlight ? "bg-brand" : ""}`}>
+    <div className={`panel relative flex flex-col p-8 ${highlight ? "bg-brand text-background" : ""}`}>
       {highlight && (
-        <span className="absolute -right-3 -top-4 rotate-3 border-[3px] border-foreground bg-foreground px-3 py-1 font-display text-sm uppercase text-brand">
+        <span className="absolute -right-3 -top-4 rotate-3 border-2 border-border bg-surface px-3 py-1 font-display text-sm uppercase text-brand">
           {highlight}
         </span>
       )}
@@ -43,7 +43,7 @@ function OfferCard({ offer }: { offer: Offer }) {
       <ul className="mt-8 flex-1 space-y-3">
         {features.map((feature) => (
           <li key={feature} className="flex gap-3 font-medium">
-            <span className="grid size-6 shrink-0 place-items-center border-2 border-foreground bg-white text-xs font-bold">✓</span>
+            <span className="grid size-6 shrink-0 place-items-center border-2 border-border bg-background text-xs font-bold text-foreground">✓</span>
             {feature}
           </li>
         ))}

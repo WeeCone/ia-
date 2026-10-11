@@ -66,7 +66,7 @@ export default function SignupPage() {
           <input name="confirm" type="password" autoComplete="new-password" minLength={6} required placeholder="••••••••" />
         </label>
         <label className="flex items-start gap-2 text-xs leading-relaxed text-muted">
-          <input name="terms" type="checkbox" className="mt-0.5 size-4 accent-foreground" />
+          <input name="terms" type="checkbox" className="mt-0.5 size-4 accent-brand" />
           <span>
             J&apos;accepte les conditions d&apos;utilisation et je comprends que les analyses ne constituent pas un conseil en investissement.
           </span>
@@ -78,7 +78,7 @@ export default function SignupPage() {
       </form>
       <p className="mt-6 text-center text-sm text-muted">
         Déjà un compte ?{" "}
-        <Link href="/auth/login" className="font-bold underline decoration-2 underline-offset-2 hover:bg-brand">
+        <Link href="/auth/login" className="font-bold underline decoration-2 underline-offset-2 hover:text-brand">
           Se connecter
         </Link>
       </p>

@@ -48,11 +48,11 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <header className="border-b-[3px] border-foreground bg-white">
+      <header className="border-b-2 border-border bg-card">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
           <Logo />
           <div className="flex items-center gap-2">
-            <span className="label hidden border-[3px] border-foreground bg-brand px-3 py-2 sm:inline">
+            <span className="label hidden border-2 border-border bg-brand px-3 py-2 sm:inline text-background">
               {credits ?? "–"} crédits · {profile ? PLAN_LABELS[profile.plan] : "–"}
             </span>
             {profile?.plan === "monthly" && (
@@ -73,7 +73,7 @@ export default function DashboardPage() {
       </header>
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-12">
         {checkoutDone && (
-          <div className="mb-8 flex items-center justify-between gap-4 border-[3px] border-foreground bg-bull px-4 py-3 font-semibold text-white">
+          <div className="mb-8 flex items-center justify-between gap-4 border-2 border-border bg-bull px-4 py-3 font-semibold text-background">
             <span>
               {profile && profile.plan !== "none"
                 ? "Paiement confirmé. Vos crédits sont disponibles."
@@ -114,7 +114,7 @@ export default function DashboardPage() {
             {analysis ? (
               <AnalysisResult analysis={analysis} />
             ) : (
-              <div className="label grid min-h-32 place-items-center border-[3px] border-dashed border-foreground p-6 text-center">
+              <div className="label grid min-h-32 place-items-center border-2 border-dashed border-border p-6 text-center">
                 Le résultat de l&apos;analyse s&apos;affichera ici.
               </div>
             )}

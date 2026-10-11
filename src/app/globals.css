@@ -1,21 +1,23 @@
 @import "tailwindcss";
 
-/* Neo-brutalist: white paper, black ink, electric yellow, thick borders, hard offset shadows. */
+/* Bold, blocky layout on a deep navy palette: hard offset shadows, electric blue accent. */
 :root {
-  --background: #ffffff;
-  --foreground: #0a0a0a;
-  --surface: #ffffff;
-  --border: #0a0a0a;
-  --muted: #545454;
-  --brand: #ffe600;
-  --bull: #00a651;
-  --bear: #ff3d2e;
+  --background: #0b0f19;
+  --surface: #121826;
+  --card: #151d2c;
+  --border: #263247;
+  --foreground: #f1f5f9;
+  --muted: #94a3b8;
+  --brand: #4f8cff;
+  --bull: #22c997;
+  --bear: #f05d6c;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
+  --color-card: var(--card);
   --color-border: var(--border);
   --color-muted: var(--muted);
   --color-brand: var(--brand);
@@ -39,7 +41,7 @@ body {
 
 ::selection {
   background: var(--brand);
-  color: var(--foreground);
+  color: var(--background);
 }
 
 @keyframes ticker {
@@ -57,28 +59,28 @@ body {
   }
   /* Yellow marker highlight for the key words of a headline. */
   .mark {
-    @apply bg-brand px-2 [box-decoration-break:clone];
+    @apply bg-brand px-2 text-background [box-decoration-break:clone];
   }
   .panel {
-    @apply border-[3px] border-foreground bg-surface shadow-[8px_8px_0_0_var(--foreground)];
+    @apply border-2 border-border bg-card shadow-[8px_8px_0_0_var(--border)];
   }
   .btn-primary,
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 border-[3px] border-foreground px-6 py-3 font-display text-sm uppercase tracking-wide shadow-[4px_4px_0_0_var(--foreground)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_var(--foreground)] active:translate-x-1 active:translate-y-1 active:shadow-none disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-0 disabled:hover:shadow-[4px_4px_0_0_var(--foreground)];
+    @apply inline-flex items-center justify-center gap-2 border-2 border-border px-6 py-3 font-display text-sm uppercase tracking-wide shadow-[4px_4px_0_0_var(--border)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_var(--border)] active:translate-x-1 active:translate-y-1 active:shadow-none disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-0 disabled:hover:shadow-[4px_4px_0_0_var(--border)];
   }
   .btn-primary {
-    @apply bg-brand;
+    @apply border-brand bg-brand text-background;
   }
   .btn-secondary {
-    @apply bg-white;
+    @apply bg-card text-foreground hover:border-brand;
   }
   .btn-ghost {
-    @apply inline-flex items-center px-3 py-2 font-display text-sm uppercase decoration-[3px] underline-offset-4 hover:underline;
+    @apply inline-flex items-center px-3 py-2 font-display text-sm uppercase text-muted decoration-brand decoration-[3px] underline-offset-4 hover:text-foreground hover:underline;
   }
   .field {
     @apply flex flex-col gap-2 font-mono text-xs font-bold uppercase tracking-wider;
   }
   .field input {
-    @apply border-[3px] border-foreground bg-white px-3 py-3 font-sans text-base font-normal normal-case tracking-normal outline-none transition-shadow placeholder:text-muted/60 focus:bg-brand/20 focus:shadow-[4px_4px_0_0_var(--foreground)];
+    @apply border-2 border-border bg-background px-3 py-3 font-sans text-base font-normal normal-case tracking-normal text-foreground outline-none transition-all placeholder:text-muted/60 focus:border-brand focus:shadow-[4px_4px_0_0_var(--brand)];
   }
 }

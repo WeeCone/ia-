@@ -82,8 +82,8 @@ export function ChartUploader({ disabled, onAnalyzed }: Props) {
           setDragging(false);
           pick(event.dataTransfer.files[0]);
         }}
-        className={`grid min-h-56 w-full place-items-center overflow-hidden border-[3px] border-dashed border-foreground p-4 text-center transition-colors md:row-span-3 ${
-          dragging ? "bg-brand" : "bg-white hover:bg-brand/40"
+        className={`grid min-h-56 w-full place-items-center overflow-hidden border-2 border-dashed border-border p-4 text-center transition-colors md:row-span-3 ${
+          dragging ? "border-brand bg-brand/15" : "bg-background hover:border-brand hover:bg-brand/10"
         }`}
       >
         {preview ? (

@@ -35,14 +35,14 @@ export function DemoChart() {
         const up = close >= open;
         return (
           <g key={index} className={up ? "text-bull" : "text-bear"}>
-            <line x1={x} x2={x} y1={y(high)} y2={y(low)} stroke="var(--foreground)" strokeWidth={1.5} />
+            <line x1={x} x2={x} y1={y(high)} y2={y(low)} stroke="var(--background)" strokeWidth={1.5} />
             <rect
               x={x - step * 0.3}
               width={step * 0.6}
               y={y(Math.max(open, close))}
               height={Math.max(1.5, Math.abs(y(open) - y(close)))}
               fill="currentColor"
-              stroke="var(--foreground)"
+              stroke="var(--background)"
               strokeWidth={1.5}
             />
           </g>

@@ -40,7 +40,7 @@ export default function LoginPage() {
         <label className="field">
           <span className="flex justify-between">
             Mot de passe
-            <Link href="/auth/forgot-password" className="underline decoration-2 underline-offset-2 hover:bg-brand">
+            <Link href="/auth/forgot-password" className="underline decoration-2 underline-offset-2 hover:text-brand">
               Oublié ?
             </Link>
           </span>
@@ -53,7 +53,7 @@ export default function LoginPage() {
       </form>
       <p className="mt-6 text-center text-sm text-muted">
         Pas encore de compte ?{" "}
-        <Link href="/auth/signup" className="font-bold underline decoration-2 underline-offset-2 hover:bg-brand">
+        <Link href="/auth/signup" className="font-bold underline decoration-2 underline-offset-2 hover:text-brand">
           S&apos;inscrire
         </Link>
       </p>
