@@ -1,14 +1,14 @@
 import { adminDb } from "@/lib/firebase-admin";
 import type { Offer } from "@/lib/plans";
 import { getRequestUid } from "@/lib/server-auth";
-import { appUrl, getStripe } from "@/lib/stripe";
+import { appUrl, getStripe, withBillingErrors } from "@/lib/stripe";
 
 const PRICES: Record<Offer, string | undefined> = {
   monthly: process.env.STRIPE_PRICE_MONTHLY,
   lifetime: process.env.STRIPE_PRICE_LIFETIME,
 };
 
-export async function POST(request: Request) {
+async function handler(request: Request) {
   const uid = await getRequestUid(request);
   if (!uid) return Response.json({ error: "Session expirée, reconnectez-vous." }, { status: 401 });
 
@@ -67,3 +67,5 @@ export async function POST(request: Request) {
 
   return Response.json({ url: session.url });
 }
+
+export const POST = withBillingErrors(handler);

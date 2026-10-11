@@ -1,8 +1,8 @@
 import { adminDb } from "@/lib/firebase-admin";
 import { getRequestUid } from "@/lib/server-auth";
-import { appUrl, getStripe } from "@/lib/stripe";
+import { appUrl, getStripe, withBillingErrors } from "@/lib/stripe";
 
-export async function POST(request: Request) {
+async function handler(request: Request) {
   const uid = await getRequestUid(request);
   if (!uid) return Response.json({ error: "Session expirée, reconnectez-vous." }, { status: 401 });
 
@@ -15,3 +15,5 @@ export async function POST(request: Request) {
   });
   return Response.json({ url: session.url });
 }
+
+export const POST = withBillingErrors(handler);
