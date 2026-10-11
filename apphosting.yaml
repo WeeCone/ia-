@@ -29,9 +29,9 @@ env:
   # - variable: APP_URL
   #   value: https://REMPLACER
   #   availability: [RUNTIME]
-  # - variable: STRIPE_PRICE_MONTHLY
-  #   value: price_REMPLACER
-  #   availability: [RUNTIME]
+  - variable: STRIPE_PRICE_MONTHLY
+    value: price_1UPRavAeyb88TK1kfidsAU3j # mode test
+    availability: [RUNTIME]
   - variable: STRIPE_PRICE_LIFETIME
     value: price_1UPRZYAeyb88TK1ksRQteZMb # mode test
     availability: [RUNTIME]
