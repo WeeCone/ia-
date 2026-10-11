@@ -118,3 +118,21 @@ body {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
+/* Sweep used on the screenshot while an analysis runs. */
+@keyframes scan {
+  from {
+    left: -6rem;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation: none !important;
+  }
+}

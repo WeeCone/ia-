@@ -11,6 +11,7 @@ export const DEMO_ANALYSIS: ChartAnalysis = {
   supports: ["63 200", "61 800"],
   resistances: ["65 400", "67 000"],
   patterns: ["Cassure puis retest de 63 200 (flip résistance → support)", "Plus bas ascendants", "Volumes en hausse sur les bougies vertes"],
+  level_marks: [],
   bullish: {
     probability: 62,
     thesis: "Une clôture 4H au-dessus de 65 400 ouvrirait la voie vers le sommet précédent.",

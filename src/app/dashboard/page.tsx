@@ -4,10 +4,10 @@ import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnalysisHistory } from "@/components/analysis-history";
-import { AnalysisResult } from "@/components/analysis-result";
+import { AnalysisView } from "@/components/analysis-view";
 import { useAuth } from "@/components/auth-provider";
 import { BillingButton } from "@/components/billing-button";
-import { ChartUploader } from "@/components/chart-uploader";
+import { ChartUploader, type AnalysisOutcome } from "@/components/chart-uploader";
 import { DeleteAccount } from "@/components/delete-account";
 import { ReviewPrompt } from "@/components/review-prompt";
 import { Logo } from "@/components/logo";
@@ -21,7 +21,8 @@ export default function DashboardPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [analysis, setAnalysis] = useState<ChartAnalysis | null>(null);
+  // The analysis on screen: a fresh one (with the user's screenshot) or one reopened from history (no image).
+  const [current, setCurrent] = useState<{ analysis: ChartAnalysis; imageUrl: string | null } | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [analysisCount, setAnalysisCount] = useState(0);
   const resultRef = useRef<HTMLDivElement>(null);
@@ -38,9 +39,19 @@ export default function DashboardPage() {
     if (user) return subscribeUserProfile(user.uid, setProfile);
   }, [user]);
 
-  function show(next: ChartAnalysis) {
-    setAnalysis(next);
+  function show(next: { analysis: ChartAnalysis; imageUrl: string | null }) {
+    setCurrent((previous) => {
+      if (previous?.imageUrl && previous.imageUrl !== next.imageUrl) URL.revokeObjectURL(previous.imageUrl);
+      return next;
+    });
     requestAnimationFrame(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }
+
+  function startNew() {
+    setCurrent((previous) => {
+      if (previous?.imageUrl) URL.revokeObjectURL(previous.imageUrl);
+      return null;
+    });
   }
 
   const credits = profile ? availableCredits(profile) : null;
@@ -105,25 +116,20 @@ export default function DashboardPage() {
           </div>
         )}
         <p className="mt-6 text-lg">Importez une capture de graphique pour obtenir une analyse technique et deux scénarios.</p>
-        <div className="mt-10 space-y-6">
-          <ChartUploader
-            disabled={credits !== null && credits < 1}
-            onAnalyzed={(next) => {
-              show(next);
-              setRefreshKey((key) => key + 1);
-            }}
-          />
-          <div ref={resultRef} className="scroll-mt-6">
-            {analysis ? (
-              <AnalysisResult analysis={analysis} />
-            ) : (
-              <div className="label grid min-h-32 place-items-center border-2 border-dashed border-border p-6 text-center">
-                Le résultat de l&apos;analyse s&apos;affichera ici.
-              </div>
-            )}
-          </div>
+        <div ref={resultRef} className="mt-10 scroll-mt-6">
+          {current ? (
+            <AnalysisView analysis={current.analysis} imageUrl={current.imageUrl} onNew={startNew} />
+          ) : (
+            <ChartUploader
+              disabled={credits !== null && credits < 1}
+              onAnalyzed={(outcome: AnalysisOutcome) => {
+                show(outcome);
+                setRefreshKey((key) => key + 1);
+              }}
+            />
+          )}
         </div>
-        <AnalysisHistory uid={user.uid} refreshKey={refreshKey} onSelect={show} onLoaded={setAnalysisCount} />
+        <AnalysisHistory uid={user.uid} refreshKey={refreshKey} onSelect={(analysis) => show({ analysis, imageUrl: null })} onLoaded={setAnalysisCount} />
         <ReviewPrompt uid={user.uid} displayName={user.displayName} analysisCount={analysisCount} />
         <DeleteAccount plan={profile?.plan} />
       </main>

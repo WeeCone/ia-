@@ -17,11 +17,21 @@ export const ChartAnalysis = z.object({
   supports: z.array(z.string()),
   resistances: z.array(z.string()),
   patterns: z.array(z.string()).describe("Figures chartistes / signaux d'indicateurs visibles."),
+  level_marks: z
+    .array(
+      z.object({
+        price: z.string().describe("Le niveau, écrit comme dans supports / resistances."),
+        kind: z.enum(["support", "resistance"]),
+        y: z.number().describe("Position verticale de ce prix dans l'image entière : 0 = bord haut, 1 = bord bas."),
+      }),
+    )
+    .describe("Un repère par support et par résistance, pour les tracer sur la capture."),
   bullish: Scenario,
   bearish: Scenario,
 });
 
 export type ChartAnalysis = z.infer<typeof ChartAnalysis>;
+export type LevelMark = ChartAnalysis["level_marks"][number];
 
 export const ALLOWED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"] as const;
 export type AllowedImageType = (typeof ALLOWED_IMAGE_TYPES)[number];
