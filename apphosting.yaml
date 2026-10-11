@@ -30,10 +30,10 @@ env:
     value: https://scanvizo--scanzivo.europe-west4.hosted.app
     availability: [RUNTIME]
   - variable: STRIPE_PRICE_MONTHLY
-    value: price_1UPRavAeyb88TK1kfidsAU3j # mode test
+    value: price_1UPRavAeyb88TK1kfidsAU3j # LIVE (mode réel) — à remplacer par le prix de test pendant les essais
     availability: [RUNTIME]
   - variable: STRIPE_PRICE_LIFETIME
-    value: price_1UPRZYAeyb88TK1ksRQteZMb # mode test
+    value: price_1UPRZYAeyb88TK1ksRQteZMb # LIVE (mode réel) — à remplacer par le prix de test pendant les essais
     availability: [RUNTIME]
 
   # Secrets (Cloud Secret Manager) : firebase apphosting:secrets:set <nom>
