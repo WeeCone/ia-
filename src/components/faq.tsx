@@ -3,7 +3,7 @@ import { MONTHLY_CREDITS } from "@/lib/plans";
 
 const QUESTIONS: { q: string; a: React.ReactNode }[] = [
   {
-    q: "Comment fonctionne NeuralTrade ?",
+    q: "Comment fonctionne Scanzivo ?",
     a: "Vous importez une capture d'écran de votre graphique. Une IA de vision la lit comme un analyste : structure de marché, tendance, supports et résistances, figures chartistes et indicateurs visibles. Elle vous rend un rapport avec deux scénarios, haussier et baissier, chacun avec une probabilité estimée, une zone d'entrée, un stop et des objectifs.",
   },
   {
@@ -16,7 +16,7 @@ const QUESTIONS: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Sur quoi reposent les analyses ?",
-    a: "Uniquement sur ce qui est visible dans votre capture. NeuralTrade ne se connecte pas aux cotations en temps réel et ne voit pas l'actualité : une capture nette, avec l'axe des prix lisible, donne une meilleure analyse.",
+    a: "Uniquement sur ce qui est visible dans votre capture. Scanzivo ne se connecte pas aux cotations en temps réel et ne voit pas l'actualité : une capture nette, avec l'axe des prix lisible, donne une meilleure analyse.",
   },
   {
     q: "Puis-je adapter l'analyse à ma façon de trader ?",
@@ -36,7 +36,7 @@ const QUESTIONS: { q: string; a: React.ReactNode }[] = [
     ),
   },
   {
-    q: "NeuralTrade garantit-il des gains ?",
+    q: "Scanzivo garantit-il des gains ?",
     a: "Non. Aucun outil ne peut garantir des gains. Les probabilités sont des estimations du modèle, pas des certitudes, et les analyses ne constituent pas un conseil en investissement. Le trading comporte un risque de perte en capital : ne risquez que ce que vous pouvez vous permettre de perdre.",
   },
 ];

@@ -14,7 +14,7 @@ function summaryText(analysis: ChartAnalysis) {
     `Supports : ${analysis.supports.join(", ") || "—"} · Résistances : ${analysis.resistances.join(", ") || "—"}`,
     scenario("Haussier", analysis.bullish),
     scenario("Baissier", analysis.bearish),
-    "Analyse NeuralTrade, à titre informatif. Pas un conseil en investissement.",
+    "Analyse Scanzivo, à titre informatif. Pas un conseil en investissement.",
   ].join("\n\n");
 }
 

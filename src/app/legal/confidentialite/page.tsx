@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal-page";
 import { COMPANY } from "@/lib/legal";
 
-export const metadata: Metadata = { title: "Politique de confidentialité — NeuralTrade" };
+export const metadata: Metadata = { title: "Politique de confidentialité — Scanzivo" };
 
 export default function ConfidentialitePage() {
   return (

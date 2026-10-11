@@ -49,6 +49,6 @@ env:
     secret: resendApiKey
     availability: [RUNTIME]
   - variable: EMAIL_FROM
-    value: "NeuralTrade <bonjour@REMPLACER>"
+    value: "Scanzivo <bonjour@REMPLACER>"
     availability: [RUNTIME]
   # FIREBASE_SERVICE_ACCOUNT est inutile ici : le SDK Admin utilise les identifiants par défaut.

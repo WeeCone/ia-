@@ -6,7 +6,7 @@ import { db } from "@/lib/firebase";
 import { FormError } from "./auth-card";
 
 const MIN_ANALYSES = 3;
-const DISMISS_KEY = "nt-review-dismissed";
+const DISMISS_KEY = "scanzivo-review-dismissed";
 
 /** Asks engaged users (3+ analyses) for one review, stored in reviews/{uid} for manual moderation. */
 export function ReviewPrompt({ uid, displayName, analysisCount }: { uid: string; displayName: string | null; analysisCount: number }) {
@@ -34,7 +34,7 @@ export function ReviewPrompt({ uid, displayName, analysisCount }: { uid: string;
     return (
       <section className="panel mt-16 border-bull p-6">
         <p className="display text-2xl text-bull">Merci pour votre avis.</p>
-        <p className="mt-2 text-sm text-muted">Il nous aide à améliorer NeuralTrade.</p>
+        <p className="mt-2 text-sm text-muted">Il nous aide à améliorer Scanzivo.</p>
       </section>
     );
   }

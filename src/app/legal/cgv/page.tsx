@@ -4,7 +4,7 @@ import { LegalPage } from "@/components/legal-page";
 import { COMPANY } from "@/lib/legal";
 import { MONTHLY_CREDITS, OFFERS } from "@/lib/plans";
 
-export const metadata: Metadata = { title: "Conditions générales — NeuralTrade" };
+export const metadata: Metadata = { title: "Conditions générales — Scanzivo" };
 
 export default function CgvPage() {
   return (

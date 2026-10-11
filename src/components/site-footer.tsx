@@ -49,7 +49,7 @@ export function SiteFooter() {
       </div>
       <div className="border-t-2 border-border">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-xs text-muted sm:flex-row sm:justify-between">
-          <span>© 2026 NeuralTrade. Tous droits réservés.</span>
+          <span>© 2026 Scanzivo. Tous droits réservés.</span>
           <span>Ceci n&apos;est pas un conseil en investissement. Le trading comporte un risque de perte en capital.</span>
         </div>
       </div>

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal-page";
 import { COMPANY } from "@/lib/legal";
 
-export const metadata: Metadata = { title: "Mentions légales — NeuralTrade" };
+export const metadata: Metadata = { title: "Mentions légales — Scanzivo" };
 
 export default function MentionsPage() {
   return (

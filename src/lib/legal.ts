@@ -1,6 +1,6 @@
 // Company details shown on the legal pages. Fill in every "[À COMPLÉTER]" before going live.
 export const COMPANY = {
-  brand: "NeuralTrade",
+  brand: "Scanzivo",
   name: "[À COMPLÉTER : raison sociale]",
   legalForm: "[À COMPLÉTER : forme juridique et capital, ex. SAS au capital de 1 000 €]",
   address: "[À COMPLÉTER : adresse du siège]",

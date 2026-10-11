@@ -24,11 +24,11 @@ export async function sendWelcomeEmail(to: string, name: string | null, appUrl: 
   const { error } = await resend.emails.send({
     from: process.env.EMAIL_FROM,
     to,
-    subject: "Bienvenue sur NeuralTrade",
+    subject: "Bienvenue sur Scanzivo",
     text: [
       greeting,
       "",
-      "Votre compte NeuralTrade est créé.",
+      "Votre compte Scanzivo est créé.",
       "Choisissez votre offre, puis importez une capture de graphique : vous recevrez tendance, niveaux clés et deux scénarios chiffrés.",
       "",
       `Commencer : ${appUrl}/pricing`,
@@ -54,7 +54,7 @@ function welcomeHtml(name: string | null, appUrl: string) {
       <tr><td align="center">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#151d2c;border:2px solid #263247">
           <tr><td style="padding:20px 28px;border-bottom:2px solid #263247;font-weight:900;font-size:18px;letter-spacing:0.5px">
-            <span style="display:inline-block;background:#4f8cff;color:#0b0f19;padding:2px 8px;margin-right:8px">N</span>NEURALTRADE
+            <span style="display:inline-block;background:#4f8cff;color:#0b0f19;padding:2px 8px;margin-right:8px">S</span>SCANZIVO
           </td></tr>
           <tr><td style="padding:32px 28px">
             <h1 style="margin:0 0 20px;font-size:30px;line-height:1.1;text-transform:uppercase">

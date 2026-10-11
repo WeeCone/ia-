@@ -8,7 +8,7 @@ const archivoBlack = Archivo_Black({ variable: "--font-archivo-black", subsets: 
 const jetbrainsMono = JetBrains_Mono({ variable: "--font-jetbrains-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "NeuralTrade — Analyse de graphiques par IA",
+  title: "Scanzivo — Analyse de graphiques par IA",
   description: "Importez une capture de graphique et obtenez une analyse technique et des scénarios de trading générés par IA.",
 };
 
