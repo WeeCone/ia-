@@ -7,15 +7,18 @@ import { db } from "@/lib/firebase";
 
 type StoredAnalysis = ChartAnalysis & { id: string; createdAt?: Timestamp };
 
-type Props = { uid: string; refreshKey: number; onSelect: (analysis: ChartAnalysis) => void };
+type Props = { uid: string; refreshKey: number; onSelect: (analysis: ChartAnalysis) => void; onLoaded?: (count: number) => void };
 
-export function AnalysisHistory({ uid, refreshKey, onSelect }: Props) {
+export function AnalysisHistory({ uid, refreshKey, onSelect, onLoaded }: Props) {
   const [items, setItems] = useState<StoredAnalysis[]>([]);
 
   useEffect(() => {
     const q = query(collection(db, "users", uid, "analyses"), orderBy("createdAt", "desc"), limit(20));
-    getDocs(q).then((snap) => setItems(snap.docs.map((d) => ({ id: d.id, ...(d.data() as ChartAnalysis) }))));
-  }, [uid, refreshKey]);
+    getDocs(q).then((snap) => {
+      setItems(snap.docs.map((d) => ({ id: d.id, ...(d.data() as ChartAnalysis) })));
+      onLoaded?.(snap.size);
+    });
+  }, [uid, refreshKey, onLoaded]);
 
   if (!items.length) return null;
 

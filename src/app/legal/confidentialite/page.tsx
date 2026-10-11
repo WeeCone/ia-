@@ -22,6 +22,10 @@ export default function ConfidentialitePage() {
           les résultats d&apos;analyse.
         </li>
         <li>
+          <strong>Avis</strong> : la note, le commentaire et votre accord de publication, si vous choisissez de laisser un avis.
+          Un avis n&apos;est publié sur le site qu&apos;avec votre accord, sous votre prénom et l&apos;initiale de votre nom.
+        </li>
+        <li>
           <strong>Facturation</strong> : offre souscrite, historique de paiement, identifiant client Stripe. Les données
           bancaires sont traitées exclusivement par Stripe.
         </li>

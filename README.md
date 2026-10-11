@@ -42,6 +42,12 @@ appelle Claude Opus 5.5 avec sortie structurée (schéma Zod dans `src/lib/analy
 - **Paiement** : activez les reçus Stripe (Paramètres → **Emails clients** → paiements réussis et remboursements).
   Stripe envoie aussi les rappels de renouvellement et d'échec de paiement de l'abonnement si vous les activez dans Billing → Emails.
 
+## Avis clients
+
+Après 3 analyses, le tableau de bord propose de laisser un avis (note, texte, accord de publication),
+enregistré dans la collection Firestore `reviews`. Rien n'est publié automatiquement : choisissez dans la
+console Firebase les avis avec `publishConsent: true`, puis ajoutez-les à `src/lib/testimonials.ts` (sans `example: true`).
+
 ## Pages légales
 
 `/legal/mentions`, `/legal/cgv` et `/legal/confidentialite` sont prêtes, mais **complétez les champs `[À COMPLÉTER]`**

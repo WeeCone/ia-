@@ -25,6 +25,7 @@ export async function DELETE(request: Request) {
   }
 
   await adminDb.recursiveDelete(userRef); // profile + analyses history
+  await adminDb.collection("reviews").doc(uid).delete();
   await adminAuth.deleteUser(uid);
 
   return new Response(null, { status: 204 });

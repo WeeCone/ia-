@@ -15,5 +15,20 @@ service cloud.firestore {
         allow write: if false;
       }
     }
+
+    // One review per user, moderated by hand before anything is published on the site.
+    match /reviews/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow create: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(["uid", "rating", "text", "publishConsent", "displayName", "createdAt"])
+        && request.resource.data.uid == uid
+        && request.resource.data.rating is int
+        && request.resource.data.rating >= 1 && request.resource.data.rating <= 5
+        && request.resource.data.text is string
+        && request.resource.data.text.size() >= 10 && request.resource.data.text.size() <= 600
+        && request.resource.data.publishConsent is bool
+        && request.resource.data.createdAt == request.time;
+      allow update, delete: if false;
+    }
   }
 }

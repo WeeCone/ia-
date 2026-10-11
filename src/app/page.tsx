@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AnalysisResult } from "@/components/analysis-result";
 import { Faq } from "@/components/faq";
 import { HeroBackdrop } from "@/components/hero-backdrop";
+import { PricingPlans } from "@/components/pricing-plans";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Testimonials } from "@/components/testimonials";
@@ -91,6 +92,20 @@ export default function Home() {
         </section>
 
         <Testimonials />
+
+        {/* Pricing */}
+        <section id="tarifs" className="scroll-mt-4 border-t-2 border-border">
+          <div className="mx-auto max-w-5xl px-4 py-20">
+            <h2 className="display text-5xl sm:text-6xl">
+              Deux offres. <span className="mark">Aucun piège.</span>
+            </h2>
+            <p className="mt-6 max-w-xl text-lg text-muted">Un abonnement mensuel sans engagement, ou un accès à vie en un seul paiement.</p>
+            <div className="mt-12">
+              <PricingPlans />
+            </div>
+          </div>
+        </section>
+
         <Faq />
 
         {/* Closing CTA */}

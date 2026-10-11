@@ -9,6 +9,7 @@ import { useAuth } from "@/components/auth-provider";
 import { BillingButton } from "@/components/billing-button";
 import { ChartUploader } from "@/components/chart-uploader";
 import { DeleteAccount } from "@/components/delete-account";
+import { ReviewPrompt } from "@/components/review-prompt";
 import { Logo } from "@/components/logo";
 import Link from "next/link";
 import type { ChartAnalysis } from "@/lib/analysis";
@@ -22,6 +23,7 @@ export default function DashboardPage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [analysis, setAnalysis] = useState<ChartAnalysis | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [analysisCount, setAnalysisCount] = useState(0);
   const resultRef = useRef<HTMLDivElement>(null);
   // Read once on the client; the page renders a loading state until auth resolves, so this cannot mismatch.
   const [checkoutDone, setCheckoutDone] = useState(
@@ -121,7 +123,8 @@ export default function DashboardPage() {
             )}
           </div>
         </div>
-        <AnalysisHistory uid={user.uid} refreshKey={refreshKey} onSelect={show} />
+        <AnalysisHistory uid={user.uid} refreshKey={refreshKey} onSelect={show} onLoaded={setAnalysisCount} />
+        <ReviewPrompt uid={user.uid} displayName={user.displayName} analysisCount={analysisCount} />
         <DeleteAccount plan={profile?.plan} />
       </main>
     </div>
