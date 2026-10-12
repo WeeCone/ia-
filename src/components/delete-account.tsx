@@ -39,7 +39,7 @@ export function DeleteAccount({ plan }: { plan: Plan | undefined }) {
   }
 
   return (
-    <section className="mt-16 border-t-2 border-border pt-10">
+    <section className="mt-16 border-t border-border/70 pt-10">
       <h2 className="display text-3xl">Compte</h2>
       {!open ? (
         <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -49,9 +49,9 @@ export function DeleteAccount({ plan }: { plan: Plan | undefined }) {
           </button>
         </div>
       ) : (
-        <div className="panel mt-6 space-y-4 border-bear p-6">
+        <div className="panel mt-6 space-y-4 border-bear/50 p-6">
           <p className="font-semibold text-bear">Cette action est définitive.</p>
-          <ul className="list-[square] space-y-1 pl-5 text-sm text-muted">
+          <ul className="list-disc space-y-1 pl-5 text-sm text-muted">
             <li>Votre profil et tout l&apos;historique de vos analyses seront effacés.</li>
             {plan === "monthly" && <li>Votre abonnement mensuel sera résilié immédiatement, sans remboursement de la période en cours.</li>}
             {plan === "lifetime" && <li>Vous perdrez votre accès à vie, sans remboursement.</li>}
@@ -69,7 +69,7 @@ export function DeleteAccount({ plan }: { plan: Plan | undefined }) {
               type="button"
               onClick={confirmDelete}
               disabled={typed.trim().toUpperCase() !== CONFIRMATION || pending}
-              className="btn-primary border-bear bg-bear"
+              className="btn-primary bg-bear shadow-none hover:bg-bear/90 hover:shadow-none"
             >
               {pending ? "Suppression…" : "Supprimer définitivement"}
             </button>

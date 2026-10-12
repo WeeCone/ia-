@@ -43,24 +43,24 @@ const QUESTIONS: { q: string; a: React.ReactNode }[] = [
 
 export function Faq() {
   return (
-    <section id="faq" className="scroll-mt-4 border-t-2 border-border">
+    <section id="faq" className="scroll-mt-20">
       <div className="mx-auto grid max-w-6xl gap-12 px-4 py-20 lg:grid-cols-12">
         <div className="lg:col-span-4">
-          <span className="label inline-block border-2 border-border bg-card px-3 py-1">FAQ</span>
-          <h2 className="display mt-6 text-5xl">Questions fréquentes</h2>
+          <p className="label text-brand">FAQ</p>
+          <h2 className="display mt-3 text-4xl sm:text-5xl">Questions fréquentes</h2>
           <p className="mt-4 text-muted">Tout ce qu&apos;il faut savoir avant votre première analyse.</p>
           <Link href="/auth/signup" className="btn-primary mt-8">Commencer →</Link>
         </div>
         <div className="space-y-4 lg:col-span-8">
           {QUESTIONS.map(({ q, a }) => (
-            <details key={q} className="group panel shadow-[4px_4px_0_0_var(--border)] open:border-brand">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 font-semibold [&::-webkit-details-marker]:hidden">
+            <details key={q} className="group panel open:border-brand/50">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 font-medium [&::-webkit-details-marker]:hidden">
                 {q}
-                <span className="display shrink-0 text-2xl leading-none text-brand transition-transform group-open:rotate-45" aria-hidden>
+                <span className="shrink-0 font-display text-2xl leading-none text-brand transition-transform group-open:rotate-45" aria-hidden>
                   +
                 </span>
               </summary>
-              <div className="border-t-2 border-border px-5 py-4 leading-relaxed text-muted">{a}</div>
+              <div className="border-t border-border px-5 py-4 leading-relaxed text-muted">{a}</div>
             </details>
           ))}
         </div>

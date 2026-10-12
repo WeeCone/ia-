@@ -11,7 +11,7 @@ export function AnnotatedChart({ imageUrl, marks }: { imageUrl: string; marks: L
 
   return (
     <figure className="panel">
-      <figcaption className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-border px-5 py-3">
+      <figcaption className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-3">
         <span className="label">Votre graphique</span>
         {visible.length > 0 && (
           <label className="label flex cursor-pointer items-center gap-2 text-muted">
@@ -26,7 +26,7 @@ export function AnnotatedChart({ imageUrl, marks }: { imageUrl: string; marks: L
           </label>
         )}
       </figcaption>
-      <div className="bg-background p-3">
+      <div className="rounded-b-2xl bg-background/60 p-3">
         <div className="relative mx-auto w-fit">
           {/* eslint-disable-next-line @next/next/no-img-element -- local object URL */}
           <img src={imageUrl} alt="Graphique analysé" className="block max-h-[560px] w-auto max-w-full" />
@@ -41,19 +41,19 @@ export function AnnotatedChart({ imageUrl, marks }: { imageUrl: string; marks: L
                 >
                   {/* Label on the left: chart platforms put their own price axis on the right. */}
                   <span
-                    className="label border-2 border-border px-1.5 py-0.5 text-background"
+                    className="label rounded px-1.5 py-0.5 text-background"
                     style={{ background: tone }}
                   >
                     {mark.price}
                   </span>
-                  <span className="h-0 flex-1 border-t-2 border-dashed" style={{ borderColor: tone }} />
+                  <span className="h-0 flex-1 border-t border-dashed" style={{ borderColor: tone }} />
                 </div>
               );
             })}
         </div>
       </div>
       {showLevels && visible.length > 0 && (
-        <p className="border-t-2 border-border px-5 py-2 text-xs text-muted">
+        <p className="border-t border-border px-5 py-2 text-xs text-muted">
           Tracé indicatif : la position des niveaux est estimée par l&apos;IA à partir de l&apos;axe des prix.
         </p>
       )}

@@ -26,24 +26,24 @@ function OfferCard({ offer }: { offer: Offer }) {
   const { user } = useAuth();
   const { name, price, period } = OFFERS[offer];
   const { features, cta, highlight } = details[offer];
-  const button = highlight ? "btn-secondary" : "btn-primary";
+  const button = highlight ? "btn-primary" : "btn-secondary";
 
   return (
-    <div className={`panel relative flex flex-col p-8 ${highlight ? "bg-brand text-background" : ""}`}>
+    <div className={`panel relative flex flex-col p-8 ${highlight ? "glow" : ""}`}>
       {highlight && (
-        <span className="absolute -right-3 -top-4 rotate-3 border-2 border-border bg-surface px-3 py-1 font-display text-sm uppercase text-brand">
+        <span className="chip absolute -top-3 right-6 border-accent/50 bg-background text-accent">
           {highlight}
         </span>
       )}
-      <h2 className="display text-4xl">{name}</h2>
+      <h2 className="display text-2xl">{name}</h2>
       <p className="mt-6 flex items-baseline gap-3">
-        <span className="display text-7xl">{price}</span>
-        <span className="label">{period}</span>
+        <span className="display text-6xl">{price}</span>
+        <span className="label text-muted">{period}</span>
       </p>
       <ul className="mt-8 flex-1 space-y-3">
         {features.map((feature) => (
-          <li key={feature} className="flex gap-3 font-medium">
-            <span className="grid size-6 shrink-0 place-items-center border-2 border-border bg-background text-xs font-bold text-foreground">✓</span>
+          <li key={feature} className="flex gap-3 text-sm text-muted">
+            <span className="grid size-5 shrink-0 place-items-center rounded-full bg-accent/15 text-[11px] font-bold text-accent">✓</span>
             {feature}
           </li>
         ))}

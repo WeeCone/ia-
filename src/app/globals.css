@@ -1,16 +1,17 @@
 @import "tailwindcss";
 
-/* Bold, blocky layout on a deep navy palette: hard offset shadows, electric blue accent. */
+/* Dark fintech look: deep anthracite, glass cards with soft glowing borders, cyan for the AI, neon green for action. */
 :root {
-  --background: #0b0f19;
-  --surface: #121826;
-  --card: #151d2c;
-  --border: #263247;
-  --foreground: #f1f5f9;
-  --muted: #94a3b8;
-  --brand: #4f8cff;
-  --bull: #22c997;
-  --bear: #f05d6c;
+  --background: #0b0e14;
+  --surface: #0f141c;
+  --card: #161b22;
+  --border: #30363d;
+  --foreground: #e6edf3;
+  --muted: #8b949e;
+  --brand: #00d2ff;
+  --accent: #00f5a0;
+  --bull: #00f5a0;
+  --bear: #ff4d6d;
 }
 
 @theme inline {
@@ -21,23 +22,18 @@
   --color-border: var(--border);
   --color-muted: var(--muted);
   --color-brand: var(--brand);
+  --color-accent: var(--accent);
   --color-bull: var(--bull);
   --color-bear: var(--bear);
-  --font-sans: var(--font-archivo);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
-  --font-display: var(--font-archivo-black);
-
-  --radius-sm: 0;
-  --radius-md: 0;
-  --radius-lg: 0;
-  --radius-xl: 0;
-  --radius-2xl: 0;
+  --font-display: var(--font-space-grotesk);
+  --font-logo: var(--font-archivo-black);
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  /* Highlighted words in big headlines can poke a few px past the gutter on phones. */
   overflow-x: clip;
 }
 
@@ -48,37 +44,51 @@ body {
 
 @layer components {
   .label {
-    @apply font-mono text-xs font-bold uppercase tracking-wider;
+    @apply font-mono text-xs font-medium uppercase tracking-wider;
   }
   .display {
-    @apply font-display uppercase leading-[0.9] tracking-tight;
+    @apply font-display font-bold leading-[1.05] tracking-tight;
   }
-  /* Yellow marker highlight for the key words of a headline. */
+  /* Key words of a headline: cyan-to-green gradient text. */
   .mark {
-    @apply bg-brand px-2 text-background [box-decoration-break:clone];
+    @apply bg-linear-to-r from-brand to-accent bg-clip-text text-transparent [box-decoration-break:clone];
   }
   .panel {
-    @apply border-2 border-border bg-card shadow-[8px_8px_0_0_var(--border)];
+    @apply rounded-2xl border border-border bg-card/70 shadow-[0_8px_32px_-12px_rgb(0_0_0/0.6)] backdrop-blur-md;
+  }
+  /* Panel with a soft cyan/green glow, for the hero pieces. */
+  .glow {
+    @apply border-brand/40 shadow-[0_0_0_1px_rgb(0_210_255/0.08),0_0_40px_-8px_rgb(0_210_255/0.35),0_0_80px_-20px_rgb(0_245_160/0.25)];
   }
   .btn-primary,
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 border-2 border-border px-6 py-3 font-display text-sm uppercase tracking-wide shadow-[4px_4px_0_0_var(--border)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_var(--border)] active:translate-x-1 active:translate-y-1 active:shadow-none disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-0 disabled:hover:shadow-[4px_4px_0_0_var(--border)];
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 font-display text-sm font-semibold transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none;
   }
   .btn-primary {
-    @apply border-brand bg-brand text-background;
+    @apply bg-accent text-background shadow-[0_0_24px_-4px_rgb(0_245_160/0.6)] hover:bg-[#33f7b3] hover:shadow-[0_0_32px_-2px_rgb(0_245_160/0.75)];
   }
   .btn-secondary {
-    @apply bg-card text-foreground hover:border-brand;
+    @apply border border-border bg-card/70 text-foreground backdrop-blur hover:border-brand/60 hover:text-brand;
   }
   .btn-ghost {
-    @apply inline-flex items-center px-3 py-2 font-display text-sm uppercase text-muted decoration-brand decoration-[3px] underline-offset-4 hover:text-foreground hover:underline;
+    @apply inline-flex items-center rounded-lg px-3 py-2 font-display text-sm font-medium text-muted transition-colors hover:text-foreground;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-xs font-medium uppercase tracking-wide;
   }
   .field {
-    @apply flex flex-col gap-2 font-mono text-xs font-bold uppercase tracking-wider;
+    @apply flex flex-col gap-2 text-sm font-medium text-muted;
   }
   .field input {
-    @apply border-2 border-border bg-background px-3 py-3 font-sans text-base font-normal normal-case tracking-normal text-foreground outline-none transition-all placeholder:text-muted/60 focus:border-brand focus:shadow-[4px_4px_0_0_var(--brand)];
+    @apply rounded-xl border border-border bg-background/80 px-3.5 py-3 font-sans text-base font-normal text-foreground outline-none transition-all placeholder:text-muted/60 focus:border-brand focus:shadow-[0_0_0_3px_rgb(0_210_255/0.2)];
   }
+}
+
+/* Faint chart-paper grid used behind hero sections. */
+.grid-bg {
+  background-image: linear-gradient(rgb(48 54 61 / 0.35) 1px, transparent 1px), linear-gradient(90deg, rgb(48 54 61 / 0.35) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 75%);
 }
 
 /* Long-form legal text. */
@@ -91,8 +101,8 @@ body {
   margin-bottom: 1rem;
   font-family: var(--font-display);
   font-size: 1.5rem;
+  font-weight: 700;
   line-height: 1.2;
-  text-transform: uppercase;
   color: var(--foreground);
 }
 .legal p,
@@ -100,7 +110,7 @@ body {
   margin-top: 1rem;
 }
 .legal ul {
-  list-style: square;
+  list-style: disc;
   padding-left: 1.25rem;
 }
 .legal li + li {
@@ -122,6 +132,22 @@ body {
   }
   to {
     left: 100%;
+  }
+}
+
+/* Laser line sweeping down the hero drop zone. */
+@keyframes scan-y {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
   }
 }
 

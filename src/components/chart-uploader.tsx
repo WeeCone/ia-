@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { ChartAnalysis } from "@/lib/analysis";
 import { auth } from "@/lib/firebase";
 import { prepareImage } from "@/lib/image";
+import { takePendingChart } from "@/lib/pending-chart";
 import { FormError } from "./auth-card";
 
 export type AnalysisOutcome = { analysis: ChartAnalysis; imageUrl: string };
@@ -55,6 +56,12 @@ export function ChartUploader({ disabled, disabledLabel = "Plus de crédits", on
     },
     [preview],
   );
+
+  // A chart dropped on the landing page before signing in.
+  useEffect(() => {
+    takePendingChart().then((pending) => pending && pick(pending));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on mount
+  }, []);
 
   // Ctrl/Cmd+V a screenshot straight from the clipboard.
   useEffect(() => {
@@ -111,8 +118,8 @@ export function ChartUploader({ disabled, disabledLabel = "Plus de crédits", on
 
   return (
     <div className="panel">
-      <div className="flex items-center justify-between gap-3 border-b-2 border-border px-5 py-3">
-        <span className="label">{pending ? "Analyse en cours" : "Nouvelle analyse"}</span>
+      <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-3">
+        <span className="label text-muted">{pending ? "Analyse en cours" : "Nouvelle analyse"}</span>
         {pending && <span className="label tabular-nums text-brand">{elapsed} s</span>}
       </div>
 
@@ -129,8 +136,8 @@ export function ChartUploader({ disabled, disabledLabel = "Plus de crédits", on
             setDragging(false);
             pick(event.dataTransfer.files[0]);
           }}
-          className={`relative grid min-h-64 place-items-center overflow-hidden border-2 border-dashed transition-colors ${
-            dragging ? "border-brand bg-brand/15" : preview ? "border-border bg-background" : "border-border bg-background hover:border-brand"
+          className={`relative grid min-h-64 place-items-center overflow-hidden rounded-xl border-2 border-dashed transition-colors ${
+            dragging ? "border-accent bg-accent/10" : preview ? "border-border bg-background/60" : "border-brand/40 bg-background/60 hover:border-brand"
           }`}
         >
           {preview ? (
@@ -145,7 +152,7 @@ export function ChartUploader({ disabled, disabledLabel = "Plus de crédits", on
                 </div>
               )}
               {!pending && (
-                <button type="button" onClick={clear} className="label absolute right-2 top-2 border-2 border-border bg-card px-2 py-1 hover:border-bear hover:text-bear">
+                <button type="button" onClick={clear} className="label absolute right-2 top-2 rounded-lg border border-border bg-card/90 px-2 py-1 hover:border-bear hover:text-bear">
                   Changer
                 </button>
               )}
@@ -157,7 +164,7 @@ export function ChartUploader({ disabled, disabledLabel = "Plus de crédits", on
               disabled={preparing}
               className="flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center"
             >
-              <span className="display text-3xl sm:text-4xl">{preparing ? "Préparation…" : "Déposez votre capture"}</span>
+              <span className="display text-2xl sm:text-3xl">{preparing ? "Préparation…" : "Déposez votre capture"}</span>
               <span className="label hidden text-muted sm:inline">Clic · glisser-déposer · Ctrl+V</span>
               <span className="label text-muted sm:hidden">Touchez pour choisir une image</span>
             </button>
@@ -176,7 +183,7 @@ export function ChartUploader({ disabled, disabledLabel = "Plus de crédits", on
                   return (
                     <li key={label} className={`flex items-center gap-3 text-sm ${status === "todo" ? "text-muted" : ""}`}>
                       <span
-                        className={`grid size-5 shrink-0 place-items-center border-2 text-[10px] font-bold ${
+                        className={`grid size-5 shrink-0 place-items-center rounded-full border text-[10px] font-bold ${
                           status === "done"
                             ? "border-bull bg-bull text-background"
                             : status === "active"

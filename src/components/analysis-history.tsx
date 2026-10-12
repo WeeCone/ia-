@@ -24,8 +24,8 @@ export function AnalysisHistory({ uid, refreshKey, onSelect, onLoaded }: Props) 
 
   return (
     <section className="mt-16">
-      <h2 className="display text-4xl">Historique</h2>
-      <ul className="panel mt-6 divide-y-2 divide-border">
+      <h2 className="display text-3xl">Historique</h2>
+      <ul className="panel mt-6 divide-y divide-border">
         {items.map((item) => (
           <li key={item.id}>
             <button
@@ -33,7 +33,7 @@ export function AnalysisHistory({ uid, refreshKey, onSelect, onLoaded }: Props) 
               onClick={() => onSelect(item)}
               className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm transition-colors hover:text-brand"
             >
-              <span className="display text-2xl">
+              <span className="display text-xl">
                 {item.is_chart ? item.asset : "Image non reconnue"}{" "}
                 {item.is_chart && <span className="font-mono text-xs text-muted">{item.timeframe}</span>}
               </span>

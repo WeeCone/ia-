@@ -11,15 +11,15 @@ export default function PricingPage() {
       <SiteHeader />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-24 pt-16 sm:pt-24">
         <div>
-          <h1 className="display text-6xl sm:text-8xl">
+          <h1 className="display text-4xl sm:text-6xl">
             Deux offres. <span className="mark">Aucun piège.</span>
           </h1>
-          <p className="mt-6 max-w-xl text-lg">Un abonnement mensuel sans engagement, ou un accès à vie en un seul paiement.</p>
+          <p className="mt-6 max-w-xl text-lg text-muted">Un abonnement mensuel sans engagement, ou un accès à vie en un seul paiement.</p>
         </div>
         <div className="mt-12">
           <PricingPlans />
         </div>
-        <p className="mt-12 text-xs font-semibold">
+        <p className="mt-12 text-xs text-muted">
           Paiement sécurisé par Stripe. Les analyses sont fournies à titre informatif et ne constituent pas un conseil en investissement.
         </p>
       </main>

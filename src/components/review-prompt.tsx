@@ -32,7 +32,7 @@ export function ReviewPrompt({ uid, displayName, analysisCount }: { uid: string;
 
   if (state === "sent") {
     return (
-      <section className="panel mt-16 border-bull p-6">
+      <section className="panel mt-16 border-bull/40 p-6">
         <p className="display text-2xl text-bull">Merci pour votre avis.</p>
         <p className="mt-2 text-sm text-muted">Il nous aide à améliorer Scanzivo.</p>
       </section>
@@ -90,8 +90,8 @@ export function ReviewPrompt({ uid, displayName, analysisCount }: { uid: string;
                 onClick={() => setRating(value)}
                 aria-label={`${value} sur 5`}
                 aria-pressed={rating === value}
-                className={`grid size-11 place-items-center border-2 font-display text-lg transition-colors ${
-                  value <= rating ? "border-brand bg-brand text-background" : "border-border bg-background text-muted hover:border-brand"
+                className={`grid size-11 place-items-center rounded-xl border font-display text-lg transition-colors ${
+                  value <= rating ? "border-accent bg-accent text-background" : "border-border bg-background text-muted hover:border-brand"
                 }`}
               >
                 {value}
@@ -108,7 +108,7 @@ export function ReviewPrompt({ uid, displayName, analysisCount }: { uid: string;
             maxLength={600}
             rows={4}
             placeholder="Ce qui vous aide, ce qui manque…"
-            className="border-2 border-border bg-background px-3 py-3 font-sans text-base normal-case tracking-normal text-foreground outline-none placeholder:text-muted/60 focus:border-brand"
+            className="rounded-xl border border-border bg-background/80 px-3.5 py-3 font-sans text-base text-foreground outline-none placeholder:text-muted/60 focus:border-brand focus:shadow-[0_0_0_3px_rgb(0_210_255/0.2)]"
           />
         </label>
         <label className="flex items-start gap-2 text-sm text-muted">

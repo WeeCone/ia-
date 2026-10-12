@@ -62,11 +62,11 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <header className="border-b-2 border-border bg-card">
+      <header className="sticky top-0 z-40 border-b border-border/70 bg-background/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
           <Logo />
           <div className="flex items-center gap-2">
-            <span className="label hidden border-2 border-border bg-brand px-3 py-2 sm:inline text-background">
+            <span className="chip hidden border-brand/40 bg-brand/10 py-1.5 text-brand sm:inline-flex">
               {credits ?? "–"} crédits · {profile ? PLAN_LABELS[profile.plan] : "–"}
             </span>
             {profile?.plan === "monthly" && (
@@ -87,7 +87,7 @@ export default function DashboardPage() {
       </header>
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-12">
         {checkoutDone && (
-          <div className="mb-8 flex items-center justify-between gap-4 border-2 border-border bg-bull px-4 py-3 font-semibold text-background">
+          <div className="mb-8 flex items-center justify-between gap-4 rounded-xl border border-bull/40 bg-bull/10 px-4 py-3 font-medium text-bull">
             <span>
               {profile && profile.plan !== "none"
                 ? "Paiement confirmé. Vos crédits sont disponibles."
@@ -98,7 +98,7 @@ export default function DashboardPage() {
             </button>
           </div>
         )}
-        <h1 className="display text-5xl sm:text-7xl">
+        <h1 className="display text-4xl sm:text-5xl">
           Salut, <span className="mark">{user.displayName ?? user.email}</span>
         </h1>
         {profile && credits !== null && credits < 1 && (
@@ -115,7 +115,7 @@ export default function DashboardPage() {
             )}
           </div>
         )}
-        <p className="mt-6 text-lg">Importez une capture de graphique pour obtenir une analyse technique et deux scénarios.</p>
+        <p className="mt-4 text-lg text-muted">Importez une capture de graphique pour obtenir une analyse technique et deux scénarios.</p>
         <div ref={resultRef} className="mt-10 scroll-mt-6">
           {current ? (
             <AnalysisView analysis={current.analysis} imageUrl={current.imageUrl} onNew={startNew} />
