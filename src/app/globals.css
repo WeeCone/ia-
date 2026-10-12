@@ -46,12 +46,6 @@ body {
   color: var(--background);
 }
 
-@keyframes ticker {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
 @layer components {
   .label {
     @apply font-mono text-xs font-bold uppercase tracking-wider;
