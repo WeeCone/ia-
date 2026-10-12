@@ -4,9 +4,9 @@ import { useState } from "react";
 import { redirectToBilling } from "@/lib/billing-client";
 import type { Offer } from "@/lib/plans";
 
-type Props = { route: "checkout" | "portal"; offer?: Offer; className?: string; children: React.ReactNode };
+type Props = { route: "checkout" | "portal"; offer?: Offer; className?: string; block?: boolean; children: React.ReactNode };
 
-export function BillingButton({ route, offer, className = "btn-primary", children }: Props) {
+export function BillingButton({ route, offer, className = "btn-primary", block = false, children }: Props) {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,7 +22,7 @@ export function BillingButton({ route, offer, className = "btn-primary", childre
   }
 
   return (
-    <span className="inline-flex flex-col items-stretch gap-1">
+    <span className={`${block ? "flex" : "inline-flex"} flex-col items-stretch gap-1`}>
       <button type="button" onClick={handleClick} disabled={pending} className={className}>
         {pending ? "Redirection…" : children}
       </button>

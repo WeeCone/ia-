@@ -39,8 +39,8 @@ export function DeleteAccount({ plan }: { plan: Plan | undefined }) {
   }
 
   return (
-    <section className="mt-16 border-t border-border/70 pt-10">
-      <h2 className="display text-3xl">Compte</h2>
+    <section className="mt-10 border-t border-border/70 pt-8">
+      <h2 className="display text-xl">Supprimer le compte</h2>
       {!open ? (
         <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-muted">Supprimez définitivement votre compte et toutes vos analyses.</p>

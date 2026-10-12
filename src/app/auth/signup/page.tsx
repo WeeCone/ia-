@@ -1,6 +1,6 @@
 "use client";
 
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -37,6 +37,8 @@ export default function SignupPage() {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(user, { displayName: name });
       await ensureUserProfile(user, name);
+      // Best effort: the dashboard banner offers to resend it.
+      sendEmailVerification(user).catch(() => {});
       router.replace("/dashboard");
     } catch (err) {
       setError(authErrorMessage(err));
