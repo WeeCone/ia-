@@ -12,7 +12,7 @@ export function TourPopover({ step, onNext, onSkip }: { step: 1 | 2; onNext: () 
     <div
       role="dialog"
       aria-label="Visite guidée"
-      className={`relative z-50 mb-3 w-full max-w-sm rounded-2xl border border-border bg-card p-4 shadow-2xl ${step === 2 ? "ml-auto" : "mx-auto"}`}
+      className={`relative z-50 mb-3 w-full max-w-sm rounded-2xl border border-border bg-card p-4 shadow-2xl ${step === 2 ? "ml-auto" : "mr-auto md:ml-[18%]"}`}
     >
       <p className="font-display font-semibold">{title}</p>
       <p className="mt-1.5 text-sm leading-relaxed text-muted">{text}</p>
@@ -25,7 +25,7 @@ export function TourPopover({ step, onNext, onSkip }: { step: 1 | 2; onNext: () 
           {step === 1 ? "Suivant" : "J'ai compris"}
         </button>
       </div>
-      <span className={`absolute -bottom-1.5 size-3 rotate-45 border-b border-r border-border bg-card ${step === 2 ? "right-6" : "left-1/2 -translate-x-1/2"}`} aria-hidden />
+      <span className={`absolute -bottom-1.5 size-3 rotate-45 border-b border-r border-border bg-card ${step === 2 ? "right-10" : "left-1/2 -translate-x-1/2"}`} aria-hidden />
     </div>
   );
 }

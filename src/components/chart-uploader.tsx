@@ -32,13 +32,13 @@ const TRADINGVIEW_URL = "https://www.tradingview.com/chart/";
 
 function ArrowIcon() {
   return (
-    <svg viewBox="0 0 20 20" className="size-5" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <svg viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <path d="M4 10h12M11 5l5 5-5 5" />
     </svg>
   );
 }
 
-/** The analysis composer: drop or pick a screenshot, add context, send. Shows progress while the analysis runs. */
+/** The analysis panel: drop or pick a screenshot, add context, analyse. Shows progress while the analysis runs. */
 export function ChartUploader({ disabled, disabledNotice, highlight = null, onAnalyzed }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
@@ -180,102 +180,114 @@ export function ChartUploader({ disabled, disabledNotice, highlight = null, onAn
   }
 
   const canSend = Boolean(file) && !preparing && !disabled;
+  const addContext = (tag: string) => setNote((current) => (current.includes(tag) ? current : current ? `${current}, ${tag}` : tag));
 
   return (
     <div>
-      <div
-        onDragOver={(event) => {
-          event.preventDefault();
-          setDragging(true);
-        }}
-        onDragLeave={() => setDragging(false)}
-        onDrop={(event) => {
-          event.preventDefault();
-          setDragging(false);
-          pick(event.dataTransfer.files[0]);
-        }}
-        className={`rounded-2xl border bg-card/80 p-3 backdrop-blur-md transition-all ${
-          dragging
-            ? "border-accent shadow-[0_0_0_3px_rgb(0_245_160/0.2)]"
-            : highlight === "zone"
-              ? "border-accent/70 shadow-[0_0_0_4px_rgb(0_245_160/0.18),0_0_40px_-8px_rgb(0_245_160/0.5)]"
-              : "border-border focus-within:border-brand/50"
-        }`}
-      >
-        {preview ? (
-          <div className="flex items-center gap-3 rounded-xl border border-border bg-background/60 p-2">
-            {/* eslint-disable-next-line @next/next/no-img-element -- local object URL preview */}
-            <img src={preview} alt="Graphique sélectionné" className="h-16 w-24 rounded-md object-cover" />
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium">{file?.name}</p>
-              <p className="text-xs text-muted">Prêt pour l&apos;analyse</p>
-            </div>
-            <button type="button" onClick={clear} className="btn-ghost text-xs hover:text-bear">
-              Retirer
-            </button>
+      <div className="panel overflow-hidden">
+        <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-3">
+          <span className="label text-muted">Nouvelle analyse</span>
+          <span className="font-mono text-[11px] text-muted">1 analyse = 1 crédit</span>
+        </div>
+
+        <div className="grid gap-5 p-5 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+          {/* Drop zone / preview */}
+          <div
+            onDragOver={(event) => {
+              event.preventDefault();
+              setDragging(true);
+            }}
+            onDragLeave={() => setDragging(false)}
+            onDrop={(event) => {
+              event.preventDefault();
+              setDragging(false);
+              pick(event.dataTransfer.files[0]);
+            }}
+            className={`relative grid min-h-64 place-items-center overflow-hidden rounded-xl border-2 border-dashed transition-all ${
+              dragging
+                ? "border-accent bg-accent/10"
+                : highlight === "zone"
+                  ? "border-accent bg-accent/5 shadow-[0_0_0_4px_rgb(0_245_160/0.18),0_0_40px_-8px_rgb(0_245_160/0.5)]"
+                  : preview
+                    ? "border-border bg-background/60"
+                    : "border-brand/40 bg-background/60 hover:border-brand"
+            }`}
+          >
+            {preview ? (
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element -- local object URL preview */}
+                <img src={preview} alt="Aperçu du graphique" className="max-h-80 object-contain" />
+                <button type="button" onClick={clear} className="label absolute right-2 top-2 rounded-lg border border-border bg-card/90 px-2 py-1 hover:border-bear hover:text-bear">
+                  Changer
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="pointer-events-none absolute inset-x-0 h-0.5 animate-[scan-y_3.2s_ease-in-out_infinite] bg-brand/80 shadow-[0_0_14px_3px_rgb(0_210_255/0.45)]" aria-hidden />
+                <button
+                  type="button"
+                  onClick={() => fileRef.current?.click()}
+                  disabled={preparing}
+                  className="flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center"
+                >
+                  <LogoMark className="size-10" />
+                  <span className="display text-2xl sm:text-3xl">{preparing ? "Préparation…" : "Déposez votre capture"}</span>
+                  <span className="label hidden text-muted sm:inline">Clic · glisser-déposer · Ctrl+V</span>
+                  <span className="label text-muted sm:hidden">Touchez pour choisir une image</span>
+                </button>
+              </>
+            )}
           </div>
-        ) : (
-          <button
-            type="button"
-            onClick={() => fileRef.current?.click()}
-            disabled={preparing}
-            className="flex w-full items-center gap-3 rounded-xl px-2 py-3 text-left"
-          >
-            <LogoMark className="size-7 shrink-0" />
-            <span className="text-base text-foreground/85">
-              {preparing ? (
-                "Préparation de l'image…"
-              ) : (
-                <>
-                  Glissez-déposez une image ou <span className="text-foreground underline underline-offset-4">cliquez pour importer</span>
-                </>
-              )}
-            </span>
-          </button>
-        )}
 
-        <input
-          id="analysis-note"
-          value={note}
-          onChange={(event) => setNote(event.target.value)}
-          maxLength={500}
-          placeholder="Contexte (optionnel) : ex. scalping 5 min, je cherche un short"
-          className="mt-2 w-full rounded-lg bg-transparent px-2 py-2 text-sm text-foreground outline-none placeholder:text-muted/70"
-        />
-
-        <div className="mt-2 flex items-center gap-2">
-          <button type="button" onClick={() => fileRef.current?.click()} className="rounded-lg border border-border bg-background/60 px-3 py-1.5 text-xs font-medium text-foreground/90 transition-colors hover:border-brand/50">
-            Parcourir les fichiers
-          </button>
-          <a
-            href={TRADINGVIEW_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden rounded-lg border border-border bg-background/60 px-3 py-1.5 text-xs font-medium text-foreground/90 transition-colors hover:border-brand/50 sm:inline-block"
-          >
-            Ouvrir TradingView ↗
-          </a>
-          <button
-            type="button"
-            onClick={() => cameraRef.current?.click()}
-            className="rounded-lg border border-border bg-background/60 px-3 py-1.5 text-xs font-medium text-foreground/90 sm:hidden"
-          >
-            Photo
-          </button>
-          <div className="ml-auto flex items-center gap-3">
-          <span className="hidden font-mono text-[11px] text-muted sm:inline">1 crédit</span>
-          <button
-            type="button"
-            onClick={submit}
-            disabled={!canSend}
-            aria-label="Lancer l'analyse"
-            title="Lancer l'analyse (1 crédit)"
-            className={`grid size-10 shrink-0 place-items-center rounded-full transition-all ${
-              canSend ? "bg-accent text-background shadow-[0_0_20px_-2px_rgb(0_245_160/0.7)] hover:scale-105" : "bg-border/60 text-muted"
-            } ${highlight === "send" ? "ring-4 ring-accent/40 ring-offset-2 ring-offset-background" : ""}`}
-          >
-            <ArrowIcon />
-          </button>
+          {/* Context + action */}
+          <div className="flex flex-col gap-4">
+            <label className="field">
+              <span>Contexte (optionnel)</span>
+              <input
+                id="analysis-note"
+                value={note}
+                onChange={(event) => setNote(event.target.value)}
+                maxLength={500}
+                placeholder="Ex. : scalping 5 min, je cherche un short"
+              />
+            </label>
+            <div className="flex flex-wrap gap-1.5" aria-label="Ajouter un style de trading au contexte">
+              {["Scalping", "Day trading", "Swing", "Long terme", "Je cherche un long", "Je cherche un short"].map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => addContext(tag.toLowerCase())}
+                  className="rounded-full border border-border bg-background/60 px-2.5 py-1 text-xs text-muted transition-colors hover:border-brand/50 hover:text-foreground"
+                >
+                  + {tag}
+                </button>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <a
+                href={TRADINGVIEW_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg border border-border bg-background/60 px-3 py-1.5 text-xs font-medium text-foreground/90 transition-colors hover:border-brand/50"
+              >
+                Ouvrir TradingView ↗
+              </a>
+              <button
+                type="button"
+                onClick={() => cameraRef.current?.click()}
+                className="rounded-lg border border-border bg-background/60 px-3 py-1.5 text-xs font-medium text-foreground/90 sm:hidden"
+              >
+                Prendre une photo
+              </button>
+            </div>
+            <button
+              type="button"
+              onClick={submit}
+              disabled={!canSend}
+              className={`btn-primary mt-auto w-full ${highlight === "send" ? "ring-4 ring-accent/40 ring-offset-2 ring-offset-card" : ""}`}
+            >
+              {error && file ? "Réessayer" : "Analyser (1 crédit)"} <ArrowIcon />
+            </button>
           </div>
         </div>
       </div>
