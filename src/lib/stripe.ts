@@ -5,7 +5,8 @@ let client: Stripe | null = null;
 
 // Lazy so that `next build` works without Stripe keys in the environment.
 export function getStripe() {
-  client ??= new Stripe(process.env.STRIPE_SECRET_KEY!);
+  // Trim: a secret pasted with a trailing newline or space would otherwise be rejected as invalid.
+  client ??= new Stripe(process.env.STRIPE_SECRET_KEY!.trim());
   return client;
 }
 
