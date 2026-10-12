@@ -1,3 +1,4 @@
+import Stripe from "stripe";
 import { adminDb } from "@/lib/firebase-admin";
 import type { Offer } from "@/lib/plans";
 import { getRequestUid } from "@/lib/server-auth";
@@ -7,6 +8,16 @@ const PRICES: Record<Offer, string | undefined> = {
   monthly: process.env.STRIPE_PRICE_MONTHLY,
   lifetime: process.env.STRIPE_PRICE_LIFETIME,
 };
+
+async function customerExists(id: string) {
+  try {
+    const customer = await getStripe().customers.retrieve(id);
+    return !customer.deleted;
+  } catch (err) {
+    if (err instanceof Stripe.errors.StripeInvalidRequestError && err.code === "resource_missing") return false;
+    throw err;
+  }
+}
 
 async function handler(request: Request) {
   const uid = await getRequestUid(request);
@@ -31,6 +42,8 @@ async function handler(request: Request) {
 
   const stripe = getStripe();
   let customerId: string | undefined = user.get("stripeCustomerId");
+  // A customer saved with the other Stripe mode (test ↔ live) or deleted in Stripe can't be reused: start fresh.
+  if (customerId && !(await customerExists(customerId))) customerId = undefined;
   if (!customerId) {
     const customer = await stripe.customers.create({
       email: user.get("email") ?? undefined,
