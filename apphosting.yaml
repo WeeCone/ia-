@@ -30,10 +30,10 @@ env:
     value: https://scanzivo.com
     availability: [RUNTIME]
   - variable: STRIPE_PRICE_MONTHLY
-    value: price_1UPRavAeyb88TK1kfidsAU3j # LIVE (mode réel) — à remplacer par le prix de test pendant les essais
+    value: price_1UPRavAeyb88TK1kfidsAU3j # mode réel (live), avec la clé sk_live/rk_live du secret stripeSecretKey
     availability: [RUNTIME]
   - variable: STRIPE_PRICE_LIFETIME
-    value: price_1UPRZYAeyb88TK1ksRQteZMb # LIVE (mode réel) — à remplacer par le prix de test pendant les essais
+    value: price_1UPRZYAeyb88TK1ksRQteZMb # mode réel (live), avec la clé sk_live/rk_live du secret stripeSecretKey
     availability: [RUNTIME]
 
   # Secrets (Cloud Secret Manager) : firebase apphosting:secrets:set <nom>
