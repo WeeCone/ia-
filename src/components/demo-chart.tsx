@@ -21,7 +21,7 @@ const step = (W - PAD_L - PAD_R) / SLOTS;
 const x = (index: number) => PAD_L + index * step + step / 2;
 const tone = (t: "bull" | "bear") => (t === "bull" ? "var(--bull)" : "var(--bear)");
 
-export function DemoChart({ annotated = false }: { annotated?: boolean }) {
+export function DemoChart({ annotated = false, labels = false }: { annotated?: boolean; labels?: boolean }) {
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label={`Graphique BTC/USDT 4H${annotated ? " annoté par Scanzivo" : ""}`}>
       {[62, 63, 64, 65, 66, 67].map((price) => (
@@ -47,6 +47,12 @@ export function DemoChart({ annotated = false }: { annotated?: boolean }) {
               </text>
             </g>
           ))}
+          {labels && (
+            <g fontSize={12} fontWeight={700} fontFamily="var(--font-jetbrains-mono)">
+              <text x={x(14)} y={y(65.4) - 7} fill="var(--bear)">Résistance : 65 400</text>
+              <text x={x(18)} y={y(63.2) + 16} fill="var(--bull)">Support : 63 200</text>
+            </g>
+          )}
           {/* Projected bullish path. */}
           <path d={`M${x(29)} ${y(65.05)} L${x(31)} ${y(65.6)} L${x(32.5)} ${y(65.3)} L${x(35)} ${y(66.9)}`} fill="none" stroke="var(--bull)" strokeWidth={2} strokeDasharray="5 4" />
           <circle cx={x(35)} cy={y(66.9)} r={4} fill="var(--bull)" />

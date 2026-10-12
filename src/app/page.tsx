@@ -50,22 +50,20 @@ export default function Home() {
           <div className="grid-bg absolute inset-0 -z-10" aria-hidden />
           <div className="absolute -top-40 left-1/2 -z-10 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-brand/15 blur-[120px]" aria-hidden />
           <div className="absolute right-0 top-80 -z-10 h-80 w-96 rounded-full bg-accent/10 blur-[110px]" aria-hidden />
-          <div className="mx-auto max-w-6xl px-4 pb-20 pt-16 sm:pt-24">
-            <div className="mx-auto max-w-4xl text-center">
-              <h1 className="display text-4xl sm:text-6xl lg:text-7xl">
-                Transformez vos graphiques en <span className="mark">opportunités de trading</span> en 1 clic.
-              </h1>
-              <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl">
-                Importez la capture d&apos;écran d&apos;un graphique. L&apos;IA repère les figures chartistes, les supports et résistances, et vous
-                rend deux scénarios chiffrés en moins d&apos;une minute.
+          <div className="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pt-16">
+            <h1 className="display text-center text-4xl sm:text-6xl">Analyse technique propulsée par l&apos;IA</h1>
+            <div className="mt-10 sm:mt-12">
+              <HeroShowcase />
+            </div>
+            <div className="mx-auto mt-16 max-w-3xl text-center">
+              <p className="text-lg leading-relaxed text-muted sm:text-xl">
+                Transformez vos graphiques en <span className="mark font-semibold">opportunités de trading</span> en 1 clic : l&apos;IA repère les
+                figures chartistes, les supports et résistances, et vous rend deux scénarios chiffrés en moins d&apos;une minute.
               </p>
-              <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+              <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                 <ScanCta className="btn-primary text-base">Scanner un graphique →</ScanCta>
                 <Link href="#demo" className="btn-secondary text-base">Voir un exemple de rapport</Link>
               </div>
-            </div>
-            <div className="mt-14 sm:mt-16">
-              <HeroShowcase />
             </div>
             <ul className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-xs uppercase tracking-wider text-muted">
               {MARKETS.map((market) => (
