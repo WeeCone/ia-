@@ -5,8 +5,14 @@ let client: Stripe | null = null;
 
 // Lazy so that `next build` works without Stripe keys in the environment.
 export function getStripe() {
+  if (client) return client;
   // Trim: a secret pasted with a trailing newline or space would otherwise be rejected as invalid.
-  client ??= new Stripe(process.env.STRIPE_SECRET_KEY!.trim());
+  const key = process.env.STRIPE_SECRET_KEY?.trim() ?? "";
+  // Catch the usual copy mistakes (key ID "mk_…", publishable key, empty value) with a readable message.
+  if (!/^(sk|rk)_(live|test)_/.test(key)) {
+    throw new Error("Clé Stripe mal configurée : le secret stripeSecretKey doit commencer par sk_live_, rk_live_, sk_test_ ou rk_test_.");
+  }
+  client = new Stripe(key);
   return client;
 }
 
