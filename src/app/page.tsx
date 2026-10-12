@@ -29,11 +29,7 @@ export default function Home() {
             aria-hidden
           />
           <div className="relative mx-auto max-w-6xl px-4 pb-24 pt-20 sm:pb-32 sm:pt-32">
-            <span className="label inline-flex items-center gap-2 border-2 border-border bg-card px-3 py-1">
-              <span className="size-2 animate-pulse bg-brand" aria-hidden />
-              Analyse technique par IA
-            </span>
-            <h1 className="display mt-6 max-w-4xl text-6xl sm:text-8xl">
+            <h1 className="display max-w-4xl text-6xl sm:text-8xl">
               Lisez le marché <span className="mark">avant</span> qu&apos;il bouge.
             </h1>
             <p className="mt-8 max-w-xl text-xl leading-relaxed">
