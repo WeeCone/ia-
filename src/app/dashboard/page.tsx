@@ -10,6 +10,7 @@ import { ChartUploader, type AnalysisOutcome } from "@/components/chart-uploader
 import { AccountPanel } from "@/components/dashboard/account-panel";
 import { EmailBanner } from "@/components/dashboard/email-banner";
 import { AccountMenu } from "@/components/dashboard/account-menu";
+import { Sidebar } from "@/components/dashboard/sidebar";
 import { TourPopover } from "@/components/dashboard/tour";
 import { Logo } from "@/components/logo";
 import { ReviewPrompt } from "@/components/review-prompt";
@@ -19,7 +20,11 @@ import { subscribeUserProfile, type UserProfile } from "@/lib/users";
 
 const TOUR_KEY = "scanzivo-tour-done";
 
-type Current = { analysis: ChartAnalysis; imageUrl: string | null; id: string | null };
+type Current = {
+  analysis: ChartAnalysis;
+  imageUrl: string | null;
+  id: string | null;
+};
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
@@ -28,6 +33,7 @@ export default function DashboardPage() {
   const [current, setCurrent] = useState<Current | null>(null);
   const [view, setView] = useState<"analyze" | "account">("analyze");
   const [refreshKey, setRefreshKey] = useState(0);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [tour, setTour] = useState<0 | 1 | 2>(0);
   const mainRef = useRef<HTMLDivElement>(null);
   // Read once on the client; the page renders a loading state until auth resolves, so this cannot mismatch.
@@ -76,6 +82,7 @@ export default function DashboardPage() {
       return next;
     });
     setView("analyze");
+    setDrawerOpen(false);
     scrollTop();
   }
 
@@ -85,6 +92,7 @@ export default function DashboardPage() {
       return null;
     });
     setView("analyze");
+    setDrawerOpen(false);
     scrollTop();
   }
 
@@ -97,6 +105,22 @@ export default function DashboardPage() {
   const firstName = (user.displayName || "").split(" ")[0];
   const gauge = Math.round((Math.min(credits ?? 0, MONTHLY_CREDITS) / MONTHLY_CREDITS) * 100);
 
+  const sidebar = (
+    <Sidebar
+      user={user}
+      profile={profile}
+      credits={credits}
+      history={history}
+      activeId={current?.id ?? null}
+      onNew={startNew}
+      onSelect={(item: StoredAnalysis) => show({ analysis: item, imageUrl: null, id: item.id })}
+      onAccount={() => {
+        setView("account");
+        setDrawerOpen(false);
+      }}
+    />
+  );
+
   const noCredits = credits !== null && credits < 1;
   const disabledNotice =
     profile?.plan === "none" ? (
@@ -107,95 +131,144 @@ export default function DashboardPage() {
         </Link>
       </p>
     ) : (
-      <p className="text-center text-sm text-muted">Vous avez utilisé toutes vos analyses du mois. Elles seront rechargées au prochain renouvellement.</p>
+      <p className="text-center text-sm text-muted">
+        Vous avez utilisé toutes vos analyses du mois. Elles seront rechargées au prochain renouvellement.
+      </p>
     );
 
   return (
-    <div className="flex flex-1 flex-col">
-      <header className="sticky top-0 z-30 border-b border-border/70 bg-background/70 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
-          <Logo />
-          <div className="flex items-center gap-2 sm:gap-3">
-            {current && view === "analyze" && (
-              <button type="button" onClick={startNew} className="btn-secondary hidden px-4 py-2 sm:inline-flex">
-                Nouvelle analyse +
-              </button>
-            )}
-            {profile?.plan === "none" && (
-              <Link href="/pricing" className="btn-primary px-4 py-2">
-                Choisir une offre
-              </Link>
-            )}
-            {/* Credits: count + gauge */}
-            <div className="flex items-center gap-2.5 rounded-full border border-border bg-card/70 py-1.5 pl-3 pr-3.5" title={`${credits ?? "–"} crédits restants ce mois-ci`}>
-              <span className="hidden h-1.5 w-16 overflow-hidden rounded-full bg-border sm:block" aria-hidden>
-                <span className="block h-full rounded-full bg-accent" style={{ width: `${gauge}%` }} />
-              </span>
-              <span className="font-mono text-xs">
-                {credits ?? "–"}
-                <span className="text-muted"> crédits</span>
-              </span>
-              {profile && <span className="hidden font-mono text-[11px] text-muted md:inline">· {PLAN_LABELS[profile.plan]}</span>}
-            </div>
-            <AccountMenu user={user} profile={profile} onAccount={() => setView("account")} />
-          </div>
-        </div>
-      </header>
+    <div className="flex flex-1">
+      {/* Desktop sidebar */}
+      <aside className="sticky top-0 hidden h-dvh w-72 shrink-0 border-r border-border/70 bg-surface/80 lg:block">{sidebar}</aside>
 
-      <EmailBanner user={user} />
-      {checkoutDone && (
-        <div className="flex items-center gap-3 border-b border-bull/30 bg-bull/10 px-4 py-2.5 text-sm text-bull">
-          <p className="mx-auto w-full max-w-6xl flex-1">
-            {profile && profile.plan !== "none" ? "Paiement confirmé. Vos crédits sont disponibles." : "Paiement reçu, activation de votre offre en cours…"}
-          </p>
-          <button type="button" onClick={() => setCheckoutDone(false)} aria-label="Fermer" className="px-1 text-lg leading-none">
-            ×
-          </button>
+      {/* Mobile drawer */}
+      {drawerOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <button
+            type="button"
+            className="absolute inset-0 bg-background/70 backdrop-blur-sm"
+            aria-label="Fermer le menu"
+            onClick={() => setDrawerOpen(false)}
+          />
+          <aside className="absolute inset-y-0 left-0 w-72 max-w-[85vw] border-r border-border bg-surface">{sidebar}</aside>
         </div>
       )}
 
-      <main ref={mainRef} className="relative mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:py-12">
-        {view === "account" ? (
-          <div className="max-w-3xl">
-            <AccountPanel user={user} profile={profile} credits={credits} onBack={() => setView("analyze")} />
-          </div>
-        ) : current ? (
-          <AnalysisView analysis={current.analysis} imageUrl={current.imageUrl} onNew={startNew} />
-        ) : (
-          <>
-            <h1 className="display text-4xl sm:text-5xl">
-              Salut{firstName ? "," : ""} <span className="mark">{firstName || "et bienvenue"}</span>
-            </h1>
-            <p className="mt-3 max-w-2xl text-lg text-muted">
-              Importez une capture de graphique : Scanzivo la lit comme un analyste et vous rend deux scénarios chiffrés, avec les niveaux tracés.
-            </p>
-
-            <div className={`mt-8 ${tour ? "relative z-50" : ""}`}>
-              {tour > 0 && <TourPopover step={tour as 1 | 2} onNext={() => (tour === 1 ? setTour(2) : endTour())} onSkip={endTour} />}
-              <ChartUploader
-                disabled={noCredits}
-                disabledNotice={disabledNotice}
-                highlight={tour === 1 ? "zone" : tour === 2 ? "send" : null}
-                onAnalyzed={(outcome: AnalysisOutcome) => {
-                  show({ ...outcome, id: null });
-                  setRefreshKey((key) => key + 1);
-                }}
-              />
+      <div className="flex min-w-0 flex-1 flex-col">
+        {/* Top bar: full on mobile; on desktop the sidebar carries logo, credits and account, so only quick actions remain. */}
+        <header className="sticky top-0 z-30 border-b border-border/70 bg-background/70 backdrop-blur-xl">
+          <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
+            <div className="flex items-center gap-3 lg:hidden">
+              <button
+                type="button"
+                onClick={() => setDrawerOpen(true)}
+                aria-label="Ouvrir le menu"
+                className="grid size-9 place-items-center rounded-lg border border-border"
+              >
+                <svg viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden>
+                  <path d="M3 5h14M3 10h14M3 15h14" />
+                </svg>
+              </button>
+              <Logo />
             </div>
+            <p className="label hidden text-muted lg:block">{view === "account" ? "Mon compte" : current ? "Rapport d'analyse" : "Analyse"}</p>
+            <div className="flex items-center gap-2 sm:gap-3">
+              {current && view === "analyze" && (
+                <button type="button" onClick={startNew} className="btn-secondary hidden px-4 py-2 sm:inline-flex">
+                  Nouvelle analyse +
+                </button>
+              )}
+              {profile?.plan === "none" && (
+                <Link href="/pricing" className="btn-primary hidden px-4 py-2 sm:inline-flex">
+                  Choisir une offre
+                </Link>
+              )}
+              {/* Credits: count + gauge */}
+              <div
+                className="flex items-center gap-2.5 whitespace-nowrap rounded-full border border-border bg-card/70 py-1.5 pl-3 pr-3.5 lg:hidden"
+                title={`${credits ?? "–"} crédits restants ce mois-ci`}
+              >
+                <span className="hidden h-1.5 w-16 overflow-hidden rounded-full bg-border sm:block" aria-hidden>
+                  <span className="block h-full rounded-full bg-accent" style={{ width: `${gauge}%` }} />
+                </span>
+                <span className="font-mono text-xs">
+                  {credits ?? "–"}
+                  <span className="text-muted"> crédits</span>
+                </span>
+                {profile && <span className="hidden font-mono text-[11px] text-muted md:inline">· {PLAN_LABELS[profile.plan]}</span>}
+              </div>
+              <div className="lg:hidden">
+                <AccountMenu user={user} profile={profile} onAccount={() => setView("account")} />
+              </div>
+            </div>
+          </div>
+        </header>
 
-            <p className="mt-4 text-xs text-muted">
-              Conseil : une capture nette, avec l&apos;axe des prix lisible, donne une meilleure analyse. Précisez votre unité de temps et votre style dans le contexte.
+        <EmailBanner user={user} />
+        {checkoutDone && (
+          <div className="flex items-center gap-3 border-b border-bull/30 bg-bull/10 px-4 py-2.5 text-sm text-bull">
+            <p className="mx-auto w-full max-w-6xl flex-1">
+              {profile && profile.plan !== "none"
+                ? "Paiement confirmé. Vos crédits sont disponibles."
+                : "Paiement reçu, activation de votre offre en cours…"}
             </p>
-
-            <RecentAnalyses items={history} onSelect={(item: StoredAnalysis) => show({ analysis: item, imageUrl: null, id: item.id })} />
-          </>
+            <button type="button" onClick={() => setCheckoutDone(false)} aria-label="Fermer" className="px-1 text-lg leading-none">
+              ×
+            </button>
+          </div>
         )}
 
-        {view === "analyze" && <ReviewPrompt uid={user.uid} displayName={user.displayName} analysisCount={history?.length ?? 0} />}
-      </main>
+        <main ref={mainRef} className="relative mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:py-12">
+          {view === "account" ? (
+            <div className="max-w-3xl">
+              <AccountPanel user={user} profile={profile} credits={credits} onBack={() => setView("analyze")} />
+            </div>
+          ) : current ? (
+            <AnalysisView analysis={current.analysis} imageUrl={current.imageUrl} onNew={startNew} />
+          ) : (
+            <>
+              <h1 className="display text-4xl sm:text-5xl">
+                Salut{firstName ? "," : ""} <span className="mark">{firstName || "et bienvenue"}</span>
+              </h1>
+              <p className="mt-3 max-w-2xl text-lg text-muted">
+                Importez une capture de graphique : Scanzivo la lit comme un analyste et vous rend deux scénarios chiffrés, avec les niveaux tracés.
+              </p>
+
+              <div className={`mt-8 ${tour ? "relative z-50" : ""}`}>
+                {tour > 0 && <TourPopover step={tour as 1 | 2} onNext={() => (tour === 1 ? setTour(2) : endTour())} onSkip={endTour} />}
+                <ChartUploader
+                  disabled={noCredits}
+                  disabledNotice={disabledNotice}
+                  highlight={tour === 1 ? "zone" : tour === 2 ? "send" : null}
+                  onAnalyzed={(outcome: AnalysisOutcome) => {
+                    show({ ...outcome, id: null });
+                    setRefreshKey((key) => key + 1);
+                  }}
+                />
+              </div>
+
+              <p className="mt-4 text-xs text-muted">
+                Conseil : une capture nette, avec l&apos;axe des prix lisible, donne une meilleure analyse. Précisez votre unité de temps et votre
+                style dans le contexte.
+              </p>
+
+              <RecentAnalyses items={history} onSelect={(item: StoredAnalysis) => show({ analysis: item, imageUrl: null, id: item.id })} />
+            </>
+          )}
+
+          {view === "analyze" && <ReviewPrompt uid={user.uid} displayName={user.displayName} analysisCount={history?.length ?? 0} />}
+        </main>
+      </div>
 
       {/* Tour backdrop: dims everything but the analysis panel. */}
-      {tour > 0 && <button type="button" aria-label="Passer la visite" onClick={endTour} className="fixed inset-0 z-40 cursor-default bg-background/75 backdrop-blur-[2px]" />}
+      {tour > 0 && (
+        <button
+          type="button"
+          aria-label="Passer la visite"
+          onClick={endTour}
+          className="fixed inset-0 z-40 cursor-default bg-background/75 backdrop-blur-[2px]"
+        />
+      )}
     </div>
   );
 }
