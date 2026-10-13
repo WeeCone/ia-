@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { RecentAnalyses, useAnalysisHistory, type StoredAnalysis } from "@/components/analysis-history";
 import { AnalysisView } from "@/components/analysis-view";
 import { useAuth } from "@/components/auth-provider";
+import { CaptureGuide } from "@/components/capture-guide";
 import { ChartUploader, type AnalysisOutcome } from "@/components/chart-uploader";
 import { AccountPanel } from "@/components/dashboard/account-panel";
 import { EmailBanner } from "@/components/dashboard/email-banner";
@@ -247,10 +248,8 @@ export default function DashboardPage() {
                 />
               </div>
 
-              <p className="mt-4 text-xs text-muted">
-                Conseil : une capture nette, avec l&apos;axe des prix lisible, donne une meilleure analyse. Précisez votre unité de temps et votre
-                style dans le contexte.
-              </p>
+              {/* Open by default until the first analysis. */}
+              <CaptureGuide defaultOpen={history?.length === 0} />
 
               <RecentAnalyses items={history} onSelect={(item: StoredAnalysis) => show({ analysis: item, imageUrl: null, id: item.id })} />
             </>

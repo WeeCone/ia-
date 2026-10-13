@@ -7,6 +7,12 @@ const confidenceStyle = {
   élevée: "border-bull/40 bg-bull/10 text-bull",
 } as const;
 
+const captureStyle = {
+  bonne: "border-bull/40 bg-bull/10 text-bull",
+  moyenne: "border-amber-400/40 bg-amber-400/10 text-amber-300",
+  faible: "border-bear/40 bg-bear/10 text-bear",
+} as const;
+
 const trendStyle = {
   haussière: "border-bull/40 bg-bull/10 text-bull",
   baissière: "border-bear/40 bg-bear/10 text-bear",
@@ -100,9 +106,23 @@ export function AnalysisResult({ analysis }: { analysis: ChartAnalysis }) {
               Confiance {analysis.confidence.level}
             </span>
           )}
+          {analysis.capture_quality && (
+            <span className={`chip ${captureStyle[analysis.capture_quality.level]}`}>Capture {analysis.capture_quality.level}</span>
+          )}
           <span className={`chip ${trendStyle[analysis.trend]}`}>Tendance {analysis.trend}</span>
         </span>
       </header>
+
+      {/* Older analyses have no capture_quality. */}
+      {analysis.capture_quality && analysis.capture_quality.level !== "bonne" && (
+        <div className="flex flex-col gap-1 border-b border-amber-400/25 bg-amber-400/5 px-5 py-3 text-sm sm:flex-row sm:items-baseline sm:gap-3">
+          <span className="label shrink-0 text-amber-300">Capture {analysis.capture_quality.level}</span>
+          <p className="text-foreground/90">
+            {analysis.capture_quality.issues.length > 0 && <span className="text-muted">{analysis.capture_quality.issues.join(" · ")}. </span>}
+            {analysis.capture_quality.tip && <span>Pour une analyse plus précise : {analysis.capture_quality.tip}</span>}
+          </p>
+        </div>
+      )}
 
       <div className="grid lg:grid-cols-12">
         <div className="border-b border-border p-5 lg:col-span-6 lg:border-b-0 lg:border-r">

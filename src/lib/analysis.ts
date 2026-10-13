@@ -23,6 +23,15 @@ export const ChartAnalysis = z.object({
       reason: z.string().describe("Pourquoi ce niveau de confiance, en une phrase (lisibilité, signaux concordants ou contradictoires…)."),
     })
     .describe("Confiance globale dans la lecture du graphique."),
+  capture_quality: z
+    .object({
+      level: z.enum(["bonne", "moyenne", "faible"]),
+      issues: z
+        .array(z.string())
+        .describe("Défauts concrets de la capture, en quelques mots chacun (ex. « courbe en ligne, pas de bougies », « axe des prix illisible »). Vide si bonne."),
+      tip: z.string().describe("Un conseil précis pour une meilleure capture la prochaine fois, ou chaîne vide si la capture est bonne."),
+    })
+    .describe("Qualité de la capture elle-même, indépendamment du marché."),
   horizon: z.string().describe("Horizon de validité des scénarios, déduit de l'unité de temps (ex. « 1 à 3 jours »)."),
   summary: z.string().describe("Synthèse de la structure du marché en 2-3 phrases."),
   supports: z.array(z.string()),

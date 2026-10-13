@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { ChartAnalysis } from "@/lib/analysis";
 import { auth } from "@/lib/firebase";
+import { checkCapture } from "@/lib/capture-check";
 import { prepareImage } from "@/lib/image";
 import { takePendingChart } from "@/lib/pending-chart";
 import { FormError } from "./auth-card";
@@ -50,6 +51,8 @@ export function ChartUploader({ disabled, disabledNotice, highlight = null, onAn
   const [pending, setPending] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [dragging, setDragging] = useState(false);
+  // Instant capture advice: null until checked, [] when nothing to flag.
+  const [advice, setAdvice] = useState<string[] | null>(null);
   const handedOff = useRef(false);
 
   async function pick(candidate: File | undefined | null) {
@@ -60,6 +63,8 @@ export function ChartUploader({ disabled, disabledNotice, highlight = null, onAn
       const ready = await prepareImage(candidate);
       setFile(ready);
       setPreview(URL.createObjectURL(ready));
+      setAdvice(null);
+      checkCapture(ready).then(setAdvice);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Impossible de lire cette image.");
     } finally {
@@ -130,6 +135,7 @@ export function ChartUploader({ disabled, disabledNotice, highlight = null, onAn
     setFile(null);
     setPreview(null);
     setError(null);
+    setAdvice(null);
   }
 
   if (pending && preview) {
@@ -280,6 +286,18 @@ export function ChartUploader({ disabled, disabledNotice, highlight = null, onAn
                 Prendre une photo
               </button>
             </div>
+            {file && advice && advice.length > 0 && (
+              <div className="rounded-xl border border-amber-400/30 bg-amber-400/5 p-3 text-xs leading-relaxed">
+                <p className="font-semibold text-amber-300">À vérifier avant d&apos;analyser</p>
+                <ul className="mt-1.5 list-disc space-y-1 pl-4 text-foreground/85">
+                  {advice.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+                <p className="mt-1.5 text-muted">Vous pouvez quand même lancer l&apos;analyse, ou changer de capture.</p>
+              </div>
+            )}
+            {file && advice?.length === 0 && <p className="text-xs text-bull">✓ Capture nette et de bonne taille</p>}
             <button
               type="button"
               onClick={submit}

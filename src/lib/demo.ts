@@ -10,6 +10,7 @@ export const DEMO_ANALYSIS: ChartAnalysis = {
     level: "moyenne",
     reason: "Structure haussière nette, mais le prix teste une résistance et le volume de cassure reste à confirmer.",
   },
+  capture_quality: { level: "bonne", issues: [], tip: "" },
   horizon: "1 à 3 jours",
   summary:
     "Structure de plus hauts et plus bas ascendants depuis 61 800. Le prix a cassé la résistance des 63 200, l'a retestée comme support, et bute désormais sous 65 400. Le momentum reste acheteur tant que 63 200 tient.",
