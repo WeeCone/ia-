@@ -43,7 +43,7 @@ const QUESTIONS: { q: string; a: React.ReactNode }[] = [
 
 export function Faq() {
   return (
-    <section id="faq" className="theme-light scroll-mt-20">
+    <section id="faq" className="scroll-mt-20">
       <div className="mx-auto grid max-w-6xl gap-12 px-4 py-20 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <p className="label text-brand">FAQ</p>

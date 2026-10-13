@@ -98,8 +98,40 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Live scan video */}
+        <section id="video" className="theme-light scroll-mt-20">
+          <div className="mx-auto max-w-6xl px-4 py-20">
+            <div className="mx-auto max-w-3xl text-center">
+              <p className="label text-brand">En action</p>
+              <h2 className="display mt-3 text-4xl sm:text-5xl">
+                Regardez Scanzivo <span className="mark">lire un graphique.</span>
+              </h2>
+              <p className="mt-4 text-lg text-muted">
+                Une capture hebdomadaire du Bitcoin : niveaux tracés, momentum, deux scénarios chiffrés. Le tout en moins d&apos;une minute.
+              </p>
+            </div>
+            <div className="mx-auto mt-10 max-w-5xl overflow-hidden rounded-2xl border border-border bg-[#0b0e14] shadow-[0_30px_80px_-30px_rgb(8_145_178/0.55)]">
+              <video
+                className="block aspect-video w-full"
+                src="/media/btc-scan.mp4"
+                poster="/media/btc-scan-poster.jpg"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-label="Démonstration : Scanzivo scanne un graphique BTC/USD hebdomadaire et produit deux scénarios"
+              />
+            </div>
+            <div className="mt-8 flex flex-col items-center gap-3">
+              <ScanCta className="btn-primary text-base">Analyser mon graphique →</ScanCta>
+              <p className="text-xs text-muted">Exemple d&apos;analyse illustratif. Pas un conseil en investissement.</p>
+            </div>
+          </div>
+        </section>
+
         {/* Features — bento grid */}
-        <section id="fonctionnalites" className="theme-light scroll-mt-20">
+        <section id="fonctionnalites" className="scroll-mt-20 border-y border-border/70 bg-surface/60">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <p className="label text-brand">Fonctionnalités</p>
             <h2 className="display mt-3 max-w-2xl text-4xl sm:text-5xl">
@@ -232,7 +264,7 @@ export default function Home() {
         </section>
 
         {/* Method */}
-        <section id="methode" className="scroll-mt-20 border-y border-border/70 bg-surface/60">
+        <section id="methode" className="theme-light scroll-mt-20">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <p className="label text-brand">Comment ça marche</p>
             <h2 className="display mt-3 text-4xl sm:text-5xl">
@@ -253,7 +285,7 @@ export default function Home() {
         <Testimonials />
 
         {/* Pricing */}
-        <section id="tarifs" className="scroll-mt-20">
+        <section id="tarifs" className="theme-light scroll-mt-20">
           <div className="mx-auto max-w-5xl px-4 py-20">
             <p className="label text-brand">Tarifs</p>
             <h2 className="display mt-3 text-4xl sm:text-5xl">
@@ -269,7 +301,7 @@ export default function Home() {
         <Faq />
 
         {/* Closing CTA */}
-        <section>
+        <section className="theme-light">
           <div className="mx-auto w-full max-w-6xl px-4 py-20">
             <div className="panel glow relative overflow-hidden px-6 py-16 text-center sm:px-12">
               <div

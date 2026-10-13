@@ -5,7 +5,7 @@ export function Testimonials() {
   const hasExamples = TESTIMONIALS.some((testimonial) => testimonial.example);
 
   return (
-    <section className="theme-light">
+    <section className="border-y border-border/70 bg-surface/60">
       <div className="mx-auto max-w-6xl px-4 py-20">
         <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <h2 className="display text-4xl sm:text-5xl">
