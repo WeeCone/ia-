@@ -84,6 +84,34 @@ body {
   }
 }
 
+/* Light sections (feature examples, sample report): the same tokens, re-pointed to a white palette.
+   Accent hues are darkened so text and thin marks keep their contrast on white. */
+.theme-light {
+  --background: #f6f8fa;
+  --surface: #eef2f6;
+  --card: #ffffff;
+  --border: #d0d7de;
+  --foreground: #0b0e14;
+  --muted: #57606a;
+  --brand: #0891b2;
+  --accent: #059669;
+  --bull: #059669;
+  --bear: #e11d48;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+.theme-light .panel {
+  background-color: var(--card);
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 12px 32px -16px rgb(15 23 42 / 0.18);
+}
+.theme-light .btn-primary {
+  color: #ffffff;
+  box-shadow: 0 8px 20px -8px rgb(5 150 105 / 0.55);
+}
+.theme-light .btn-primary:hover {
+  background-color: #047857;
+}
+
 /* Faint chart-paper grid used behind hero sections. */
 .grid-bg {
   background-image: linear-gradient(rgb(48 54 61 / 0.35) 1px, transparent 1px), linear-gradient(90deg, rgb(48 54 61 / 0.35) 1px, transparent 1px);

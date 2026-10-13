@@ -77,7 +77,7 @@ export default function Home() {
         </section>
 
         {/* Features — bento grid */}
-        <section id="fonctionnalites" className="scroll-mt-20">
+        <section id="fonctionnalites" className="theme-light scroll-mt-20">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <p className="label text-brand">Fonctionnalités</p>
             <h2 className="display mt-3 max-w-2xl text-4xl sm:text-5xl">
@@ -204,20 +204,22 @@ export default function Home() {
         </section>
 
         {/* Example report */}
-        <section id="demo" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20">
-          <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-            <div>
-              <p className="label text-brand">Démo</p>
-              <h2 className="display mt-3 text-4xl sm:text-5xl">
-                Le rapport, <span className="mark">tel quel.</span>
-              </h2>
+        <section id="demo" className="theme-light scroll-mt-20">
+          <div className="mx-auto max-w-6xl px-4 py-20">
+            <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+              <div>
+                <p className="label text-brand">Démo</p>
+                <h2 className="display mt-3 text-4xl sm:text-5xl">
+                  Le rapport, <span className="mark">tel quel.</span>
+                </h2>
+              </div>
+              <p className="max-w-xs border-l border-border pl-3 text-sm text-muted">
+                Exemple illustratif, rédigé pour la démonstration. Il ne reflète pas le marché actuel.
+              </p>
             </div>
-            <p className="max-w-xs border-l border-border pl-3 text-sm text-muted">
-              Exemple illustratif, rédigé pour la démonstration. Il ne reflète pas le marché actuel.
-            </p>
-          </div>
-          <div className="mt-12">
-            <AnalysisResult analysis={DEMO_ANALYSIS} />
+            <div className="mt-12">
+              <AnalysisResult analysis={DEMO_ANALYSIS} />
+            </div>
           </div>
         </section>
 
