@@ -20,14 +20,35 @@ const steps = [
 function Icon({ path }: { path: string }) {
   return (
     <span className="grid size-10 place-items-center rounded-xl border border-brand/30 bg-brand/10 text-brand">
-      <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <svg
+        viewBox="0 0 24 24"
+        className="size-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden
+      >
         <path d={path} />
       </svg>
     </span>
   );
 }
 
-function Feature({ icon, title, text, children, className = "" }: { icon: string; title: string; text: string; children: React.ReactNode; className?: string }) {
+function Feature({
+  icon,
+  title,
+  text,
+  children,
+  className = "",
+}: {
+  icon: string;
+  title: string;
+  text: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <li className={`panel group flex flex-col overflow-hidden p-6 transition-colors hover:border-brand/40 ${className}`}>
       <Icon path={icon} />
@@ -62,7 +83,9 @@ export default function Home() {
               </p>
               <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                 <ScanCta className="btn-primary text-base">Scanner un graphique →</ScanCta>
-                <Link href="#demo" className="btn-secondary text-base">Voir un exemple de rapport</Link>
+                <Link href="#demo" className="btn-secondary text-base">
+                  Voir un exemple de rapport
+                </Link>
               </div>
             </div>
             <ul className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-xs uppercase tracking-wider text-muted">
@@ -91,11 +114,27 @@ export default function Home() {
                 text="Triangles, doubles creux, têtes-épaules, canaux, drapeaux : les figures visibles sur votre capture sont repérées et nommées."
               >
                 <svg viewBox="0 0 400 110" className="h-auto w-full" aria-hidden>
-                  <path d="M10 95 L70 30 L110 75 L170 38 L205 68 L260 45 L285 60 L330 50" fill="none" stroke="var(--muted)" strokeWidth="2" strokeOpacity="0.6" />
+                  <path
+                    d="M10 95 L70 30 L110 75 L170 38 L205 68 L260 45 L285 60 L330 50"
+                    fill="none"
+                    stroke="var(--muted)"
+                    strokeWidth="2"
+                    strokeOpacity="0.6"
+                  />
                   <line x1="60" y1="28" x2="340" y2="49" stroke="var(--bear)" strokeWidth="2" strokeDasharray="6 4" />
                   <line x1="100" y1="80" x2="340" y2="52" stroke="var(--bull)" strokeWidth="2" strokeDasharray="6 4" />
                   <path d="M330 50 L390 12" fill="none" stroke="var(--brand)" strokeWidth="2.5" />
-                  <rect x="262" y="82" width="116" height="20" rx="10" fill="var(--brand)" fillOpacity="0.12" stroke="var(--brand)" strokeOpacity="0.5" />
+                  <rect
+                    x="262"
+                    y="82"
+                    width="116"
+                    height="20"
+                    rx="10"
+                    fill="var(--brand)"
+                    fillOpacity="0.12"
+                    stroke="var(--brand)"
+                    strokeOpacity="0.5"
+                  />
                   <text x="320" y="96" textAnchor="middle" fontSize="9" fontFamily="var(--font-jetbrains-mono)" fill="var(--brand)">
                     TRIANGLE SYMÉTRIQUE
                   </text>
@@ -165,8 +204,15 @@ export default function Home() {
                   <rect x="0" y="0" width="400" height="80" rx="10" fill="var(--background)" fillOpacity="0.7" />
                   <line x1="0" y1="20" x2="400" y2="20" stroke="var(--bear)" strokeOpacity="0.5" strokeDasharray="4 4" />
                   <line x1="0" y1="60" x2="400" y2="60" stroke="var(--bull)" strokeOpacity="0.5" strokeDasharray="4 4" />
-                  <path d="M0 50 C30 45 45 62 70 58 S110 30 140 34 S180 64 210 55 S260 18 290 16 S340 40 360 36 S390 28 400 26" fill="none" stroke="var(--brand)" strokeWidth="2.5" />
-                  <text x="10" y="14" fontSize="10" fontFamily="var(--font-jetbrains-mono)" fill="var(--muted)">RSI 14</text>
+                  <path
+                    d="M0 50 C30 45 45 62 70 58 S110 30 140 34 S180 64 210 55 S260 18 290 16 S340 40 360 36 S390 28 400 26"
+                    fill="none"
+                    stroke="var(--brand)"
+                    strokeWidth="2.5"
+                  />
+                  <text x="10" y="14" fontSize="10" fontFamily="var(--font-jetbrains-mono)" fill="var(--muted)">
+                    RSI 14
+                  </text>
                 </svg>
               </Feature>
               <Feature
@@ -176,7 +222,9 @@ export default function Home() {
               >
                 <div className="flex flex-wrap gap-2">
                   {["1m", "15m", "1H", "4H", "1D", "1W"].map((tf) => (
-                    <span key={tf} className="chip border-border text-muted">{tf}</span>
+                    <span key={tf} className="chip border-border text-muted">
+                      {tf}
+                    </span>
                   ))}
                 </div>
               </Feature>
@@ -226,7 +274,7 @@ export default function Home() {
         <Testimonials />
 
         {/* Pricing */}
-        <section id="tarifs" className="scroll-mt-20">
+        <section id="tarifs" className="theme-light scroll-mt-20">
           <div className="mx-auto max-w-5xl px-4 py-20">
             <p className="label text-brand">Tarifs</p>
             <h2 className="display mt-3 text-4xl sm:text-5xl">
@@ -242,14 +290,19 @@ export default function Home() {
         <Faq />
 
         {/* Closing CTA */}
-        <section className="mx-auto w-full max-w-6xl px-4 pb-24">
-          <div className="panel glow relative overflow-hidden px-6 py-16 text-center sm:px-12">
-            <div className="absolute -bottom-32 left-1/2 -z-10 h-64 w-[600px] -translate-x-1/2 rounded-full bg-accent/15 blur-[100px]" aria-hidden />
-            <h2 className="display mx-auto max-w-3xl text-4xl sm:text-6xl">
-              Arrêtez de deviner. <span className="mark">Analysez.</span>
-            </h2>
-            <p className="mx-auto mt-5 max-w-xl text-muted">Votre prochain graphique mérite un second avis, chiffré et argumenté.</p>
-            <ScanCta className="btn-primary mt-9 text-base">Scanner un graphique →</ScanCta>
+        <section className="theme-light">
+          <div className="mx-auto w-full max-w-6xl px-4 py-20">
+            <div className="panel glow relative overflow-hidden px-6 py-16 text-center sm:px-12">
+              <div
+                className="absolute -bottom-32 left-1/2 -z-10 h-64 w-[600px] -translate-x-1/2 rounded-full bg-accent/15 blur-[100px]"
+                aria-hidden
+              />
+              <h2 className="display mx-auto max-w-3xl text-4xl sm:text-6xl">
+                Arrêtez de deviner. <span className="mark">Analysez.</span>
+              </h2>
+              <p className="mx-auto mt-5 max-w-xl text-muted">Votre prochain graphique mérite un second avis, chiffré et argumenté.</p>
+              <ScanCta className="btn-primary mt-9 text-base">Scanner un graphique →</ScanCta>
+            </div>
           </div>
         </section>
       </main>
