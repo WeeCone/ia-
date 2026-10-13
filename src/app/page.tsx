@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { AnalysisResult } from "@/components/analysis-result";
 import { Faq } from "@/components/faq";
 import { HeroShowcase } from "@/components/hero-showcase";
 import { PricingPlans } from "@/components/pricing-plans";
@@ -83,8 +82,8 @@ export default function Home() {
               </p>
               <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                 <ScanCta className="btn-primary text-base">Scanner un graphique →</ScanCta>
-                <Link href="#demo" className="btn-secondary text-base">
-                  Voir un exemple de rapport
+                <Link href="/pricing" className="btn-secondary text-base">
+                  Voir les offres
                 </Link>
               </div>
             </div>
@@ -251,30 +250,10 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Example report */}
-        <section id="demo" className="theme-light scroll-mt-20">
-          <div className="mx-auto max-w-6xl px-4 py-20">
-            <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-              <div>
-                <p className="label text-brand">Démo</p>
-                <h2 className="display mt-3 text-4xl sm:text-5xl">
-                  Le rapport, <span className="mark">tel quel.</span>
-                </h2>
-              </div>
-              <p className="max-w-xs border-l border-border pl-3 text-sm text-muted">
-                Exemple illustratif, rédigé pour la démonstration. Il ne reflète pas le marché actuel.
-              </p>
-            </div>
-            <div className="mt-12">
-              <AnalysisResult analysis={DEMO_ANALYSIS} />
-            </div>
-          </div>
-        </section>
-
         <Testimonials />
 
         {/* Pricing */}
-        <section id="tarifs" className="theme-light scroll-mt-20">
+        <section id="tarifs" className="scroll-mt-20">
           <div className="mx-auto max-w-5xl px-4 py-20">
             <p className="label text-brand">Tarifs</p>
             <h2 className="display mt-3 text-4xl sm:text-5xl">
@@ -290,7 +269,7 @@ export default function Home() {
         <Faq />
 
         {/* Closing CTA */}
-        <section className="theme-light">
+        <section>
           <div className="mx-auto w-full max-w-6xl px-4 py-20">
             <div className="panel glow relative overflow-hidden px-6 py-16 text-center sm:px-12">
               <div
