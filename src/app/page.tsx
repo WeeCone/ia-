@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DemoVideo } from "@/components/demo-video";
 import { Faq } from "@/components/faq";
 import { HeroShowcase } from "@/components/hero-showcase";
 import { PricingPlans } from "@/components/pricing-plans";
@@ -111,17 +112,7 @@ export default function Home() {
               </p>
             </div>
             <div className="mx-auto mt-10 max-w-5xl overflow-hidden rounded-2xl border border-border bg-[#0b0e14] shadow-[0_30px_80px_-30px_rgb(8_145_178/0.55)]">
-              <video
-                className="block aspect-video w-full"
-                src="/media/btc-scan.mp4"
-                poster="/media/btc-scan-poster.jpg"
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                aria-label="Démonstration : Scanzivo scanne un graphique BTC/USD hebdomadaire et produit deux scénarios"
-              />
+              <DemoVideo />
             </div>
             <div className="mt-8 flex flex-col items-center gap-3">
               <ScanCta className="btn-primary text-base">Analyser mon graphique →</ScanCta>
