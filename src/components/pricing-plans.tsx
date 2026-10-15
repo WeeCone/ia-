@@ -5,40 +5,55 @@ import { MONTHLY_CREDITS, OFFERS, type Offer } from "@/lib/plans";
 import { useAuth } from "./auth-provider";
 import { BillingButton } from "./billing-button";
 
-const INCLUDED = [
+const common = [
   `${MONTHLY_CREDITS} analyses de graphiques par mois`,
-  "Le verdict et le plan chiffré : entrée, stop, objectifs, gain / risque",
-  "Les niveaux tracés sur votre capture",
-  "Crypto, forex, actions, indices, matières premières",
-  "L'historique de vos analyses, captures comprises",
+  "Crypto, forex, actions, matières premières",
+  "Plan d'action sur le scénario le plus probable",
+  "Entrée, stop, objectifs et ratio gain / risque",
+  "Historique de vos analyses",
 ];
 
-const DETAILS: Record<Offer, { line: string; note: string; cta: string }> = {
-  monthly: { line: "Sans engagement, résiliable en un clic.", note: "Quota rechargé à chaque échéance.", cta: "S'abonner" },
-  lifetime: { line: "Un seul paiement, aucun renouvellement.", note: "Le prix de 4,5 mois d'abonnement. Quota rechargé chaque mois civil.", cta: "Obtenir l'accès à vie" },
+const details: Record<Offer, { features: string[]; cta: string; highlight?: string }> = {
+  monthly: { features: [...common, "Sans engagement, résiliable en un clic"], cta: "S'abonner" },
+  lifetime: {
+    features: [...common, "Un seul paiement, aucun renouvellement"],
+    cta: "Obtenir l'accès à vie",
+    highlight: "Meilleure offre",
+  },
 };
 
-function Offer({ offer }: { offer: Offer }) {
+function OfferCard({ offer }: { offer: Offer }) {
   const { user } = useAuth();
   const { name, price, period } = OFFERS[offer];
-  const { line, note, cta } = DETAILS[offer];
-  const button = offer === "lifetime" ? "btn-primary" : "btn-secondary";
+  const { features, cta, highlight } = details[offer];
+  const button = highlight ? "btn-primary" : "btn-secondary";
 
   return (
-    <div className="flex flex-col py-6 md:px-8 md:py-2 md:first:pl-0 md:last:pr-0">
-      <h3 className="font-[family-name:var(--font-bodoni)] text-3xl font-bold">{name}</h3>
-      <p className="mt-4 flex items-baseline gap-3">
-        <span className="font-[family-name:var(--font-bodoni)] text-6xl font-bold tracking-tight">{price}</span>
-        <span className="text-muted">{period}</span>
+    <div className={`panel relative flex flex-col p-8 ${highlight ? "glow" : ""}`}>
+      {highlight && (
+        <span className="chip absolute -top-3 right-6 border-accent/50 bg-background text-accent">
+          {highlight}
+        </span>
+      )}
+      <h2 className="display text-2xl">{name}</h2>
+      <p className="mt-6 flex items-baseline gap-3">
+        <span className="display text-6xl">{price}</span>
+        <span className="label text-muted">{period}</span>
       </p>
-      <p className="mt-4 font-semibold">{line}</p>
-      <p className="mt-1 flex-1 text-sm text-muted">{note}</p>
+      <ul className="mt-8 flex-1 space-y-3">
+        {features.map((feature) => (
+          <li key={feature} className="flex gap-3 text-sm text-muted">
+            <span className="grid size-5 shrink-0 place-items-center rounded-full bg-accent/15 text-[11px] font-bold text-accent">✓</span>
+            {feature}
+          </li>
+        ))}
+      </ul>
       {user ? (
-        <BillingButton route="checkout" offer={offer} className={`${button} mt-7 w-full py-3.5`} block>
+        <BillingButton route="checkout" offer={offer} className={`${button} mt-10 w-full`}>
           {cta}
         </BillingButton>
       ) : (
-        <Link href="/auth/signup" className={`${button} mt-7 py-3.5`}>
+        <Link href="/auth/signup" className={`${button} mt-10`}>
           {cta}
         </Link>
       )}
@@ -46,27 +61,11 @@ function Offer({ offer }: { offer: Offer }) {
   );
 }
 
-/** Both offers side by side, with what they share stated once. */
 export function PricingPlans() {
   return (
-    <div className="grid gap-10 lg:grid-cols-12">
-      <div className="order-2 lg:order-1 lg:col-span-4">
-        <p className="font-[family-name:var(--font-bodoni)] text-xl font-bold italic">Inclus dans les deux formules</p>
-        <ul className="mt-4 divide-y divide-border border-y border-border">
-          {INCLUDED.map((item) => (
-            <li key={item} className="flex gap-3 py-2.5 text-sm">
-              <svg viewBox="0 0 16 16" className="mt-0.5 size-4 shrink-0 text-bull" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" aria-hidden>
-                <path d="M3 8.5l3 3 7-7" />
-              </svg>
-              {item}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="order-1 grid divide-y divide-border border-y-2 border-foreground md:grid-cols-2 md:divide-x md:divide-y-0 md:py-8 lg:order-2 lg:col-span-8">
-        <Offer offer="monthly" />
-        <Offer offer="lifetime" />
-      </div>
+    <div className="grid gap-10 md:grid-cols-2">
+      <OfferCard offer="monthly" />
+      <OfferCard offer="lifetime" />
     </div>
   );
 }

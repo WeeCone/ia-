@@ -35,7 +35,9 @@ A verdict, not a "maybe": the AI commits to the single most probable scenario an
 
 ## Brand Commitments
 
-- Name: Scanzivo (scanzivo.com). Logo and colours are open to replacement in the 2026-10 public-site redesign.
+- Name: Scanzivo (scanzivo.com), with its current logo (gradient scan viewfinder framing candles).
+- Visual identity confirmed by the owner (2026-10-15): dark fintech look, anthracite ground, cyan (#00d2ff) and neon green (#00f5a0), modern sans titling (Space Grotesk), glass panels; light sections alternate for the AI examples. It should feel modern and tech.
+- Rejected (2026-10-15, live for a few minutes then reverted): a "chess annotation book" redesign with board green and paper white, Bodoni serif titles, chess evaluation symbols (± ∓ = ∞) and game vocabulary. The owner disliked the green, the serif fonts, the chess theme and the sober, old-fashioned feel. Do not propose these again.
 - The BTC scan demo video (public/media/btc-scan.*) stays on the homepage; its analysis results are deliberately blurred.
 
 ## Evidence on Hand

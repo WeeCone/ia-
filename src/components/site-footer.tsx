@@ -6,10 +6,10 @@ const COLUMNS = [
   {
     title: "Produit",
     links: [
-      { href: "/#demo", label: "Démo" },
-      { href: "/#verdicts", label: "Les verdicts" },
+      { href: "/#fonctionnalites", label: "Fonctionnalités" },
+      { href: "/#methode", label: "Comment ça marche" },
       { href: "/#tarifs", label: "Tarifs" },
-      { href: "/#faq", label: "Questions" },
+      { href: "/#faq", label: "FAQ" },
     ],
   },
   {
@@ -25,19 +25,21 @@ const COLUMNS = [
 
 export function SiteFooter() {
   return (
-    <footer className="board border-t border-border">
+    <footer className="border-t border-border/70 bg-surface/60">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-12">
         <div className="md:col-span-5">
           <Logo />
-          <p className="mt-4 max-w-xs leading-relaxed text-muted">Votre graphique, commenté comme une partie : une lecture, un verdict, un plan.</p>
+          <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
+            L&apos;analyse technique par IA, à partir d&apos;une simple capture de graphique.
+          </p>
         </div>
         {COLUMNS.map((column) => (
           <nav key={column.title} className="md:col-span-2" aria-label={column.title}>
-            <p className="font-[family-name:var(--font-bodoni)] text-lg font-bold">{column.title}</p>
-            <ul className="mt-3 space-y-2.5 text-sm">
+            <p className="label text-foreground">{column.title}</p>
+            <ul className="mt-4 space-y-3 text-sm">
               {column.links.map(({ href, label }) => (
                 <li key={href}>
-                  <Link href={href} className="text-muted underline-offset-4 hover:text-foreground hover:underline">
+                  <Link href={href} className="text-muted hover:text-brand">
                     {label}
                   </Link>
                 </li>
@@ -46,7 +48,7 @@ export function SiteFooter() {
           </nav>
         ))}
       </div>
-      <div className="border-t border-border">
+      <div className="border-t border-border/70">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-xs text-muted sm:flex-row sm:justify-between">
           <span>© 2026 Scanzivo. Tous droits réservés.</span>
           <span>Ceci n&apos;est pas un conseil en investissement. Le trading comporte un risque de perte en capital.</span>

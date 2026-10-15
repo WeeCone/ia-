@@ -31,7 +31,7 @@ const QUESTIONS: { q: string; a: React.ReactNode }[] = [
     a: (
       <>
         Oui. L&apos;abonnement mensuel est sans engagement et se résilie en un clic depuis votre tableau de bord ; l&apos;offre À vie
-        est un paiement unique, sans renouvellement. Détails dans les <Link href="/legal/cgv" className="text-foreground underline underline-offset-2">conditions générales</Link>.
+        est un paiement unique, sans renouvellement. Détails dans les <Link href="/legal/cgv" className="text-brand underline underline-offset-2">conditions générales</Link>.
       </>
     ),
   },
@@ -43,24 +43,24 @@ const QUESTIONS: { q: string; a: React.ReactNode }[] = [
 
 export function Faq() {
   return (
-    <section id="faq" className="paper scroll-mt-20 border-t border-border">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-20 lg:grid-cols-12">
+    <section id="faq" className="scroll-mt-20">
+      <div className="mx-auto grid max-w-6xl gap-12 px-4 py-20 lg:grid-cols-12">
         <div className="lg:col-span-4">
-          <h2 className="display text-4xl sm:text-5xl">Questions avant la première analyse</h2>
-          <p className="mt-4 text-muted">
-            Autre question ? Les <Link href="/legal/cgv" className="underline underline-offset-4">conditions générales</Link> détaillent tout le reste.
-          </p>
+          <p className="label text-brand">FAQ</p>
+          <h2 className="display mt-3 text-4xl sm:text-5xl">Questions fréquentes</h2>
+          <p className="mt-4 text-muted">Tout ce qu&apos;il faut savoir avant votre première analyse.</p>
+          <Link href="/auth/signup" className="btn-primary mt-8">Commencer →</Link>
         </div>
-        <div className="border-t-2 border-foreground lg:col-span-8">
+        <div className="space-y-4 lg:col-span-8">
           {QUESTIONS.map(({ q, a }) => (
-            <details key={q} className="group border-b border-border">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-lg font-semibold [&::-webkit-details-marker]:hidden">
+            <details key={q} className="group panel open:border-brand/50">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 font-medium [&::-webkit-details-marker]:hidden">
                 {q}
-                <svg viewBox="0 0 16 16" className="size-4 shrink-0 transition-transform group-open:rotate-45" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="square" aria-hidden>
-                  <path d="M8 2v12M2 8h12" />
-                </svg>
+                <span className="shrink-0 font-display text-2xl leading-none text-brand transition-transform group-open:rotate-45" aria-hidden>
+                  +
+                </span>
               </summary>
-              <div className="max-w-[65ch] pb-5 leading-relaxed text-muted">{a}</div>
+              <div className="border-t border-border px-5 py-4 leading-relaxed text-muted">{a}</div>
             </details>
           ))}
         </div>
