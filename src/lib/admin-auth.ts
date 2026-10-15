@@ -8,8 +8,12 @@ export async function isAdminRequest(request: Request) {
   if (!token) return false;
   try {
     const decoded = await adminAuth.verifyIdToken(token);
+    if (isAdminUid(decoded.uid)) return true;
     // An email counts only once verified: an unverified address could belong to anyone who typed it at sign-up.
-    return isAdminUid(decoded.uid) || (decoded.email_verified === true && isAdminEmail(decoded.email));
+    if (!isAdminEmail(decoded.email)) return false;
+    if (decoded.email_verified === true) return true;
+    // The token's claim lags for up to an hour after the user clicks the link: ask Firebase for the live status.
+    return (await adminAuth.getUser(decoded.uid)).emailVerified;
   } catch {
     return false;
   }
