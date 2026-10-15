@@ -23,7 +23,7 @@ export function DemoVideo() {
       <video
         ref={ref}
         className="block aspect-video w-full"
-        poster="/media/btc-scan-poster.jpg"
+        poster="/media/btc-scan-poster.jpg?v=2"
         autoPlay
         muted
         loop
@@ -31,8 +31,8 @@ export function DemoVideo() {
         preload="metadata"
         aria-label="Démonstration : Scanzivo scanne un graphique BTC/USD hebdomadaire et produit un plan d'action"
       >
-        <source src="/media/btc-scan.webm" type="video/webm" />
-        <source src="/media/btc-scan.mp4" type="video/mp4" />
+        <source src="/media/btc-scan.webm?v=2" type="video/webm" />
+        <source src="/media/btc-scan.mp4?v=2" type="video/mp4" />
       </video>
       <button
         type="button"
