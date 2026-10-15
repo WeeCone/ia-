@@ -247,38 +247,6 @@ body {
   }
 }
 
-/* Cards that lean toward the pointer, with a sheen following it (mouse only, see TiltCard). */
-.tilt {
-  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  transform-style: preserve-3d;
-  position: relative;
-}
-.tilt[data-tilt] {
-  transition-duration: 0.12s;
-}
-.tilt::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background: radial-gradient(circle at var(--sx, 50%) var(--sy, 50%), rgb(255 255 255 / 0.09), transparent 45%);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.tilt[data-tilt]::after {
-  opacity: 1;
-}
-@media (prefers-reduced-motion: reduce), (pointer: coarse) {
-  .tilt {
-    transform: none;
-  }
-  .tilt::after {
-    display: none;
-  }
-}
-
 /* Platforms band: two copies of the list slide by exactly one copy's width, so the loop is seamless. */
 @keyframes marquee {
   to {
