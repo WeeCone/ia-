@@ -46,8 +46,7 @@ export function Faq() {
     <section id="faq" className="scroll-mt-20">
       <div className="mx-auto grid max-w-6xl gap-12 px-4 py-20 lg:grid-cols-12">
         <div className="lg:col-span-4">
-          <p className="label text-brand">FAQ</p>
-          <h2 className="display mt-3 text-4xl sm:text-5xl">Questions fréquentes</h2>
+                    <h2 className="display text-4xl sm:text-5xl">Questions fréquentes</h2>
           <p className="mt-4 text-muted">Tout ce qu&apos;il faut savoir avant votre première analyse.</p>
           <Link href="/auth/signup" className="btn-primary mt-8">Commencer →</Link>
         </div>

@@ -18,33 +18,12 @@ const steps = [
   { title: "Décidez", text: "Un verdict clair : le scénario le plus probable, avec entrée, stop et objectifs. Ou « attendre » quand le signal n'y est pas." },
 ];
 
-function Icon({ path }: { path: string }) {
-  return (
-    <span className="grid size-10 place-items-center rounded-xl border border-brand/30 bg-brand/10 text-brand">
-      <svg
-        viewBox="0 0 24 24"
-        className="size-5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden
-      >
-        <path d={path} />
-      </svg>
-    </span>
-  );
-}
-
 function Feature({
-  icon,
   title,
   text,
   children,
   className = "",
 }: {
-  icon: string;
   title: string;
   text: string;
   children: React.ReactNode;
@@ -52,8 +31,7 @@ function Feature({
 }) {
   return (
     <li className={`panel group flex flex-col overflow-hidden p-6 transition-colors hover:border-brand/40 ${className}`}>
-      <Icon path={icon} />
-      <h3 className="display mt-5 text-xl">{title}</h3>
+      <h3 className="display text-xl">{title}</h3>
       <p className="mt-2 text-sm leading-relaxed text-muted">{text}</p>
       <div className="mt-6 flex flex-1 items-end">{children}</div>
     </li>
@@ -71,7 +49,6 @@ export default function Home() {
         <section className="relative isolate overflow-hidden">
           <div className="grid-bg absolute inset-0 -z-10" aria-hidden />
           <div className="absolute -top-40 left-1/2 -z-10 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-brand/15 blur-[120px]" aria-hidden />
-          <div className="absolute right-0 top-80 -z-10 h-80 w-96 rounded-full bg-accent/10 blur-[110px]" aria-hidden />
           <div className="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pt-16">
             <h1 className="display text-center text-4xl sm:text-6xl">Analyse technique propulsée par l&apos;IA</h1>
             <div className="mt-10 sm:mt-12">
@@ -105,8 +82,7 @@ export default function Home() {
         <section id="video" className="theme-light scroll-mt-20">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <div className="mx-auto max-w-3xl text-center">
-              <p className="label text-brand">Démo</p>
-              <h2 className="display mt-3 text-4xl sm:text-5xl">
+                            <h2 className="display text-4xl sm:text-5xl">
                 Regardez Scanzivo <span className="mark">lire un graphique.</span>
               </h2>
               <p className="mt-4 text-lg text-muted">
@@ -127,14 +103,12 @@ export default function Home() {
         {/* Features — bento grid */}
         <section id="fonctionnalites" className="scroll-mt-20 border-y border-border/70 bg-surface/60">
           <div className="mx-auto max-w-6xl px-4 py-20">
-            <p className="label text-brand">Fonctionnalités</p>
-            <h2 className="display mt-3 max-w-2xl text-4xl sm:text-5xl">
+                        <h2 className="display max-w-2xl text-4xl sm:text-5xl">
               Tout ce que l&apos;IA lit <span className="mark">sur votre graphique.</span>
             </h2>
             <ul className="mt-12 grid gap-5 md:grid-cols-3">
               <Feature
                 className="md:col-span-2"
-                icon="M3 20l6-12 5 8 3-5 4 9"
                 title="Détection de figures chartistes"
                 text="Triangles, doubles creux, têtes-épaules, canaux, drapeaux : les figures visibles sur votre capture sont repérées et nommées."
               >
@@ -166,7 +140,6 @@ export default function Home() {
                 </svg>
               </Feature>
               <Feature
-                icon="M3 7h18M3 12h18M3 17h18"
                 title="Supports & résistances"
                 text="Les niveaux clés sont tracés directement sur votre capture, avec leur prix."
               >
@@ -184,7 +157,6 @@ export default function Home() {
                 </div>
               </Feature>
               <Feature
-                icon="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5"
                 title="Un verdict, pas un « peut-être »"
                 text="L'IA retient le scénario le plus probable et le formule en plan : acheter, vendre, attendre ou s'abstenir. L'alternative reste consultable."
               >
@@ -200,7 +172,6 @@ export default function Home() {
               </Feature>
               <Feature
                 className="md:col-span-2"
-                icon="M4 19h16M7 15l3-4 3 2 4-6"
                 title="Plan de trade chiffré"
                 text="Pour le scénario retenu : zone d'entrée, stop, objectifs, et le ratio gain / risque calculé à partir des prix."
               >
@@ -220,7 +191,6 @@ export default function Home() {
               </Feature>
               <Feature
                 className="md:col-span-2"
-                icon="M3 12h4l3-7 4 14 3-7h4"
                 title="Lecture des indicateurs visibles"
                 text="RSI, MACD, moyennes mobiles, volumes : s'ils figurent sur votre capture, ils sont pris en compte dans l'analyse."
               >
@@ -240,7 +210,6 @@ export default function Home() {
                 </svg>
               </Feature>
               <Feature
-                icon="M4 5h16v11H4zM8 20h8M12 16v4"
                 title="Toutes vos plateformes"
                 text="TradingView, Binance, MetaTrader… sur toutes les unités de temps."
               >
@@ -259,15 +228,14 @@ export default function Home() {
         {/* Method */}
         <section id="methode" className="theme-light scroll-mt-20">
           <div className="mx-auto max-w-6xl px-4 py-20">
-            <p className="label text-brand">Comment ça marche</p>
-            <h2 className="display mt-3 text-4xl sm:text-5xl">
+                        <h2 className="display text-4xl sm:text-5xl">
               Trois étapes, <span className="mark">pas une de plus.</span>
             </h2>
             <ol className="mt-12 grid gap-5 md:grid-cols-3">
               {steps.map((step, index) => (
                 <li key={step.title} className="panel p-6">
-                  <span className="display mark text-5xl">{String(index + 1).padStart(2, "0")}</span>
-                  <h3 className="display mt-5 text-2xl">{step.title}</h3>
+                  <span className="font-mono text-sm font-medium text-brand">Étape {index + 1}</span>
+                  <h3 className="display mt-2 text-2xl">{step.title}</h3>
                   <p className="mt-2 leading-relaxed text-muted">{step.text}</p>
                 </li>
               ))}
@@ -279,9 +247,8 @@ export default function Home() {
 
         {/* Pricing */}
         <section id="tarifs" className="theme-light scroll-mt-20">
-          <div className="mx-auto max-w-5xl px-4 py-20">
-            <p className="label text-brand">Tarifs</p>
-            <h2 className="display mt-3 text-4xl sm:text-5xl">
+          <div className="mx-auto max-w-6xl px-4 py-20">
+                        <h2 className="display text-4xl sm:text-5xl">
               Deux offres. <span className="mark">Prix affichés.</span>
             </h2>
             <p className="mt-5 max-w-xl text-lg text-muted">Pas d&apos;offre gratuite : un abonnement mensuel sans engagement, ou un accès à vie en un seul paiement.</p>
@@ -296,11 +263,7 @@ export default function Home() {
         {/* Closing CTA */}
         <section className="theme-light">
           <div className="mx-auto w-full max-w-6xl px-4 py-20">
-            <div className="panel glow relative overflow-hidden px-6 py-16 text-center sm:px-12">
-              <div
-                className="absolute -bottom-32 left-1/2 -z-10 h-64 w-[600px] -translate-x-1/2 rounded-full bg-accent/15 blur-[100px]"
-                aria-hidden
-              />
+            <div className="panel relative overflow-hidden px-6 py-16 text-center sm:px-12">
               <h2 className="display mx-auto max-w-3xl text-4xl sm:text-6xl">
                 Arrêtez de deviner. <span className="mark">Analysez.</span>
               </h2>
