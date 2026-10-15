@@ -2,7 +2,7 @@ import { DemoVideo } from "@/components/demo-video";
 import { Faq } from "@/components/faq";
 import { HeroScene } from "@/components/hero-scene";
 import { DropBar } from "@/components/drop-bar";
-import { HeroShowcase } from "@/components/hero-showcase";
+import { BeforeAfter } from "@/components/before-after";
 import { PhoneShowcase } from "@/components/phone-showcase";
 import { PlatformMarquee } from "@/components/platform-marquee";
 import { PriceNote } from "@/components/price-note";
@@ -68,8 +68,8 @@ export default function Home() {
 
         {/* Before / after */}
         <section className="theme-dark mx-2 rounded-[2.5rem] sm:mx-4 scroll-mt-24">
-          <div className="mx-auto max-w-6xl px-4 py-20">
-            <HeroShowcase />
+          <div className="mx-auto max-w-6xl px-4 py-20 sm:py-24">
+            <BeforeAfter />
           </div>
         </section>
 
