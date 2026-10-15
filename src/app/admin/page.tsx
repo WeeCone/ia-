@@ -185,13 +185,83 @@ function ReviewCard({ review, onChanged }: { review: AdminReview; onChanged: () 
   );
 }
 
+function ImportAnalysis() {
+  const [image, setImage] = useState<File | null>(null);
+  const [json, setJson] = useState("");
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [done, setDone] = useState<string | null>(null);
+
+  async function submit() {
+    setPending(true);
+    setError(null);
+    setDone(null);
+    try {
+      const token = await auth.currentUser?.getIdToken();
+      const body = new FormData();
+      body.set("analysis", json);
+      if (image) body.set("image", image);
+      const response = await fetch("/api/admin/import", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error ?? "Import impossible.");
+      setDone(
+        data.imageSaved || !image
+          ? "Analyse ajoutée à votre historique. Ouvrez le tableau de bord pour la voir."
+          : "Analyse ajoutée, mais la capture n'a pas pu être enregistrée (stockage Firebase à activer).",
+      );
+      setJson("");
+      setImage(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Import impossible.");
+    } finally {
+      setPending(false);
+    }
+  }
+
+  return (
+    <section className="panel mt-6 max-w-3xl space-y-5 p-6">
+      <div>
+        <h2 className="display text-xl">Importer une analyse dans mon historique</h2>
+        <p className="mt-1 text-sm text-muted">
+          Pour une démonstration ou une analyse préparée à l&apos;avance : collez son JSON et, si possible, la capture d&apos;origine. Aucun crédit
+          n&apos;est utilisé.
+        </p>
+      </div>
+      <label className="field">
+        <span>Capture du graphique (optionnelle)</span>
+        <input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={(event) => setImage(event.target.files?.[0] ?? null)} />
+      </label>
+      <label className="field">
+        <span>Analyse (JSON)</span>
+        <textarea
+          value={json}
+          onChange={(event) => setJson(event.target.value)}
+          rows={10}
+          placeholder='{ "is_chart": true, "asset": "…", … }'
+          className="rounded-xl border border-border bg-background/80 px-3.5 py-3 font-mono text-xs text-foreground outline-none focus:border-brand"
+        />
+      </label>
+      <FormError message={error} />
+      {done && <p className="rounded-xl border border-bull/40 bg-bull/10 px-3 py-2 text-sm text-bull">{done}</p>}
+      <div className="flex flex-wrap gap-3">
+        <button type="button" onClick={submit} disabled={pending || !json.trim()} className="btn-primary">
+          {pending ? "Import…" : "Ajouter à mon historique"}
+        </button>
+        <Link href="/dashboard" className="btn-secondary">
+          Voir mon historique
+        </Link>
+      </div>
+    </section>
+  );
+}
+
 export default function AdminPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [data, setData] = useState<AdminOverview | null>(null);
   const [error, setError] = useState<{ message: string; status?: number } | null>(null);
   const [refreshing, setRefreshing] = useState(false);
-  const [tab, setTab] = useState<"users" | "reviews">("users");
+  const [tab, setTab] = useState<"users" | "reviews" | "import">("users");
   const [query, setQuery] = useState("");
   const [planFilter, setPlanFilter] = useState<Plan | "all">("all");
 
@@ -310,6 +380,7 @@ export default function AdminPage() {
                 [
                   ["users", `Utilisateurs (${data.users.length})`],
                   ["reviews", `Avis${pendingReviews ? ` (${pendingReviews} en attente)` : ` (${data.reviews.length})`}`],
+                  ["import", "Importer une analyse"],
                 ] as const
               ).map(([key, label]) => (
                 <button
@@ -369,7 +440,7 @@ export default function AdminPage() {
                   {!users.length && <p className="px-4 py-6 text-center text-sm text-muted">Aucun utilisateur ne correspond.</p>}
                 </div>
               </section>
-            ) : (
+            ) : tab === "reviews" ? (
               <section className="mt-6">
                 {data.reviews.length ? (
                   <ul className="grid gap-4 md:grid-cols-2">
@@ -381,6 +452,8 @@ export default function AdminPage() {
                   <p className="text-sm text-muted">Aucun avis pour l&apos;instant. Ils arrivent après la 3ᵉ analyse d&apos;un client.</p>
                 )}
               </section>
+            ) : (
+              <ImportAnalysis />
             )}
           </>
         )}
