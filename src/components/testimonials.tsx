@@ -1,8 +1,21 @@
-import { TESTIMONIALS } from "@/lib/testimonials";
+import { getPublishedReviews } from "@/lib/testimonials";
 
-export function Testimonials() {
-  if (!TESTIMONIALS.length) return null;
-  const hasExamples = TESTIMONIALS.some((testimonial) => testimonial.example);
+function Stars({ rating }: { rating: number }) {
+  return (
+    <span className="flex gap-0.5 text-accent" aria-label={`${rating} sur 5`}>
+      {[1, 2, 3, 4, 5].map((star) => (
+        <svg key={star} viewBox="0 0 20 20" className={`size-4 ${star <= rating ? "" : "opacity-25"}`} fill="currentColor" aria-hidden>
+          <path d="M10 1.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.5 7.7l5.9-.9z" />
+        </svg>
+      ))}
+    </span>
+  );
+}
+
+/** Genuine customer reviews, approved in the admin. Hidden until there is at least one. */
+export async function Testimonials() {
+  const reviews = await getPublishedReviews();
+  if (!reviews.length) return null;
 
   return (
     <section className="border-y border-border/70 bg-surface/60">
@@ -11,30 +24,16 @@ export function Testimonials() {
           <h2 className="display text-4xl sm:text-5xl">
             Ils lisent <span className="mark">leurs graphiques.</span>
           </h2>
-          {hasExamples && (
-            <p className="max-w-xs border-l border-bear pl-3 text-sm text-muted">
-              Témoignages fictifs, affichés en exemple. Ils seront remplacés par de vrais avis clients.
-            </p>
-          )}
+          <p className="max-w-xs text-sm text-muted">Avis laissés par des utilisateurs de Scanzivo depuis leur espace client.</p>
         </div>
-        <ul className="mt-12 grid gap-8 md:grid-cols-3">
-          {TESTIMONIALS.map((testimonial, index) => (
-            <li key={index} className="panel relative flex flex-col p-6">
-              {testimonial.example && (
-                <span className="chip absolute -top-3 right-4 border-bear/40 bg-background text-bear">
-                  Exemple
-                </span>
-              )}
-              <span className="display mark text-6xl leading-none" aria-hidden>
-                “
-              </span>
-              <blockquote className="mt-2 flex-1 leading-relaxed">{testimonial.quote}</blockquote>
-              <footer className="mt-6 flex items-end justify-between gap-4 border-t border-border pt-4">
-                <div>
-                  <p className="font-semibold">{testimonial.name}</p>
-                  <p className="text-sm text-muted">{testimonial.role}</p>
-                </div>
-                <span className="chip shrink-0 border-border text-muted">{testimonial.market}</span>
+        <ul className={`mt-12 grid gap-8 ${reviews.length > 1 ? "md:grid-cols-2 lg:grid-cols-3" : "max-w-xl"}`}>
+          {reviews.map((review, index) => (
+            <li key={index} className="panel flex flex-col p-6">
+              <Stars rating={review.rating} />
+              <blockquote className="mt-4 flex-1 leading-relaxed">« {review.quote} »</blockquote>
+              <footer className="mt-6 flex items-center justify-between gap-4 border-t border-border pt-4">
+                <p className="font-semibold">{review.name}</p>
+                <span className="chip shrink-0 border-bull/40 text-bull">Client Scanzivo</span>
               </footer>
             </li>
           ))}

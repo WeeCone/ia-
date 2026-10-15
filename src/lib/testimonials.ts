@@ -1,37 +1,35 @@
-export type Testimonial = {
-  quote: string;
-  name: string;
-  role: string;
-  market: string;
-  /** Placeholder copy. Shown with a visible "Exemple" tag; replace with real, verifiable customer reviews. */
-  example?: boolean;
-};
+import { cacheLife, cacheTag } from "next/cache";
+import { adminDb } from "./firebase-admin";
 
-// Replace these with genuine reviews (with the customer's consent) before launch.
-// Publishing invented reviews as real ones is a misleading commercial practice under French law.
-export const TESTIMONIALS: Testimonial[] = [
-  {
-    quote:
-      "Je colle ma capture TradingView avant chaque entrée. Les deux scénarios m'obligent à penser à l'invalidation avant de cliquer.",
-    name: "Prénom N.",
-    role: "Trader crypto, swing",
-    market: "BTC/USDT · 4H",
-    example: true,
-  },
-  {
-    quote:
-      "Ce que j'apprécie, ce sont les niveaux chiffrés : entrée, stop, objectifs. Je compare avec mon propre plan et je vois vite ce que j'ai raté.",
-    name: "Prénom N.",
-    role: "Trader forex, intraday",
-    market: "EUR/USD · 1H",
-    example: true,
-  },
-  {
-    quote:
-      "Je débute en analyse technique. Lire pourquoi un support compte, sur mon propre graphique, m'apprend plus qu'un cours théorique.",
-    name: "Prénom N.",
-    role: "Investisseur débutant",
-    market: "XAU/USD · Daily",
-    example: true,
-  },
-];
+export type Testimonial = { quote: string; name: string; rating: number };
+
+export const REVIEWS_TAG = "public-reviews";
+
+/** "David Mougin" → "David M.": first name and initial only. */
+function shortName(displayName: unknown) {
+  const parts = typeof displayName === "string" ? displayName.trim().split(/\s+/).filter(Boolean) : [];
+  if (!parts.length) return "Client Scanzivo";
+  return parts.length > 1 ? `${parts[0]} ${parts[parts.length - 1][0].toUpperCase()}.` : parts[0];
+}
+
+/**
+ * Real customer reviews: approved in the admin and published with the author's consent.
+ * Only genuine reviews are shown; the section stays hidden until there is at least one.
+ */
+export async function getPublishedReviews(): Promise<Testimonial[]> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag(REVIEWS_TAG);
+  try {
+    const snapshot = await adminDb.collection("reviews").where("status", "==", "approved").where("publishConsent", "==", true).get();
+    return snapshot.docs
+      .map((doc) => doc.data())
+      .filter((review) => typeof review.text === "string" && review.text.trim())
+      .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0) || (b.createdAt?.toMillis?.() ?? 0) - (a.createdAt?.toMillis?.() ?? 0))
+      .slice(0, 6)
+      .map((review) => ({ quote: review.text.trim(), name: shortName(review.displayName), rating: Math.max(1, Math.min(5, Math.round(review.rating ?? 5))) }));
+  } catch (error) {
+    console.error("Avis publics indisponibles", error);
+    return [];
+  }
+}

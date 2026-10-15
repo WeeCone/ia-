@@ -1,6 +1,8 @@
+import { revalidateTag } from "next/cache";
 import { adminAuth, adminBucket, adminDb } from "@/lib/firebase-admin";
 import { getRequestUid } from "@/lib/server-auth";
 import { getStripe } from "@/lib/stripe";
+import { REVIEWS_TAG } from "@/lib/testimonials";
 
 /** Deletes the caller's account: stops billing, erases Firestore data, then the Firebase Auth user. */
 export async function DELETE(request: Request) {
@@ -31,6 +33,7 @@ export async function DELETE(request: Request) {
     console.error("screenshot cleanup failed", err);
   }
   await adminDb.collection("reviews").doc(uid).delete();
+  revalidateTag(REVIEWS_TAG, { expire: 0 });
   await adminAuth.deleteUser(uid);
 
   return new Response(null, { status: 204 });
