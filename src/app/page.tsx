@@ -38,7 +38,7 @@ export default function Home() {
   const { bullish } = DEMO_ANALYSIS;
 
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="theme-light flex flex-1 flex-col">
       <SiteHeader />
       <main id="contenu" className="flex-1">
         {/* Hero */}
@@ -47,7 +47,7 @@ export default function Home() {
           <HeroScene />
           <div className="absolute -top-40 left-1/2 -z-10 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-brand/15 blur-[120px]" aria-hidden />
           <div className="mx-auto max-w-6xl px-4 pb-14 pt-14 text-center sm:pt-20">
-            <h1 className="display mx-auto max-w-5xl text-[2.6rem] leading-[0.98] tracking-[-0.035em] [text-shadow:0_2px_28px_rgb(11_14_20/0.95)] sm:text-7xl lg:text-[5.25rem]">
+            <h1 className="display mx-auto max-w-5xl text-[2.6rem] leading-[0.98] tracking-[-0.035em] [text-shadow:0_2px_28px_var(--background)] sm:text-7xl lg:text-[5.25rem]">
               L&apos;IA qui lit vos graphiques
               <br />
               et tranche sur <RotatingWord words={["la crypto", "le forex", "l\u2019or", "les indices", "les actions"]} />
@@ -67,7 +67,7 @@ export default function Home() {
         </section>
 
         {/* Before / after */}
-        <section className="scroll-mt-24">
+        <section className="theme-dark mx-2 rounded-[2.5rem] sm:mx-4 scroll-mt-24">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <HeroShowcase />
           </div>
@@ -89,7 +89,7 @@ export default function Home() {
         </section>
 
         {/* Live scan video */}
-        <section id="video" className="theme-light mx-2 scroll-mt-24 rounded-[2.5rem] sm:mx-4">
+        <section id="video" className="theme-dark mx-2 rounded-[2.5rem] sm:mx-4 scroll-mt-24">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <div className="mx-auto max-w-3xl text-center">
               <h2 className="display text-4xl sm:text-5xl">
@@ -111,7 +111,7 @@ export default function Home() {
         </section>
 
         {/* Features — bento grid */}
-        <section id="fonctionnalites" className="scroll-mt-20 border-y border-border/70 bg-surface/60">
+        <section id="fonctionnalites" className="scroll-mt-24">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <h2 className="display max-w-2xl text-4xl sm:text-5xl">
               Tout ce que l&apos;IA lit <span className="mark">sur votre graphique.</span>
@@ -187,7 +187,7 @@ export default function Home() {
                     ["Entrée", "65 400"],
                     ["Stop", "64 300"],
                     ["Objectifs", "66 600 · 67 000"],
-                    ["Gain / risque", "1 : 1,1 · 1 : 1,5"],
+                    ["Gain / risque", "1 : 1,1 / 1,5"],
                   ].map(([term, value]) => (
                     <div key={term} className="rounded-xl border border-border bg-background/70 px-3 py-2.5">
                       <dt className="text-[11px] uppercase tracking-wider text-muted">{term}</dt>
@@ -230,7 +230,7 @@ export default function Home() {
         </section>
 
         {/* Method */}
-        <section id="methode" className="theme-light mx-2 scroll-mt-24 rounded-[2.5rem] sm:mx-4">
+        <section id="methode" className="theme-dark mx-2 rounded-[2.5rem] sm:mx-4 scroll-mt-24">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <h2 className="display text-4xl sm:text-5xl">
               Trois étapes, <span className="mark">pas une de plus.</span>
@@ -250,7 +250,7 @@ export default function Home() {
         <Testimonials />
 
         {/* Pricing */}
-        <section id="tarifs" className="theme-light mx-2 scroll-mt-24 rounded-[2.5rem] sm:mx-4">
+        <section id="tarifs" className="scroll-mt-24">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <h2 className="display text-4xl sm:text-5xl">
               Deux offres. <span className="mark">Prix affichés.</span>
@@ -270,7 +270,7 @@ export default function Home() {
         <Faq />
 
         {/* Closing CTA */}
-        <section className="theme-light mx-2 mb-4 rounded-[2.5rem] sm:mx-4">
+        <section className="theme-dark mx-2 rounded-[2.5rem] sm:mx-4 mb-4">
           <div className="mx-auto w-full max-w-6xl px-4 py-20">
             <div className="panel relative overflow-hidden px-6 py-16 text-center sm:px-12">
               <h2 className="display mx-auto max-w-3xl text-4xl sm:text-6xl">

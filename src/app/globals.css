@@ -112,11 +112,37 @@ body {
   background-color: #065f46;
 }
 
+/* Dark blocks set inside a light page: the original dark palette, re-pointed locally. */
+.theme-dark {
+  --background: #0b0e14;
+  --surface: #0f141c;
+  --card: #161b22;
+  --border: #30363d;
+  --foreground: #e6edf3;
+  --muted: #8b949e;
+  --brand: #00d2ff;
+  --accent: #00f5a0;
+  --bull: #00f5a0;
+  --bear: #ff4d6d;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+.theme-dark .btn-primary {
+  color: var(--background);
+}
+.theme-dark .btn-primary:hover {
+  background-color: #33f7b3;
+}
+
 /* Faint chart-paper grid used behind hero sections. */
 .grid-bg {
   background-image: linear-gradient(rgb(48 54 61 / 0.35) 1px, transparent 1px), linear-gradient(90deg, rgb(48 54 61 / 0.35) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 75%);
+}
+
+.theme-light .grid-bg {
+  background-image: linear-gradient(rgb(208 215 222 / 0.45) 1px, transparent 1px), linear-gradient(90deg, rgb(208 215 222 / 0.45) 1px, transparent 1px);
 }
 
 /* Long-form legal text. */

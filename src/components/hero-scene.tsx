@@ -46,7 +46,10 @@ export function HeroScene() {
       host.appendChild(canvas);
 
       const scene = new THREE.Scene();
-      scene.fog = new THREE.Fog(0x0b0e14, 15, 34);
+      // Fog and floor follow the page ground, so the scene melts into a light or a dark hero alike.
+      const ground = new THREE.Color(getComputedStyle(host).getPropertyValue("--background").trim() || "#0b0e14");
+      const light = ground.getHSL({ h: 0, s: 0, l: 0 }).l > 0.5;
+      scene.fog = new THREE.Fog(ground, 15, 34);
       const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 60);
 
       scene.add(new THREE.AmbientLight(0x9fb4c8, 0.55));
@@ -58,7 +61,7 @@ export function HeroScene() {
       scene.add(rim);
 
       // Floor: a faint price grid.
-      const grid = new THREE.GridHelper(40, 40, 0x1f2a36, 0x16202b);
+      const grid = new THREE.GridHelper(40, 40, light ? 0xc9d1da : 0x1f2a36, light ? 0xdde3ea : 0x16202b);
       grid.position.y = 0;
       scene.add(grid);
 
