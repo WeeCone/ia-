@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { DemoVideo } from "@/components/demo-video";
 import { Faq } from "@/components/faq";
+import { HeroScene } from "@/components/hero-scene";
 import { HeroShowcase } from "@/components/hero-showcase";
 import { PriceNote } from "@/components/price-note";
 import { PricingPlans } from "@/components/pricing-plans";
@@ -49,9 +50,10 @@ export default function Home() {
         {/* Hero */}
         <section className="relative isolate overflow-hidden">
           <div className="grid-bg absolute inset-0 -z-10" aria-hidden />
+          <HeroScene />
           <div className="absolute -top-40 left-1/2 -z-10 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-brand/15 blur-[120px]" aria-hidden />
           <div className="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pt-16">
-            <h1 className="display text-center text-4xl sm:text-6xl">Analyse technique propulsée par l&apos;IA</h1>
+            <h1 className="display text-center text-4xl [text-shadow:0_2px_28px_rgb(11_14_20/0.95)] sm:text-6xl">Analyse technique propulsée par l&apos;IA</h1>
             <div className="mt-10 sm:mt-12">
               <HeroShowcase />
             </div>

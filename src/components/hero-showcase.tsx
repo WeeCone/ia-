@@ -7,6 +7,7 @@ import { prepareImage } from "@/lib/image";
 import { savePendingChart } from "@/lib/pending-chart";
 import { useAuth } from "./auth-provider";
 import { DemoChart } from "./demo-chart";
+import { TiltCard } from "./tilt-card";
 
 function UploadIcon() {
   return (
@@ -110,9 +111,11 @@ export function HeroShowcase() {
           <div className="mt-5 grid items-center gap-5 xl:-mx-24 lg:grid-cols-[1fr_1.15fr_1fr] lg:gap-8">
             {/* Before */}
             <figure className="order-2 lg:order-1">
-              <div className="overflow-hidden rounded-xl border border-border bg-background p-2 shadow-[0_20px_50px_-20px_rgb(0_0_0/0.9)]">
-                <DemoChart />
-              </div>
+              <TiltCard className="rounded-xl">
+                <div className="overflow-hidden rounded-xl border border-border bg-background p-2 shadow-[0_20px_50px_-20px_rgb(0_0_0/0.9)]">
+                  <DemoChart />
+                </div>
+              </TiltCard>
               <figcaption className="mt-3 text-center font-display text-muted">Avant</figcaption>
             </figure>
 
@@ -187,23 +190,25 @@ export function HeroShowcase() {
             {/* After */}
             <figure className="relative order-3">
               <Rays />
-              <div className="relative overflow-hidden rounded-xl border border-accent/60 bg-background p-2 shadow-[0_0_40px_-6px_rgb(0_245_160/0.55)]">
-                <span
-                  className="pop-in absolute right-2 top-2 z-10 rounded-full border border-accent/50 bg-background/90 px-2.5 py-0.5 text-xs font-medium text-accent"
-                  style={{ "--d": "2.4s" } as React.CSSProperties}
-                >
-                  Score IA : {bullish.probability} % haussier<span className="hidden xl:inline"> · confiance {confidence.level}</span>
-                </span>
-                <div className="pt-6">
-                  <DemoChart annotated labels animate />
+              <TiltCard className="rounded-xl">
+                <div className="relative overflow-hidden rounded-xl border border-accent/60 bg-background p-2 shadow-[0_0_40px_-6px_rgb(0_245_160/0.55)]">
+                  <span
+                    className="pop-in absolute right-2 top-2 z-10 rounded-full border border-accent/50 bg-background/90 px-2.5 py-0.5 text-xs font-medium text-accent"
+                    style={{ "--d": "2.4s" } as React.CSSProperties}
+                  >
+                    Score IA : {bullish.probability} % haussier<span className="hidden xl:inline"> · confiance {confidence.level}</span>
+                  </span>
+                  <div className="pt-6">
+                    <DemoChart annotated labels animate />
+                  </div>
+                  <span
+                    className="pop-in absolute bottom-2 left-2 rounded-full border border-accent/50 bg-background/90 px-2.5 py-0.5 text-xs font-medium text-accent"
+                    style={{ "--d": "2.2s" } as React.CSSProperties}
+                  >
+                    Cassure + retest
+                  </span>
                 </div>
-                <span
-                  className="pop-in absolute bottom-2 left-2 rounded-full border border-accent/50 bg-background/90 px-2.5 py-0.5 text-xs font-medium text-accent"
-                  style={{ "--d": "2.2s" } as React.CSSProperties}
-                >
-                  Cassure + retest
-                </span>
-              </div>
+              </TiltCard>
               {/* Summary bubble overhanging the card. */}
               <div
                 className="rise-in relative z-10 mt-3 rounded-lg border border-border bg-card/95 p-3 shadow-xl backdrop-blur xl:absolute xl:-bottom-20 xl:-right-24 xl:mt-0 xl:w-60"
