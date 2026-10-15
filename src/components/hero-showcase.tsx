@@ -29,7 +29,12 @@ function UploadIcon() {
 function Rays() {
   const angles = [-34, -22, -12, -4, 4, 13, 24, 36];
   return (
-    <svg viewBox="0 0 420 420" className="pointer-events-none absolute -right-[300px] top-1/3 hidden h-[420px] w-[420px] -translate-y-1/2 xl:block" aria-hidden>
+    <svg
+      viewBox="0 0 420 420"
+      style={{ "--d": "2s" } as React.CSSProperties}
+      className="rise-in pointer-events-none absolute -right-[300px] top-1/3 hidden h-[420px] w-[420px] -translate-y-1/2 xl:block"
+      aria-hidden
+    >
       <defs>
         <linearGradient id="ray" x1="0" y1="0" x2="1" y2="0">
           <stop offset="0" stopColor="#00F5A0" stopOpacity="0.9" />
@@ -79,14 +84,19 @@ export function HeroShowcase() {
     }
   }
 
+  // One paste listener for the page's lifetime, always calling the latest `take`.
+  const takeRef = useRef(take);
+  useEffect(() => {
+    takeRef.current = take;
+  });
   useEffect(() => {
     const onPaste = (event: ClipboardEvent) => {
       const pasted = event.clipboardData?.files[0];
-      if (pasted?.type.startsWith("image/")) take(pasted);
+      if (pasted?.type.startsWith("image/")) takeRef.current(pasted);
     };
     window.addEventListener("paste", onPaste);
     return () => window.removeEventListener("paste", onPaste);
-  });
+  }, []);
 
   const { bullish, confidence } = DEMO_ANALYSIS;
 
@@ -123,7 +133,10 @@ export function HeroShowcase() {
                   dragging ? "border-accent bg-accent/10" : "border-muted/40 bg-background/40 hover:border-brand"
                 }`}
               >
-                <div className="pointer-events-none absolute inset-x-0 h-0.5 animate-[scan-y_3.2s_ease-in-out_infinite] bg-brand shadow-[0_0_18px_4px_rgb(0_210_255/0.55)]" aria-hidden />
+                <div
+                  className="pointer-events-none absolute inset-x-0 h-0.5 animate-[scan-y_3.2s_ease-in-out_infinite] bg-brand shadow-[0_0_18px_4px_rgb(0_210_255/0.55)]"
+                  aria-hidden
+                />
                 <button
                   type="button"
                   onClick={() => inputRef.current?.click()}
@@ -155,11 +168,19 @@ export function HeroShowcase() {
               </div>
               <p className="mt-3 text-center text-sm text-muted">
                 Ou{" "}
-                <button type="button" onClick={() => inputRef.current?.click()} className="underline decoration-muted/50 underline-offset-4 hover:text-brand">
+                <button
+                  type="button"
+                  onClick={() => inputRef.current?.click()}
+                  className="underline decoration-muted/50 underline-offset-4 hover:text-brand"
+                >
                   choisissez une image
                 </button>
               </p>
-              {error && <p role="alert" className="mt-2 text-center text-sm text-bear">{error}</p>}
+              {error && (
+                <p role="alert" className="mt-2 text-center text-sm text-bear">
+                  {error}
+                </p>
+              )}
               <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={(event) => take(event.target.files?.[0])} />
             </div>
 
@@ -167,21 +188,30 @@ export function HeroShowcase() {
             <figure className="relative order-3">
               <Rays />
               <div className="relative overflow-hidden rounded-xl border border-accent/60 bg-background p-2 shadow-[0_0_40px_-6px_rgb(0_245_160/0.55)]">
-                <span className="absolute right-2 top-2 z-10 rounded-full border border-accent/50 bg-background/90 px-2.5 py-0.5 text-[11px] font-medium text-accent">
+                <span
+                  className="pop-in absolute right-2 top-2 z-10 rounded-full border border-accent/50 bg-background/90 px-2.5 py-0.5 text-xs font-medium text-accent"
+                  style={{ "--d": "2.4s" } as React.CSSProperties}
+                >
                   Score IA : {bullish.probability} % haussier<span className="hidden xl:inline"> · confiance {confidence.level}</span>
                 </span>
                 <div className="pt-6">
-                  <DemoChart annotated labels />
+                  <DemoChart annotated labels animate />
                 </div>
-                <span className="absolute bottom-2 left-2 rounded-full border border-accent/50 bg-background/90 px-2.5 py-0.5 text-[11px] font-medium text-accent">
+                <span
+                  className="pop-in absolute bottom-2 left-2 rounded-full border border-accent/50 bg-background/90 px-2.5 py-0.5 text-xs font-medium text-accent"
+                  style={{ "--d": "2.2s" } as React.CSSProperties}
+                >
                   Cassure + retest
                 </span>
               </div>
               {/* Summary bubble overhanging the card. */}
-              <div className="relative z-10 mt-3 rounded-lg border border-border bg-card/95 p-3 shadow-xl backdrop-blur xl:absolute xl:-bottom-10 xl:-right-24 xl:mt-0 xl:w-56">
+              <div
+                className="rise-in relative z-10 mt-3 rounded-lg border border-border bg-card/95 p-3 shadow-xl backdrop-blur xl:absolute xl:-bottom-20 xl:-right-24 xl:mt-0 xl:w-60"
+                style={{ "--d": "2.7s" } as React.CSSProperties}
+              >
                 <p className="text-xs font-semibold text-foreground">Synthèse de l&apos;analyse</p>
-                <p className="mt-1 text-[11px] leading-snug text-muted">
-                  Cassure puis retest de 63 200 : une clôture 4H au-dessus de 65 400 viserait 67 000. Invalidé sous 63 200.
+                <p className="mt-1 text-xs leading-snug text-muted">
+                  Cassure puis retest de 63 200 : une clôture 4H au-dessus de 65 400 viserait 67 000. Invalidé sous 63 200.
                 </p>
               </div>
               <figcaption className="mt-3 text-center font-display text-accent">Après</figcaption>

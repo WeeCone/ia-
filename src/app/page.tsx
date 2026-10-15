@@ -105,7 +105,7 @@ export default function Home() {
         <section id="video" className="theme-light scroll-mt-20">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <div className="mx-auto max-w-3xl text-center">
-              <p className="label text-brand">En action</p>
+              <p className="label text-brand">Démo</p>
               <h2 className="display mt-3 text-4xl sm:text-5xl">
                 Regardez Scanzivo <span className="mark">lire un graphique.</span>
               </h2>
@@ -138,7 +138,7 @@ export default function Home() {
                 title="Détection de figures chartistes"
                 text="Triangles, doubles creux, têtes-épaules, canaux, drapeaux : les figures visibles sur votre capture sont repérées et nommées."
               >
-                <svg viewBox="0 0 400 110" className="h-auto w-full" aria-hidden>
+                <svg viewBox="0 0 400 110" className="draw-on-view h-auto w-full" aria-hidden>
                   <path
                     d="M10 95 L70 30 L110 75 L170 38 L205 68 L260 45 L285 60 L330 50"
                     fill="none"
@@ -170,7 +170,7 @@ export default function Home() {
                 title="Supports & résistances"
                 text="Les niveaux clés sont tracés directement sur votre capture, avec leur prix."
               >
-                <div className="w-full space-y-2 font-mono text-xs">
+                <div className="draw-on-view w-full space-y-2 font-mono text-xs">
                   {[
                     ["65 400", "bear"],
                     ["63 200", "bull"],
@@ -190,7 +190,7 @@ export default function Home() {
               >
                 <div className="w-full rounded-xl border border-bull/30 bg-bull/5 p-3">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="rounded bg-bull px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-background">
+                    <span className="rounded bg-bull px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-background">
                       {DEMO_ANALYSIS.verdict.action}
                     </span>
                     <span className="font-mono text-xs text-bull">{bullish.probability} %</span>
@@ -212,7 +212,7 @@ export default function Home() {
                     ["Gain / risque", "1 : 1,1 · 1 : 1,5"],
                   ].map(([term, value]) => (
                     <div key={term} className="rounded-xl border border-border bg-background/70 px-3 py-2.5">
-                      <dt className="text-[10px] uppercase tracking-wider text-muted">{term}</dt>
+                      <dt className="text-[11px] uppercase tracking-wider text-muted">{term}</dt>
                       <dd className={`mt-1 font-bold ${term === "Gain / risque" ? "text-bull" : ""}`}>{value}</dd>
                     </div>
                   ))}
@@ -224,7 +224,7 @@ export default function Home() {
                 title="Lecture des indicateurs visibles"
                 text="RSI, MACD, moyennes mobiles, volumes : s'ils figurent sur votre capture, ils sont pris en compte dans l'analyse."
               >
-                <svg viewBox="0 0 400 80" className="h-auto w-full" aria-hidden>
+                <svg viewBox="0 0 400 80" className="draw-on-view h-auto w-full" aria-hidden>
                   <rect x="0" y="0" width="400" height="80" rx="10" fill="var(--background)" fillOpacity="0.7" />
                   <line x1="0" y1="20" x2="400" y2="20" stroke="var(--bear)" strokeOpacity="0.5" strokeDasharray="4 4" />
                   <line x1="0" y1="60" x2="400" y2="60" stroke="var(--bull)" strokeOpacity="0.5" strokeDasharray="4 4" />

@@ -16,7 +16,7 @@ const common = [
 const details: Record<Offer, { features: string[]; cta: string; highlight?: string }> = {
   monthly: { features: [...common, "Sans engagement, résiliable en un clic"], cta: "S'abonner" },
   lifetime: {
-    features: [...common, "Un seul paiement, aucun renouvellement"],
+    features: [...common, "Un seul paiement, aucun renouvellement", "Le prix de 4,5 mois d'abonnement"],
     cta: "Obtenir l'accès à vie",
     highlight: "Meilleure offre",
   },
@@ -43,7 +43,11 @@ function OfferCard({ offer }: { offer: Offer }) {
       <ul className="mt-8 flex-1 space-y-3">
         {features.map((feature) => (
           <li key={feature} className="flex gap-3 text-sm text-muted">
-            <span className="grid size-5 shrink-0 place-items-center rounded-full bg-accent/15 text-[11px] font-bold text-accent">✓</span>
+            <span className="grid size-5 shrink-0 place-items-center rounded-full bg-accent/15 text-accent">
+              <svg viewBox="0 0 16 16" className="size-3" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M3.5 8.5l3 3 6-7" />
+              </svg>
+            </span>
             {feature}
           </li>
         ))}
