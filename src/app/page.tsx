@@ -14,7 +14,7 @@ const MARKETS = ["Crypto", "Forex", "Actions", "Indices", "Matières premières"
 const steps = [
   { title: "Capturez", text: "Un screenshot de votre graphique, sur n'importe quelle plateforme : TradingView, Binance, MetaTrader…" },
   { title: "Déposez", text: "Glissez l'image ou collez-la avec Ctrl+V. Ajoutez un mot de contexte si vous voulez." },
-  { title: "Décidez", text: "Tendance, niveaux clés, figures, et deux scénarios chiffrés avec entrée, stop et objectifs." },
+  { title: "Décidez", text: "Un verdict clair : le scénario le plus probable, avec entrée, stop et objectifs. Ou « attendre » quand le signal n'y est pas." },
 ];
 
 function Icon({ path }: { path: string }) {
@@ -60,7 +60,7 @@ function Feature({
 }
 
 export default function Home() {
-  const { bullish, bearish } = DEMO_ANALYSIS;
+  const { bullish } = DEMO_ANALYSIS;
 
   return (
     <div className="flex flex-1 flex-col">
@@ -79,7 +79,7 @@ export default function Home() {
             <div className="mx-auto mt-16 max-w-3xl text-center">
               <p className="text-lg leading-relaxed text-muted sm:text-xl">
                 Transformez vos graphiques en <span className="mark font-semibold">opportunités de trading</span> en 1 clic : l&apos;IA repère les
-                figures chartistes, les supports et résistances, et vous rend deux scénarios chiffrés en moins d&apos;une minute.
+                figures chartistes, les supports et résistances, et tranche : un scénario privilégié et un plan d&apos;action chiffré, en moins d&apos;une minute.
               </p>
               <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                 <ScanCta className="btn-primary text-base">Scanner un graphique →</ScanCta>
@@ -108,7 +108,7 @@ export default function Home() {
                 Regardez Scanzivo <span className="mark">lire un graphique.</span>
               </h2>
               <p className="mt-4 text-lg text-muted">
-                Une capture hebdomadaire du Bitcoin : niveaux tracés, momentum, deux scénarios chiffrés. Le tout en moins d&apos;une minute.
+                Une capture hebdomadaire du Bitcoin : niveaux tracés, momentum, et un plan d&apos;action chiffré. Le tout en moins d&apos;une minute.
               </p>
             </div>
             <div className="mx-auto mt-10 max-w-5xl overflow-hidden rounded-2xl border border-border bg-[#0b0e14] shadow-[0_30px_80px_-30px_rgb(8_145_178/0.55)]">
@@ -182,25 +182,24 @@ export default function Home() {
               </Feature>
               <Feature
                 icon="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5"
-                title="Synthèse décisionnelle"
-                text="Deux scénarios probabilisés, haussier et baissier, avec un niveau de confiance justifié."
+                title="Un verdict, pas un « peut-être »"
+                text="L'IA retient le scénario le plus probable et le formule en plan : acheter, vendre, attendre ou s'abstenir. L'alternative reste consultable."
               >
-                <div className="w-full">
-                  <div className="flex justify-between font-mono text-xs">
-                    <span className="text-bull">Haussier {bullish.probability} %</span>
-                    <span className="text-bear">{bearish.probability} % Baissier</span>
+                <div className="w-full rounded-xl border border-bull/30 bg-bull/5 p-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="rounded bg-bull px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-background">
+                      {DEMO_ANALYSIS.verdict.action}
+                    </span>
+                    <span className="font-mono text-xs text-bull">{bullish.probability} %</span>
                   </div>
-                  <div className="mt-2 flex h-2.5 overflow-hidden rounded-full bg-background">
-                    <span className="bg-bull" style={{ width: `${bullish.probability}%` }} />
-                    <span className="flex-1 bg-bear" />
-                  </div>
+                  <p className="mt-2 text-sm font-medium leading-snug">{DEMO_ANALYSIS.verdict.headline}</p>
                 </div>
               </Feature>
               <Feature
                 className="md:col-span-2"
                 icon="M4 19h16M7 15l3-4 3 2 4-6"
                 title="Plan de trade chiffré"
-                text="Pour chaque scénario : zone d'entrée, stop, objectifs, et le ratio gain / risque calculé à partir des prix."
+                text="Pour le scénario retenu : zone d'entrée, stop, objectifs, et le ratio gain / risque calculé à partir des prix."
               >
                 <dl className="grid w-full grid-cols-2 gap-2 font-mono text-sm sm:grid-cols-4">
                   {[

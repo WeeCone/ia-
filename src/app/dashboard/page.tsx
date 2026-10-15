@@ -253,7 +253,7 @@ export default function DashboardPage() {
                 Salut{firstName ? "," : ""} <span className="mark">{firstName || "et bienvenue"}</span>
               </h1>
               <p className="mt-3 max-w-2xl text-lg text-muted">
-                Importez une capture de graphique : Scanzivo la lit comme un analyste et vous rend deux scénarios chiffrés, avec les niveaux tracés.
+                Importez une capture de graphique : Scanzivo la lit comme un analyste et vous rend un plan d&apos;action chiffré sur le scénario le plus probable, avec les niveaux tracés.
               </p>
 
               {isAdminUser(user) && (

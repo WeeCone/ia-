@@ -48,6 +48,19 @@ export const ChartAnalysis = z.object({
     .describe("Un repère par support et par résistance, pour les tracer sur la capture."),
   bullish: Scenario,
   bearish: Scenario,
+  verdict: z
+    .object({
+      bias: z.enum(["haussier", "baissier"]).describe("Le scénario privilégié : celui dont la probabilité est la plus élevée."),
+      action: z
+        .enum(["acheter sur confirmation", "vendre sur confirmation", "attendre", "ne pas trader"])
+        .describe(
+          "Ce que le trader devrait faire. « attendre » si le signal n'est pas encore là ; « ne pas trader » si le gain/risque du scénario privilégié est inférieur à 1 ou si le graphique est trop incertain.",
+        ),
+      headline: z.string().describe("Le plan en une phrase directive, avec les niveaux (ex. « Vendre sur clôture journalière sous 1,50, stop 1,82, objectifs 1,20 puis 1,00 »)."),
+      rationale: z.string().describe("Pourquoi ce scénario plutôt que l'autre, en 1-2 phrases."),
+      change_mind: z.string().describe("Ce qui ferait changer d'avis, avec un niveau précis."),
+    })
+    .describe("Le verdict : un seul scénario privilégié et un plan d'action clair."),
   risk_notes: z
     .array(z.string())
     .describe("2 à 4 conseils concrets de gestion du risque propres à ce graphique (taille de position, attente de confirmation, volatilité…)."),
@@ -60,3 +73,24 @@ export type Scenario = ChartAnalysis["bullish"];
 export const ALLOWED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"] as const;
 export type AllowedImageType = (typeof ALLOWED_IMAGE_TYPES)[number];
 export const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+
+export type Verdict = ChartAnalysis["verdict"];
+
+/**
+ * The preferred scenario, its alternative and the verdict. Analyses stored before the verdict existed
+ * fall back to the more probable scenario, with a plan derived from its entry.
+ */
+export function preferredPlan(analysis: ChartAnalysis) {
+  const stored = analysis.verdict as Verdict | undefined;
+  const bias = stored?.bias ?? (analysis.bearish.probability > analysis.bullish.probability ? "baissier" : "haussier");
+  const scenario = bias === "haussier" ? analysis.bullish : analysis.bearish;
+  const alternative = bias === "haussier" ? analysis.bearish : analysis.bullish;
+  const verdict: Verdict = stored ?? {
+    bias,
+    action: bias === "haussier" ? "acheter sur confirmation" : "vendre sur confirmation",
+    headline: scenario.thesis,
+    rationale: "",
+    change_mind: scenario.invalidation ?? "",
+  };
+  return { bias, scenario, alternative, verdict };
+}

@@ -8,8 +8,8 @@ import { BillingButton } from "./billing-button";
 const common = [
   `${MONTHLY_CREDITS} analyses de graphiques par mois`,
   "Crypto, forex, actions, matières premières",
-  "Scénarios haussier et baissier probabilisés",
-  "Entrée, stop et objectifs pour chaque scénario",
+  "Plan d'action sur le scénario le plus probable",
+  "Entrée, stop, objectifs et ratio gain / risque",
   "Historique de vos analyses",
 ];
 

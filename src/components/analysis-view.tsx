@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { ChartAnalysis } from "@/lib/analysis";
+import { type ChartAnalysis, preferredPlan } from "@/lib/analysis";
 import { formatRatio, rewardRatios } from "@/lib/risk";
 import { AnalysisResult } from "./analysis-result";
 import { AnnotatedChart } from "./annotated-chart";
@@ -18,14 +18,18 @@ function summaryText(analysis: ChartAnalysis) {
       .filter(Boolean)
       .join("\n");
   };
+  const { bias, scenario: preferred, alternative, verdict } = preferredPlan(analysis);
   return [
     `${analysis.asset} · ${analysis.timeframe} · tendance ${analysis.trend}` +
       (analysis.confidence ? ` · confiance ${analysis.confidence.level}` : "") +
       (analysis.horizon ? ` · horizon ${analysis.horizon}` : ""),
+    `Plan d'action (${verdict.action}) : ${verdict.headline}` +
+      (verdict.rationale ? `\n${verdict.rationale}` : "") +
+      (verdict.change_mind ? `\nChange d'avis si : ${verdict.change_mind}` : ""),
     analysis.summary,
     `Supports : ${analysis.supports.join(", ") || "—"} · Résistances : ${analysis.resistances.join(", ") || "—"}`,
-    scenario("Haussier", analysis.bullish, "long"),
-    scenario("Baissier", analysis.bearish, "short"),
+    scenario(`Scénario ${bias} privilégié`, preferred, bias === "haussier" ? "long" : "short"),
+    scenario(`Alternative ${bias === "haussier" ? "baissière" : "haussière"}`, alternative, bias === "haussier" ? "short" : "long"),
     analysis.risk_notes?.length ? `Gestion du risque :\n- ${analysis.risk_notes.join("\n- ")}` : null,
     "Analyse Scanzivo, à titre informatif. Pas un conseil en investissement.",
   ]

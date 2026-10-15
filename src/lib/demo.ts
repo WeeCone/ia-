@@ -40,6 +40,13 @@ export const DEMO_ANALYSIS: ChartAnalysis = {
     target_prices: [62400, 61800],
     invalidation: "Reprise de 64 100 en clôture 4H.",
   },
+  verdict: {
+    bias: "haussier",
+    action: "acheter sur confirmation",
+    headline: "Acheter sur clôture 4H au-dessus de 65 400, stop 64 300, objectifs 66 200 puis 67 000.",
+    rationale: "Structure de plus bas ascendants et retest réussi de 63 200 : la pression acheteuse domine tant que ce support tient.",
+    change_mind: "Une clôture 4H sous 63 200 invaliderait la structure haussière.",
+  },
   risk_notes: [
     "Attendre la clôture 4H au-delà du niveau plutôt qu'entrer sur une mèche.",
     "Le premier objectif haussier rapporte moins que le risque pris : alléger la position sur 66 200.",

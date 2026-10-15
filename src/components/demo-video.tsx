@@ -29,7 +29,7 @@ export function DemoVideo() {
         loop
         playsInline
         preload="metadata"
-        aria-label="Démonstration : Scanzivo scanne un graphique BTC/USD hebdomadaire et produit deux scénarios"
+        aria-label="Démonstration : Scanzivo scanne un graphique BTC/USD hebdomadaire et produit un plan d'action"
       >
         <source src="/media/btc-scan.webm" type="video/webm" />
         <source src="/media/btc-scan.mp4" type="video/mp4" />

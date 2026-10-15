@@ -4,7 +4,7 @@ import { MONTHLY_CREDITS } from "@/lib/plans";
 const QUESTIONS: { q: string; a: React.ReactNode }[] = [
   {
     q: "Comment fonctionne Scanzivo ?",
-    a: "Vous importez une capture d'écran de votre graphique. Une IA de vision la lit comme un analyste : structure de marché, tendance, supports et résistances, figures chartistes et indicateurs visibles. Elle vous rend un rapport avec deux scénarios, haussier et baissier, chacun avec une probabilité estimée, une zone d'entrée, un stop et des objectifs.",
+    a: "Vous importez une capture d'écran de votre graphique. Une IA de vision la lit comme un analyste : structure de marché, tendance, supports et résistances, figures chartistes et indicateurs visibles. Elle tranche pour le scénario le plus probable et vous rend un plan d'action : acheter ou vendre sur confirmation, attendre, ou ne pas trader, avec une zone d'entrée, un stop, des objectifs et le niveau qui la ferait changer d'avis. Le scénario alternatif reste consultable.",
   },
   {
     q: "Faut-il savoir trader pour l'utiliser ?",

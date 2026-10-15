@@ -29,7 +29,7 @@ export async function sendWelcomeEmail(to: string, name: string | null, appUrl: 
       greeting,
       "",
       "Votre compte Scanzivo est créé.",
-      "Choisissez votre offre, puis importez une capture de graphique : vous recevrez tendance, niveaux clés et deux scénarios chiffrés.",
+      "Choisissez votre offre, puis importez une capture de graphique : vous recevrez tendance, niveaux clés et un plan d'action chiffré.",
       "",
       `Commencer : ${appUrl}/pricing`,
       "",
@@ -63,7 +63,7 @@ function welcomeHtml(name: string | null, appUrl: string) {
             <p style="margin:0 0 16px;line-height:1.6;color:#94a3b8">Votre compte est créé. Il ne reste qu'une étape&nbsp;: choisir votre offre.</p>
             <p style="margin:0 0 28px;line-height:1.6;color:#94a3b8">
               Ensuite, importez une capture de graphique&nbsp;: vous recevrez la tendance, les niveaux clés et
-              <strong style="color:#f1f5f9">deux scénarios chiffrés</strong> avec entrée, stop et objectifs.
+              <strong style="color:#f1f5f9">un plan d'action chiffré</strong> sur le scénario le plus probable, avec entrée, stop et objectifs.
             </p>
             <a href="${appUrl}/pricing" style="display:inline-block;background:#4f8cff;color:#0b0f19;font-weight:900;text-transform:uppercase;text-decoration:none;padding:14px 24px;border:2px solid #4f8cff">
               Choisir mon offre →
