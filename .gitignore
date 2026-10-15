@@ -45,3 +45,4 @@ next-env.d.ts
 /marketing/
 .impeccable/live/
 .impeccable/review/
+__pycache__/
