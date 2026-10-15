@@ -1,0 +1,467 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-15T17:39:06+00:00",
+  "title": "Design System: Scanzivo",
+  "extensions": {
+    "colorMeta": {
+      "board-green": {
+        "role": "primary",
+        "displayName": "Club Board Green",
+        "canonical": "oklch(42.0% 0.08 159.2)",
+        "tonalRamp": [
+          "oklch(15% 0.08 159.2)",
+          "oklch(25% 0.08 159.2)",
+          "oklch(35% 0.08 159.2)",
+          "oklch(45% 0.08 159.2)",
+          "oklch(55% 0.08 159.2)",
+          "oklch(65% 0.08 159.2)",
+          "oklch(80% 0.08 159.2)",
+          "oklch(95% 0.03 159.2)"
+        ]
+      },
+      "board-green-pressed": {
+        "role": "primary",
+        "displayName": "Pressed Board Green",
+        "canonical": "oklch(33.1% 0.06 160.2)",
+        "tonalRamp": [
+          "oklch(15% 0.06 160.2)",
+          "oklch(25% 0.06 160.2)",
+          "oklch(35% 0.06 160.2)",
+          "oklch(45% 0.06 160.2)",
+          "oklch(55% 0.06 160.2)",
+          "oklch(65% 0.06 160.2)",
+          "oklch(80% 0.06 160.2)",
+          "oklch(95% 0.03 160.2)"
+        ]
+      },
+      "board-deep": {
+        "role": "primary",
+        "displayName": "Deep Board",
+        "canonical": "oklch(37.7% 0.071 159.4)",
+        "tonalRamp": [
+          "oklch(15% 0.071 159.4)",
+          "oklch(25% 0.071 159.4)",
+          "oklch(35% 0.071 159.4)",
+          "oklch(45% 0.071 159.4)",
+          "oklch(55% 0.071 159.4)",
+          "oklch(65% 0.071 159.4)",
+          "oklch(80% 0.071 159.4)",
+          "oklch(95% 0.03 159.4)"
+        ]
+      },
+      "board-rule": {
+        "role": "neutral",
+        "displayName": "Board Rule",
+        "canonical": "oklch(59.7% 0.062 160.5)",
+        "tonalRamp": [
+          "oklch(15% 0.062 160.5)",
+          "oklch(25% 0.062 160.5)",
+          "oklch(35% 0.062 160.5)",
+          "oklch(45% 0.062 160.5)",
+          "oklch(55% 0.062 160.5)",
+          "oklch(65% 0.062 160.5)",
+          "oklch(80% 0.062 160.5)",
+          "oklch(95% 0.03 160.5)"
+        ]
+      },
+      "board-muted": {
+        "role": "neutral",
+        "displayName": "Board Muted",
+        "canonical": "oklch(89.2% 0.018 153.5)",
+        "tonalRamp": [
+          "oklch(15% 0.018 153.5)",
+          "oklch(25% 0.018 153.5)",
+          "oklch(35% 0.018 153.5)",
+          "oklch(45% 0.018 153.5)",
+          "oklch(55% 0.018 153.5)",
+          "oklch(65% 0.018 153.5)",
+          "oklch(80% 0.018 153.5)",
+          "oklch(95% 0.018 153.5)"
+        ]
+      },
+      "board-ink": {
+        "role": "neutral",
+        "displayName": "Board Chalk",
+        "canonical": "oklch(97.4% 0.007 115.7)",
+        "tonalRamp": [
+          "oklch(15% 0.007 115.7)",
+          "oklch(25% 0.007 115.7)",
+          "oklch(35% 0.007 115.7)",
+          "oklch(45% 0.007 115.7)",
+          "oklch(55% 0.007 115.7)",
+          "oklch(65% 0.007 115.7)",
+          "oklch(80% 0.007 115.7)",
+          "oklch(95% 0.007 115.7)"
+        ]
+      },
+      "board-bull": {
+        "role": "secondary",
+        "displayName": "Board Bull",
+        "canonical": "oklch(91.0% 0.052 154.6)",
+        "tonalRamp": [
+          "oklch(15% 0.052 154.6)",
+          "oklch(25% 0.052 154.6)",
+          "oklch(35% 0.052 154.6)",
+          "oklch(45% 0.052 154.6)",
+          "oklch(55% 0.052 154.6)",
+          "oklch(65% 0.052 154.6)",
+          "oklch(80% 0.052 154.6)",
+          "oklch(95% 0.03 154.6)"
+        ]
+      },
+      "board-bear": {
+        "role": "tertiary",
+        "displayName": "Board Bear",
+        "canonical": "oklch(87.0% 0.07 12.0)",
+        "tonalRamp": [
+          "oklch(15% 0.07 12.0)",
+          "oklch(25% 0.07 12.0)",
+          "oklch(35% 0.07 12.0)",
+          "oklch(45% 0.07 12.0)",
+          "oklch(55% 0.07 12.0)",
+          "oklch(65% 0.07 12.0)",
+          "oklch(80% 0.07 12.0)",
+          "oklch(95% 0.03 12.0)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "oklch(96.8% 0.007 115.7)",
+        "tonalRamp": [
+          "oklch(15% 0.007 115.7)",
+          "oklch(25% 0.007 115.7)",
+          "oklch(35% 0.007 115.7)",
+          "oklch(45% 0.007 115.7)",
+          "oklch(55% 0.007 115.7)",
+          "oklch(65% 0.007 115.7)",
+          "oklch(80% 0.007 115.7)",
+          "oklch(95% 0.007 115.7)"
+        ]
+      },
+      "paper-surface": {
+        "role": "neutral",
+        "displayName": "Paper Surface",
+        "canonical": "oklch(93.4% 0.01 119.6)",
+        "tonalRamp": [
+          "oklch(15% 0.01 119.6)",
+          "oklch(25% 0.01 119.6)",
+          "oklch(35% 0.01 119.6)",
+          "oklch(45% 0.01 119.6)",
+          "oklch(55% 0.01 119.6)",
+          "oklch(65% 0.01 119.6)",
+          "oklch(80% 0.01 119.6)",
+          "oklch(95% 0.01 119.6)"
+        ]
+      },
+      "paper-card": {
+        "role": "neutral",
+        "displayName": "Card White",
+        "canonical": "oklch(98.7% 0.004 106.5)",
+        "tonalRamp": [
+          "oklch(15% 0.004 106.5)",
+          "oklch(25% 0.004 106.5)",
+          "oklch(35% 0.004 106.5)",
+          "oklch(45% 0.004 106.5)",
+          "oklch(55% 0.004 106.5)",
+          "oklch(65% 0.004 106.5)",
+          "oklch(80% 0.004 106.5)",
+          "oklch(95% 0.004 106.5)"
+        ]
+      },
+      "paper-rule": {
+        "role": "neutral",
+        "displayName": "Paper Rule",
+        "canonical": "oklch(82.6% 0.016 126.9)",
+        "tonalRamp": [
+          "oklch(15% 0.016 126.9)",
+          "oklch(25% 0.016 126.9)",
+          "oklch(35% 0.016 126.9)",
+          "oklch(45% 0.016 126.9)",
+          "oklch(55% 0.016 126.9)",
+          "oklch(65% 0.016 126.9)",
+          "oklch(80% 0.016 126.9)",
+          "oklch(95% 0.016 126.9)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "True Ink",
+        "canonical": "oklch(19.7% 0.007 135.0)",
+        "tonalRamp": [
+          "oklch(15% 0.007 135.0)",
+          "oklch(25% 0.007 135.0)",
+          "oklch(35% 0.007 135.0)",
+          "oklch(45% 0.007 135.0)",
+          "oklch(55% 0.007 135.0)",
+          "oklch(65% 0.007 135.0)",
+          "oklch(80% 0.007 135.0)",
+          "oklch(95% 0.007 135.0)"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Ink Grey",
+        "canonical": "oklch(44.8% 0.017 138.7)",
+        "tonalRamp": [
+          "oklch(15% 0.017 138.7)",
+          "oklch(25% 0.017 138.7)",
+          "oklch(35% 0.017 138.7)",
+          "oklch(45% 0.017 138.7)",
+          "oklch(55% 0.017 138.7)",
+          "oklch(65% 0.017 138.7)",
+          "oklch(80% 0.017 138.7)",
+          "oklch(95% 0.017 138.7)"
+        ]
+      },
+      "bull-green": {
+        "role": "secondary",
+        "displayName": "Bull Green",
+        "canonical": "oklch(48.2% 0.113 153.7)",
+        "tonalRamp": [
+          "oklch(15% 0.113 153.7)",
+          "oklch(25% 0.113 153.7)",
+          "oklch(35% 0.113 153.7)",
+          "oklch(45% 0.113 153.7)",
+          "oklch(55% 0.113 153.7)",
+          "oklch(65% 0.113 153.7)",
+          "oklch(80% 0.113 153.7)",
+          "oklch(95% 0.03 153.7)"
+        ]
+      },
+      "annotation-red": {
+        "role": "tertiary",
+        "displayName": "Annotation Red",
+        "canonical": "oklch(50.7% 0.186 22.8)",
+        "tonalRamp": [
+          "oklch(15% 0.186 22.8)",
+          "oklch(25% 0.186 22.8)",
+          "oklch(35% 0.186 22.8)",
+          "oklch(45% 0.186 22.8)",
+          "oklch(55% 0.186 22.8)",
+          "oklch(65% 0.186 22.8)",
+          "oklch(80% 0.186 22.8)",
+          "oklch(95% 0.03 22.8)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero H1 only; two short lines, the second in Bodoni italic regular."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section titles, 2.25rem rising to 3rem / 3.75rem at sm; closing call up to 4.5rem."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Verdict names, reading-list entries, offer names, footer column heads; italic for figure captions and small sub-heads."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Section leads (1.125rem) and running text (1rem); FAQ capped at 65ch, legal at 68ch with 1.75 leading."
+      },
+      "body-small": {
+        "displayName": "Body Small",
+        "purpose": "Price note, captions, disclaimers, footer links."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "All buttons; Franklin 700 in sentence case."
+      },
+      "notation": {
+        "displayName": "Notation",
+        "purpose": "Prices, move numbers, probabilities, asset and timeframe, kbd keys; always tabular figures."
+      }
+    },
+    "shadows": [
+      {
+        "name": "sheet-on-board",
+        "value": "0 2px 0 rgb(20 22 19 / 0.08), 0 40px 60px -40px rgb(0 0 0 / 0.75)",
+        "purpose": "The hero diagram resting on the green field."
+      },
+      {
+        "name": "panel",
+        "value": "0 1px 0 rgb(20 22 19 / 0.06), 0 18px 30px -24px rgb(20 22 19 / 0.45)",
+        "purpose": "A .panel inside either field."
+      },
+      {
+        "name": "dropdown",
+        "value": "0 18px 30px -20px rgb(20 22 19 / 0.6)",
+        "purpose": "Mobile menu sheet under the header band."
+      }
+    ],
+    "motion": [
+      {
+        "name": "settle",
+        "value": "1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.5s backwards (height from 50%)",
+        "purpose": "Evaluation bar settling from 50/50 to the verdict split."
+      },
+      {
+        "name": "set-in",
+        "value": "0.5s ease-out 1.9s backwards (clip-path inset(0 100% 0 0), opacity 0.2)",
+        "purpose": "The verdict symbol being set after the bar settles."
+      },
+      {
+        "name": "state",
+        "value": "150ms colors",
+        "purpose": "Hover fill and rule-colour changes on buttons, links and the drop zone."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation: none !important",
+        "purpose": "All keyframe animation removed under prefers-reduced-motion; final states are the resting styles."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "container",
+        "value": "1152px (72rem)"
+      }
+    ],
+    "scopes": {
+      "paper": ".paper — light sheet; re-points --background/--foreground/--muted/--border/--brand/--accent/--bull/--bear and sets Libre Franklin / Bodoni Moda.",
+      "board": ".board — green field; same tokens re-pointed for the board.",
+      "root-out-of-scope": ":root still holds the previous dark fintech tokens (#0b0e14, cyan #00d2ff, neon #00f5a0, Inter / Space Grotesk, glow buttons, .mark gradient, .label, rounded-full .chip). Used only by the client area (/dashboard, /admin), which is out of scope and keeps its old look until migrated. Not part of this system."
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button (on paper)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main call to action on a paper sheet; near-square, no shadow.",
+      "html": "<button class=\"ds-btn-primary\">Analyser mon graphique</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#1d5a3d;color:#f4f5f0;font-family:'Libre Franklin',ui-sans-serif,system-ui,sans-serif;font-weight:700;font-size:1rem;letter-spacing:0.01em;padding:14px 24px;border:none;border-radius:3px;cursor:pointer;transition:background-color .15s}.ds-btn-primary:hover{background:#143f2b}.ds-btn-primary:focus-visible{outline:2px solid #141613;outline-offset:3px}.ds-btn-primary:active{transform:scale(.98)}"
+    },
+    {
+      "name": "Primary Button (on board)",
+      "kind": "button",
+      "refersTo": "button-primary-on-board",
+      "description": "Main call to action on the green field; colours invert.",
+      "html": "<div class=\"ds-board-swatch\"><button class=\"ds-btn-board\">Analyser mon graphique</button></div>",
+      "css": ".ds-board-swatch{background:#1d5a3d;padding:24px}.ds-btn-board{display:inline-flex;align-items:center;background:#f6f7f2;color:#1d5a3d;font-family:'Libre Franklin',ui-sans-serif,system-ui,sans-serif;font-weight:700;font-size:1rem;letter-spacing:0.01em;padding:14px 24px;border:none;border-radius:3px;cursor:pointer;transition:background-color .15s}.ds-btn-board:hover{background:#ffffff}.ds-btn-board:focus-visible{outline:2px solid #f6f7f2;outline-offset:3px}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Outlined alternative beside a primary (monthly offer, Google sign-in).",
+      "html": "<button class=\"ds-btn-secondary\">S'abonner</button>",
+      "css": ".ds-btn-secondary{display:inline-flex;align-items:center;justify-content:center;background:transparent;color:#141613;border:1px solid rgb(20 22 19 / .45);border-radius:3px;font-family:'Libre Franklin',ui-sans-serif,system-ui,sans-serif;font-weight:700;font-size:1rem;letter-spacing:0.01em;padding:14px 24px;cursor:pointer;transition:border-color .15s}.ds-btn-secondary:hover{border-color:#141613}.ds-btn-secondary:focus-visible{outline:2px solid #141613;outline-offset:3px}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Auth form field: label above, card-white input, ink border and green ring on focus.",
+      "html": "<label class=\"ds-field\">Adresse e-mail<input type=\"email\" placeholder=\"vous@exemple.fr\"></label>",
+      "css": ".ds-field{display:flex;flex-direction:column;gap:8px;font-family:'Libre Franklin',ui-sans-serif,system-ui,sans-serif;font-size:.875rem;font-weight:500;color:#50574e}.ds-field input{background:#fbfbf8;color:#141613;border:1px solid #c3c8bd;border-radius:3px;padding:12px 14px;font:400 1rem 'Libre Franklin',ui-sans-serif,sans-serif;outline:none;transition:border-color .15s,box-shadow .15s}.ds-field input:focus{border-color:#141613;box-shadow:0 0 0 2px rgb(29 90 61 / .35)}"
+    },
+    {
+      "name": "Header Band",
+      "kind": "nav",
+      "refersTo": "header-band",
+      "description": "Sticky board-green strip on every public page: logo, ghost links, compact CTA.",
+      "html": "<header class=\"ds-band\"><span class=\"ds-band-logo\"><svg viewBox=\"0 0 64 64\" width=\"32\" height=\"32\"><rect width=\"64\" height=\"64\" rx=\"6\" fill=\"#1D5A3D\"/><rect x=\"10\" y=\"10\" width=\"44\" height=\"44\" fill=\"none\" stroke=\"#F6F7F2\" stroke-width=\"3\"/><path d=\"M17 37h30\" stroke=\"#F6F7F2\" stroke-width=\"2.5\" stroke-dasharray=\"4 3\"/><g fill=\"#F6F7F2\"><rect x=\"24\" y=\"22\" width=\"2.5\" height=\"26\"/><rect x=\"20.5\" y=\"27\" width=\"9.5\" height=\"14\"/><rect x=\"38\" y=\"16\" width=\"2.5\" height=\"22\"/><rect x=\"34.5\" y=\"20\" width=\"9.5\" height=\"11\"/></g></svg>Scanzivo</span><nav><a href=\"#\">Démo</a><a href=\"#\">Les verdicts</a><a href=\"#\">Tarifs</a></nav><a class=\"ds-band-cta\" href=\"#\">Analyser</a></header>",
+      "css": ".ds-band{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#1d5a3d;color:#f6f7f2;padding:12px 16px;border-bottom:1px solid #5e8b73;font-family:'Libre Franklin',ui-sans-serif,sans-serif}.ds-band-logo{display:flex;align-items:center;gap:10px;font:700 1.5rem 'Bodoni Moda',Didot,serif;letter-spacing:-0.02em}.ds-band nav{display:flex}.ds-band nav a{color:#d3dfd6;text-decoration:none;font-size:.875rem;font-weight:500;padding:8px 12px;transition:color .15s}.ds-band nav a:hover{color:#f6f7f2}.ds-band a:focus-visible{outline:2px solid #f6f7f2;outline-offset:3px}.ds-band-cta{background:#f6f7f2;color:#1d5a3d;font-weight:700;font-size:.875rem;padding:8px 14px;border-radius:3px;text-decoration:none}.ds-band-cta:hover{background:#fff}"
+    },
+    {
+      "name": "Evaluation Symbol Legend Row",
+      "kind": "custom",
+      "refersTo": "verdict-symbol",
+      "description": "One verdict of the printed legend: drawn ± mark, Bodoni title, muted condition.",
+      "html": "<div class=\"ds-verdict\"><svg viewBox=\"0 0 48 48\" role=\"img\" aria-label=\"±\"><path d=\"M9 19h30M24 6v26M9 41h30\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"4.5\" stroke-linecap=\"square\"/></svg><div><p class=\"ds-verdict-title\">Acheter sur confirmation</p><p class=\"ds-verdict-when\">Le scénario haussier domine et le gain espéré couvre le risque.</p></div></div>",
+      "css": ".ds-verdict{display:grid;grid-template-columns:4.5rem 1fr;column-gap:20px;align-items:start;background:#f4f5f0;border-top:2px solid #141613;border-bottom:1px solid #c3c8bd;padding:28px 0}.ds-verdict svg{width:64px;height:64px;color:#17703f}.ds-verdict-title{margin:0;font:700 1.5rem 'Bodoni Moda',Didot,serif;color:#141613}.ds-verdict-when{margin:6px 0 0;font:400 1rem/1.625 'Libre Franklin',ui-sans-serif,sans-serif;color:#50574e}"
+    },
+    {
+      "name": "Diagram Frame with Evaluation Bar",
+      "kind": "card",
+      "refersTo": "diagram-frame",
+      "description": "The example game: captioned paper sheet, framed chart area, evaluation bar settling on the verdict split, numbered mono moves.",
+      "html": "<figure class=\"ds-diagram\"><figcaption><em>Diagramme 1</em><b>BTC/USDT · 4H</b><span>Exemple illustratif</span></figcaption><div class=\"ds-diagram-body\"><div class=\"ds-diagram-chart\"></div><div class=\"ds-evalbar\" role=\"img\" aria-label=\"Évaluation : 68 % haussier, 32 % baissier\"><span class=\"ds-bear\">32</span><div class=\"ds-evalbar-col\"><div class=\"ds-evalbar-fill\"></div><i></i></div><span class=\"ds-bull\">68</span></div></div><ol class=\"ds-moves\"><li><span>1.</span> Entrée 65 400 <b class=\"ds-bull\">!</b></li><li><span>2.</span> Stop 63 200</li><li class=\"ds-mute\">Variante : cassure de 63 200 <b class=\"ds-bear\">?!</b></li></ol></figure>",
+      "css": ".ds-diagram{margin:0;background:#f4f5f0;color:#141613;border:1px solid #c3c8bd;padding:24px;box-shadow:0 2px 0 rgb(20 22 19 / .08),0 40px 60px -40px rgb(0 0 0 / .75);font-family:'Libre Franklin',ui-sans-serif,sans-serif}.ds-diagram figcaption{display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-bottom:1px solid #141613;padding-bottom:8px}.ds-diagram figcaption em{font:italic 400 1.125rem 'Bodoni Moda',Didot,serif}.ds-diagram figcaption b{font:600 .875rem 'JetBrains Mono',ui-monospace,monospace}.ds-diagram figcaption span{font-size:.75rem;color:#50574e}.ds-diagram-body{display:grid;grid-template-columns:1fr auto;gap:16px;margin-top:16px}.ds-diagram-chart{min-height:160px;background:#fbfbf8;border:1px solid rgb(20 22 19 / .8)}.ds-evalbar{display:flex;flex-direction:column;align-items:center;gap:6px;width:44px;font:600 .75rem 'JetBrains Mono',monospace}.ds-evalbar-col{position:relative;width:12px;flex:1;border:1px solid #141613;background:#b81f2e}.ds-evalbar-fill{position:absolute;left:0;right:0;bottom:0;height:68%;background:#17703f;animation:ds-settle 1.4s cubic-bezier(.16,1,.3,1) .5s backwards}.ds-evalbar-col i{position:absolute;left:-5px;right:-5px;top:50%;height:1px;background:#141613}@keyframes ds-settle{from{height:50%}}@media (prefers-reduced-motion:reduce){.ds-evalbar-fill{animation:none}}.ds-bull{color:#17703f}.ds-bear{color:#b81f2e}.ds-moves{list-style:none;margin:20px 0 0;padding:0;font:400 13px/1.375 'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}.ds-moves li+li{margin-top:6px}.ds-moves li>span,.ds-mute{color:#50574e}"
+    },
+    {
+      "name": "Drop Zone",
+      "kind": "custom",
+      "refersTo": "diagram-frame",
+      "description": "Working upload target styled as an empty diagram with corner ticks, on the board field.",
+      "html": "<div class=\"ds-dropwrap\"><button class=\"ds-drop\"><i class=\"tl\"></i><i class=\"tr\"></i><i class=\"bl\"></i><i class=\"br\"></i><svg viewBox=\"0 0 32 32\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"square\"><path d=\"M5 21v6h22v-6M16 4v16M10 10l6-6 6 6\"/></svg><span><b>Glissez votre capture ici</b><small>ou collez-la avec Ctrl+V · PNG, JPG, 5 Mo max</small></span></button></div>",
+      "css": ".ds-dropwrap{background:#1d5a3d;padding:24px}.ds-drop{position:relative;display:flex;align-items:center;gap:16px;width:100%;text-align:left;padding:20px;background:transparent;color:#f6f7f2;border:1px dashed rgb(246 247 242 / .55);font-family:'Libre Franklin',ui-sans-serif,sans-serif;cursor:pointer;transition:border-color .15s,background-color .15s}.ds-drop:hover{border-color:#f6f7f2;background:rgb(255 255 255 / .05)}.ds-drop:focus-visible{outline:2px solid #f6f7f2;outline-offset:3px}.ds-drop i{position:absolute;width:12px;height:12px;border:0 solid #f6f7f2;pointer-events:none}.ds-drop .tl{left:0;top:0;border-left-width:2px;border-top-width:2px}.ds-drop .tr{right:0;top:0;border-right-width:2px;border-top-width:2px}.ds-drop .bl{left:0;bottom:0;border-left-width:2px;border-bottom-width:2px}.ds-drop .br{right:0;bottom:0;border-right-width:2px;border-bottom-width:2px}.ds-drop b{display:block;font-weight:600}.ds-drop small{display:block;font-size:.875rem;color:#d3dfd6}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Annotated Game",
+    "overview": "**Creative North Star: \"The Annotated Game\"**\n\nScanzivo's public site reads like a page from a chess analysis book. The trader's chart becomes a numbered diagram, the reading becomes a line of moves in notation, and the whole commentary closes on one evaluation symbol (± ∓ = ∞) with a printed legend. The world is built from a club roll-up board green field, paper-white sheets laid on it, true-black ink, and an annotation red reserved for doubtful and bearish marks. A high-contrast Bodoni titles the page, a sturdy Libre Franklin carries the reading, and JetBrains Mono sets every price and move number.\n\nDensity is that of a well-set book: generous section margins, hairline rules between entries, heavy two-point rules above lists that matter (verdicts, offers, FAQ, moves). Depth is printed, not lit: frames, rules and tonal sheets, with the only soft shadow reserved for a sheet resting on the green. The world was built against the dark neon AI-SaaS page; glow, gradient words, glass, icon tiles and the pill-shaped capsule do not exist in it.\n\nThe world lives in two CSS scopes that re-point the shared tokens: `.paper` (light sheet) and `.board` (green field). Every public surface (homepage, pricing, auth, legal, header, footer) sits inside one of them. The `:root` tokens still hold the previous dark fintech look, used only by the client area (`/dashboard`, `/admin`); that area is out of scope for this system and keeps its old look until it is migrated. New public work must never fall through to `:root`.",
+    "keyCharacteristics": [
+      "Board green field (30 to 60% of a page) alternating with paper sheets, never with a dark theme.",
+      "One evaluation symbol per verdict, drawn as SVG strokes, always paired with its written title.",
+      "Bodoni display with an italic regular rejoinder line (\"Un graphique. / *Un verdict.*\").",
+      "Prices, move numbers and probabilities in tabular mono.",
+      "Hairline diagram frames, corner ticks and a time-edge ruler as the frame language.",
+      "Near-square corners (0 to 4px); no glow, no gradients, no blur."
+    ],
+    "rules": [
+      {
+        "name": "The Two Fields Rule",
+        "body": "Every public surface sits inside `.paper` or `.board`; components read `--background`, `--foreground`, `--muted`, `--border`, `--bull`, `--bear` and never hard-code a field's hex. A component moved from paper to board must re-color itself through the scope alone.",
+        "section": "colors"
+      },
+      {
+        "name": "The Red Pen Rule",
+        "body": "Annotation red marks only what a commentator would mark in red: bearish levels and candles, the ∓ verdict, \"?!\" doubtful moves, and errors. It is never decoration, never a call to action.",
+        "section": "colors"
+      },
+      {
+        "name": "The Label Beside the Colour Rule",
+        "body": "Bull and bear are never carried by colour alone: every coloured level has its price, every verdict symbol has its title, every probability has its number.",
+        "section": "colors"
+      },
+      {
+        "name": "The Rejoinder Rule",
+        "body": "A headline may answer itself on a second line in Bodoni italic at regular weight (\"Quatre verdicts. / *Jamais « peut-être ».*\"). One rejoinder per headline, and only in Bodoni.",
+        "section": "typography"
+      },
+      {
+        "name": "The Notation Rule",
+        "body": "Any number a trader would act on (price, stop, target, probability, ratio, move number) is set in tabular mono with non-breaking spaces inside thousands (\"65 400\"). Running prose numbers stay in Franklin.",
+        "section": "typography"
+      },
+      {
+        "name": "The Paper Has No Glow Rule",
+        "body": "Buttons, fields and frames carry no shadow at rest or on hover; state is shown by fill, rule colour or an ink outline (2px, 3px offset) on focus.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** wrap every public surface in `.paper` or `.board`, and alternate the two fields by section.",
+      "**Do** close any verdict with the drawn evaluation symbol and its written title, together.",
+      "**Do** set prices, probabilities and move numbers in tabular JetBrains Mono with non-breaking thousands.",
+      "**Do** frame product material as a numbered diagram: 1px ink frame, figure caption in Bodoni italic, coordinates on the edge.",
+      "**Do** put the price note under every call to action and keep the investment disclaimer visible near any verdict.",
+      "**Do** keep corners at 0 to 4px and express state with fill, rule colour and the 2px ink focus outline."
+    ],
+    "donts": [
+      "**Don't** use glow, gradient text, glassmorphism or backdrop blur anywhere in the public world.",
+      "**Don't** use rounded-full pills or icon tiles; badges and buttons stay near-square.",
+      "**Don't** add uppercase mono eyebrows or kickers above headings; the Bodoni headline stands alone.",
+      "**Don't** carry bull or bear by colour alone; pair it with a price, a symbol title or a number.",
+      "**Don't** use annotation red for calls to action or ornament.",
+      "**Don't** let public pages fall through to the `:root` dark tokens; those belong to the client area until it is migrated."
+    ]
+  }
+}
