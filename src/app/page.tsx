@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Faq } from "@/components/faq";
 import { HeroScene } from "@/components/hero-scene";
 import { DropBar } from "@/components/drop-bar";
@@ -42,7 +43,9 @@ export default function Home() {
       <main id="contenu" className="flex-1">
         {/* Hero */}
         <section className="relative isolate -mt-20 overflow-hidden pt-20">
-          <div className="grid-bg absolute inset-0 -z-10" aria-hidden />
+          {/* Wall Street behind a white veil (photo supplied by the owner), the 3D candles drifting over it. */}
+          <Image src="/media/hero-wallstreet.jpg" alt="" fill priority sizes="100vw" className="-z-20 object-cover object-[50%_35%]" />
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(246_248_250/0.78)_0%,rgb(246_248_250/0.7)_40%,rgb(246_248_250/0.9)_75%,var(--background)_100%)]" aria-hidden />
           <HeroScene />
           <div className="absolute -top-40 left-1/2 -z-10 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-brand/15 blur-[120px]" aria-hidden />
           <div className="mx-auto max-w-6xl px-4 pb-14 pt-14 text-center sm:pt-20">
