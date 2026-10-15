@@ -12,6 +12,7 @@
   --accent: #00f5a0;
   --bull: #00f5a0;
   --bear: #ff4d6d;
+  --warn: #fcd34d;
 }
 
 @theme inline {
@@ -25,6 +26,7 @@
   --color-accent: var(--accent);
   --color-bull: var(--bull);
   --color-bear: var(--bear);
+  --color-warn: var(--warn);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
   --font-display: var(--font-space-grotesk);
@@ -97,6 +99,7 @@ body {
   --accent: #047857;
   --bull: #047857;
   --bear: #e11d48;
+  --warn: #b45309;
   background-color: var(--background);
   color: var(--foreground);
 }
@@ -114,6 +117,7 @@ body {
 
 /* Dark blocks set inside a light page: the original dark palette, re-pointed locally. */
 .theme-dark {
+  --warn: #fcd34d;
   --background: #0b0e14;
   --surface: #0f141c;
   --card: #161b22;

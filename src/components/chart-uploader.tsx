@@ -291,7 +291,7 @@ export function ChartUploader({ disabled, disabledNotice, testMode = false, high
             </div>
             {file && advice && advice.length > 0 && (
               <div className="rounded-xl border border-amber-400/30 bg-amber-400/5 p-3 text-xs leading-relaxed">
-                <p className="font-semibold text-amber-300">À vérifier avant d&apos;analyser</p>
+                <p className="font-semibold text-warn">À vérifier avant d&apos;analyser</p>
                 <ul className="mt-1.5 list-disc space-y-1 pl-4 text-foreground/85">
                   {advice.map((item) => (
                     <li key={item}>{item}</li>

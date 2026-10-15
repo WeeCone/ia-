@@ -1,6 +1,9 @@
 import { type ChartAnalysis, preferredPlan } from "@/lib/analysis";
 import { formatRatio, rewardRatios } from "@/lib/risk";
 
+/** Keeps prices such as "65 400" on one line. */
+const keepNumbers = (text: string) => text.replace(/(\d) (\d)/g, "$1\u00a0$2");
+
 const confidenceStyle = {
   faible: "border-bear/40 bg-bear/10 text-bear",
   moyenne: "border-brand/40 bg-brand/10 text-brand",
@@ -9,7 +12,7 @@ const confidenceStyle = {
 
 const captureStyle = {
   bonne: "border-bull/40 bg-bull/10 text-bull",
-  moyenne: "border-amber-400/40 bg-amber-400/10 text-amber-300",
+  moyenne: "border-amber-400/40 bg-amber-400/10 text-warn",
   faible: "border-bear/40 bg-bear/10 text-bear",
 } as const;
 
@@ -95,19 +98,19 @@ function ActionPlan({ analysis }: { analysis: ChartAnalysis }) {
             <h3 className="label text-muted">Plan d&apos;action</h3>
             <span className={`rounded-md px-2.5 py-1 text-xs font-bold uppercase tracking-wide ${actionStyle[verdict.action]}`}>{verdict.action}</span>
           </div>
-          <p className="display mt-4 text-2xl leading-snug sm:text-3xl">{verdict.headline}</p>
-          {verdict.rationale && <p className="mt-4 leading-relaxed text-foreground/90">{verdict.rationale}</p>}
+          <p className="display mt-4 text-2xl leading-snug sm:text-3xl">{keepNumbers(verdict.headline)}</p>
+          {verdict.rationale && <p className="mt-4 leading-relaxed text-foreground/90">{keepNumbers(verdict.rationale)}</p>}
           {verdict.change_mind && (
             <p className="mt-4 rounded-xl border border-border bg-background/50 px-4 py-3 text-sm">
               <span className="label mr-2 text-muted">Change d&apos;avis si</span>
-              {verdict.change_mind}
+              {keepNumbers(verdict.change_mind)}
             </p>
           )}
         </div>
         <div className="lg:col-span-5">
           <div className={`flex items-end justify-between gap-4 ${tone === "bull" ? "text-bull" : "text-bear"}`}>
             <span className="label">Scénario {bias} privilégié</span>
-            <span className="display text-5xl">{Math.round(scenario.probability)} %</span>
+            <span className="display whitespace-nowrap text-5xl">{Math.round(scenario.probability)} %</span>
           </div>
           <div className="mt-4">
             <ScenarioTable scenario={scenario} tone={tone} />
@@ -177,7 +180,7 @@ export function AnalysisResult({ analysis }: { analysis: ChartAnalysis }) {
       {/* Older analyses have no capture_quality. */}
       {analysis.capture_quality && analysis.capture_quality.level !== "bonne" && (
         <div className="flex flex-col gap-1 border-b border-amber-400/25 bg-amber-400/5 px-5 py-3 text-sm sm:flex-row sm:items-baseline sm:gap-3">
-          <span className="label shrink-0 text-amber-300">Capture {analysis.capture_quality.level}</span>
+          <span className="label shrink-0 text-warn">Capture {analysis.capture_quality.level}</span>
           <p className="text-foreground/90">
             {analysis.capture_quality.issues.length > 0 && <span className="text-muted">{analysis.capture_quality.issues.join(" · ")}. </span>}
             {analysis.capture_quality.tip && <span>Pour une analyse plus précise : {analysis.capture_quality.tip}</span>}

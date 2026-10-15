@@ -121,7 +121,7 @@ export default function DashboardPage() {
   const credits = profile ? availableCredits(profile) : null;
 
   if (loading || !user) {
-    return <div className="label flex flex-1 items-center justify-center text-muted">Chargement…</div>;
+    return <div className="theme-light label flex flex-1 items-center justify-center text-muted">Chargement…</div>;
   }
 
   const firstName = (user.displayName || "").split(" ")[0];
@@ -159,9 +159,12 @@ export default function DashboardPage() {
     );
 
   return (
-    <div className="flex flex-1">
+    <div className="theme-light flex flex-1">
       {/* Desktop sidebar */}
-      <aside className="sticky top-0 hidden h-dvh w-72 shrink-0 border-r border-border/70 bg-surface/80 lg:block">{sidebar}</aside>
+      {/* The column carries the sidebar ground down the whole page; the sidebar itself stays pinned. */}
+      <div className="hidden w-72 shrink-0 border-r border-border/70 bg-surface/80 lg:block">
+        <aside className="sticky top-0 h-dvh">{sidebar}</aside>
+      </div>
 
       {/* Mobile drawer */}
       {drawerOpen && (

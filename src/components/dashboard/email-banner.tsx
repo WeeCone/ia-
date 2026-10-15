@@ -31,17 +31,17 @@ export function EmailBanner({ user }: { user: User }) {
   }
 
   return (
-    <div className="flex items-center gap-3 border-b border-amber-400/25 bg-amber-400/10 px-4 py-2.5 text-sm text-amber-100">
+    <div className="flex items-center gap-3 border-b border-amber-400/25 bg-amber-400/10 px-4 py-2.5 text-sm text-warn">
       <span aria-hidden>✉</span>
       <p className="flex-1">Confirmez votre adresse e-mail pour sécuriser votre compte.</p>
       {status === "sent" ? (
-        <span className="text-xs text-amber-200">Lien envoyé, vérifiez vos e-mails.</span>
+        <span className="text-xs text-warn">Lien envoyé, vérifiez vos e-mails.</span>
       ) : (
         <button type="button" onClick={resend} disabled={status === "sending"} className="text-xs font-medium underline underline-offset-4 hover:text-white">
           {status === "error" ? "Échec, réessayer" : status === "sending" ? "Envoi…" : "Renvoyer le lien"}
         </button>
       )}
-      <button type="button" onClick={() => setVisible(false)} aria-label="Masquer" className="px-1 text-lg leading-none text-amber-200 hover:text-white">
+      <button type="button" onClick={() => setVisible(false)} aria-label="Masquer" className="px-1 text-lg leading-none text-warn hover:text-white">
         ×
       </button>
     </div>
