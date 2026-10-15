@@ -240,7 +240,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        <main ref={mainRef} className="relative mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:py-12">
+        <main id="contenu" ref={mainRef} className="relative mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:py-12">
           {view === "account" ? (
             <div className="max-w-3xl">
               <AccountPanel user={user} profile={profile} credits={credits} onBack={() => setView("analyze")} />

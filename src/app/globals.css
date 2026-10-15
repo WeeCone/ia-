@@ -232,9 +232,23 @@ details[open]::details-content {
   block-size: auto;
 }
 
-/* Browser surfaces in the palette. */
+/* Browser surfaces in the palette. Anchors and keyboard focus stop below the sticky header. */
 html {
   scrollbar-color: #30363d #0b0e14;
+  scroll-padding-top: 5.5rem;
+}
+/* Pointer cursor on every real control, no 300 ms tap delay on touch screens. */
+button:not(:disabled),
+summary,
+[role="button"] {
+  cursor: pointer;
+}
+a,
+button,
+summary,
+input,
+label {
+  touch-action: manipulation;
 }
 :focus-visible {
   outline: 2px solid var(--brand);

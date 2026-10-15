@@ -2,7 +2,7 @@ import { Logo } from "./logo";
 
 export function AuthCard({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
   return (
-    <main className="grid flex-1 lg:grid-cols-2">
+    <main id="contenu" className="grid flex-1 lg:grid-cols-2">
       {/* Glowing side panel, desktop only. */}
       <aside className="relative isolate hidden flex-col justify-between overflow-hidden border-r border-border bg-surface p-12 lg:flex">
         <div className="grid-bg absolute inset-0 -z-10" aria-hidden />

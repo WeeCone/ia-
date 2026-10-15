@@ -18,6 +18,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="fr" className={`${inter.variable} ${spaceGrotesk.variable} ${archivoBlack.variable} ${jetbrainsMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
+        <a
+          href="#contenu"
+          className="sr-only z-50 rounded-lg bg-accent px-4 py-2 font-semibold text-background focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:px-4 focus:py-2"
+        >
+          Aller au contenu
+        </a>
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

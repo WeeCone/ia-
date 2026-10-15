@@ -8,6 +8,7 @@ import { ScanCta } from "@/components/scan-cta";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Testimonials } from "@/components/testimonials";
+import { TrustStrip } from "@/components/trust-strip";
 import { DEMO_ANALYSIS } from "@/lib/demo";
 
 const MARKETS = ["Crypto", "Forex", "Actions", "Indices", "Matières premières"];
@@ -44,7 +45,7 @@ export default function Home() {
   return (
     <div className="flex flex-1 flex-col">
       <SiteHeader />
-      <main className="flex-1">
+      <main id="contenu" className="flex-1">
         {/* Hero */}
         <section className="relative isolate overflow-hidden">
           <div className="grid-bg absolute inset-0 -z-10" aria-hidden />
@@ -254,6 +255,9 @@ export default function Home() {
             <p className="mt-5 max-w-xl text-lg text-muted">Pas d&apos;offre gratuite : un abonnement mensuel sans engagement, ou un accès à vie en un seul paiement.</p>
             <div className="mt-12">
               <PricingPlans />
+            </div>
+            <div className="mt-10 border-t border-border pt-8">
+              <TrustStrip />
             </div>
           </div>
         </section>

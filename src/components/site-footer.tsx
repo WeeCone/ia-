@@ -36,10 +36,10 @@ export function SiteFooter() {
         {COLUMNS.map((column) => (
           <nav key={column.title} className="md:col-span-2" aria-label={column.title}>
             <p className="label text-foreground">{column.title}</p>
-            <ul className="mt-4 space-y-3 text-sm">
+            <ul className="mt-3 space-y-1 text-sm">
               {column.links.map(({ href, label }) => (
                 <li key={href}>
-                  <Link href={href} className="text-muted hover:text-brand">
+                  <Link href={href} className="inline-block py-1.5 text-muted transition-colors hover:text-brand">
                     {label}
                   </Link>
                 </li>
