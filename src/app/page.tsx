@@ -1,8 +1,7 @@
-import { DemoVideo } from "@/components/demo-video";
 import { Faq } from "@/components/faq";
 import { HeroScene } from "@/components/hero-scene";
 import { DropBar } from "@/components/drop-bar";
-import { BeforeAfter } from "@/components/before-after";
+import { ScanDemo } from "@/components/scan-demo";
 import { PhoneShowcase } from "@/components/phone-showcase";
 import { PlatformMarquee } from "@/components/platform-marquee";
 import { PriceNote } from "@/components/price-note";
@@ -66,10 +65,10 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Before / after */}
-        <section className="theme-dark mx-2 rounded-[2.5rem] sm:mx-4 scroll-mt-24">
+        {/* The scan, in video */}
+        <section id="video" className="theme-dark mx-2 scroll-mt-24 rounded-[2.5rem] sm:mx-4">
           <div className="mx-auto max-w-6xl px-4 py-20 sm:py-24">
-            <BeforeAfter />
+            <ScanDemo />
           </div>
         </section>
 
@@ -88,30 +87,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Live scan video */}
-        <section id="video" className="theme-dark mx-2 rounded-[2.5rem] sm:mx-4 scroll-mt-24">
-          <div className="mx-auto max-w-6xl px-4 py-20">
-            <div className="mx-auto max-w-3xl text-center">
-              <h2 className="display text-4xl sm:text-5xl">
-                Regardez Scanzivo <span className="mark">lire un graphique.</span>
-              </h2>
-              <p className="mt-4 text-lg text-muted">
-                Une capture hebdomadaire du Bitcoin : niveaux tracés, momentum, et un plan d&apos;action chiffré. Le tout en moins d&apos;une minute.
-              </p>
-            </div>
-            <div className="mx-auto mt-10 max-w-5xl overflow-hidden rounded-2xl border border-border bg-[#0b0e14] shadow-[0_30px_80px_-30px_rgb(8_145_178/0.55)]">
-              <DemoVideo />
-            </div>
-            <div className="mt-8 flex flex-col items-center gap-3">
-              <ScanCta className="btn-primary text-base">Analyser mon graphique →</ScanCta>
-              <PriceNote className="text-muted" />
-              <p className="text-xs text-muted">Exemple d&apos;analyse illustratif. Pas un conseil en investissement.</p>
-            </div>
-          </div>
-        </section>
-
         {/* Features — bento grid */}
-        <section id="fonctionnalites" className="scroll-mt-24">
+        <section id="fonctionnalites" className="theme-dark mx-2 scroll-mt-24 rounded-[2.5rem] sm:mx-4">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <h2 className="display max-w-2xl text-4xl sm:text-5xl">
               Tout ce que l&apos;IA lit <span className="mark">sur votre graphique.</span>
@@ -230,7 +207,7 @@ export default function Home() {
         </section>
 
         {/* Method */}
-        <section id="methode" className="theme-dark mx-2 rounded-[2.5rem] sm:mx-4 scroll-mt-24">
+        <section id="methode" className="scroll-mt-24">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <h2 className="display text-4xl sm:text-5xl">
               Trois étapes, <span className="mark">pas une de plus.</span>
