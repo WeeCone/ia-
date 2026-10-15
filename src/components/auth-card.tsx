@@ -2,9 +2,9 @@ import { Logo } from "./logo";
 
 export function AuthCard({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
   return (
-    <main id="contenu" className="grid flex-1 lg:grid-cols-2">
+    <main id="contenu" className="theme-light grid flex-1 lg:grid-cols-2">
       {/* Glowing side panel, desktop only. */}
-      <aside className="relative isolate hidden flex-col justify-between overflow-hidden border-r border-border bg-surface p-12 lg:flex">
+      <aside className="theme-dark relative isolate hidden flex-col justify-between overflow-hidden border-r border-border bg-surface p-12 lg:flex">
         <div className="grid-bg absolute inset-0 -z-10" aria-hidden />
         <div className="absolute -left-20 top-1/3 -z-10 h-96 w-96 rounded-full bg-brand/20 blur-[120px]" aria-hidden />
         <div className="absolute -right-10 bottom-0 -z-10 h-72 w-72 rounded-full bg-accent/15 blur-[110px]" aria-hidden />

@@ -4,7 +4,7 @@ import { SiteHeader } from "./site-header";
 
 export function LegalPage({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="theme-light flex flex-1 flex-col">
       <SiteHeader />
       <main id="contenu" className="mx-auto w-full max-w-3xl flex-1 px-4 pb-24 pt-16">
         <h1 className="display text-4xl sm:text-5xl">{title}</h1>

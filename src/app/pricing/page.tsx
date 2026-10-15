@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Tarifs — Scanzivo" };
 
 export default function PricingPage() {
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="theme-light flex flex-1 flex-col">
       <SiteHeader />
       <main id="contenu" className="mx-auto w-full max-w-5xl flex-1 px-4 pb-24 pt-16 sm:pt-24">
         <div>
