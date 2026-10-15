@@ -1,10 +1,12 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { FieldValue } from "firebase-admin/firestore";
+import { isAdminRequest } from "@/lib/admin-auth";
 import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_BYTES, type AllowedImageType } from "@/lib/analysis";
 import { analyzeChart, AnalysisRefusedError } from "@/lib/claude";
 import { availableCredits, creditPeriod } from "@/lib/plans";
 import { adminDb } from "@/lib/firebase-admin";
 import { getRequestUid } from "@/lib/server-auth";
+import { TEST_ANALYSIS } from "@/lib/test-analysis";
 
 export const maxDuration = 120;
 
@@ -25,6 +27,13 @@ export async function POST(request: Request) {
     return error("Format non supporté (PNG, JPEG, WebP ou GIF).", 400);
   }
   if (image.size > MAX_IMAGE_BYTES) return error("Image trop lourde (5 Mo maximum).", 400);
+
+  // Admin test mode: canned report, no model call, no credit, nothing stored.
+  if (form.get("test") === "1") {
+    if (!(await isAdminRequest(request))) return error("Mode test réservé à l'administrateur.", 403);
+    await new Promise((resolve) => setTimeout(resolve, 4000)); // lets the progress screen show
+    return Response.json({ id: null, analysis: TEST_ANALYSIS, charged: false, test: true });
+  }
 
   const userRef = adminDb.collection("users").doc(uid);
   const userSnap = await userRef.get();

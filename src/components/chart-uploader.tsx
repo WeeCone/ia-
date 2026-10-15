@@ -15,6 +15,8 @@ type Props = {
   disabled: boolean;
   /** Shown under the composer when analysing is not possible (no offer, no credits left). */
   disabledNotice?: React.ReactNode;
+  /** Admin test mode: canned report, no model call, no credit. */
+  testMode?: boolean;
   /** Onboarding tour: which part of the composer to spotlight. */
   highlight?: "zone" | "send" | null;
   onAnalyzed: (outcome: AnalysisOutcome) => void;
@@ -40,7 +42,7 @@ function ArrowIcon() {
 }
 
 /** The analysis panel: drop or pick a screenshot, add context, analyse. Shows progress while the analysis runs. */
-export function ChartUploader({ disabled, disabledNotice, highlight = null, onAnalyzed }: Props) {
+export function ChartUploader({ disabled, disabledNotice, testMode = false, highlight = null, onAnalyzed }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -109,13 +111,14 @@ export function ChartUploader({ disabled, disabledNotice, highlight = null, onAn
 
   async function submit() {
     const user = auth.currentUser;
-    if (!file || !preview || !user || disabled) return;
+    if (!file || !preview || !user || (disabled && !testMode)) return;
     setPending(true);
     setError(null);
     try {
       const body = new FormData();
       body.set("image", file);
       body.set("note", note);
+      if (testMode) body.set("test", "1");
       const response = await fetch("/api/analyze", {
         method: "POST",
         headers: { Authorization: `Bearer ${await user.getIdToken()}` },
@@ -185,7 +188,7 @@ export function ChartUploader({ disabled, disabledNotice, highlight = null, onAn
     );
   }
 
-  const canSend = Boolean(file) && !preparing && !disabled;
+  const canSend = Boolean(file) && !preparing && (!disabled || testMode);
   const addContext = (tag: string) => setNote((current) => (current.includes(tag) ? current : current ? `${current}, ${tag}` : tag));
 
   return (
@@ -304,7 +307,7 @@ export function ChartUploader({ disabled, disabledNotice, highlight = null, onAn
               disabled={!canSend}
               className={`btn-primary mt-auto w-full ${highlight === "send" ? "ring-4 ring-accent/40 ring-offset-2 ring-offset-card" : ""}`}
             >
-              {error && file ? "Réessayer" : "Analyser (1 crédit)"} <ArrowIcon />
+              {testMode ? "Tester (sans IA, gratuit)" : error && file ? "Réessayer" : "Analyser (1 crédit)"} <ArrowIcon />
             </button>
           </div>
         </div>
@@ -312,7 +315,7 @@ export function ChartUploader({ disabled, disabledNotice, highlight = null, onAn
 
       <div className="mt-3 space-y-2">
         <FormError message={error} />
-        {disabled && disabledNotice}
+        {disabled && !testMode && disabledNotice}
       </div>
 
       <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(event) => pick(event.target.files?.[0])} />

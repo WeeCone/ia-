@@ -16,10 +16,12 @@ import { TourPopover } from "@/components/dashboard/tour";
 import { Logo } from "@/components/logo";
 import { ReviewPrompt } from "@/components/review-prompt";
 import type { ChartAnalysis } from "@/lib/analysis";
+import { isAdminEmail } from "@/lib/admin";
 import { availableCredits, MONTHLY_CREDITS, PLAN_LABELS } from "@/lib/plans";
 import { subscribeUserProfile, type UserProfile } from "@/lib/users";
 
 const TOUR_KEY = "scanzivo-tour-done";
+const TEST_MODE_KEY = "scanzivo-test-mode";
 
 type Current = {
   analysis: ChartAnalysis;
@@ -36,6 +38,14 @@ export default function DashboardPage() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [tour, setTour] = useState<0 | 1 | 2>(0);
+  // Admin-only: canned reports without calling the model (remembered on this device).
+  const [testMode, setTestMode] = useState(() => {
+    try {
+      return typeof window !== "undefined" && localStorage.getItem(TEST_MODE_KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
   const mainRef = useRef<HTMLDivElement>(null);
   // Read once on the client; the page renders a loading state until auth resolves, so this cannot mismatch.
   const [checkoutDone, setCheckoutDone] = useState(
@@ -235,11 +245,32 @@ export default function DashboardPage() {
                 Importez une capture de graphique : Scanzivo la lit comme un analyste et vous rend deux scénarios chiffrés, avec les niveaux tracés.
               </p>
 
+              {isAdminEmail(user.email) && (
+                <label className="mt-6 flex w-fit cursor-pointer items-center gap-3 rounded-xl border border-bear/40 bg-bear/5 px-4 py-2.5 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={testMode}
+                    onChange={(event) => {
+                      setTestMode(event.target.checked);
+                      try {
+                        localStorage.setItem(TEST_MODE_KEY, event.target.checked ? "1" : "0");
+                      } catch {}
+                    }}
+                    className="size-4 accent-bear"
+                  />
+                  <span>
+                    <span className="font-semibold text-bear">Mode test (admin)</span>
+                    <span className="text-muted"> : rapport d&apos;exemple, sans appeler l&apos;IA ni débiter de crédit</span>
+                  </span>
+                </label>
+              )}
+
               <div className={`mt-8 ${tour ? "relative z-50" : ""}`}>
                 {tour > 0 && <TourPopover step={tour as 1 | 2} onNext={() => (tour === 1 ? setTour(2) : endTour())} onSkip={endTour} />}
                 <ChartUploader
                   disabled={noCredits}
                   disabledNotice={disabledNotice}
+                  testMode={testMode && isAdminEmail(user.email)}
                   highlight={tour === 1 ? "zone" : tour === 2 ? "send" : null}
                   onAnalyzed={(outcome: AnalysisOutcome) => {
                     show({ ...outcome, id: null });
