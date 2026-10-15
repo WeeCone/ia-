@@ -12,6 +12,8 @@
   --accent: #00f5a0;
   --bull: #00f5a0;
   --bear: #ff4d6d;
+  --text-face: var(--font-inter);
+  --display-face: var(--font-space-grotesk);
 }
 
 @theme inline {
@@ -25,9 +27,9 @@
   --color-accent: var(--accent);
   --color-bull: var(--bull);
   --color-bear: var(--bear);
-  --font-sans: var(--font-inter);
+  --font-sans: var(--text-face);
   --font-mono: var(--font-jetbrains-mono);
-  --font-display: var(--font-space-grotesk);
+  --font-display: var(--display-face);
   --font-logo: var(--font-archivo-black);
 }
 
@@ -56,10 +58,6 @@ body {
   .panel {
     @apply rounded-2xl border border-border bg-card/70 shadow-[0_8px_32px_-12px_rgb(0_0_0/0.6)] backdrop-blur-md;
   }
-  /* Panel with a soft cyan/green glow, for the hero pieces. */
-  .glow {
-    @apply border-brand/40 shadow-[0_0_0_1px_rgb(0_210_255/0.08),0_0_40px_-8px_rgb(0_210_255/0.35),0_0_80px_-20px_rgb(0_245_160/0.25)];
-  }
   .btn-primary,
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 font-display text-sm font-semibold transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none;
@@ -84,41 +82,6 @@ body {
   }
 }
 
-/* Light sections (feature examples, sample report): the same tokens, re-pointed to a white palette.
-   Accent hues are darkened so text and thin marks keep their contrast on white. */
-.theme-light {
-  --background: #f6f8fa;
-  --surface: #eef2f6;
-  --card: #ffffff;
-  --border: #d0d7de;
-  --foreground: #0b0e14;
-  --muted: #57606a;
-  --brand: #0891b2;
-  --accent: #059669;
-  --bull: #059669;
-  --bear: #e11d48;
-  background-color: var(--background);
-  color: var(--foreground);
-}
-.theme-light .panel {
-  background-color: var(--card);
-  box-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 12px 32px -16px rgb(15 23 42 / 0.18);
-}
-.theme-light .btn-primary {
-  color: #ffffff;
-  box-shadow: 0 8px 20px -8px rgb(5 150 105 / 0.55);
-}
-.theme-light .btn-primary:hover {
-  background-color: #047857;
-}
-
-/* Faint chart-paper grid used behind hero sections. */
-.grid-bg {
-  background-image: linear-gradient(rgb(48 54 61 / 0.35) 1px, transparent 1px), linear-gradient(90deg, rgb(48 54 61 / 0.35) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 75%);
-}
-
 /* Long-form legal text. */
 .legal {
   line-height: 1.75;
@@ -127,7 +90,7 @@ body {
 .legal h2 {
   margin-top: 3rem;
   margin-bottom: 1rem;
-  font-family: var(--font-display);
+  font-family: var(--display-face);
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.2;
@@ -151,6 +114,126 @@ body {
   color: var(--brand);
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Public site: the "annotated game" world. Club roll-up board green, paper sheets, black ink,
+   annotation red; chess-book titling (Bodoni Moda) over a sturdy text face (Libre Franklin).
+   Two scopes re-point the shared tokens, so every component (fields, buttons, chart) follows.
+   --------------------------------------------------------------------------------------------- */
+.paper,
+.board {
+  --text-face: var(--font-franklin);
+  --display-face: var(--font-bodoni);
+  font-family: var(--text-face), ui-sans-serif, system-ui, sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+.paper {
+  --background: #f4f5f0;
+  --surface: #e8eae3;
+  --card: #fbfbf8;
+  --border: #c3c8bd;
+  --foreground: #141613;
+  --muted: #50574e;
+  --brand: #1d5a3d;
+  --accent: #1d5a3d;
+  --bull: #17703f;
+  --bear: #b81f2e;
+}
+.board {
+  --background: #1d5a3d;
+  --surface: #184d34;
+  --card: #f4f5f0;
+  --border: #5e8b73;
+  --foreground: #f6f7f2;
+  --muted: #d3dfd6;
+  --brand: #f6f7f2;
+  --accent: #f6f7f2;
+  --bull: #c7ecd2;
+  --bear: #ffc2c8;
+}
+.paper ::selection {
+  background: #1d5a3d;
+  color: #f6f7f2;
+}
+.board ::selection {
+  background: #f6f7f2;
+  color: #1d5a3d;
+}
+:is(.paper, .board) :focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 3px;
+}
+:is(.paper, .board) .font-mono {
+  font-variant-numeric: tabular-nums;
+}
+:is(.paper, .board) .display {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+:is(.paper, .board) .btn-primary,
+:is(.paper, .board) .btn-secondary {
+  border-radius: 3px;
+  box-shadow: none;
+  font-family: var(--text-face);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+:is(.paper, .board) .btn-primary {
+  background-color: var(--accent);
+  color: var(--background);
+}
+.paper .btn-primary:hover {
+  background-color: #143f2b;
+  box-shadow: none;
+}
+.board .btn-primary:hover {
+  background-color: #ffffff;
+  box-shadow: none;
+}
+:is(.paper, .board) .btn-secondary {
+  border: 1px solid color-mix(in srgb, var(--foreground) 45%, transparent);
+  background: transparent;
+  backdrop-filter: none;
+}
+:is(.paper, .board) .btn-secondary:hover {
+  border-color: var(--foreground);
+  color: var(--foreground);
+}
+:is(.paper, .board) .btn-ghost {
+  font-family: var(--text-face);
+}
+:is(.paper, .board) .field input {
+  border-radius: 3px;
+  background-color: var(--card);
+}
+:is(.paper, .board) .field input:focus {
+  border-color: var(--foreground);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand) 35%, transparent);
+}
+:is(.paper, .board) .panel {
+  border-radius: 4px;
+  background-color: var(--card);
+  backdrop-filter: none;
+  box-shadow: 0 1px 0 rgb(20 22 19 / 0.06), 0 18px 30px -24px rgb(20 22 19 / 0.45);
+}
+html:has(.paper, .board) {
+  scrollbar-color: #1d5a3d #e8eae3;
+}
+
+/* Evaluation bar settling on the verdict split, then the verdict symbol being set. Final state is the resting style. */
+@keyframes settle {
+  from {
+    height: 50%;
+  }
+}
+@keyframes set-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0.2;
+  }
 }
 
 /* Sweep used on the screenshot while an analysis runs. */

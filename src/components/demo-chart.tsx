@@ -15,19 +15,34 @@ const LEVELS = [
   { price: 61.8, tone: "bull" },
 ] as const;
 
-const W = 520, H = 320, PAD_L = 8, PAD_R = 62, PAD_Y = 18, MIN = 61.4, MAX = 67.5, SLOTS = 36;
-const y = (price: number) => PAD_Y + ((MAX - price) / (MAX - MIN)) * (H - 2 * PAD_Y);
-const step = (W - PAD_L - PAD_R) / SLOTS;
-const x = (index: number) => PAD_L + index * step + step / 2;
+const PAD_L = 8, PAD_R = 62, PAD_Y = 18, MIN = 61.4, MAX = 67.5, SLOTS = 36;
 const tone = (t: "bull" | "bear") => (t === "bull" ? "var(--bull)" : "var(--bear)");
 
-export function DemoChart({ annotated = false, labels = false }: { annotated?: boolean; labels?: boolean }) {
+/**
+ * `compact` draws the same chart in a narrower viewBox, so its 11px labels stay legible on a phone
+ * (the side labels are dropped there; the price tags carry the levels).
+ */
+export function DemoChart({ annotated = false, labels = false, compact = false }: { annotated?: boolean; labels?: boolean; compact?: boolean }) {
+  const W = compact ? 300 : 520;
+  const H = compact ? 240 : 320;
+  const y = (price: number) => PAD_Y + ((MAX - price) / (MAX - MIN)) * (H - 2 * PAD_Y);
+  const step = (W - PAD_L - PAD_R) / SLOTS;
+  const x = (index: number) => PAD_L + index * step + step / 2;
+  const showLabels = labels && !compact;
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label={`Graphique BTC/USDT 4H${annotated ? " annoté par Scanzivo" : ""}`}>
       {[62, 63, 64, 65, 66, 67].map((price) => (
         <g key={price}>
           <line x1={PAD_L} x2={W - PAD_R} y1={y(price)} y2={y(price)} stroke="var(--border)" strokeOpacity={0.5} />
-          <text x={W - PAD_R + 8} y={y(price) + 4} fill="var(--muted)" fontSize={11} fontFamily="var(--font-jetbrains-mono)">
+          {/* Axis price, hidden where a level tag covers it. */}
+          <text
+            opacity={annotated && LEVELS.some((level) => Math.abs(y(level.price) - y(price)) < 16) ? 0 : 1}
+            x={W - PAD_R + 8}
+            y={y(price) + 4}
+            fill="var(--muted)"
+            fontSize={11}
+            fontFamily="var(--font-jetbrains-mono)"
+          >
             {(price * 1000).toLocaleString("fr-FR")}
           </text>
         </g>
@@ -36,18 +51,18 @@ export function DemoChart({ annotated = false, labels = false }: { annotated?: b
       {annotated && (
         <>
           {/* Rising trendline under the higher lows. */}
-          <line x1={x(1)} y1={y(61.75)} x2={x(33)} y2={y(64.6)} stroke="var(--brand)" strokeWidth={2.5} strokeLinecap="round" filter="url(#demo-glow)" />
-          <rect x={x(24) - 6} y={y(65.4) - 14} width={x(29) - x(24) + 12} height={y(64.5) - y(65.4) + 22} rx={6} fill="var(--brand)" fillOpacity={0.08} stroke="var(--brand)" strokeOpacity={0.5} strokeDasharray="4 3" />
+          <line x1={x(1)} y1={y(61.75)} x2={x(33)} y2={y(64.6)} stroke="var(--foreground)" strokeWidth={2} strokeLinecap="round" />
+          <rect x={x(24) - 6} y={y(65.4) - 14} width={x(29) - x(24) + 12} height={y(64.5) - y(65.4) + 22} fill="var(--brand)" fillOpacity={0.07} stroke="var(--brand)" strokeOpacity={0.6} strokeDasharray="4 3" />
           {LEVELS.map(({ price, tone: t }) => (
             <g key={price}>
               <line x1={PAD_L} x2={W - PAD_R} y1={y(price)} y2={y(price)} stroke={tone(t)} strokeWidth={1.75} strokeDasharray="6 4" />
-              <rect x={W - PAD_R + 2} y={y(price) - 9} width={PAD_R - 4} height={18} rx={4} fill={tone(t)} />
+              <rect x={W - PAD_R + 2} y={y(price) - 9} width={PAD_R - 4} height={18} rx={1} fill={tone(t)} />
               <text x={W - PAD_R + 8} y={y(price) + 4} fill="var(--background)" fontSize={11} fontWeight={700} fontFamily="var(--font-jetbrains-mono)">
                 {(price * 1000).toLocaleString("fr-FR")}
               </text>
             </g>
           ))}
-          {labels && (
+          {showLabels && (
             <g fontSize={12} fontWeight={700} fontFamily="var(--font-jetbrains-mono)">
               <text x={x(14)} y={y(65.4) - 7} fill="var(--bear)">Résistance : 65 400</text>
               <text x={x(18)} y={y(63.2) + 16} fill="var(--bull)">Support : 63 200</text>
@@ -78,15 +93,6 @@ export function DemoChart({ annotated = false, labels = false }: { annotated?: b
         );
       })}
 
-      <defs>
-        <filter id="demo-glow" x="-10%" y="-10%" width="120%" height="120%">
-          <feGaussianBlur stdDeviation="2.5" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
     </svg>
   );
 }

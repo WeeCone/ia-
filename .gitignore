@@ -44,3 +44,4 @@ next-env.d.ts
 # Local marketing renders (videos), kept out of the public repo
 /marketing/
 .impeccable/live/
+.impeccable/review/

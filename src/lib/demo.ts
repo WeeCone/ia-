@@ -25,8 +25,8 @@ export const DEMO_ANALYSIS: ChartAnalysis = {
     entry_price: 65400,
     stop_loss: "64 300",
     stop_price: 64300,
-    targets: ["66 200", "67 000"],
-    target_prices: [66200, 67000],
+    targets: ["66 600", "67 000"],
+    target_prices: [66600, 67000],
     invalidation: "Retour sous 64 300 après la cassure (fausse cassure).",
   },
   bearish: {
@@ -43,13 +43,13 @@ export const DEMO_ANALYSIS: ChartAnalysis = {
   verdict: {
     bias: "haussier",
     action: "acheter sur confirmation",
-    headline: "Acheter sur clôture 4H au-dessus de 65 400, stop 64 300, objectifs 66 200 puis 67 000.",
+    headline: "Acheter sur clôture 4H au-dessus de 65 400, stop 64 300, objectifs 66 600 puis 67 000.",
     rationale: "Structure de plus bas ascendants et retest réussi de 63 200 : la pression acheteuse domine tant que ce support tient.",
     change_mind: "Une clôture 4H sous 63 200 invaliderait la structure haussière.",
   },
   risk_notes: [
     "Attendre la clôture 4H au-delà du niveau plutôt qu'entrer sur une mèche.",
-    "Le premier objectif haussier rapporte moins que le risque pris : alléger la position sur 66 200.",
+    "Alléger une partie de la position sur 66 600, laisser courir le reste vers 67 000.",
     "Volatilité élevée près de 65 400 : réduire la taille de position.",
   ],
 };
