@@ -30,6 +30,8 @@ export type AdminUser = {
   plan: "none" | "monthly" | "lifetime";
   credits: number;
   analyses: number;
+  /** AI spend this calendar month, in euros. */
+  spendEur: number;
   createdAt: number | null;
   hasStripe: boolean;
 };

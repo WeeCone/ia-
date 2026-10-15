@@ -2,6 +2,7 @@ import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { ChartAnalysis, type AllowedImageType } from "./analysis";
+import { callCostEur } from "./usage-cost";
 
 const client = new Anthropic();
 
@@ -20,12 +21,23 @@ Pour chaque support et chaque résistance, donne aussi sa position verticale dan
 Si l'image n'est pas un graphique de prix, mets is_chart à false et remplis les autres champs de façon minimale.
 Réponds en français.`;
 
-export class AnalysisRefusedError extends Error {}
+export class AnalysisRefusedError extends Error {
+  constructor(
+    message: string,
+    /** What the refused call still cost, so it counts toward the monthly budget. */
+    readonly costEur: number,
+  ) {
+    super(message);
+  }
+}
+
+/** Output ceiling of one call; with the input, bounds what a single analysis can cost (see MAX_CALL_COST_EUR). */
+export const MAX_OUTPUT_TOKENS = 16000;
 
 export async function analyzeChart(imageBase64: string, mediaType: AllowedImageType, note?: string) {
   const response = await client.beta.messages.parse({
     model: "claude-opus-5-5",
-    max_tokens: 16000,
+    max_tokens: MAX_OUTPUT_TOKENS,
     betas: ["server-side-fallback-2026-07-01"],
     fallbacks: "default",
     output_config: { effort: "medium", format: betaZodOutputFormat(ChartAnalysis) },
@@ -42,7 +54,7 @@ export async function analyzeChart(imageBase64: string, mediaType: AllowedImageT
   });
 
   if (response.stop_reason === "refusal" || !response.parsed_output) {
-    throw new AnalysisRefusedError(`Analyse impossible (stop_reason: ${response.stop_reason})`);
+    throw new AnalysisRefusedError(`Analyse impossible (stop_reason: ${response.stop_reason})`, callCostEur(response.model, response.usage));
   }
-  return { analysis: response.parsed_output, model: response.model };
+  return { analysis: response.parsed_output, model: response.model, costEur: callCostEur(response.model, response.usage) };
 }

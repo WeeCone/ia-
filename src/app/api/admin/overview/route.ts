@@ -3,6 +3,7 @@ import type { AdminOverview, AdminReview, AdminUser, ReviewStatus } from "@/lib/
 import { forbidden, isAdminRequest } from "@/lib/admin-auth";
 import { adminDb } from "@/lib/firebase-admin";
 import { availableCredits } from "@/lib/plans";
+import { monthSpend } from "@/lib/usage-cost";
 
 const millis = (value: unknown) => (value && typeof (value as Timestamp).toMillis === "function" ? (value as Timestamp).toMillis() : null);
 
@@ -25,6 +26,7 @@ export async function GET(request: Request) {
         plan: data.plan ?? "none",
         credits: availableCredits(data),
         analyses: count.data().count,
+        spendEur: monthSpend(data),
         createdAt: millis(data.createdAt),
         hasStripe: Boolean(data.stripeCustomerId),
       };

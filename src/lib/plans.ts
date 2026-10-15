@@ -1,8 +1,23 @@
 export type Plan = "none" | "monthly" | "lifetime";
 export type Offer = Exclude<Plan, "none">;
 
-/** Fair-use quota per calendar month, for both offers. */
-export const MONTHLY_CREDITS = 100;
+/**
+ * Hard ceiling on what one customer can cost in AI calls per calendar month, in euros.
+ * Every call is priced from its real token usage and recorded on the user; once the ceiling is near, analyses stop until next month.
+ */
+export const MONTHLY_BUDGET_EUR = 5;
+
+/** Typical cost of one analysis, in euros (measured on real reports; keep it pessimistic). */
+export const ANALYSIS_COST_EUR = 0.1;
+
+/**
+ * Worst case for a single call (16 000 output tokens at Opus prices, plus the image and prompt).
+ * An analysis only starts if this much budget is left, so the ceiling is never crossed.
+ */
+export const MAX_CALL_COST_EUR = 0.35;
+
+/** Fair-use quota per month, for both offers: one credit per analysis, sized to fit the budget (rounded down to 5). */
+export const MONTHLY_CREDITS = Math.floor((MONTHLY_BUDGET_EUR - MAX_CALL_COST_EUR) / ANALYSIS_COST_EUR / 5) * 5;
 
 // Display only: keep prices in sync with the Stripe prices set in STRIPE_PRICE_MONTHLY / STRIPE_PRICE_LIFETIME.
 export const OFFERS: Record<Offer, { name: string; price: string; period: string }> = {

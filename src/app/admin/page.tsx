@@ -8,7 +8,7 @@ import { FormError } from "@/components/auth-card";
 import { Logo } from "@/components/logo";
 import type { AdminOverview, AdminReview, AdminUser, ReviewStatus } from "@/lib/admin";
 import { auth } from "@/lib/firebase";
-import { OFFERS, PLAN_LABELS, type Plan } from "@/lib/plans";
+import { MONTHLY_BUDGET_EUR, OFFERS, PLAN_LABELS, type Plan } from "@/lib/plans";
 
 const PRICE = { monthly: 40, lifetime: 180 };
 const euros = (value: number) => value.toLocaleString("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
@@ -74,6 +74,9 @@ function UserRow({ user, onSaved }: { user: AdminUser; onSaved: () => void }) {
         </td>
         <td className="px-4 py-3 text-right font-mono tabular-nums">{user.credits}</td>
         <td className="px-4 py-3 text-right font-mono tabular-nums">{user.analyses}</td>
+        <td className={`px-4 py-3 text-right font-mono tabular-nums ${user.spendEur >= MONTHLY_BUDGET_EUR * 0.8 ? "text-bear" : ""}`}>
+          {user.spendEur.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €
+        </td>
         <td className="px-4 py-3 text-xs text-muted">{date(user.createdAt)}</td>
         <td className="px-4 py-3 text-xs text-muted">{user.hasStripe ? "Oui" : "—"}</td>
         <td className="px-4 py-3 text-right">
@@ -426,6 +429,9 @@ export default function AdminPage() {
                         <th className="px-4 py-3 font-medium">Offre</th>
                         <th className="px-4 py-3 text-right font-medium">Crédits</th>
                         <th className="px-4 py-3 text-right font-medium">Analyses</th>
+                        <th className="px-4 py-3 text-right font-medium" title={`Coût IA du mois, plafonné à ${MONTHLY_BUDGET_EUR} € par client`}>
+                          Coût IA (mois)
+                        </th>
                         <th className="px-4 py-3 font-medium">Inscrit le</th>
                         <th className="px-4 py-3 font-medium">Client Stripe</th>
                         <th className="px-4 py-3" />

@@ -3,14 +3,16 @@ import { FieldValue } from "firebase-admin/firestore";
 import { isAdminRequest } from "@/lib/admin-auth";
 import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_BYTES, type AllowedImageType } from "@/lib/analysis";
 import { analyzeChart, AnalysisRefusedError } from "@/lib/claude";
-import { availableCredits, creditPeriod } from "@/lib/plans";
+import { availableCredits, creditPeriod, MAX_CALL_COST_EUR, MONTHLY_BUDGET_EUR } from "@/lib/plans";
 import { adminBucket, adminDb } from "@/lib/firebase-admin";
 import { getRequestUid } from "@/lib/server-auth";
 import { TEST_ANALYSIS } from "@/lib/test-analysis";
+import { monthSpend } from "@/lib/usage-cost";
 
 export const maxDuration = 120;
 
 const NO_CREDITS_MESSAGE = "Plus de crédits d'analyse disponibles.";
+const BUDGET_MESSAGE = "Quota mensuel d'analyses atteint. Il sera rechargé le 1er du mois prochain.";
 
 const error = (message: string, status: number) => Response.json({ error: message }, { status });
 
@@ -37,18 +39,29 @@ export async function POST(request: Request) {
 
   const userRef = adminDb.collection("users").doc(uid);
   const userSnap = await userRef.get();
-  if (availableCredits(userSnap.data() ?? {}) < 1) return error(NO_CREDITS_MESSAGE, 402);
+  const userData = userSnap.data() ?? {};
+  if (availableCredits(userData) < 1) return error(NO_CREDITS_MESSAGE, 402);
+  // Hard monthly ceiling on AI spend per customer, whatever the credits say. The admin is exempt.
+  if (monthSpend(userData) + MAX_CALL_COST_EUR > MONTHLY_BUDGET_EUR && !(await isAdminRequest(request))) {
+    return error(BUDGET_MESSAGE, 402);
+  }
 
   let result: Awaited<ReturnType<typeof analyzeChart>>;
   const bytes = Buffer.from(await image.arrayBuffer());
   try {
     result = await analyzeChart(bytes.toString("base64"), image.type as AllowedImageType, note || undefined);
   } catch (err) {
-    if (err instanceof AnalysisRefusedError) return error("L'IA n'a pas pu analyser cette image.", 422);
+    if (err instanceof AnalysisRefusedError) {
+      await recordSpend(userRef, err.costEur);
+      return error("L'IA n'a pas pu analyser cette image.", 422);
+    }
     if (err instanceof Anthropic.RateLimitError) return error("Service saturé, réessayez dans un instant.", 503);
     console.error("analyze failed", err);
     return error("L'analyse a échoué. Aucun crédit n'a été débité.", 502);
   }
+
+  // Every call counts toward the monthly budget, even one that is not charged a credit.
+  await recordSpend(userRef, result.costEur);
 
   // Only charge for a usable chart; re-check credits inside the transaction to avoid double spending.
   const charged = result.analysis.is_chart;
@@ -85,4 +98,16 @@ export async function POST(request: Request) {
   }
 
   return Response.json({ id: analysisRef.id, analysis: result.analysis, charged });
+}
+
+/** Adds a call's cost to the user's spend for the current month (reset when the month changes). */
+async function recordSpend(userRef: FirebaseFirestore.DocumentReference, costEur: number) {
+  try {
+    await adminDb.runTransaction(async (tx) => {
+      const spent = monthSpend((await tx.get(userRef)).data() ?? {});
+      tx.set(userRef, { spendEur: spent + costEur, spendPeriod: creditPeriod() }, { merge: true });
+    });
+  } catch (err) {
+    console.error("spend tracking failed", err);
+  }
 }
