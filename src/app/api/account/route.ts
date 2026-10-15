@@ -1,4 +1,4 @@
-import { adminAuth, adminDb } from "@/lib/firebase-admin";
+import { adminAuth, adminBucket, adminDb } from "@/lib/firebase-admin";
 import { getRequestUid } from "@/lib/server-auth";
 import { getStripe } from "@/lib/stripe";
 
@@ -25,6 +25,11 @@ export async function DELETE(request: Request) {
   }
 
   await adminDb.recursiveDelete(userRef); // profile + analyses history
+  try {
+    await adminBucket().deleteFiles({ prefix: `users/${uid}/` }); // their chart screenshots
+  } catch (err) {
+    console.error("screenshot cleanup failed", err);
+  }
   await adminDb.collection("reviews").doc(uid).delete();
   await adminAuth.deleteUser(uid);
 

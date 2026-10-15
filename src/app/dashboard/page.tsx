@@ -16,7 +16,9 @@ import { TourPopover } from "@/components/dashboard/tour";
 import { Logo } from "@/components/logo";
 import { ReviewPrompt } from "@/components/review-prompt";
 import type { ChartAnalysis } from "@/lib/analysis";
+import { getDownloadURL, ref } from "firebase/storage";
 import { isAdminUser } from "@/lib/admin";
+import { storage } from "@/lib/firebase";
 import { availableCredits, MONTHLY_CREDITS, PLAN_LABELS } from "@/lib/plans";
 import { subscribeUserProfile, type UserProfile } from "@/lib/users";
 
@@ -107,6 +109,15 @@ export default function DashboardPage() {
     scrollTop();
   }
 
+  // Reopen a saved analysis; its screenshot (when stored) loads just after the report.
+  function openStored(item: StoredAnalysis) {
+    show({ analysis: item, imageUrl: null, id: item.id });
+    if (!item.imagePath) return;
+    getDownloadURL(ref(storage, item.imagePath))
+      .then((url) => setCurrent((current) => (current?.id === item.id ? { ...current, imageUrl: url } : current)))
+      .catch(() => {});
+  }
+
   const credits = profile ? availableCredits(profile) : null;
 
   if (loading || !user) {
@@ -124,7 +135,7 @@ export default function DashboardPage() {
       history={history}
       activeId={current?.id ?? null}
       onNew={startNew}
-      onSelect={(item: StoredAnalysis) => show({ analysis: item, imageUrl: null, id: item.id })}
+      onSelect={openStored}
       onAccount={() => {
         setView("account");
         setDrawerOpen(false);
@@ -282,7 +293,7 @@ export default function DashboardPage() {
               {/* Open by default until the first analysis. */}
               <CaptureGuide defaultOpen={history?.length === 0} />
 
-              <RecentAnalyses items={history} onSelect={(item: StoredAnalysis) => show({ analysis: item, imageUrl: null, id: item.id })} />
+              <RecentAnalyses items={history} onSelect={openStored} />
             </>
           )}
 

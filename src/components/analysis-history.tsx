@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import type { ChartAnalysis } from "@/lib/analysis";
 import { db } from "@/lib/firebase";
 
-export type StoredAnalysis = ChartAnalysis & { id: string; createdAt?: Timestamp };
+export type StoredAnalysis = ChartAnalysis & { id: string; createdAt?: Timestamp; imagePath?: string };
 
 /** The user's latest analyses, refetched whenever refreshKey changes. */
 export function useAnalysisHistory(uid: string | null, refreshKey: number) {

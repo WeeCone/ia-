@@ -4,7 +4,7 @@ import { isAdminRequest } from "@/lib/admin-auth";
 import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_BYTES, type AllowedImageType } from "@/lib/analysis";
 import { analyzeChart, AnalysisRefusedError } from "@/lib/claude";
 import { availableCredits, creditPeriod } from "@/lib/plans";
-import { adminDb } from "@/lib/firebase-admin";
+import { adminBucket, adminDb } from "@/lib/firebase-admin";
 import { getRequestUid } from "@/lib/server-auth";
 import { TEST_ANALYSIS } from "@/lib/test-analysis";
 
@@ -40,9 +40,9 @@ export async function POST(request: Request) {
   if (availableCredits(userSnap.data() ?? {}) < 1) return error(NO_CREDITS_MESSAGE, 402);
 
   let result: Awaited<ReturnType<typeof analyzeChart>>;
+  const bytes = Buffer.from(await image.arrayBuffer());
   try {
-    const base64 = Buffer.from(await image.arrayBuffer()).toString("base64");
-    result = await analyzeChart(base64, image.type as AllowedImageType, note || undefined);
+    result = await analyzeChart(bytes.toString("base64"), image.type as AllowedImageType, note || undefined);
   } catch (err) {
     if (err instanceof AnalysisRefusedError) return error("L'IA n'a pas pu analyser cette image.", 422);
     if (err instanceof Anthropic.RateLimitError) return error("Service saturé, réessayez dans un instant.", 503);
@@ -71,6 +71,17 @@ export async function POST(request: Request) {
       return error(NO_CREDITS_MESSAGE, 402);
     }
     throw err;
+  }
+
+  // Keep the screenshot so the history can show it annotated again. Best effort: the analysis is already saved.
+  if (result.analysis.is_chart) {
+    const imagePath = `users/${uid}/analyses/${analysisRef.id}.${image.type.split("/")[1]}`;
+    try {
+      await adminBucket().file(imagePath).save(bytes, { contentType: image.type, resumable: false });
+      await analysisRef.update({ imagePath });
+    } catch (err) {
+      console.error("screenshot upload failed", err);
+    }
   }
 
   return Response.json({ id: analysisRef.id, analysis: result.analysis, charged });

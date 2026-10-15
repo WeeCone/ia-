@@ -10,7 +10,7 @@ export const COMPANY = {
   email: "[À COMPLÉTER : email de contact]",
 };
 
-export const LAST_UPDATED = "11 octobre 2026";
+export const LAST_UPDATED = "15 octobre 2026";
 
 export const LEGAL_LINKS = [
   { href: "/legal/mentions", label: "Mentions légales" },

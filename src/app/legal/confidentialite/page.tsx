@@ -19,7 +19,8 @@ export default function ConfidentialitePage() {
         </li>
         <li>
           <strong>Analyses</strong> : les captures d&apos;écran que vous importez, le contexte éventuel que vous saisissez, et
-          les résultats d&apos;analyse.
+          les résultats d&apos;analyse. Les captures sont conservées avec votre historique pour que vous puissiez les revoir
+          annotées ; elles sont effacées avec votre compte.
         </li>
         <li>
           <strong>Avis</strong> : la note, le commentaire et votre accord de publication, si vous choisissez de laisser un avis.
@@ -42,12 +43,11 @@ export default function ConfidentialitePage() {
       <h2>Sous-traitants</h2>
       <ul>
         <li>
-          <strong>Google (Firebase)</strong> — authentification, base de données, hébergement.
+          <strong>Google (Firebase)</strong> — authentification, base de données, stockage des captures, hébergement.
         </li>
         <li>
-          <strong>Anthropic</strong> — analyse des images par intelligence artificielle. Les captures sont transmises pour
-          traitement au moment de l&apos;analyse ; elles ne sont pas conservées par {COMPANY.brand} après l&apos;analyse, seul le
-          résultat l&apos;est.
+          <strong>Anthropic</strong> — analyse des images par intelligence artificielle. Les captures lui sont transmises pour
+          traitement au moment de l&apos;analyse ; {COMPANY.brand} conserve la capture et le résultat dans votre historique.
         </li>
         <li>
           <strong>Stripe</strong> — paiement et gestion des abonnements.
