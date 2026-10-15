@@ -42,9 +42,11 @@ export default function Home() {
       <main id="contenu" className="flex-1">
         {/* Hero */}
         <section className="relative isolate -mt-20 overflow-hidden pt-20">
-          {/* Wall Street behind a white veil (photo supplied by the owner). */}
-          <Image src="/media/hero-wallstreet.jpg" alt="" fill priority sizes="100vw" className="-z-20 object-cover object-[50%_35%]" />
-          <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(246_248_250/0.78)_0%,rgb(246_248_250/0.7)_40%,rgb(246_248_250/0.9)_75%,var(--background)_100%)]" aria-hidden />
+          {/* Wall Street's bull on the right, fading into the page (photo supplied by the owner). */}
+          <div className="pointer-events-none absolute inset-y-0 right-0 -z-20 w-full sm:w-[58%] [mask-image:linear-gradient(to_right,transparent,black_45%)]" aria-hidden>
+            <Image src="/media/hero-bull.jpg" alt="" fill priority sizes="(min-width: 640px) 58vw, 100vw" className="object-cover object-[55%_45%] opacity-[0.22] sm:opacity-[0.38]" />
+          </div>
+          <div className="absolute inset-x-0 bottom-0 -z-10 h-1/3 bg-[linear-gradient(180deg,transparent,var(--background))]" aria-hidden />
           <div className="absolute -top-40 left-1/2 -z-10 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-brand/15 blur-[120px]" aria-hidden />
           <div className="mx-auto max-w-6xl px-4 pb-14 pt-14 text-center sm:pt-20">
             <h1 className="display mx-auto max-w-5xl text-[2.6rem] leading-[0.98] tracking-[-0.035em] [text-shadow:0_2px_28px_var(--background)] sm:text-7xl lg:text-[5.25rem]">
