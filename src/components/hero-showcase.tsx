@@ -1,11 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
 import { DEMO_ANALYSIS } from "@/lib/demo";
-import { prepareImage } from "@/lib/image";
-import { savePendingChart } from "@/lib/pending-chart";
-import { useAuth } from "./auth-provider";
+import { useChartIntake } from "@/hooks/use-chart-intake";
 import { DemoChart } from "./demo-chart";
 import { TiltCard } from "./tilt-card";
 
@@ -65,39 +61,7 @@ function Rays() {
 
 /** Landing-page centrepiece: raw chart → drop zone → annotated result. A dropped chart is carried to the dashboard. */
 export function HeroShowcase() {
-  const router = useRouter();
-  const { user } = useAuth();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [dragging, setDragging] = useState(false);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  async function take(file: File | undefined | null) {
-    if (!file || busy) return;
-    setError(null);
-    setBusy(true);
-    try {
-      await savePendingChart(await prepareImage(file));
-      router.push(user ? "/dashboard" : "/auth/signup");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Impossible de lire cette image.");
-      setBusy(false);
-    }
-  }
-
-  // One paste listener for the page's lifetime, always calling the latest `take`.
-  const takeRef = useRef(take);
-  useEffect(() => {
-    takeRef.current = take;
-  });
-  useEffect(() => {
-    const onPaste = (event: ClipboardEvent) => {
-      const pasted = event.clipboardData?.files[0];
-      if (pasted?.type.startsWith("image/")) takeRef.current(pasted);
-    };
-    window.addEventListener("paste", onPaste);
-    return () => window.removeEventListener("paste", onPaste);
-  }, []);
+  const { dragging, busy, error, dropProps, pick, input } = useChartIntake();
 
   const { bullish, confidence } = DEMO_ANALYSIS;
 
@@ -106,7 +70,7 @@ export function HeroShowcase() {
       {/* Glowing frame; the before/after cards overhang it on large screens. */}
       <div className="relative rounded-3xl bg-linear-to-br from-brand/60 via-brand/20 to-accent/70 p-px shadow-[0_0_60px_-10px_rgb(0_210_255/0.45),0_0_120px_-30px_rgb(0_245_160/0.4)]">
         <div className="rounded-3xl bg-[linear-gradient(180deg,rgb(22_27_34/0.92),rgb(11_14_20/0.92))] px-4 pb-6 pt-5 backdrop-blur-md sm:px-6 lg:px-8">
-          <p className="text-center font-display text-xl font-semibold text-foreground/80 sm:text-2xl">Bienvenue sur Scanzivo</p>
+          <p className="text-center font-display text-xl font-semibold text-foreground/80 sm:text-2xl">Avant / après : ce que Scanzivo trace sur votre capture</p>
 
           <div className="mt-5 grid items-center gap-5 xl:-mx-24 lg:grid-cols-[1fr_1.15fr_1fr] lg:gap-8">
             {/* Before */}
@@ -122,16 +86,7 @@ export function HeroShowcase() {
             {/* Drop zone */}
             <div className="order-1 lg:order-2">
               <div
-                onDragOver={(event) => {
-                  event.preventDefault();
-                  setDragging(true);
-                }}
-                onDragLeave={() => setDragging(false)}
-                onDrop={(event) => {
-                  event.preventDefault();
-                  setDragging(false);
-                  take(event.dataTransfer.files[0]);
-                }}
+                {...dropProps}
                 className={`relative overflow-hidden rounded-2xl border-2 border-dashed transition-colors ${
                   dragging ? "border-accent bg-accent/10" : "border-muted/40 bg-background/40 hover:border-brand"
                 }`}
@@ -142,7 +97,7 @@ export function HeroShowcase() {
                 />
                 <button
                   type="button"
-                  onClick={() => inputRef.current?.click()}
+                  onClick={pick}
                   disabled={busy}
                   className="flex min-h-56 w-full flex-col items-center justify-center gap-4 p-6 text-center"
                 >
@@ -173,7 +128,7 @@ export function HeroShowcase() {
                 Ou{" "}
                 <button
                   type="button"
-                  onClick={() => inputRef.current?.click()}
+                  onClick={pick}
                   className="underline decoration-muted/50 underline-offset-4 hover:text-brand"
                 >
                   choisissez une image
@@ -184,7 +139,7 @@ export function HeroShowcase() {
                   {error}
                 </p>
               )}
-              <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={(event) => take(event.target.files?.[0])} />
+              <input {...input} />
             </div>
 
             {/* After */}

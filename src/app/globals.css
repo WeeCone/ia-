@@ -249,6 +249,19 @@ body {
   }
 }
 
+/* Platforms band: two copies of the list slide by exactly one copy's width, so the loop is seamless. */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+/* Gentle float for the phone and the asset badges around it. */
+@keyframes float {
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
 /* FAQ answers unfold instead of jumping open (progressive enhancement). */
 :root {
   interpolate-size: allow-keywords;

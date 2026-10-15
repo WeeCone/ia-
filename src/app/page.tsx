@@ -1,10 +1,13 @@
-import Link from "next/link";
 import { DemoVideo } from "@/components/demo-video";
 import { Faq } from "@/components/faq";
 import { HeroScene } from "@/components/hero-scene";
+import { DropBar } from "@/components/drop-bar";
 import { HeroShowcase } from "@/components/hero-showcase";
+import { PhoneShowcase } from "@/components/phone-showcase";
+import { PlatformMarquee } from "@/components/platform-marquee";
 import { PriceNote } from "@/components/price-note";
 import { PricingPlans } from "@/components/pricing-plans";
+import { RotatingWord } from "@/components/rotating-word";
 import { ScanCta } from "@/components/scan-cta";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -12,25 +15,16 @@ import { Testimonials } from "@/components/testimonials";
 import { TrustStrip } from "@/components/trust-strip";
 import { DEMO_ANALYSIS } from "@/lib/demo";
 
-const MARKETS = ["Crypto", "Forex", "Actions", "Indices", "Matières premières"];
-
 const steps = [
   { title: "Capturez", text: "Un screenshot de votre graphique, sur n'importe quelle plateforme : TradingView, Binance, MetaTrader…" },
   { title: "Déposez", text: "Glissez l'image ou collez-la avec Ctrl+V. Ajoutez un mot de contexte si vous voulez." },
-  { title: "Décidez", text: "Un verdict clair : le scénario le plus probable, avec entrée, stop et objectifs. Ou « attendre » quand le signal n'y est pas." },
+  {
+    title: "Décidez",
+    text: "Un verdict clair : le scénario le plus probable, avec entrée, stop et objectifs. Ou « attendre » quand le signal n'y est pas.",
+  },
 ];
 
-function Feature({
-  title,
-  text,
-  children,
-  className = "",
-}: {
-  title: string;
-  text: string;
-  children: React.ReactNode;
-  className?: string;
-}) {
+function Feature({ title, text, children, className = "" }: { title: string; text: string; children: React.ReactNode; className?: string }) {
   return (
     <li className={`panel group flex flex-col overflow-hidden p-6 transition-colors hover:border-brand/40 ${className}`}>
       <h3 className="display text-xl">{title}</h3>
@@ -48,44 +42,57 @@ export default function Home() {
       <SiteHeader />
       <main id="contenu" className="flex-1">
         {/* Hero */}
-        <section className="relative isolate overflow-hidden">
+        <section className="relative isolate -mt-20 overflow-hidden pt-20">
           <div className="grid-bg absolute inset-0 -z-10" aria-hidden />
           <HeroScene />
           <div className="absolute -top-40 left-1/2 -z-10 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-brand/15 blur-[120px]" aria-hidden />
-          <div className="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pt-16">
-            <h1 className="display text-center text-4xl [text-shadow:0_2px_28px_rgb(11_14_20/0.95)] sm:text-6xl">Analyse technique propulsée par l&apos;IA</h1>
-            <div className="mt-10 sm:mt-12">
-              <HeroShowcase />
+          <div className="mx-auto max-w-6xl px-4 pb-14 pt-14 text-center sm:pt-20">
+            <h1 className="display mx-auto max-w-5xl text-[2.6rem] leading-[0.98] tracking-[-0.035em] [text-shadow:0_2px_28px_rgb(11_14_20/0.95)] sm:text-7xl lg:text-[5.25rem]">
+              L&apos;IA qui lit vos graphiques
+              <br />
+              et tranche sur <RotatingWord words={["la crypto", "le forex", "l\u2019or", "les indices", "les actions"]} />
+            </h1>
+            <p className="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl">
+              Une capture d&apos;écran, un verdict clair et un plan chiffré : entrée, stop, objectifs. En moins d&apos;une minute.
+            </p>
+            <div className="mt-10">
+              <DropBar />
             </div>
-            <div className="mx-auto mt-16 max-w-3xl text-center">
-              <p className="text-lg leading-relaxed text-muted sm:text-xl">
-                Transformez vos graphiques en <span className="mark font-semibold">opportunités de trading</span> depuis une simple capture : l&apos;IA repère les
-                figures chartistes, les supports et résistances, et tranche : un scénario privilégié et un plan d&apos;action chiffré, en moins d&apos;une minute.
-              </p>
-              <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-                <ScanCta className="btn-primary text-base">Scanner un graphique →</ScanCta>
-                <Link href="/pricing" className="btn-secondary text-base">
-                  Voir les offres
-                </Link>
-              </div>
-              <PriceNote className="mt-4 text-muted" />
+            <PriceNote className="mt-4 text-muted" />
+          </div>
+          <div className="mx-2 rounded-[2.5rem] border border-border/70 bg-card/40 py-8 backdrop-blur sm:mx-4">
+            <p className="mb-5 text-center text-sm text-muted">Fonctionne avec les captures de vos plateformes</p>
+            <PlatformMarquee />
+          </div>
+        </section>
+
+        {/* Before / after */}
+        <section className="scroll-mt-24">
+          <div className="mx-auto max-w-6xl px-4 py-20">
+            <HeroShowcase />
+          </div>
+        </section>
+
+        {/* Markets: the 3D phone */}
+        <section id="marches" className="scroll-mt-24 overflow-hidden">
+          <div className="mx-auto max-w-6xl px-4 pb-10 pt-6">
+            <h2 className="display mx-auto max-w-3xl text-center text-4xl leading-[1] tracking-[-0.03em] sm:text-6xl">
+              Lire un graphique n&apos;a jamais été <span className="mark">aussi simple.</span>
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl text-center text-lg text-muted">
+              Crypto, forex, or, indices : un seul verdict par graphique, ou « attendre » quand le signal n&apos;y est pas.
+            </p>
+            <div className="mt-10">
+              <PhoneShowcase />
             </div>
-            <ul className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-xs uppercase tracking-wider text-muted">
-              {MARKETS.map((market) => (
-                <li key={market} className="flex items-center gap-2">
-                  <span className="size-1.5 rounded-full bg-brand" aria-hidden />
-                  {market}
-                </li>
-              ))}
-            </ul>
           </div>
         </section>
 
         {/* Live scan video */}
-        <section id="video" className="theme-light scroll-mt-20">
+        <section id="video" className="theme-light mx-2 scroll-mt-24 rounded-[2.5rem] sm:mx-4">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <div className="mx-auto max-w-3xl text-center">
-                            <h2 className="display text-4xl sm:text-5xl">
+              <h2 className="display text-4xl sm:text-5xl">
                 Regardez Scanzivo <span className="mark">lire un graphique.</span>
               </h2>
               <p className="mt-4 text-lg text-muted">
@@ -106,7 +113,7 @@ export default function Home() {
         {/* Features — bento grid */}
         <section id="fonctionnalites" className="scroll-mt-20 border-y border-border/70 bg-surface/60">
           <div className="mx-auto max-w-6xl px-4 py-20">
-                        <h2 className="display max-w-2xl text-4xl sm:text-5xl">
+            <h2 className="display max-w-2xl text-4xl sm:text-5xl">
               Tout ce que l&apos;IA lit <span className="mark">sur votre graphique.</span>
             </h2>
             <ul className="mt-12 grid gap-5 md:grid-cols-3">
@@ -142,10 +149,7 @@ export default function Home() {
                   </text>
                 </svg>
               </Feature>
-              <Feature
-                title="Supports & résistances"
-                text="Les niveaux clés sont tracés directement sur votre capture, avec leur prix."
-              >
+              <Feature title="Supports & résistances" text="Les niveaux clés sont tracés directement sur votre capture, avec leur prix.">
                 <div className="draw-on-view w-full space-y-2 font-mono text-xs">
                   {[
                     ["65 400", "bear"],
@@ -212,10 +216,7 @@ export default function Home() {
                   </text>
                 </svg>
               </Feature>
-              <Feature
-                title="Toutes vos plateformes"
-                text="TradingView, Binance, MetaTrader… sur toutes les unités de temps."
-              >
+              <Feature title="Toutes vos plateformes" text="TradingView, Binance, MetaTrader… sur toutes les unités de temps.">
                 <div className="flex flex-wrap gap-2">
                   {["1m", "15m", "1H", "4H", "1D", "1W"].map((tf) => (
                     <span key={tf} className="chip border-border normal-case text-muted">
@@ -229,9 +230,9 @@ export default function Home() {
         </section>
 
         {/* Method */}
-        <section id="methode" className="theme-light scroll-mt-20">
+        <section id="methode" className="theme-light mx-2 scroll-mt-24 rounded-[2.5rem] sm:mx-4">
           <div className="mx-auto max-w-6xl px-4 py-20">
-                        <h2 className="display text-4xl sm:text-5xl">
+            <h2 className="display text-4xl sm:text-5xl">
               Trois étapes, <span className="mark">pas une de plus.</span>
             </h2>
             <ol className="mt-12 grid gap-5 md:grid-cols-3">
@@ -249,12 +250,14 @@ export default function Home() {
         <Testimonials />
 
         {/* Pricing */}
-        <section id="tarifs" className="theme-light scroll-mt-20">
+        <section id="tarifs" className="theme-light mx-2 scroll-mt-24 rounded-[2.5rem] sm:mx-4">
           <div className="mx-auto max-w-6xl px-4 py-20">
-                        <h2 className="display text-4xl sm:text-5xl">
+            <h2 className="display text-4xl sm:text-5xl">
               Deux offres. <span className="mark">Prix affichés.</span>
             </h2>
-            <p className="mt-5 max-w-xl text-lg text-muted">Pas d&apos;offre gratuite : un abonnement mensuel sans engagement, ou un accès à vie en un seul paiement.</p>
+            <p className="mt-5 max-w-xl text-lg text-muted">
+              Pas d&apos;offre gratuite : un abonnement mensuel sans engagement, ou un accès à vie en un seul paiement.
+            </p>
             <div className="mt-12">
               <PricingPlans />
             </div>
@@ -267,7 +270,7 @@ export default function Home() {
         <Faq />
 
         {/* Closing CTA */}
-        <section className="theme-light">
+        <section className="theme-light mx-2 mb-4 rounded-[2.5rem] sm:mx-4">
           <div className="mx-auto w-full max-w-6xl px-4 py-20">
             <div className="panel relative overflow-hidden px-6 py-16 text-center sm:px-12">
               <h2 className="display mx-auto max-w-3xl text-4xl sm:text-6xl">
