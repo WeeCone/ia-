@@ -4,7 +4,7 @@ import { signOut } from "firebase/auth";
 import type { User } from "firebase/auth";
 import Link from "next/link";
 import { useState } from "react";
-import { isAdminEmail } from "@/lib/admin";
+import { isAdminUser } from "@/lib/admin";
 import { auth } from "@/lib/firebase";
 import { MONTHLY_CREDITS } from "@/lib/plans";
 import type { UserProfile } from "@/lib/users";
@@ -121,7 +121,7 @@ export function Sidebar({ user, profile, credits, history, activeId, onNew, onSe
                 <Link href="/pricing" className="block rounded-lg px-3 py-2 text-sm hover:bg-background/60">
                   Offres et tarifs
                 </Link>
-                {isAdminEmail(user.email) && (
+                {isAdminUser(user) && (
                   <Link href="/admin" className="block rounded-lg px-3 py-2 text-sm text-brand hover:bg-background/60">
                     Administration
                   </Link>

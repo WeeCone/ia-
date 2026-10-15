@@ -3,7 +3,7 @@
 import { signOut, type User } from "firebase/auth";
 import Link from "next/link";
 import { useState } from "react";
-import { isAdminEmail } from "@/lib/admin";
+import { isAdminUser } from "@/lib/admin";
 import { auth } from "@/lib/firebase";
 import type { UserProfile } from "@/lib/users";
 import { BillingButton } from "../billing-button";
@@ -61,7 +61,7 @@ export function AccountMenu({ user, profile, onAccount }: { user: User; profile:
               <Link href="/pricing" className={item}>
                 Offres et tarifs
               </Link>
-              {isAdminEmail(user.email) && (
+              {isAdminUser(user) && (
                 <Link href="/admin" className={`${item} text-brand`}>
                   Administration
                 </Link>

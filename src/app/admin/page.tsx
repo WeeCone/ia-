@@ -240,8 +240,8 @@ export default function AdminPage() {
         <Logo />
         <h1 className="display text-3xl">Accès réservé</h1>
         <p className="text-muted">
-          Cet espace est réservé à l&apos;administrateur. Si c&apos;est vous, vérifiez que l&apos;adresse e-mail de votre compte est confirmée (lien
-          reçu à l&apos;inscription).
+          Cet espace est réservé à l&apos;administrateur. Si c&apos;est vous, confirmez l&apos;adresse e-mail de votre compte, ou ajoutez son identifiant
+          (UID) dans la configuration NEXT_PUBLIC_ADMIN_UIDS.
         </p>
         <Link href="/dashboard" className="btn-secondary">
           Retour au tableau de bord

@@ -24,7 +24,10 @@ env:
     value: 1:190863139139:web:b00ca34632e08b7e104ff6
     availability: [BUILD, RUNTIME]
 
-  # Comptes administrateurs (e-mails séparés par des virgules) : accès à /admin, e-mail confirmé obligatoire.
+  # Comptes administrateurs : par identifiant Firebase (UID, recommandé) et/ou par e-mail confirmé, séparés par des virgules.
+  - variable: NEXT_PUBLIC_ADMIN_UIDS
+    value: "none" # remplacer par l'UID (Firebase → Authentication → Utilisateurs)
+    availability: [BUILD, RUNTIME]
   - variable: NEXT_PUBLIC_ADMIN_EMAILS
     value: d.mougin@hotmail.com
     availability: [BUILD, RUNTIME]

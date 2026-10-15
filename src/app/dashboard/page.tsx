@@ -16,7 +16,7 @@ import { TourPopover } from "@/components/dashboard/tour";
 import { Logo } from "@/components/logo";
 import { ReviewPrompt } from "@/components/review-prompt";
 import type { ChartAnalysis } from "@/lib/analysis";
-import { isAdminEmail } from "@/lib/admin";
+import { isAdminUser } from "@/lib/admin";
 import { availableCredits, MONTHLY_CREDITS, PLAN_LABELS } from "@/lib/plans";
 import { subscribeUserProfile, type UserProfile } from "@/lib/users";
 
@@ -245,7 +245,7 @@ export default function DashboardPage() {
                 Importez une capture de graphique : Scanzivo la lit comme un analyste et vous rend deux scénarios chiffrés, avec les niveaux tracés.
               </p>
 
-              {isAdminEmail(user.email) && (
+              {isAdminUser(user) && (
                 <label className="mt-6 flex w-fit cursor-pointer items-center gap-3 rounded-xl border border-bear/40 bg-bear/5 px-4 py-2.5 text-sm">
                   <input
                     type="checkbox"
@@ -270,7 +270,7 @@ export default function DashboardPage() {
                 <ChartUploader
                   disabled={noCredits}
                   disabledNotice={disabledNotice}
-                  testMode={testMode && isAdminEmail(user.email)}
+                  testMode={testMode && isAdminUser(user)}
                   highlight={tour === 1 ? "zone" : tour === 2 ? "send" : null}
                   onAnalyzed={(outcome: AnalysisOutcome) => {
                     show({ ...outcome, id: null });
