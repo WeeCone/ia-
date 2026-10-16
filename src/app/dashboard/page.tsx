@@ -144,19 +144,12 @@ export default function DashboardPage() {
   );
 
   const noCredits = credits !== null && credits < 1;
-  const disabledNotice =
-    profile?.plan === "none" ? (
-      <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-sm text-muted">
-        Choisissez une offre pour lancer votre première analyse.
-        <Link href="/pricing" className="font-medium text-accent underline underline-offset-4">
-          Voir les offres
-        </Link>
-      </p>
-    ) : (
-      <p className="text-center text-sm text-muted">
-        Vous avez utilisé toutes vos analyses du mois. Elles seront rechargées au prochain renouvellement.
-      </p>
-    );
+  // No offer: the uploader itself turns into "choose an offer". Out of credits: a notice under it.
+  const disabledNotice = (
+    <p className="text-center text-sm text-muted">
+      Vous avez utilisé toutes vos analyses du mois. Elles seront rechargées au prochain renouvellement.
+    </p>
+  );
 
   return (
     <div className="theme-light flex flex-1">
@@ -284,6 +277,7 @@ export default function DashboardPage() {
                 <ChartUploader
                   disabled={noCredits}
                   disabledNotice={disabledNotice}
+                  needsOffer={profile?.plan === "none"}
                   testMode={testMode && isAdminUser(user)}
                   highlight={tour === 1 ? "zone" : tour === 2 ? "send" : null}
                   onAnalyzed={(outcome: AnalysisOutcome) => {

@@ -1,11 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { ChartAnalysis } from "@/lib/analysis";
 import { auth } from "@/lib/firebase";
 import { checkCapture } from "@/lib/capture-check";
 import { prepareImage } from "@/lib/image";
-import { takePendingChart } from "@/lib/pending-chart";
+import { savePendingChart, takePendingChart } from "@/lib/pending-chart";
+import { MONTHLY_CREDITS, OFFERS } from "@/lib/plans";
 import { FormError } from "./auth-card";
 import { LogoMark } from "./logo";
 
@@ -15,6 +17,8 @@ type Props = {
   disabled: boolean;
   /** Shown under the composer when analysing is not possible (no offer, no credits left). */
   disabledNotice?: React.ReactNode;
+  /** No offer yet: the action becomes "choose an offer" (the capture is kept for after payment) instead of a disabled button. */
+  needsOffer?: boolean;
   /** Admin test mode: canned report, no model call, no credit. */
   testMode?: boolean;
   /** Onboarding tour: which part of the composer to spotlight. */
@@ -42,7 +46,8 @@ function ArrowIcon() {
 }
 
 /** The analysis panel: drop or pick a screenshot, add context, analyse. Shows progress while the analysis runs. */
-export function ChartUploader({ disabled, disabledNotice, testMode = false, highlight = null, onAnalyzed }: Props) {
+export function ChartUploader({ disabled, disabledNotice, needsOffer = false, testMode = false, highlight = null, onAnalyzed }: Props) {
+  const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -189,14 +194,21 @@ export function ChartUploader({ disabled, disabledNotice, testMode = false, high
   }
 
   const canSend = Boolean(file) && !preparing && (!disabled || testMode);
+  const offerFirst = needsOffer && !testMode;
+
+  // Keep the chosen capture in the tab so it is back in the composer after checkout.
+  async function chooseOffer() {
+    if (file) await savePendingChart(file);
+    router.push("/pricing");
+  }
   const addContext = (tag: string) => setNote((current) => (current.includes(tag) ? current : current ? `${current}, ${tag}` : tag));
 
   return (
     <div>
       <div className="panel overflow-hidden">
         <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-3">
-          <span className="label text-muted">Nouvelle analyse</span>
-          <span className="font-mono text-[11px] text-muted">1 analyse = 1 crédit</span>
+          <span className="label whitespace-nowrap text-muted">Nouvelle analyse</span>
+          <span className="whitespace-nowrap font-mono text-[11px] text-muted">1 analyse = 1 crédit</span>
         </div>
 
         <div className="grid gap-5 p-5 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
@@ -212,7 +224,7 @@ export function ChartUploader({ disabled, disabledNotice, testMode = false, high
               setDragging(false);
               pick(event.dataTransfer.files[0]);
             }}
-            className={`relative grid min-h-64 place-items-center overflow-hidden rounded-xl border-2 border-dashed transition-all ${
+            className={`relative grid min-h-64 place-items-center overflow-hidden rounded-xl border-2 transition-all ${preview ? "" : "border-dashed"} ${
               dragging
                 ? "border-accent bg-accent/10"
                 : highlight === "zone"
@@ -301,21 +313,35 @@ export function ChartUploader({ disabled, disabledNotice, testMode = false, high
               </div>
             )}
             {file && advice?.length === 0 && <p className="text-xs text-bull">✓ Capture nette et de bonne taille</p>}
-            <button
-              type="button"
-              onClick={submit}
-              disabled={!canSend}
-              className={`btn-primary mt-auto w-full ${highlight === "send" ? "ring-4 ring-accent/40 ring-offset-2 ring-offset-card" : ""}`}
-            >
-              {testMode ? "Tester (sans IA, gratuit)" : error && file ? "Réessayer" : "Analyser (1 crédit)"} <ArrowIcon />
-            </button>
+            {offerFirst ? (
+              <div className="mt-auto space-y-3">
+                <p className="text-sm leading-relaxed text-muted">
+                  {file ? "Votre capture est prête. " : ""}Choisissez une offre pour lancer l&apos;analyse :{" "}
+                  <span className="whitespace-nowrap font-medium text-foreground">{OFFERS.monthly.price.replace(" ", "\u00a0")}/mois</span> ou{" "}
+                  <span className="whitespace-nowrap font-medium text-foreground">{OFFERS.lifetime.price.replace(" ", "\u00a0")} à vie</span>, {MONTHLY_CREDITS} analyses par mois.
+                  {file ? " Elle vous attendra ici après le paiement." : ""}
+                </p>
+                <button type="button" onClick={chooseOffer} className="btn-primary w-full">
+                  Choisir une offre et analyser <ArrowIcon />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={submit}
+                disabled={!canSend}
+                className={`btn-primary mt-auto w-full ${highlight === "send" ? "ring-4 ring-accent/40 ring-offset-2 ring-offset-card" : ""}`}
+              >
+                {testMode ? "Tester (sans IA, gratuit)" : error && file ? "Réessayer" : "Analyser (1 crédit)"} <ArrowIcon />
+              </button>
+            )}
           </div>
         </div>
       </div>
 
       <div className="mt-3 space-y-2">
         <FormError message={error} />
-        {disabled && !testMode && disabledNotice}
+        {disabled && !offerFirst && !testMode && disabledNotice}
       </div>
 
       <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(event) => pick(event.target.files?.[0])} />
