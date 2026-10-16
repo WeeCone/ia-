@@ -31,9 +31,10 @@ export function LogoMark({ className = "size-9" }: { className?: string }) {
   );
 }
 
-export function Logo() {
+/** Wordmark linking home; pass the localized home path ("/en"…). */
+export function Logo({ href = "/" }: { href?: string }) {
   return (
-    <Link href="/" className="flex items-center gap-2.5" aria-label="Scanzivo, accueil">
+    <Link href={href} className="flex items-center gap-2.5" aria-label="Scanzivo">
       <LogoMark className="size-9 drop-shadow-[0_0_12px_rgb(0_210_255/0.45)]" />
       <span className="font-logo text-xl uppercase tracking-tight">Scanzivo</span>
     </Link>

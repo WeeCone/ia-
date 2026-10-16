@@ -3,6 +3,9 @@ import { adminDb } from "@/lib/firebase-admin";
 import type { Offer } from "@/lib/plans";
 import { getRequestUid } from "@/lib/server-auth";
 import { appUrl, getStripe, withBillingErrors } from "@/lib/stripe";
+import { localePath } from "@/i18n/config";
+import { DICTIONARIES } from "@/i18n/dictionaries";
+import { requestLocale } from "@/i18n/server";
 
 const PRICES: Record<Offer, string | undefined> = {
   monthly: process.env.STRIPE_PRICE_MONTHLY,
@@ -20,19 +23,21 @@ async function customerExists(id: string) {
 }
 
 async function handler(request: Request) {
+  const locale = requestLocale(request);
+  const text = DICTIONARIES[locale].api;
   const uid = await getRequestUid(request);
-  if (!uid) return Response.json({ error: "Session expirée, reconnectez-vous." }, { status: 401 });
+  if (!uid) return Response.json({ error: text.sessionExpired }, { status: 401 });
 
   const { offer, embedded = false } = (await request.json().catch(() => ({}))) as { offer?: Offer; embedded?: boolean };
   if (offer !== "monthly" && offer !== "lifetime") {
-    return Response.json({ error: "Offre inconnue." }, { status: 400 });
+    return Response.json({ error: text.unknownOffer }, { status: 400 });
   }
 
   const userRef = adminDb.collection("users").doc(uid);
   const user = await userRef.get();
   // Monthly → lifetime is allowed: the webhook stops the subscription once lifetime access is paid.
   if (user.get("plan") === "lifetime" || (user.get("plan") === "monthly" && offer === "monthly")) {
-    return Response.json({ error: "Vous avez déjà un accès actif." }, { status: 409 });
+    return Response.json({ error: text.alreadyActive }, { status: 409 });
   }
 
   const stripe = getStripe();
@@ -50,24 +55,26 @@ async function handler(request: Request) {
   }
 
   const base = appUrl(request);
+  // Back to the dashboard in the language the customer paid in.
+  const dashboard = `${base}${localePath(locale, "/dashboard")}`;
   // The webhook resolves the user from this metadata (subscription invoices, or the one-off checkout session).
   const metadata = { uid, offer };
   const session = await stripe.checkout.sessions.create({
     customer: customerId,
     client_reference_id: uid,
     line_items: [{ price: PRICES[offer], quantity: 1 }],
-    locale: "fr",
+    locale,
     // Embedded: Stripe's form opens inside the site and sends the page to return_url once paid.
     ...(embedded
-      ? { ui_mode: "embedded_page" as const, return_url: `${base}/dashboard?checkout=success` }
-      : { success_url: `${base}/dashboard?checkout=success`, cancel_url: `${base}/dashboard` }),
+      ? { ui_mode: "embedded_page" as const, return_url: `${dashboard}?checkout=success` }
+      : { success_url: `${dashboard}?checkout=success`, cancel_url: dashboard }),
     metadata,
     // Express consent required by art. L221-28 13° Code de la consommation for immediate digital access.
     // Needs a Terms of Service URL set in Stripe (Settings → Public details) pointing to /legal/cgv.
     consent_collection: { terms_of_service: "required" },
     custom_text: {
       terms_of_service_acceptance: {
-        message: `J'accepte les [conditions générales](${base}/legal/cgv), je demande l'accès immédiat au service et je renonce à mon droit de rétractation.`,
+        message: text.checkoutConsent(`${base}${localePath(locale, "/legal/cgv")}`),
       },
     },
     ...(offer === "monthly"

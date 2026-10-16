@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { prepareImage } from "@/lib/image";
 import { savePendingChart } from "@/lib/pending-chart";
+import { useI18n } from "@/i18n/client";
 
 /**
  * Takes a chart screenshot from the landing page (drop, file picker or paste) and carries it to the dashboard,
@@ -12,6 +13,7 @@ import { savePendingChart } from "@/lib/pending-chart";
  */
 export function useChartIntake({ listenPaste = false }: { listenPaste?: boolean } = {}) {
   const router = useRouter();
+  const { t, href } = useI18n();
   const { user } = useAuth();
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
@@ -23,10 +25,10 @@ export function useChartIntake({ listenPaste = false }: { listenPaste?: boolean 
     setError(null);
     setBusy(true);
     try {
-      await savePendingChart(await prepareImage(file));
-      router.push(user ? "/dashboard" : "/auth/signup");
+      await savePendingChart(await prepareImage(file, t.image));
+      router.push(href(user ? "/dashboard" : "/auth/signup"));
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Impossible de lire cette image.");
+      setError(err instanceof Error ? err.message : t.intake.readError);
       setBusy(false);
     }
   }

@@ -1,3 +1,7 @@
+"use client";
+
+import { useI18n } from "@/i18n/client";
+
 // "What makes a good capture": a good/bad pair of mini charts, a checklist and how-tos per platform.
 
 const RISING = [62, 58, 60, 54, 50, 52, 46, 42, 44, 38, 34, 36, 30, 26, 28, 24];
@@ -51,20 +55,14 @@ function BadCapture() {
   );
 }
 
-const CHECKS = [
-  "Des bougies, pas une simple courbe",
-  "L'axe des prix lisible, à droite",
-  "Le nom de l'actif et l'unité de temps visibles en haut",
-  "50 à 150 bougies : ni trop zoomé, ni trop dézoomé",
-  "Vos indicateurs utiles (RSI, volume, moyennes mobiles) si vous en avez",
-];
-
 export function CaptureGuide({ defaultOpen = false }: { defaultOpen?: boolean }) {
+  const { t } = useI18n();
+  const g = t.captureGuide;
   return (
     <details className="panel group mt-4" open={defaultOpen}>
       <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-3.5 text-sm font-medium [&::-webkit-details-marker]:hidden">
         <span>
-          Comment faire une bonne capture ? <span className="text-muted">La qualité de l&apos;analyse en dépend.</span>
+          {g.title} <span className="text-muted">{g.subtitle}</span>
         </span>
         <span className="shrink-0 font-display text-xl leading-none text-brand transition-transform group-open:rotate-45" aria-hidden>
           +
@@ -77,8 +75,8 @@ export function CaptureGuide({ defaultOpen = false }: { defaultOpen?: boolean })
               <GoodCapture />
             </div>
             <figcaption className="mt-2 text-xs">
-              <span className="font-semibold text-bull">✓ Bonne capture</span>
-              <span className="block text-muted">Bougies, axe des prix, actif et unité de temps.</span>
+              <span className="font-semibold text-bull">{g.good}</span>
+              <span className="block text-muted">{g.goodHint}</span>
             </figcaption>
           </figure>
           <figure>
@@ -86,14 +84,14 @@ export function CaptureGuide({ defaultOpen = false }: { defaultOpen?: boolean })
               <BadCapture />
             </div>
             <figcaption className="mt-2 text-xs">
-              <span className="font-semibold text-bear">✗ À éviter</span>
-              <span className="block text-muted">Simple courbe floue, sans prix ni actif.</span>
+              <span className="font-semibold text-bear">{g.bad}</span>
+              <span className="block text-muted">{g.badHint}</span>
             </figcaption>
           </figure>
         </div>
         <div className="space-y-4 text-sm">
           <ul className="space-y-1.5">
-            {CHECKS.map((check) => (
+            {g.checks.map((check) => (
               <li key={check} className="flex gap-2">
                 <span className="text-bull" aria-hidden>
                   ✓
@@ -103,18 +101,11 @@ export function CaptureGuide({ defaultOpen = false }: { defaultOpen?: boolean })
             ))}
           </ul>
           <div className="space-y-2 rounded-xl border border-border bg-background/50 p-3 text-xs leading-relaxed text-muted">
-            <p>
-              <span className="font-semibold text-foreground">TradingView (ordinateur)</span> : icône appareil photo en haut du graphique →
-              « Copier l&apos;image », puis Ctrl+V ici.
-            </p>
-            <p>
-              <span className="font-semibold text-foreground">Windows / Mac</span> : Win+Maj+S ou Cmd+Maj+4 pour capturer une zone, puis Ctrl+V
-              (Cmd+V) ici.
-            </p>
-            <p>
-              <span className="font-semibold text-foreground">Téléphone</span> : graphique en paysage, en bougies, puis capture d&apos;écran. Évitez
-              de photographier un écran.
-            </p>
+            {g.howTo.map(({ name, text }) => (
+              <p key={name}>
+                <span className="font-semibold text-foreground">{name}</span> : {text}
+              </p>
+            ))}
           </div>
         </div>
       </div>

@@ -3,11 +3,14 @@ import { adminAuth, adminBucket, adminDb } from "@/lib/firebase-admin";
 import { getRequestUid } from "@/lib/server-auth";
 import { getStripe } from "@/lib/stripe";
 import { REVIEWS_TAG } from "@/lib/testimonials";
+import { DICTIONARIES } from "@/i18n/dictionaries";
+import { requestLocale } from "@/i18n/server";
 
 /** Deletes the caller's account: stops billing, erases Firestore data, then the Firebase Auth user. */
 export async function DELETE(request: Request) {
+  const text = DICTIONARIES[requestLocale(request)].api;
   const uid = await getRequestUid(request);
-  if (!uid) return Response.json({ error: "Session expirée, reconnectez-vous." }, { status: 401 });
+  if (!uid) return Response.json({ error: text.sessionExpired }, { status: 401 });
 
   const userRef = adminDb.collection("users").doc(uid);
   const user = await userRef.get();
@@ -20,7 +23,7 @@ export async function DELETE(request: Request) {
     } catch (err) {
       console.error("subscription cancel failed", err);
       return Response.json(
-        { error: "Impossible de résilier votre abonnement pour le moment. Réessayez ou contactez-nous." },
+        { error: text.cancelFailed },
         { status: 502 },
       );
     }

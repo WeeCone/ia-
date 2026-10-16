@@ -7,14 +7,14 @@ const REENCODE_ABOVE = 3 * 1024 * 1024;
  * Makes any image the browser can decode (including phone photos and HEIC on Safari) uploadable:
  * oversized or unsupported files are downscaled and re-encoded as JPEG.
  */
-export async function prepareImage(file: File): Promise<File> {
+export async function prepareImage(file: File, messages: { unreadable: string; tooLarge: string }): Promise<File> {
   const supported = ALLOWED_IMAGE_TYPES.includes(file.type as AllowedImageType);
 
   let bitmap: ImageBitmap;
   try {
     bitmap = await createImageBitmap(file);
   } catch {
-    throw new Error("Impossible de lire cette image. Utilisez un fichier PNG, JPEG ou WebP.");
+    throw new Error(messages.unreadable);
   }
 
   const longEdge = Math.max(bitmap.width, bitmap.height);
@@ -31,6 +31,6 @@ export async function prepareImage(file: File): Promise<File> {
   bitmap.close();
 
   const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.9));
-  if (!blob || blob.size > MAX_IMAGE_BYTES) throw new Error("Image trop lourde, même après compression.");
+  if (!blob || blob.size > MAX_IMAGE_BYTES) throw new Error(messages.tooLarge);
   return new File([blob], file.name.replace(/\.\w+$/, "") + ".jpg", { type: "image/jpeg" });
 }

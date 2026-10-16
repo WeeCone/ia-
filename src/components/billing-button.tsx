@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { redirectToBilling } from "@/lib/billing-client";
+import { useI18n } from "@/i18n/client";
 import { EMBEDDED_CHECKOUT, openCheckout } from "@/lib/offers-client";
 import type { Offer } from "@/lib/plans";
 
@@ -9,6 +10,7 @@ type Props = { route: "checkout" | "portal"; offer?: Offer; className?: string; 
 
 export function BillingButton({ route, offer, className = "btn-primary", block = false, children }: Props) {
   const [pending, setPending] = useState(false);
+  const { t, locale } = useI18n();
   const [error, setError] = useState<string | null>(null);
 
   async function handleClick() {
@@ -20,9 +22,9 @@ export function BillingButton({ route, offer, className = "btn-primary", block =
     setPending(true);
     setError(null);
     try {
-      await redirectToBilling(route, offer);
+      await redirectToBilling(route, offer, locale);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Paiement indisponible pour le moment.");
+      setError(err instanceof Error ? err.message : t.checkout.unavailable);
       setPending(false);
     }
   }
@@ -30,7 +32,7 @@ export function BillingButton({ route, offer, className = "btn-primary", block =
   return (
     <span className={`${block ? "flex" : "inline-flex"} flex-col items-stretch gap-1`}>
       <button type="button" onClick={handleClick} disabled={pending} className={className}>
-        {pending ? "Redirection…" : children}
+        {pending ? t.checkout.redirecting : children}
       </button>
       {error && <span role="alert" className="text-xs font-semibold text-bear">{error}</span>}
     </span>

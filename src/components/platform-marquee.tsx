@@ -1,3 +1,5 @@
+import { getI18n } from "@/i18n/server";
+
 // Where traders take their screenshots. Names only, set as text: compatibility, not partnership.
 const PLATFORMS = [
   "TradingView",
@@ -14,10 +16,11 @@ const PLATFORMS = [
   "Bitget",
 ];
 
-export function PlatformMarquee() {
+export async function PlatformMarquee() {
+  const { t } = await getI18n();
   return (
     <div className="group relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
-      <ul className="flex w-max animate-[marquee_38s_linear_infinite] group-hover:[animation-play-state:paused]" aria-label="Plateformes compatibles">
+      <ul className="flex w-max animate-[marquee_38s_linear_infinite] group-hover:[animation-play-state:paused]" aria-label={t.hero.platformsLabel}>
         {[...PLATFORMS, ...PLATFORMS].map((name, index) => (
           <li
             key={`${name}-${index}`}

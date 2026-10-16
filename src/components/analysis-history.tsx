@@ -1,5 +1,7 @@
 "use client";
 
+import { useI18n } from "@/i18n/client";
+import { INTL_LOCALE } from "@/i18n/config";
 import { collection, getDocs, limit, orderBy, query, type Timestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import type { ChartAnalysis } from "@/lib/analysis";
@@ -35,16 +37,17 @@ const PREVIEW_COUNT = 6;
 /** "Analyses récentes": a card grid under the composer, expandable to the full list. */
 export function RecentAnalyses({ items, onSelect }: { items: StoredAnalysis[] | null; onSelect: (item: StoredAnalysis) => void }) {
   const [expanded, setExpanded] = useState(false);
+  const { t, locale } = useI18n();
   if (!items?.length) return null;
   const shown = expanded ? items : items.slice(0, PREVIEW_COUNT);
 
   return (
     <section className="mt-14">
       <div className="flex items-end justify-between gap-4">
-        <h2 className="display text-2xl">Analyses récentes</h2>
+        <h2 className="display text-2xl">{t.history.recent}</h2>
         {items.length > PREVIEW_COUNT && (
           <button type="button" onClick={() => setExpanded((value) => !value)} className="btn-ghost text-xs">
-            {expanded ? "Réduire" : `Tout afficher (${items.length})`}
+            {expanded ? t.history.collapse : t.history.showAll(items.length)}
           </button>
         )}
       </div>
@@ -58,10 +61,10 @@ export function RecentAnalyses({ items, onSelect }: { items: StoredAnalysis[] | 
             >
               <span className="flex items-center justify-between gap-2">
                 <span className="truncate font-display text-lg font-semibold">
-                  {item.is_chart ? item.asset : "Image non reconnue"}
+                  {item.is_chart ? item.asset : t.history.notChart}
                   {item.is_chart && <span className="ml-2 font-mono text-xs font-normal text-muted">{item.timeframe}</span>}
                 </span>
-                {item.is_chart && <span className={`chip shrink-0 ${trendChip[item.trend]}`}>{item.trend}</span>}
+                {item.is_chart && <span className={`chip shrink-0 ${trendChip[item.trend]}`}>{t.enums.trend[item.trend]}</span>}
               </span>
               {item.is_chart && (
                 <span className="flex h-1.5 overflow-hidden rounded-full bg-background" aria-hidden>
@@ -70,7 +73,7 @@ export function RecentAnalyses({ items, onSelect }: { items: StoredAnalysis[] | 
                 </span>
               )}
               <span className="font-mono text-[11px] text-muted">
-                {item.createdAt?.toDate().toLocaleDateString("fr-FR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
+                {item.createdAt?.toDate().toLocaleDateString(INTL_LOCALE[locale], { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
               </span>
             </button>
           </li>
@@ -91,8 +94,9 @@ export function HistoryList({
   activeId: string | null;
   onSelect: (item: StoredAnalysis) => void;
 }) {
-  if (items === null) return <p className="px-2 py-3 text-sm text-muted">Chargement…</p>;
-  if (!items.length) return <p className="px-2 py-3 text-sm text-muted">Aucune analyse pour l&apos;instant.</p>;
+  const { t, locale } = useI18n();
+  if (items === null) return <p className="px-2 py-3 text-sm text-muted">{t.history.loading}</p>;
+  if (!items.length) return <p className="px-2 py-3 text-sm text-muted">{t.history.empty}</p>;
 
   return (
     <ul className="space-y-0.5">
@@ -108,13 +112,13 @@ export function HistoryList({
             <span className={`size-2 shrink-0 rounded-full ${item.is_chart ? trendDot[item.trend] : "bg-border"}`} aria-hidden />
             <span className="min-w-0 flex-1">
               <span className="block truncate text-sm font-medium">
-                {item.is_chart ? item.asset : "Image non reconnue"}
+                {item.is_chart ? item.asset : t.history.notChart}
                 {item.is_chart && <span className="ml-1.5 font-mono text-xs text-muted">{item.timeframe}</span>}
               </span>
               <span className="block font-mono text-[11px] text-muted">
-                {item.createdAt?.toDate().toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" })}
+                {item.createdAt?.toDate().toLocaleDateString(INTL_LOCALE[locale], { day: "2-digit", month: "2-digit", year: "numeric" })}
                 {" · "}
-                {item.createdAt?.toDate().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}
+                {item.createdAt?.toDate().toLocaleTimeString(INTL_LOCALE[locale], { hour: "2-digit", minute: "2-digit" })}
               </span>
             </span>
           </button>

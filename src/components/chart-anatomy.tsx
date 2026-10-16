@@ -1,31 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { DEMO_ANALYSIS } from "@/lib/demo";
-
-// What the AI reads, each one annotated on the capture under the same number.
-const READINGS = [
-  {
-    title: "Supports & résistances",
-    text: "Les niveaux clés sont tracés sur votre capture, à leur vraie hauteur, avec leur prix.",
-  },
-  {
-    title: "Figures chartistes",
-    text: "Triangles, doubles creux, têtes-épaules, cassures et retests : les figures visibles sont repérées et nommées.",
-  },
-  {
-    title: "Indicateurs visibles",
-    text: "RSI, MACD, moyennes mobiles, volumes : s'ils figurent sur la capture, ils comptent dans la lecture.",
-  },
-  {
-    title: "Un plan chiffré",
-    text: "Entrée, stop, objectifs et ratio gain / risque, calculés à partir des prix du graphique.",
-  },
-  {
-    title: "Un verdict, pas un « peut-être »",
-    text: "Le scénario le plus probable, formulé en action : acheter, vendre, attendre ou s'abstenir.",
-  },
-];
+import { useI18n } from "@/i18n/client";
+import { INTL_LOCALE } from "@/i18n/config";
+import { keepNumbers } from "@/i18n/format";
 
 // Price pane: 61 000 → y 250, 67 500 → y 20.
 const y = (price: number) => 250 - ((price - 61000) * 230) / 6500;
@@ -55,9 +33,9 @@ const rsiY = (value: number) => 350 - (value / 100) * 70;
 const RSI_PATH = RSI.map((v, i) => `${i ? "L" : "M"}${(18 + i * 12.6).toFixed(1)} ${rsiY(v).toFixed(1)}`).join(" ");
 
 const LEVELS = [
-  { price: 65400, label: "65 400", tone: "bear" },
-  { price: 63200, label: "63 200", tone: "bull" },
-  { price: 61800, label: "61 800", tone: "bull" },
+  { price: 65400, tone: "bear" },
+  { price: 63200, tone: "bull" },
+  { price: 61800, tone: "bull" },
 ] as const;
 
 function Marker({ n, x, y: cy }: { n: number; x: number; y: number }) {
@@ -82,7 +60,10 @@ function Marker({ n, x, y: cy }: { n: number; x: number; y: number }) {
 /** Feature section body: what the AI reads, listed on one side and annotated under the same numbers on an example capture. */
 export function ChartAnatomy() {
   const [picked, setPicked] = useState<number | null>(null);
-  const { verdict, bullish } = DEMO_ANALYSIS;
+  const { t, locale } = useI18n();
+  const f = t.features;
+  // Prices written the visitor's way: 65 400 / 65,400 / 65.400.
+  const price = (value: number) => value.toLocaleString(INTL_LOCALE[locale]);
   // Hovering or focusing a reading picks out its annotation and dims the others.
   const dim = (n: number) => `transition-opacity duration-300 ${picked !== null && picked !== n ? "opacity-15" : ""}`;
 
@@ -90,7 +71,7 @@ export function ChartAnatomy() {
     <div className="mt-12">
       <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-14">
         <ol data-reveal-stagger className="order-2 lg:order-1" onMouseLeave={() => setPicked(null)}>
-          {READINGS.map((item, i) => {
+          {f.readings.map((item, i) => {
             const lit = picked === i;
             return (
               <li key={item.title} className="border-t border-border last:border-b">
@@ -121,7 +102,7 @@ export function ChartAnatomy() {
             );
           })}
           <li className="pt-5 text-sm text-muted">
-            Fonctionne avec TradingView, Binance, MetaTrader… de la bougie 1 minute à l&apos;hebdomadaire.
+            {f.platforms}
           </li>
         </ol>
 
@@ -131,14 +112,14 @@ export function ChartAnatomy() {
               <span className="flex items-center gap-2">
                 <span className="font-semibold text-foreground">BTC/USDT</span> 4H
               </span>
-              <span>Lecture Scanzivo</span>
+              <span>{f.reading}</span>
             </div>
 
             <svg
               viewBox="0 0 600 360"
               className="block h-auto w-full"
               role="img"
-              aria-label="Exemple de capture BTC/USDT 4H annotée par Scanzivo"
+              aria-label={f.chartLabel}
             >
 
               {/* Grid */}
@@ -172,7 +153,7 @@ export function ChartAnatomy() {
                 {/* 1. Levels, with their price on the right axis */}
                 <g className={dim(0)}>
                   {LEVELS.map((level) => (
-                    <g key={level.label}>
+                    <g key={level.price}>
                       <line
                         x1="0"
                         x2="532"
@@ -192,7 +173,7 @@ export function ChartAnatomy() {
                         fontFamily="var(--font-jetbrains-mono)"
                         fill="var(--background)"
                       >
-                        {level.label}
+                        {price(level.price)}
                       </text>
                     </g>
                   ))}
@@ -220,7 +201,7 @@ export function ChartAnatomy() {
                     fontFamily="var(--font-jetbrains-mono)"
                     fill="var(--brand)"
                   >
-                    CASSURE + RETEST
+                    {f.pattern}
                   </text>
                   <Marker n={2} x={CANDLES[22].x - 90} y={y(63200) + 27} />
                 </g>
@@ -234,7 +215,7 @@ export function ChartAnatomy() {
                     RSI 14 · 64
                   </text>
                   <text x="456" y="316" fontSize="11" fontFamily="var(--font-jetbrains-mono)" fill="var(--muted)">
-                    momentum acheteur
+                    {f.momentum}
                   </text>
                   <Marker n={3} x={440} y={278} />
                 </g>
@@ -254,7 +235,7 @@ export function ChartAnatomy() {
                     fontFamily="var(--font-jetbrains-mono)"
                     fill="var(--bull)"
                   >
-                    OBJ 67 000
+                    {f.target} {price(67000)}
                   </text>
                   <text
                     x="492"
@@ -264,7 +245,7 @@ export function ChartAnatomy() {
                     fontFamily="var(--font-jetbrains-mono)"
                     fill="var(--bull)"
                   >
-                    OBJ 66 600
+                    {f.target} {price(66600)}
                   </text>
                   <text
                     x="492"
@@ -274,7 +255,7 @@ export function ChartAnatomy() {
                     fontFamily="var(--font-jetbrains-mono)"
                     fill="var(--bear)"
                   >
-                    STOP 64 300
+                    {f.stop} {price(64300)}
                   </text>
                   <Marker n={4} x={492} y={y(67000) - 16} />
                 </g>
@@ -290,17 +271,17 @@ export function ChartAnatomy() {
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="rounded bg-bull px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-background">
-                      {verdict.action}
+                      {f.action}
                     </span>
-                    <span className="whitespace-nowrap font-mono text-xs text-bull">Scénario haussier · {bullish.probability} %</span>
+                    <span className="whitespace-nowrap font-mono text-xs text-bull">{f.scenario} · 62 %</span>
                   </div>
-                  <p className="mt-2 text-sm font-medium leading-snug">{verdict.headline.replace(/(\d) (\d)/g, "$1\u00a0$2")}</p>
+                  <p className="mt-2 text-sm font-medium leading-snug">{keepNumbers(f.headline)}</p>
                 </div>
               </div>
             </div>
           </div>
           <figcaption className="mt-3 text-center text-xs text-muted">
-            Exemple illustratif, chiffres fictifs. Ce n&apos;est pas un conseil en investissement.
+            {t.common.illustrative} {t.common.notAdvice}
           </figcaption>
         </figure>
       </div>

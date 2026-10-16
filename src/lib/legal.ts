@@ -10,10 +10,11 @@ export const COMPANY = {
   email: "[À COMPLÉTER : email de contact]",
 };
 
-export const LAST_UPDATED = "15 octobre 2026";
+/** Date of the current legal texts (all languages). */
+export const LAST_UPDATED = new Date("2026-10-15T12:00:00Z");
 
 export const LEGAL_LINKS = [
-  { href: "/legal/mentions", label: "Mentions légales" },
-  { href: "/legal/cgv", label: "CGV / CGU" },
-  { href: "/legal/confidentialite", label: "Confidentialité" },
+  { href: "/legal/mentions", key: "mentions" },
+  { href: "/legal/cgv", key: "terms" },
+  { href: "/legal/confidentialite", key: "privacy" },
 ] as const;

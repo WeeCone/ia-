@@ -4,7 +4,9 @@ const MIN_HEIGHT = 400;
 // Calibrated on sample captures: sharp TradingView exports score 220-270, a heavily blurred one about 50.
 const SHARPNESS_MIN = 80;
 
-export async function checkCapture(file: File): Promise<string[]> {
+export type CaptureAdviceText = { small: (width: number, height: number) => string; portrait: string; uniform: string; blurry: string };
+
+export async function checkCapture(file: File, text: CaptureAdviceText): Promise<string[]> {
   let bitmap: ImageBitmap;
   try {
     bitmap = await createImageBitmap(file);
@@ -15,10 +17,10 @@ export async function checkCapture(file: File): Promise<string[]> {
   const advice: string[] = [];
 
   if (width < MIN_WIDTH || height < MIN_HEIGHT) {
-    advice.push(`Image petite (${width} × ${height} px) : l'axe des prix risque d'être illisible. Capturez le graphique en plein écran.`);
+    advice.push(text.small(width, height));
   }
   if (width / height < 0.9) {
-    advice.push("Capture en hauteur : tournez le téléphone en paysage pour montrer plus d'historique.");
+    advice.push(text.portrait);
   }
 
   // Sharpness on a small grayscale copy.
@@ -44,8 +46,8 @@ export async function checkCapture(file: File): Promise<string[]> {
     }
     edges.sort((a, b) => b - a);
     const sharp = edges.length ? edges[Math.floor(edges.length * 0.02)] : 255;
-    if (sharp < 10) advice.push("Image presque uniforme : vérifiez que le graphique est bien visible sur la capture.");
-    else if (sharp < SHARPNESS_MIN) advice.push("Image floue : faites une capture d'écran plutôt qu'une photo de l'écran, et évitez de zoomer dessus.");
+    if (sharp < 10) advice.push(text.uniform);
+    else if (sharp < SHARPNESS_MIN) advice.push(text.blurry);
   }
   bitmap.close();
   return advice;

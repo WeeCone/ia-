@@ -25,6 +25,9 @@ export const OFFERS: Record<Offer, { name: string; price: string; period: string
   lifetime: { name: "À vie", price: "180 €", period: "paiement unique" },
 };
 
+/** Prices in euros (display; keep in sync with Stripe). Format with formatEur() for the visitor's language. */
+export const OFFER_PRICE_EUR: Record<Offer, number> = { monthly: 40, lifetime: 180 };
+
 export const PLAN_LABELS: Record<Plan, string> = { none: "Aucune offre", monthly: "Mensuel", lifetime: "À vie" };
 
 /** Month key ("2026-10") used to refill lifetime credits once per calendar month. */

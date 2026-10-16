@@ -23,7 +23,8 @@ import { OfferDialog } from "@/components/dashboard/offer-dialog";
 import { redirectToBilling } from "@/lib/billing-client";
 import { EMBEDDED_CHECKOUT, hasPendingOffer, onOpenCheckout, onOpenOffers, openCheckout, openOffers, takePendingOffer } from "@/lib/offers-client";
 import { hasPendingChart } from "@/lib/pending-chart";
-import { availableCredits, MONTHLY_CREDITS, PLAN_LABELS } from "@/lib/plans";
+import { availableCredits, MONTHLY_CREDITS } from "@/lib/plans";
+import { useI18n } from "@/i18n/client";
 import { subscribeUserProfile, type UserProfile } from "@/lib/users";
 
 const TOUR_KEY = "scanzivo-tour-done";
@@ -40,6 +41,8 @@ type Current = {
 export default function DashboardPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const { t, locale, href } = useI18n();
+  const d = t.dashboard;
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [current, setCurrent] = useState<Current | null>(null);
   const [view, setView] = useState<"analyze" | "account">("analyze");
@@ -64,7 +67,7 @@ export default function DashboardPage() {
   );
 
   useEffect(() => {
-    if (!loading && !user) router.replace("/auth/login");
+    if (!loading && !user) router.replace(href("/auth/login"));
   }, [loading, user, router]);
 
   useEffect(() => {
@@ -85,7 +88,7 @@ export default function DashboardPage() {
         const timer = setTimeout(() => openCheckout(offer), 0);
         return () => clearTimeout(timer);
       }
-      redirectToBilling("checkout", offer).catch(() => {
+      redirectToBilling("checkout", offer, locale).catch(() => {
         setRedirecting(false);
         setOffersOpen(true);
       });
@@ -161,7 +164,7 @@ export default function DashboardPage() {
   const credits = profile ? availableCredits(profile) : null;
 
   if (loading || !user) {
-    return <div className="theme-light label flex flex-1 items-center justify-center text-muted">Chargement…</div>;
+    return <div className="theme-light label flex flex-1 items-center justify-center text-muted">{d.loading}</div>;
   }
 
   const firstName = (user.displayName || "").split(" ")[0];
@@ -187,7 +190,7 @@ export default function DashboardPage() {
   // No offer: the uploader itself turns into "choose an offer". Out of credits: a notice under it.
   const disabledNotice = (
     <p className="text-center text-sm text-muted">
-      Vous avez utilisé toutes vos analyses du mois. Elles seront rechargées au prochain renouvellement.
+      {d.outOfCredits}
     </p>
   );
 
@@ -205,7 +208,7 @@ export default function DashboardPage() {
           <button
             type="button"
             className="absolute inset-0 bg-background/70 backdrop-blur-sm"
-            aria-label="Fermer le menu"
+            aria-label={d.closeMenu}
             onClick={() => setDrawerOpen(false)}
           />
           <aside className="absolute inset-y-0 left-0 w-72 max-w-[85vw] border-r border-border bg-surface">{sidebar}</aside>
@@ -220,40 +223,40 @@ export default function DashboardPage() {
               <button
                 type="button"
                 onClick={() => setDrawerOpen(true)}
-                aria-label="Ouvrir le menu"
+                aria-label={d.openMenu}
                 className="grid size-9 place-items-center rounded-lg border border-border"
               >
                 <svg viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden>
                   <path d="M3 5h14M3 10h14M3 15h14" />
                 </svg>
               </button>
-              <Logo />
+              <Logo href={href("/")} />
             </div>
-            <p className="label hidden text-muted lg:block">{view === "account" ? "Mon compte" : current ? "Rapport d'analyse" : "Analyse"}</p>
+            <p className="label hidden text-muted lg:block">{view === "account" ? d.viewAccount : current ? d.viewReport : d.viewAnalyse}</p>
             <div className="flex items-center gap-2 sm:gap-3">
               {current && view === "analyze" && (
                 <button type="button" onClick={startNew} className="btn-secondary hidden px-4 py-2 sm:inline-flex">
-                  Nouvelle analyse +
+                  {d.newAnalysis}
                 </button>
               )}
               {profile?.plan === "none" && (
                 <button type="button" onClick={openOffers} className="btn-primary hidden px-4 py-2 sm:inline-flex">
-                  Choisir une offre
+                  {d.chooseOffer}
                 </button>
               )}
               {/* Credits: count + gauge */}
               <div
                 className="flex items-center gap-2.5 whitespace-nowrap rounded-full border border-border bg-card/70 py-1.5 pl-3 pr-3.5 lg:hidden"
-                title={`${credits ?? "–"} crédits restants ce mois-ci`}
+                title={d.creditsLeft(String(credits ?? "–"))}
               >
                 <span className="hidden h-1.5 w-16 overflow-hidden rounded-full bg-border sm:block" aria-hidden>
                   <span className="block h-full rounded-full bg-accent" style={{ width: `${gauge}%` }} />
                 </span>
                 <span className="font-mono text-xs">
                   {credits ?? "–"}
-                  <span className="text-muted"> crédits</span>
+                  <span className="text-muted">{d.credits}</span>
                 </span>
-                {profile && <span className="hidden font-mono text-[11px] text-muted md:inline">· {PLAN_LABELS[profile.plan]}</span>}
+                {profile && <span className="hidden font-mono text-[11px] text-muted md:inline">· {t.plans[profile.plan]}</span>}
               </div>
               <div className="lg:hidden">
                 <AccountMenu user={user} profile={profile} onAccount={() => setView("account")} />
@@ -266,11 +269,9 @@ export default function DashboardPage() {
         {checkoutDone && (
           <div className="flex items-center gap-3 border-b border-bull/30 bg-bull/10 px-4 py-2.5 text-sm text-bull">
             <p className="mx-auto w-full max-w-6xl flex-1">
-              {profile && profile.plan !== "none"
-                ? "Paiement confirmé. Vos crédits sont disponibles."
-                : "Paiement reçu, activation de votre offre en cours…"}
+              {profile && profile.plan !== "none" ? d.paymentConfirmed : d.paymentPending}
             </p>
-            <button type="button" onClick={() => setCheckoutDone(false)} aria-label="Fermer" className="px-1 text-lg leading-none">
+            <button type="button" onClick={() => setCheckoutDone(false)} aria-label={t.common.close} className="px-1 text-lg leading-none">
               ×
             </button>
           </div>
@@ -286,10 +287,11 @@ export default function DashboardPage() {
           ) : (
             <>
               <h1 className="display text-4xl sm:text-5xl">
-                Salut{firstName ? "," : ""} <span className="mark">{firstName || "et bienvenue"}</span>
+                {d.hello}
+                {firstName ? "," : ""} <span className="mark">{firstName || d.welcome}</span>
               </h1>
               <p className="mt-3 max-w-2xl text-lg text-muted">
-                Importez une capture de graphique : Scanzivo la lit comme un analyste et vous rend un plan d&apos;action chiffré sur le scénario le plus probable, avec les niveaux tracés.
+                {d.intro}
               </p>
 
               {isAdminUser(user) && (
@@ -306,8 +308,8 @@ export default function DashboardPage() {
                     className="size-4 accent-bear"
                   />
                   <span>
-                    <span className="font-semibold text-bear">Mode test (admin)</span>
-                    <span className="text-muted"> : rapport d&apos;exemple, sans appeler l&apos;IA ni débiter de crédit</span>
+                    <span className="font-semibold text-bear">{d.testMode}</span>
+                    <span className="text-muted">{d.testModeHint}</span>
                   </span>
                 </label>
               )}
@@ -342,7 +344,7 @@ export default function DashboardPage() {
       {tour > 0 && (
         <button
           type="button"
-          aria-label="Passer la visite"
+          aria-label={d.skipTour}
           onClick={endTour}
           className="fixed inset-0 z-40 cursor-default bg-background/75 backdrop-blur-[2px]"
         />
@@ -351,7 +353,7 @@ export default function DashboardPage() {
       <OfferDialog open={offersOpen} onClose={() => setOffersOpen(false)} plan={profile?.plan ?? null} hasCapture={offersOpen && hasPendingChart()} />
       {redirecting && !checkoutDone && plan !== "lifetime" && (
         <div role="status" className="fixed inset-0 z-50 grid place-items-center bg-background/85 backdrop-blur-sm">
-          <p className="label text-muted">Redirection vers le paiement sécurisé…</p>
+          <p className="label text-muted">{d.redirecting}</p>
         </div>
       )}
     </div>

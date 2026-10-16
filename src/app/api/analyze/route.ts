@@ -9,31 +9,33 @@ import { getRequestUid } from "@/lib/server-auth";
 import { recordActivity } from "@/lib/activity";
 import { TEST_ANALYSIS } from "@/lib/test-analysis";
 import { monthSpend } from "@/lib/usage-cost";
+import { DICTIONARIES } from "@/i18n/dictionaries";
+import { requestLocale } from "@/i18n/server";
 
 export const maxDuration = 120;
-
-const NO_CREDITS_MESSAGE = "Plus de crédits d'analyse disponibles.";
-const BUDGET_MESSAGE = "Quota mensuel d'analyses atteint. Il sera rechargé le 1er du mois prochain.";
 
 const error = (message: string, status: number) => Response.json({ error: message }, { status });
 
 export async function POST(request: Request) {
+  // The report and every message come back in the customer's language.
+  const locale = requestLocale(request);
+  const text = DICTIONARIES[locale].api;
   const uid = await getRequestUid(request);
-  if (!uid) return error("Session expirée, reconnectez-vous.", 401);
+  if (!uid) return error(text.sessionExpired, 401);
 
   const form = await request.formData();
   const image = form.get("image");
   const note = String(form.get("note") ?? "").trim().slice(0, 500);
 
-  if (!(image instanceof File)) return error("Aucune image reçue.", 400);
+  if (!(image instanceof File)) return error(text.noImage, 400);
   if (!ALLOWED_IMAGE_TYPES.includes(image.type as AllowedImageType)) {
-    return error("Format non supporté (PNG, JPEG, WebP ou GIF).", 400);
+    return error(text.badFormat, 400);
   }
-  if (image.size > MAX_IMAGE_BYTES) return error("Image trop lourde (5 Mo maximum).", 400);
+  if (image.size > MAX_IMAGE_BYTES) return error(text.tooLarge, 400);
 
   // Admin test mode: canned report, no model call, no credit, nothing stored.
   if (form.get("test") === "1") {
-    if (!(await isAdminRequest(request))) return error("Mode test réservé à l'administrateur.", 403);
+    if (!(await isAdminRequest(request))) return error(text.testOnly, 403);
     await new Promise((resolve) => setTimeout(resolve, 4000)); // lets the progress screen show
     return Response.json({ id: null, analysis: TEST_ANALYSIS, charged: false, test: true });
   }
@@ -41,24 +43,24 @@ export async function POST(request: Request) {
   const userRef = adminDb.collection("users").doc(uid);
   const userSnap = await userRef.get();
   const userData = userSnap.data() ?? {};
-  if (availableCredits(userData) < 1) return error(NO_CREDITS_MESSAGE, 402);
+  if (availableCredits(userData) < 1) return error(text.noCredits, 402);
   // Hard monthly ceiling on AI spend per customer, whatever the credits say. The admin is exempt.
   if (monthSpend(userData) + MAX_CALL_COST_EUR > MONTHLY_BUDGET_EUR && !(await isAdminRequest(request))) {
-    return error(BUDGET_MESSAGE, 402);
+    return error(text.budget, 402);
   }
 
   let result: Awaited<ReturnType<typeof analyzeChart>>;
   const bytes = Buffer.from(await image.arrayBuffer());
   try {
-    result = await analyzeChart(bytes.toString("base64"), image.type as AllowedImageType, note || undefined);
+    result = await analyzeChart(bytes.toString("base64"), image.type as AllowedImageType, note || undefined, locale);
   } catch (err) {
     if (err instanceof AnalysisRefusedError) {
       await recordSpend(userRef, err.costEur);
-      return error("L'IA n'a pas pu analyser cette image.", 422);
+      return error(text.refused, 422);
     }
-    if (err instanceof Anthropic.RateLimitError) return error("Service saturé, réessayez dans un instant.", 503);
+    if (err instanceof Anthropic.RateLimitError) return error(text.busy, 503);
     console.error("analyze failed", err);
-    return error("L'analyse a échoué. Aucun crédit n'a été débité.", 502);
+    return error(text.failed, 502);
   }
 
   // Every call counts toward the monthly budget, even one that is not charged a credit.
@@ -82,7 +84,7 @@ export async function POST(request: Request) {
     });
   } catch (err) {
     if (err instanceof Error && err.message === "NO_CREDITS") {
-      return error(NO_CREDITS_MESSAGE, 402);
+      return error(text.noCredits, 402);
     }
     throw err;
   }

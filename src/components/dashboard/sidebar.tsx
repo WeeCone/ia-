@@ -9,6 +9,7 @@ import { isAdminUser } from "@/lib/admin";
 import { auth } from "@/lib/firebase";
 import { MONTHLY_CREDITS } from "@/lib/plans";
 import type { UserProfile } from "@/lib/users";
+import { useI18n } from "@/i18n/client";
 import { HistoryList, type StoredAnalysis } from "../analysis-history";
 import { BillingButton } from "../billing-button";
 import { Logo } from "../logo";
@@ -35,33 +36,35 @@ function initials(user: User) {
 }
 
 function PlanCard({ profile }: { profile: UserProfile | null }) {
+  const { t } = useI18n();
   if (!profile) return null;
   if (profile.plan === "none") {
     return (
       <div className="rounded-xl border border-accent/30 bg-accent/5 p-3">
-        <p className="text-sm font-medium">Aucune offre active</p>
-        <p className="mt-0.5 text-xs text-muted">Choisissez une offre pour lancer vos analyses.</p>
+        <p className="text-sm font-medium">{t.account.noOffer}</p>
+        <p className="mt-0.5 text-xs text-muted">{t.account.noOfferHint}</p>
         <button type="button" onClick={openOffers} className="btn-primary mt-3 w-full px-3 py-2 text-xs">
-          Choisir une offre +
+          {t.account.chooseOffer}
         </button>
       </div>
     );
   }
   return (
     <div className="rounded-xl border border-border bg-card/70 p-3">
-      <p className="text-sm font-medium">{profile.plan === "monthly" ? "Formule mensuelle" : "Accès à vie"}</p>
-      <p className="mt-0.5 text-xs text-muted">{MONTHLY_CREDITS} analyses par mois</p>
+      <p className="text-sm font-medium">{profile.plan === "monthly" ? t.account.monthlyPlan : t.account.lifetimePlan}</p>
+      <p className="mt-0.5 text-xs text-muted">{t.account.perMonth(MONTHLY_CREDITS)}</p>
     </div>
   );
 }
 
 function CreditsGauge({ credits }: { credits: number | null }) {
+  const { t } = useI18n();
   const value = credits ?? 0;
   const filled = Math.round((Math.min(value, MONTHLY_CREDITS) / MONTHLY_CREDITS) * 10);
   return (
     <div className="px-1">
       <p className="flex items-center justify-between text-xs">
-        <span className="text-muted">Crédits</span>
+        <span className="text-muted">{t.account.credits}</span>
         <span className="font-mono text-foreground">
           {credits ?? "–"} <span className="text-muted">/ {MONTHLY_CREDITS}</span>
         </span>
@@ -78,20 +81,22 @@ function CreditsGauge({ credits }: { credits: number | null }) {
 /** App-style dashboard sidebar: new analysis, history, plan, credits and account menu. */
 export function Sidebar({ user, profile, credits, history, activeId, onNew, onSelect, onAccount }: Props) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { t, href } = useI18n();
+  const a = t.account;
 
   return (
     <div className="flex h-full flex-col">
       <div className="px-4 pb-4 pt-5">
-        <Logo />
+        <Logo href={href("/")} />
       </div>
       <div className="px-3">
         <button type="button" onClick={onNew} className="btn-primary w-full">
-          Nouvelle analyse +
+          {a.newAnalysis}
         </button>
       </div>
 
-      <nav className="mt-6 min-h-0 flex-1 overflow-y-auto px-3" aria-label="Historique des analyses">
-        <p className="label px-2 pb-2 text-muted">Historique</p>
+      <nav className="mt-6 min-h-0 flex-1 overflow-y-auto px-3" aria-label={a.historyLabel}>
+        <p className="label px-2 pb-2 text-muted">{a.history}</p>
         <HistoryList items={history} activeId={activeId} onSelect={onSelect} />
       </nav>
 
@@ -102,7 +107,7 @@ export function Sidebar({ user, profile, credits, history, activeId, onNew, onSe
         <div className="relative">
           {menuOpen && (
             <>
-              <button type="button" className="fixed inset-0 z-10 cursor-default" aria-label="Fermer le menu" onClick={() => setMenuOpen(false)} />
+              <button type="button" className="fixed inset-0 z-10 cursor-default" aria-label={a.closeMenu} onClick={() => setMenuOpen(false)} />
               <div className="absolute inset-x-0 bottom-full z-20 mb-2 overflow-hidden rounded-xl border border-border bg-card p-1 shadow-2xl">
                 <button
                   type="button"
@@ -112,19 +117,19 @@ export function Sidebar({ user, profile, credits, history, activeId, onNew, onSe
                   }}
                   className="w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-background/60"
                 >
-                  Mon compte
+                  {a.myAccount}
                 </button>
                 {profile?.plan === "monthly" && (
                   <BillingButton route="portal" block className="w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-background/60">
-                    Mon abonnement
+                    {a.mySubscription}
                   </BillingButton>
                 )}
-                <Link href="/pricing" className="block rounded-lg px-3 py-2 text-sm hover:bg-background/60">
-                  Offres et tarifs
+                <Link href={href("/pricing")} className="block rounded-lg px-3 py-2 text-sm hover:bg-background/60">
+                  {a.offers}
                 </Link>
                 {isAdminUser(user) && (
                   <Link href="/admin" className="block rounded-lg px-3 py-2 text-sm text-brand hover:bg-background/60">
-                    Administration
+                    {a.admin}
                   </Link>
                 )}
                 <button
@@ -132,7 +137,7 @@ export function Sidebar({ user, profile, credits, history, activeId, onNew, onSe
                   onClick={() => signOut(auth)}
                   className="w-full rounded-lg px-3 py-2 text-left text-sm text-bear hover:bg-background/60"
                 >
-                  Déconnexion
+                  {a.signOut}
                 </button>
               </div>
             </>
@@ -147,7 +152,7 @@ export function Sidebar({ user, profile, credits, history, activeId, onNew, onSe
               {initials(user)}
             </span>
             <span className="min-w-0 flex-1">
-              <span className="block truncate text-sm font-medium">{user.displayName || "Mon compte"}</span>
+              <span className="block truncate text-sm font-medium">{user.displayName || a.myAccount}</span>
               <span className="block truncate text-xs text-muted">{user.email}</span>
             </span>
             <span className="text-muted" aria-hidden>

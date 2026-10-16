@@ -7,7 +7,9 @@ import { checkCapture } from "@/lib/capture-check";
 import { prepareImage } from "@/lib/image";
 import { openOffers } from "@/lib/offers-client";
 import { clearPendingChart, readPendingChart, savePendingChart } from "@/lib/pending-chart";
-import { OFFERS } from "@/lib/plans";
+import { OFFER_PRICE_EUR } from "@/lib/plans";
+import { useI18n } from "@/i18n/client";
+import { formatEur } from "@/i18n/format";
 import { FormError } from "./auth-card";
 import { LogoMark } from "./logo";
 
@@ -27,13 +29,6 @@ type Props = {
 };
 
 // Shown while the request runs, to make a ~30-60 s wait legible. Purely cosmetic: the model works in one pass.
-const STEPS = [
-  "Lecture de l'axe des prix",
-  "Repérage de la structure de marché",
-  "Détection des supports et résistances",
-  "Recherche de figures chartistes",
-  "Construction des scénarios",
-];
 const STEP_SECONDS = 6;
 const TRADINGVIEW_URL = "https://www.tradingview.com/chart/";
 
@@ -60,21 +55,23 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
   // Instant capture advice: null until checked, [] when nothing to flag.
   const [advice, setAdvice] = useState<string[] | null>(null);
   const handedOff = useRef(false);
+  const { t, locale } = useI18n();
+  const u = t.uploader;
 
   async function pick(candidate: File | undefined | null) {
     if (!candidate || pending) return;
     setError(null);
     setPreparing(true);
     try {
-      const ready = await prepareImage(candidate);
+      const ready = await prepareImage(candidate, t.image);
       setFile(ready);
       setPreview(URL.createObjectURL(ready));
       // Without an offer the next stop is checkout: keep this capture for the way back.
       if (needsOffer && !testMode) savePendingChart(ready);
       setAdvice(null);
-      checkCapture(ready).then(setAdvice);
+      checkCapture(ready, t.image).then(setAdvice);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Impossible de lire cette image.");
+      setError(err instanceof Error ? err.message : t.intake.readError);
     } finally {
       setPreparing(false);
     }
@@ -125,18 +122,20 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
       body.set("image", file);
       body.set("note", note);
       if (testMode) body.set("test", "1");
+      // The report is written in the visitor's language.
+      body.set("locale", locale);
       const response = await fetch("/api/analyze", {
         method: "POST",
-        headers: { Authorization: `Bearer ${await user.getIdToken()}` },
+        headers: { Authorization: `Bearer ${await user.getIdToken()}`, "X-Locale": locale },
         body,
       });
       const data = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(data.error ?? "L'analyse a échoué. Aucun crédit n'a été débité.");
+      if (!response.ok) throw new Error(data.error ?? u.failed);
       handedOff.current = true;
       clearPendingChart();
       onAnalyzed({ analysis: data.analysis, imageUrl: preview });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "L'analyse a échoué. Aucun crédit n'a été débité.");
+      setError(err instanceof Error ? err.message : u.failed);
       setPending(false);
     }
   }
@@ -150,17 +149,17 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
   }
 
   if (pending && preview) {
-    const current = Math.min(STEPS.length - 1, Math.floor(elapsed / STEP_SECONDS));
+    const current = Math.min(u.steps.length - 1, Math.floor(elapsed / STEP_SECONDS));
     return (
       <div className="panel overflow-hidden">
         <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-3">
-          <span className="label text-muted">Analyse en cours</span>
+          <span className="label text-muted">{u.inProgress}</span>
           <span className="label tabular-nums text-brand">{elapsed} s</span>
         </div>
         <div className="grid gap-6 p-5 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
           <div className="relative grid min-h-56 place-items-center overflow-hidden rounded-xl border border-border bg-background/60">
             {/* eslint-disable-next-line @next/next/no-img-element -- local object URL preview */}
-            <img src={preview} alt="Graphique en cours d'analyse" className="max-h-80 object-contain opacity-60" />
+            <img src={preview} alt={u.analysingAlt} className="max-h-80 object-contain opacity-60" />
             <div className="pointer-events-none absolute inset-0" aria-hidden>
               <div className="absolute inset-y-0 w-24 animate-[scan_2.4s_ease-in-out_infinite_alternate] bg-gradient-to-r from-transparent to-brand/40">
                 <div className="absolute inset-y-0 right-0 w-0.5 bg-brand shadow-[0_0_14px_2px_rgb(0_210_255/0.6)]" />
@@ -169,7 +168,7 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
           </div>
           <div aria-live="polite">
             <ol className="space-y-3">
-              {STEPS.map((label, index) => {
+              {u.steps.map((label, index) => {
                 const status = index < current ? "done" : index === current ? "active" : "todo";
                 return (
                   <li key={label} className={`flex items-center gap-3 text-sm ${status === "todo" ? "text-muted" : ""}`}>
@@ -189,7 +188,7 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
                 );
               })}
             </ol>
-            <p className="mt-5 text-xs text-muted">Une analyse prend généralement moins d&apos;une minute. Gardez cette page ouverte.</p>
+            <p className="mt-5 text-xs text-muted">{u.keepOpen}</p>
           </div>
         </div>
       </div>
@@ -205,8 +204,8 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
     <div>
       <div className="panel overflow-hidden">
         <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-3">
-          <span className="label whitespace-nowrap text-muted">Nouvelle analyse</span>
-          <span className="whitespace-nowrap font-mono text-[11px] text-muted">1 analyse = 1 crédit</span>
+          <span className="label whitespace-nowrap text-muted">{u.title}</span>
+          <span className="whitespace-nowrap font-mono text-[11px] text-muted">{u.cost}</span>
         </div>
 
         <div className="grid gap-5 p-5 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
@@ -235,9 +234,9 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
             {preview ? (
               <>
                 {/* eslint-disable-next-line @next/next/no-img-element -- local object URL preview */}
-                <img src={preview} alt="Aperçu du graphique" className="max-h-80 object-contain" />
+                <img src={preview} alt={u.previewAlt} className="max-h-80 object-contain" />
                 <button type="button" onClick={clear} className="label absolute right-2 top-2 rounded-lg border border-border bg-card/90 px-2 py-1 hover:border-bear hover:text-bear">
-                  Changer
+                  {u.change}
                 </button>
               </>
             ) : (
@@ -250,9 +249,9 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
                   className="flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center"
                 >
                   <LogoMark className="size-10" />
-                  <span className="display text-2xl sm:text-3xl">{preparing ? "Préparation…" : "Déposez votre capture"}</span>
-                  <span className="label hidden text-muted sm:inline">Clic · glisser-déposer · Ctrl+V</span>
-                  <span className="label text-muted sm:hidden">Touchez pour choisir une image</span>
+                  <span className="display text-2xl sm:text-3xl">{preparing ? u.preparing : u.drop}</span>
+                  <span className="label hidden text-muted sm:inline">{u.dropHint}</span>
+                  <span className="label text-muted sm:hidden">{u.tapHint}</span>
                 </button>
               </>
             )}
@@ -261,17 +260,17 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
           {/* Context + action */}
           <div className="flex flex-col gap-4">
             <label className="field">
-              <span>Contexte (optionnel)</span>
+              <span>{u.context}</span>
               <input
                 id="analysis-note"
                 value={note}
                 onChange={(event) => setNote(event.target.value)}
                 maxLength={500}
-                placeholder="Ex. : scalping 5 min, je cherche un short"
+                placeholder={u.contextPlaceholder}
               />
             </label>
-            <div className="flex flex-wrap gap-1.5" aria-label="Ajouter un style de trading au contexte">
-              {["Scalping", "Day trading", "Swing", "Long terme", "Je cherche un long", "Je cherche un short"].map((tag) => (
+            <div className="flex flex-wrap gap-1.5" aria-label={u.contextGroup}>
+              {u.tags.map((tag) => (
                 <button
                   key={tag}
                   type="button"
@@ -289,38 +288,46 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
                 rel="noopener noreferrer"
                 className="rounded-lg border border-border bg-background/60 px-3 py-1.5 text-xs font-medium text-foreground/90 transition-colors hover:border-brand/50"
               >
-                Ouvrir TradingView ↗
+                {u.openTradingView}
               </a>
               <button
                 type="button"
                 onClick={() => cameraRef.current?.click()}
                 className="rounded-lg border border-border bg-background/60 px-3 py-1.5 text-xs font-medium text-foreground/90 sm:hidden"
               >
-                Prendre une photo
+                {u.takePhoto}
               </button>
             </div>
             {file && advice && advice.length > 0 && (
               <div className="rounded-xl border border-amber-400/30 bg-amber-400/5 p-3 text-xs leading-relaxed">
-                <p className="font-semibold text-warn">À vérifier avant d&apos;analyser</p>
+                <p className="font-semibold text-warn">{u.checkTitle}</p>
                 <ul className="mt-1.5 list-disc space-y-1 pl-4 text-foreground/85">
                   {advice.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
-                <p className="mt-1.5 text-muted">Vous pouvez quand même lancer l&apos;analyse, ou changer de capture.</p>
+                <p className="mt-1.5 text-muted">{u.checkHint}</p>
               </div>
             )}
-            {file && advice?.length === 0 && <p className="text-xs text-bull">✓ Capture nette et de bonne taille</p>}
+            {file && advice?.length === 0 && <p className="text-xs text-bull">{u.captureOk}</p>}
             {offerFirst ? (
               <div className="mt-auto space-y-3">
                 <p className="text-sm leading-relaxed text-muted">
-                  {file ? "Votre capture est prête. " : ""}Choisissez une offre pour lancer l&apos;analyse :{" "}
-                  <span className="whitespace-nowrap font-medium text-foreground">{OFFERS.monthly.price.replace(" ", "\u00a0")}/mois</span> ou{" "}
-                  <span className="whitespace-nowrap font-medium text-foreground">{OFFERS.lifetime.price.replace(" ", "\u00a0")} à vie</span>.
-                  {file ? " Elle vous attendra ici après le paiement." : ""}
+                  {file ? u.offerReady : ""}
+                  {u.offerChoose}
+                  <span className="whitespace-nowrap font-medium text-foreground">
+                    {formatEur(locale, OFFER_PRICE_EUR.monthly)}
+                    {t.common.perMonth}
+                  </span>
+                  {u.offerOr}
+                  <span className="whitespace-nowrap font-medium text-foreground">
+                    {formatEur(locale, OFFER_PRICE_EUR.lifetime)}
+                    {u.offerLifetime}
+                  </span>
+                  .{file ? u.offerKept : ""}
                 </p>
                 <button type="button" onClick={openOffers} className="btn-primary w-full">
-                  Choisir une offre et analyser <ArrowIcon />
+                  {u.offerCta} <ArrowIcon />
                 </button>
               </div>
             ) : (
@@ -330,7 +337,7 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
                 disabled={!canSend}
                 className={`btn-primary mt-auto w-full ${highlight === "send" ? "ring-4 ring-accent/40 ring-offset-2 ring-offset-card" : ""}`}
               >
-                {testMode ? "Tester (sans IA, gratuit)" : error && file ? "Réessayer" : "Analyser (1 crédit)"} <ArrowIcon />
+                {testMode ? u.test : error && file ? u.retry : u.analyse} <ArrowIcon />
               </button>
             )}
           </div>

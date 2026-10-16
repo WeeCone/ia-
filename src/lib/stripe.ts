@@ -1,5 +1,7 @@
 import "server-only";
 import Stripe from "stripe";
+import { DICTIONARIES } from "@/i18n/dictionaries";
+import { requestLocale } from "@/i18n/server";
 
 let client: Stripe | null = null;
 
@@ -30,15 +32,16 @@ export function withBillingErrors(handler: (request: Request) => Promise<Respons
       return await handler(request);
     } catch (err) {
       console.error("billing route failed", err);
+      const text = DICTIONARIES[requestLocale(request)].api;
       if (err instanceof Stripe.errors.StripeError) {
-        return Response.json({ error: `Paiement indisponible (Stripe) : ${err.message}` }, { status: 502 });
+        return Response.json({ error: text.paymentStripe(err.message) }, { status: 502 });
       }
       const code = (err as { code?: unknown })?.code;
       if (code === 7 || code === "permission-denied") {
-        return Response.json({ error: "Paiement indisponible : le serveur n'a pas accès à la base de données." }, { status: 500 });
+        return Response.json({ error: text.paymentDatabase }, { status: 500 });
       }
       const message = err instanceof Error ? err.message : String(err);
-      return Response.json({ error: `Paiement indisponible : ${message}` }, { status: 500 });
+      return Response.json({ error: text.payment(message) }, { status: 500 });
     }
   };
 }

@@ -2,11 +2,13 @@
 
 import { useEffect, useRef } from "react";
 import type { Plan } from "@/lib/plans";
+import { useI18n } from "@/i18n/client";
 import { PricingPlans } from "../pricing-plans";
 
 /** The offer picker, opened inside the dashboard so choosing an offer goes straight to checkout. */
 export function OfferDialog({ open, onClose, plan, hasCapture }: { open: boolean; onClose: () => void; plan: Plan | null; hasCapture: boolean }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const { t } = useI18n();
 
   useEffect(() => {
     const dialog = ref.current;
@@ -27,15 +29,13 @@ export function OfferDialog({ open, onClose, plan, hasCapture }: { open: boolean
         <div className="flex items-start justify-between gap-4">
           <div>
             <h2 id="offer-dialog-title" className="display text-3xl sm:text-4xl">
-              {plan === "monthly" ? "Passer à l'accès à vie" : "Choisissez votre offre"}
+              {plan === "monthly" ? t.offerDialog.upgradeTitle : t.offerDialog.title}
             </h2>
             <p className="mt-2 text-muted">
-              {hasCapture
-                ? "Votre capture est gardée : elle sera prête à analyser dès votre retour du paiement."
-                : "Paiement en une minute, puis vos analyses sont disponibles aussitôt."}
+              {hasCapture ? t.offerDialog.withCapture : t.offerDialog.withoutCapture}
             </p>
           </div>
-          <button type="button" onClick={onClose} aria-label="Fermer" className="btn-ghost -mr-2 -mt-1 px-2 text-2xl leading-none">
+          <button type="button" onClick={onClose} aria-label={t.common.close} className="btn-ghost -mr-2 -mt-1 px-2 text-2xl leading-none">
             ×
           </button>
         </div>

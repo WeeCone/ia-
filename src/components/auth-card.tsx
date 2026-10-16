@@ -1,6 +1,10 @@
+"use client";
+
+import { useI18n } from "@/i18n/client";
 import { Logo } from "./logo";
 
 export function AuthCard({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
+  const { t, href } = useI18n();
   return (
     <main id="contenu" className="theme-light grid flex-1 lg:grid-cols-2">
       {/* Glowing side panel, desktop only. */}
@@ -8,16 +12,16 @@ export function AuthCard({ title, subtitle, children }: { title: string; subtitl
         <div className="grid-bg absolute inset-0 -z-10" aria-hidden />
         <div className="absolute -left-20 top-1/3 -z-10 h-96 w-96 rounded-full bg-brand/20 blur-[120px]" aria-hidden />
         <div className="absolute -right-10 bottom-0 -z-10 h-72 w-72 rounded-full bg-accent/15 blur-[110px]" aria-hidden />
-        <Logo />
+        <Logo href={href("/")} />
         <p className="display text-6xl">
-          Le graphique dit tout. <span className="mark">Encore faut-il le lire.</span>
+          {t.auth.asideTitleA} <span className="mark">{t.auth.asideTitleB}</span>
         </p>
-        <p className="label text-muted">Crypto · Forex · Actions · Indices</p>
+        <p className="label text-muted">{t.auth.asideMarkets}</p>
       </aside>
       <div className="flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-sm">
           <div className="mb-10 lg:hidden">
-            <Logo />
+            <Logo href={href("/")} />
           </div>
           <h1 className="display text-4xl">{title}</h1>
           <p className="mt-3 text-muted">{subtitle}</p>
@@ -38,10 +42,11 @@ export function FormError({ message }: { message: string | null }) {
 }
 
 export function Divider() {
+  const { t } = useI18n();
   return (
     <div className="label my-6 flex items-center gap-3 text-muted">
       <span className="h-px flex-1 bg-border" />
-      ou
+      {t.auth.or}
       <span className="h-px flex-1 bg-border" />
     </div>
   );

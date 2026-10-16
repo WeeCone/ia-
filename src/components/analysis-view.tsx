@@ -1,37 +1,41 @@
 "use client";
 
 import { useState } from "react";
+import { useI18n } from "@/i18n/client";
+import type { Dict } from "@/i18n/dictionaries";
 import { type ChartAnalysis, preferredPlan } from "@/lib/analysis";
 import { formatRatio, rewardRatios } from "@/lib/risk";
 import { AnalysisResult } from "./analysis-result";
 import { AnnotatedChart } from "./annotated-chart";
 
-function summaryText(analysis: ChartAnalysis) {
+function summaryText(analysis: ChartAnalysis, t: Dict) {
+  const w = t.report.summary;
   const scenario = (title: string, s: ChartAnalysis["bullish"], direction: "long" | "short") => {
     const ratios = rewardRatios(s, direction);
     return [
       `${title} (${Math.round(s.probability)} %) : ${s.thesis}`,
-      `Entrée ${s.entry} · Stop ${s.stop_loss} · Objectifs ${s.targets.join(" → ")}`,
-      ratios ? `Gain/risque ${ratios.map(formatRatio).join(" · ")}` : null,
-      s.invalidation ? `Invalidé si : ${s.invalidation}` : null,
+      `${w.entry} ${s.entry} · Stop ${s.stop_loss} · ${w.targets} ${s.targets.join(" → ")}`,
+      ratios ? `${w.rr} ${ratios.map(formatRatio).join(" · ")}` : null,
+      s.invalidation ? `${w.invalidated}${s.invalidation}` : null,
     ]
       .filter(Boolean)
       .join("\n");
   };
   const { bias, scenario: preferred, alternative, verdict } = preferredPlan(analysis);
+  const other = bias === "haussier" ? "baissière" : "haussière";
   return [
-    `${analysis.asset} · ${analysis.timeframe} · tendance ${analysis.trend}` +
-      (analysis.confidence ? ` · confiance ${analysis.confidence.level}` : "") +
-      (analysis.horizon ? ` · horizon ${analysis.horizon}` : ""),
-    `Plan d'action (${verdict.action}) : ${verdict.headline}` +
+    `${analysis.asset} · ${analysis.timeframe} · ${w.trend} ${t.enums.trend[analysis.trend]}` +
+      (analysis.confidence ? ` · ${w.confidence} ${t.enums.confidence[analysis.confidence.level]}` : "") +
+      (analysis.horizon ? ` · ${w.horizon} ${analysis.horizon}` : ""),
+    `${w.plan} (${t.enums.action[verdict.action]}) : ${verdict.headline}` +
       (verdict.rationale ? `\n${verdict.rationale}` : "") +
-      (verdict.change_mind ? `\nChange d'avis si : ${verdict.change_mind}` : ""),
+      (verdict.change_mind ? `\n${w.changeMind}${verdict.change_mind}` : ""),
     analysis.summary,
-    `Supports : ${analysis.supports.join(", ") || "—"} · Résistances : ${analysis.resistances.join(", ") || "—"}`,
-    scenario(`Scénario ${bias} privilégié`, preferred, bias === "haussier" ? "long" : "short"),
-    scenario(`Alternative ${bias === "haussier" ? "baissière" : "haussière"}`, alternative, bias === "haussier" ? "short" : "long"),
-    analysis.risk_notes?.length ? `Gestion du risque :\n- ${analysis.risk_notes.join("\n- ")}` : null,
-    "Analyse Scanzivo, à titre informatif. Pas un conseil en investissement.",
+    `${w.supports} : ${analysis.supports.join(", ") || "—"} · ${w.resistances} : ${analysis.resistances.join(", ") || "—"}`,
+    scenario(w.preferred(t.enums.bias[bias]), preferred, bias === "haussier" ? "long" : "short"),
+    scenario(w.alternative(t.enums.trend[other]), alternative, bias === "haussier" ? "short" : "long"),
+    analysis.risk_notes?.length ? `${w.risk}\n- ${analysis.risk_notes.join("\n- ")}` : null,
+    w.disclaimer,
   ]
     .filter(Boolean)
     .join("\n\n");
@@ -48,10 +52,11 @@ export function AnalysisView({
   onNew: () => void;
 }) {
   const [copied, setCopied] = useState(false);
+  const { t } = useI18n();
 
   async function copy() {
     try {
-      await navigator.clipboard.writeText(summaryText(analysis));
+      await navigator.clipboard.writeText(summaryText(analysis, t));
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -62,15 +67,15 @@ export function AnalysisView({
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="label text-bull">● Analyse terminée</p>
+        <p className="label text-bull">{t.report.done}</p>
         <div className="flex flex-wrap gap-3">
           {analysis.is_chart && (
             <button type="button" onClick={copy} className="btn-secondary px-4 py-2">
-              {copied ? "Copié" : "Copier le résumé"}
+              {copied ? t.report.copied : t.report.copy}
             </button>
           )}
           <button type="button" onClick={onNew} className="btn-primary px-4 py-2">
-            Nouvelle analyse
+            {t.report.newAnalysis}
           </button>
         </div>
       </div>

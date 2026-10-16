@@ -3,6 +3,7 @@ import { sendWelcomeEmail } from "@/lib/email";
 import { adminAuth, adminDb } from "@/lib/firebase-admin";
 import { getRequestUid } from "@/lib/server-auth";
 import { appUrl } from "@/lib/stripe";
+import { requestLocale } from "@/i18n/server";
 
 /** Sends the welcome email once per account, right after sign-up. */
 export async function POST(request: Request) {
@@ -20,7 +21,7 @@ export async function POST(request: Request) {
   if (!claimed) return new Response(null, { status: 204 });
 
   const { email, displayName } = await adminAuth.getUser(uid);
-  const sent = email ? await sendWelcomeEmail(email, displayName ?? null, appUrl(request)) : false;
+  const sent = email ? await sendWelcomeEmail(email, displayName ?? null, appUrl(request), requestLocale(request)) : false;
   // Release the claim so a later call can retry.
   if (!sent) await userRef.update({ welcomeEmailSentAt: FieldValue.delete() });
 

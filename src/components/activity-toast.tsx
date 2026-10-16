@@ -1,18 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useI18n } from "@/i18n/client";
 import type { Activity } from "@/lib/activity";
 
 const FIRST_DELAY = 6000;
 const SHOWN_FOR = 6500;
 const GAP = 16000;
 
-function ago(at: number) {
+function ago(at: number, text: { justNow: string; minutesAgo: (n: number) => string; hoursAgo: (n: number) => string }) {
   const minutes = Math.round((Date.now() - at) / 60000);
-  if (minutes < 1) return "à l'instant";
-  if (minutes < 60) return `il y a ${minutes} min`;
-  const hours = Math.round(minutes / 60);
-  return `il y a ${hours} h`;
+  if (minutes < 1) return text.justNow;
+  if (minutes < 60) return text.minutesAgo(minutes);
+  return text.hoursAgo(Math.round(minutes / 60));
 }
 
 /**
@@ -24,6 +24,7 @@ export function ActivityToast() {
   const [index, setIndex] = useState(-1);
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const { t } = useI18n();
 
   useEffect(() => {
     try {
@@ -71,10 +72,10 @@ export function ActivityToast() {
           <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
           <span className="relative size-2 rounded-full bg-accent" />
         </span>
-        Analyse en direct · {ago(item.at)}
+        {t.activity.live} · {ago(item.at, t.activity)}
       </p>
       <p className="mt-1.5 text-sm leading-snug">
-        Un trader vient d&apos;analyser{" "}
+        {t.activity.text}{" "}
         <span className="whitespace-nowrap font-semibold">
           {item.asset}
           {item.timeframe ? ` · ${item.timeframe}` : ""}
@@ -88,7 +89,7 @@ export function ActivityToast() {
             sessionStorage.setItem("scanzivo:activity-dismissed", "1");
           } catch {}
         }}
-        aria-label="Masquer l'activité"
+        aria-label={t.activity.hide}
         className="absolute right-1.5 top-1.5 rounded-lg px-2 py-1 text-lg leading-none text-muted hover:text-foreground"
       >
         ×

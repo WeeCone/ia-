@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/i18n/client";
 import { useEffect, useRef, useState } from "react";
 import type { LevelMark } from "@/lib/analysis";
 
@@ -18,6 +19,7 @@ function spreadLabels(marks: LevelMark[], height: number) {
 
 /** The user's own screenshot with the detected supports / resistances drawn over it. */
 export function AnnotatedChart({ imageUrl, marks }: { imageUrl: string; marks: LevelMark[] | undefined }) {
+  const { t } = useI18n();
   const [showLevels, setShowLevels] = useState(true);
   const imageRef = useRef<HTMLImageElement>(null);
   const [height, setHeight] = useState(0);
@@ -36,7 +38,7 @@ export function AnnotatedChart({ imageUrl, marks }: { imageUrl: string; marks: L
   return (
     <figure className="panel">
       <figcaption className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-3">
-        <span className="label">Votre graphique</span>
+        <span className="label">{t.report.yourChart}</span>
         {visible.length > 0 && (
           <label className="label flex cursor-pointer items-center gap-2 text-muted">
             <input
@@ -46,14 +48,14 @@ export function AnnotatedChart({ imageUrl, marks }: { imageUrl: string; marks: L
               onChange={(event) => setShowLevels(event.target.checked)}
               className="size-4 accent-brand"
             />
-            Niveaux tracés
+            {t.report.levelsToggle}
           </label>
         )}
       </figcaption>
       <div className="rounded-b-2xl bg-background/60 p-3">
         <div className="relative mx-auto w-fit">
           {/* eslint-disable-next-line @next/next/no-img-element -- local object URL */}
-          <img ref={imageRef} src={imageUrl} alt="Graphique analysé" className="block max-h-[560px] w-auto max-w-full" />
+          <img ref={imageRef} src={imageUrl} alt={t.report.chartAlt} className="block max-h-[560px] w-auto max-w-full" />
           {showLevels &&
             visible.map((mark, index) => (
               <span
@@ -77,7 +79,7 @@ export function AnnotatedChart({ imageUrl, marks }: { imageUrl: string; marks: L
       </div>
       {showLevels && visible.length > 0 && (
         <p className="border-t border-border px-5 py-2 text-xs text-muted">
-          Tracé indicatif : la position des niveaux est estimée par l&apos;IA à partir de l&apos;axe des prix.
+          {t.report.levelsNote}
         </p>
       )}
     </figure>

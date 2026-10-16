@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useI18n } from "@/i18n/client";
 
 /** Looping product demo. Browsers only autoplay muted videos, so sound is opt-in. */
 export function DemoVideo() {
   const ref = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
+  const { t } = useI18n();
 
   // The loop only plays while on screen: no decoding (or sound) for a video nobody sees.
   useEffect(() => {
@@ -41,7 +43,7 @@ export function DemoVideo() {
         loop
         playsInline
         preload="metadata"
-        aria-label="Démonstration : Scanzivo scanne un graphique BTC/USD hebdomadaire et produit un plan d'action"
+        aria-label={t.demo.videoLabel}
       >
         <source src="/media/btc-scan.webm?v=2" type="video/webm" />
         <source src="/media/btc-scan.mp4?v=2" type="video/mp4" />
@@ -65,7 +67,7 @@ export function DemoVideo() {
           <path d="M3 8v4h3l4 3V5L6 8H3z" />
           {muted ? <path d="M13.5 8l4 4M17.5 8l-4 4" /> : <path d="M13.5 7.5a3.5 3.5 0 0 1 0 5M15.5 5.5a6.5 6.5 0 0 1 0 9" />}
         </svg>
-        {muted ? "Activer le son" : "Couper le son"}
+        {muted ? t.demo.soundOn : t.demo.soundOff}
       </button>
     </div>
   );

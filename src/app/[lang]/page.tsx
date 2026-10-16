@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { ChartAnatomy } from "@/components/chart-anatomy";
 import { ActivityToast } from "@/components/activity-toast";
@@ -14,17 +15,15 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Testimonials } from "@/components/testimonials";
 import { TrustStrip } from "@/components/trust-strip";
+import { getI18n, languageAlternates } from "@/i18n/server";
 
-const steps = [
-  { title: "Capturez", text: "Un screenshot de votre graphique, sur n'importe quelle plateforme : TradingView, Binance, MetaTrader…" },
-  { title: "Déposez", text: "Glissez l'image ou collez-la avec Ctrl+V. Ajoutez un mot de contexte si vous voulez." },
-  {
-    title: "Décidez",
-    text: "Un verdict clair : le scénario le plus probable, avec entrée, stop et objectifs. Ou « attendre » quand le signal n'y est pas.",
-  },
-];
+export async function generateMetadata(): Promise<Metadata> {
+  const { locale } = await getI18n();
+  return { alternates: languageAlternates(locale, "/") };
+}
 
-export default function Home() {
+export default async function Home() {
+  const { t } = await getI18n();
   return (
     <div className="theme-light flex flex-1 flex-col">
       <SiteHeader />
@@ -39,19 +38,19 @@ export default function Home() {
           <div className="absolute -top-40 left-1/2 -z-10 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-brand/15 blur-[120px]" aria-hidden />
           <div className="mx-auto max-w-6xl px-4 pb-14 pt-14 text-center sm:pt-20">
             <h1 className="rise-in display mx-auto max-w-5xl text-[2.6rem] leading-[0.98] tracking-[-0.035em] [text-shadow:0_2px_28px_var(--background)] sm:text-7xl lg:text-[5.25rem]">
-              L&apos;IA qui lit vos graphiques
+              {t.hero.titleLine1}
               <br />
-              et décide sur <RotatingWord words={["la crypto", "le forex", "l\u2019or", "les indices", "les actions"]} />
+              {t.hero.titleLine2} <RotatingWord words={t.hero.words} />
             </h1>
             <p style={{ "--d": "0.15s" } as React.CSSProperties} className="rise-in mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl">
-              Une capture d&apos;écran, un verdict clair et un plan chiffré : entrée, stop, objectifs. En moins d&apos;une minute.
+              {t.hero.subtitle}
             </p>
             <div style={{ "--d": "0.3s" } as React.CSSProperties} className="rise-in mt-10">
               <DropBar />
             </div>
           </div>
           <div data-reveal="fade" className="mx-2 rounded-[2.5rem] border border-border/70 bg-card/40 py-8 backdrop-blur sm:mx-4">
-            <p className="mb-5 text-center text-sm text-muted">Fonctionne avec les captures de vos plateformes</p>
+            <p className="mb-5 text-center text-sm text-muted">{t.hero.platforms}</p>
             <PlatformMarquee />
           </div>
         </section>
@@ -67,9 +66,9 @@ export default function Home() {
         <section id="fonctionnalites" className="scroll-mt-24">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <h2 data-reveal="fade" className="display max-w-2xl text-4xl sm:text-5xl">
-              Tout ce que l&apos;IA lit <span className="mark">sur votre graphique.</span>
+              {t.features.titleA} <span className="mark">{t.features.titleB}</span>
             </h2>
-            <p data-reveal="fade" className="mt-5 max-w-xl text-lg leading-relaxed text-muted">Chaque point de la lecture est annoté sur la capture elle-même, au bon prix.</p>
+            <p data-reveal="fade" className="mt-5 max-w-xl text-lg leading-relaxed text-muted">{t.features.subtitle}</p>
             <ChartAnatomy />
           </div>
         </section>
@@ -78,16 +77,18 @@ export default function Home() {
         <section id="methode" className="scroll-mt-24">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <h2 data-reveal="fade" className="display text-4xl sm:text-5xl">
-              Trois étapes, <span className="mark">pas une de plus.</span>
+              {t.method.titleA} <span className="mark">{t.method.titleB}</span>
             </h2>
             {/* Progress line over the steps: it fills as the steps arrive. */}
             <div aria-hidden className="mt-12 hidden h-0.5 overflow-hidden rounded-full bg-border md:block">
               <div data-reveal="line" className="h-full bg-brand" />
             </div>
             <ol data-reveal-stagger className="mt-12 grid gap-5 md:mt-6 md:grid-cols-3">
-              {steps.map((step, index) => (
+              {t.method.steps.map((step, index) => (
                 <li key={step.title} className="panel p-6">
-                  <span className="font-mono text-sm font-medium text-brand">Étape {index + 1}</span>
+                  <span className="font-mono text-sm font-medium text-brand">
+                    {t.method.step} {index + 1}
+                  </span>
                   <h3 className="display mt-2 text-2xl">{step.title}</h3>
                   <p className="mt-2 leading-relaxed text-muted">{step.text}</p>
                 </li>
@@ -109,9 +110,11 @@ export default function Home() {
           </div>
           <div className="mx-auto max-w-6xl px-4 py-20">
             <h2 data-reveal="fade" className="display text-4xl sm:text-5xl">
-              Un prix clair. <span className="mark">Un verdict sur chaque graphique.</span>
+              {t.pricing.titleA} <span className="mark">{t.pricing.titleB}</span>
             </h2>
-            <p data-reveal="fade" className="mt-5 max-w-xl text-lg text-muted">Un accès à vie en un seul paiement, ou un abonnement mensuel sans engagement.</p>
+            <p data-reveal="fade" className="mt-5 max-w-xl text-lg text-muted">
+              {t.pricing.subtitle}
+            </p>
             <div data-reveal="fade" className="mt-12">
               <PricingPlans />
             </div>
@@ -128,10 +131,10 @@ export default function Home() {
           <div className="mx-auto w-full max-w-6xl px-4 py-20">
             <div className="panel relative overflow-hidden px-6 py-16 text-center sm:px-12">
               <h2 className="display mx-auto max-w-3xl text-4xl sm:text-6xl">
-                Arrêtez de deviner. <span className="mark">Analysez.</span>
+                {t.closing.titleA} <span className="mark">{t.closing.titleB}</span>
               </h2>
-              <p className="mx-auto mt-5 max-w-xl text-muted">Votre prochain graphique mérite un second avis, chiffré et argumenté.</p>
-              <ScanCta className="btn-primary mt-9 text-base">Scanner un graphique →</ScanCta>
+              <p className="mx-auto mt-5 max-w-xl text-muted">{t.closing.subtitle}</p>
+              <ScanCta className="btn-primary mt-9 text-base">{t.closing.cta}</ScanCta>
               <PriceNote className="mt-4 text-muted" />
             </div>
           </div>

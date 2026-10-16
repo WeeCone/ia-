@@ -3,6 +3,7 @@
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
+import { useI18n } from "@/i18n/client";
 import { FormError } from "./auth-card";
 
 const MIN_ANALYSES = 3;
@@ -16,6 +17,8 @@ export function ReviewPrompt({ uid, displayName, analysisCount }: { uid: string;
   const [consent, setConsent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const { t } = useI18n();
+  const r = t.review;
 
   useEffect(() => {
     if (analysisCount < MIN_ANALYSES) return;
@@ -33,8 +36,8 @@ export function ReviewPrompt({ uid, displayName, analysisCount }: { uid: string;
   if (state === "sent") {
     return (
       <section className="panel mt-16 border-bull/40 p-6">
-        <p className="display text-2xl text-bull">Merci pour votre avis.</p>
-        <p className="mt-2 text-sm text-muted">Il nous aide à améliorer Scanzivo.</p>
+        <p className="display text-2xl text-bull">{r.thanks}</p>
+        <p className="mt-2 text-sm text-muted">{r.thanksHint}</p>
       </section>
     );
   }
@@ -48,8 +51,8 @@ export function ReviewPrompt({ uid, displayName, analysisCount }: { uid: string;
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
-    if (!rating) return setError("Choisissez une note de 1 à 5.");
-    if (text.trim().length < 10) return setError("Écrivez au moins quelques mots.");
+    if (!rating) return setError(r.needRating);
+    if (text.trim().length < 10) return setError(r.needText);
     setPending(true);
     setError(null);
     try {
@@ -63,7 +66,7 @@ export function ReviewPrompt({ uid, displayName, analysisCount }: { uid: string;
       });
       setState("sent");
     } catch {
-      setError("Envoi impossible pour le moment. Réessayez plus tard.");
+      setError(r.failed);
       setPending(false);
     }
   }
@@ -72,23 +75,23 @@ export function ReviewPrompt({ uid, displayName, analysisCount }: { uid: string;
     <section className="panel mt-16 p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="display text-3xl">Votre avis compte</h2>
-          <p className="mt-2 text-sm text-muted">Vous avez fait {analysisCount} analyses. Qu&apos;en pensez-vous ?</p>
+          <h2 className="display text-3xl">{r.title}</h2>
+          <p className="mt-2 text-sm text-muted">{r.intro(analysisCount)}</p>
         </div>
         <button type="button" onClick={dismiss} className="btn-ghost shrink-0">
-          Plus tard
+          {r.later}
         </button>
       </div>
       <form onSubmit={submit} className="mt-6 space-y-5">
         <fieldset>
-          <legend className="label">Note</legend>
+          <legend className="label">{r.rating}</legend>
           <div className="mt-2 flex gap-2">
             {[1, 2, 3, 4, 5].map((value) => (
               <button
                 key={value}
                 type="button"
                 onClick={() => setRating(value)}
-                aria-label={`${value} sur 5`}
+                aria-label={r.stars(value)}
                 aria-pressed={rating === value}
                 className={`grid size-11 place-items-center rounded-xl border font-display text-lg transition-colors ${
                   value <= rating ? "border-accent bg-accent text-background" : "border-border bg-background text-muted hover:border-brand"
@@ -100,24 +103,24 @@ export function ReviewPrompt({ uid, displayName, analysisCount }: { uid: string;
           </div>
         </fieldset>
         <label className="field">
-          <span>Votre retour</span>
+          <span>{r.feedback}</span>
           <textarea
             id="review-text"
             value={text}
             onChange={(event) => setText(event.target.value)}
             maxLength={600}
             rows={4}
-            placeholder="Ce qui vous aide, ce qui manque…"
+            placeholder={r.placeholder}
             className="rounded-xl border border-border bg-background/80 px-3.5 py-3 font-sans text-base text-foreground outline-none placeholder:text-muted/60 focus:border-brand focus:shadow-[0_0_0_3px_rgb(0_210_255/0.2)]"
           />
         </label>
         <label className="flex items-start gap-2 text-sm text-muted">
           <input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} className="mt-0.5 size-4 accent-brand" />
-          <span>J&apos;accepte que cet avis soit publié sur le site avec mon prénom et l&apos;initiale de mon nom.</span>
+          <span>{r.consent}</span>
         </label>
         <FormError message={error} />
         <button type="submit" disabled={pending} className="btn-primary">
-          {pending ? "Envoi…" : "Envoyer mon avis"}
+          {pending ? r.sending : r.submit}
         </button>
       </form>
     </section>

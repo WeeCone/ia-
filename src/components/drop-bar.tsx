@@ -1,10 +1,12 @@
 "use client";
 
 import { useChartIntake } from "@/hooks/use-chart-intake";
+import { useI18n } from "@/i18n/client";
 
 /** The hero's main action, shaped like a search bar: drop, paste or pick a chart screenshot, then "Analyser". */
 export function DropBar() {
   const { dragging, busy, error, dropProps, pick, input } = useChartIntake({ listenPaste: true });
+  const { t } = useI18n();
 
   return (
     <div className="mx-auto w-full max-w-2xl">
@@ -35,24 +37,24 @@ export function DropBar() {
           className="min-w-0 flex-1 truncate py-2 text-left text-muted transition-colors hover:text-foreground"
         >
           {busy ? (
-            "Préparation de votre capture…"
+            t.dropBar.preparing
           ) : (
             <>
               <span className="pointer-coarse:hidden">
-                Glissez votre capture ou collez-la (<kbd className="font-mono text-sm">Ctrl+V</kbd>)
+                {t.dropBar.desktop} (<kbd className="font-mono text-sm">Ctrl+V</kbd>)
               </span>
-              <span className="hidden pointer-coarse:inline">Choisissez une capture de graphique</span>
+              <span className="hidden pointer-coarse:inline">{t.dropBar.mobile}</span>
             </>
           )}
         </button>
         <button type="button" onClick={pick} disabled={busy} className="btn-primary shrink-0 rounded-full px-6 py-3 text-base">
-          Analyser
+          {t.dropBar.analyse}
         </button>
         <input {...input} />
       </div>
       {error && (
         <p role="alert" className="mt-3 text-center text-sm text-bear">
-          {error} Essayez une capture PNG ou JPG avec l&apos;axe des prix visible.
+          {error} {t.dropBar.errorHint}
         </p>
       )}
     </div>

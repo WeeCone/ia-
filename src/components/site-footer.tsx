@@ -1,37 +1,38 @@
 import Link from "next/link";
 import { LEGAL_LINKS } from "@/lib/legal";
+import { getI18n } from "@/i18n/server";
+import { LanguageSwitcher } from "./language-switcher";
 import { Logo } from "./logo";
 
-const COLUMNS = [
-  {
-    title: "Produit",
-    links: [
-      { href: "/#fonctionnalites", label: "Fonctionnalités" },
-      { href: "/#methode", label: "Comment ça marche" },
-      { href: "/#tarifs", label: "Tarifs" },
-      { href: "/#faq", label: "FAQ" },
-    ],
-  },
-  {
-    title: "Compte",
-    links: [
-      { href: "/auth/signup", label: "Créer un compte" },
-      { href: "/auth/login", label: "Connexion" },
-      { href: "/dashboard", label: "Tableau de bord" },
-    ],
-  },
-  { title: "Légal", links: [...LEGAL_LINKS] },
-];
-
-export function SiteFooter() {
+export async function SiteFooter() {
+  const { t, href } = await getI18n();
+  const COLUMNS = [
+    {
+      title: t.footer.product,
+      links: [
+        { href: href("/#fonctionnalites"), label: t.header.nav.features },
+        { href: href("/#methode"), label: t.header.nav.method },
+        { href: href("/#tarifs"), label: t.header.nav.pricing },
+        { href: href("/#faq"), label: t.header.nav.faq },
+      ],
+    },
+    {
+      title: t.footer.account,
+      links: [
+        { href: href("/auth/signup"), label: t.footer.signup },
+        { href: href("/auth/login"), label: t.footer.login },
+        { href: href("/dashboard"), label: t.footer.dashboard },
+      ],
+    },
+    { title: t.footer.legal, links: LEGAL_LINKS.map(({ href: path, key }) => ({ href: href(path), label: t.legalLinks[key] })) },
+  ];
   return (
     <footer className="theme-dark border-t border-border/70">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-12">
         <div className="md:col-span-5">
-          <Logo />
-          <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
-            L&apos;analyse technique par IA, à partir d&apos;une simple capture de graphique.
-          </p>
+          <Logo href={href("/")} />
+          <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">{t.footer.tagline}</p>
+          <LanguageSwitcher className="-ml-1.5 mt-5" />
         </div>
         {COLUMNS.map((column) => (
           <nav key={column.title} className="md:col-span-2" aria-label={column.title}>
@@ -50,8 +51,8 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-border/70">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-xs text-muted sm:flex-row sm:justify-between">
-          <span>© 2026 Scanzivo. Tous droits réservés.</span>
-          <span>Ceci n&apos;est pas un conseil en investissement. Le trading comporte un risque de perte en capital.</span>
+          <span>{t.footer.rights}</span>
+          <span>{t.common.riskWarning}</span>
         </div>
       </div>
     </footer>
