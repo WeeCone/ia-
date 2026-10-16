@@ -41,7 +41,7 @@ export default function Home() {
             <h1 className="rise-in display mx-auto max-w-5xl text-[2.6rem] leading-[0.98] tracking-[-0.035em] [text-shadow:0_2px_28px_var(--background)] sm:text-7xl lg:text-[5.25rem]">
               L&apos;IA qui lit vos graphiques
               <br />
-              et tranche sur <RotatingWord words={["la crypto", "le forex", "l\u2019or", "les indices", "les actions"]} />
+              et décide sur <RotatingWord words={["la crypto", "le forex", "l\u2019or", "les indices", "les actions"]} />
             </h1>
             <p style={{ "--d": "0.15s" } as React.CSSProperties} className="rise-in mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl">
               Une capture d&apos;écran, un verdict clair et un plan chiffré : entrée, stop, objectifs. En moins d&apos;une minute.
