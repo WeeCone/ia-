@@ -3,6 +3,7 @@ import { Archivo_Black, Inter, JetBrains_Mono, Space_Grotesk } from "next/font/g
 import { AuthProvider } from "@/components/auth-provider";
 import { CheckoutDialog } from "@/components/checkout-dialog";
 import { LanguageSuggestion } from "@/components/language-suggestion";
+import { VisitTracker } from "@/components/visit-tracker";
 import { WhatsAppButton } from "@/components/whatsapp-button";
 import { LocaleProvider } from "@/i18n/client";
 import { LOCALES } from "@/i18n/config";
@@ -46,6 +47,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
           </AuthProvider>
           <WhatsAppButton />
           <LanguageSuggestion />
+          <VisitTracker />
         </LocaleProvider>
       </body>
     </html>

@@ -10,6 +10,7 @@ import { clearPendingChart, readPendingChart, savePendingChart } from "@/lib/pen
 import { OFFER_PRICE_EUR } from "@/lib/plans";
 import { useI18n } from "@/i18n/client";
 import { formatEur } from "@/i18n/format";
+import { trackEvent } from "@/lib/track";
 import { FormError } from "./auth-card";
 import { LogoMark } from "./logo";
 
@@ -133,6 +134,7 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
       if (!response.ok) throw new Error(data.error ?? u.failed);
       handedOff.current = true;
       clearPendingChart();
+      trackEvent("analysis");
       onAnalyzed({ analysis: data.analysis, imageUrl: preview });
     } catch (err) {
       setError(err instanceof Error ? err.message : u.failed);

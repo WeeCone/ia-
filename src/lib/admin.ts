@@ -70,3 +70,16 @@ export type AdminAnalysis = {
   note: string | null;
   hasImage: boolean;
 };
+
+export type FunnelCounts = { visits: number; signup: number; analysis: number; checkout: number; purchase: number; revenue: number };
+
+/** The admin "Visites" tab, over a period. */
+export type AdminStats = {
+  days: { day: string; visits: number; views: number; signup: number; purchase: number }[];
+  totals: FunnelCounts & { views: number };
+  sources: (FunnelCounts & { source: string })[];
+  campaigns: (FunnelCounts & { source: string; campaign: string | null })[];
+  pages: { page: string; views: number }[];
+  devices: Record<string, number>;
+  locales: Record<string, number>;
+};

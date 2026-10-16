@@ -7,8 +7,10 @@ import { useAuth } from "@/components/auth-provider";
 import { FormError } from "@/components/auth-card";
 import { Logo } from "@/components/logo";
 import { AnalysesTab } from "@/components/admin-analyses";
+import { VisitsTab } from "@/components/admin-visits";
 import type { AdminOverview, AdminReview, AdminUser, ReviewStatus } from "@/lib/admin";
 import { adminFetch } from "@/lib/admin-client";
+import { optOutOfTracking } from "@/lib/track";
 import { auth } from "@/lib/firebase";
 import { MONTHLY_BUDGET_EUR, OFFER_PRICE_EUR as PRICE, OFFERS, PLAN_LABELS, type Plan } from "@/lib/plans";
 
@@ -277,10 +279,13 @@ export default function AdminPage() {
   const [data, setData] = useState<AdminOverview | null>(null);
   const [error, setError] = useState<{ message: string; status?: number } | null>(null);
   const [refreshing, setRefreshing] = useState(false);
-  const [tab, setTab] = useState<"users" | "analyses" | "reviews" | "import">("users");
+  const [tab, setTab] = useState<"visits" | "users" | "analyses" | "reviews" | "import">("visits");
   const [analysisQuery, setAnalysisQuery] = useState("");
   const [query, setQuery] = useState("");
   const [planFilter, setPlanFilter] = useState<Plan | "all">("all");
+
+  // The admin's own browsing never counts in the visit stats, on any page.
+  useEffect(() => optOutOfTracking(), []);
 
   useEffect(() => {
     if (!loading && !user) router.replace("/auth/login");
@@ -390,6 +395,7 @@ export default function AdminPage() {
             <div className="mt-10 flex gap-1 border-b border-border" role="tablist">
               {(
                 [
+                  ["visits", "Visites"],
                   ["users", `Utilisateurs (${data.users.length})`],
                   ["analyses", `Analyses (${totals.analyses})`],
                   ["reviews", `Avis${pendingReviews ? ` (${pendingReviews} en attente)` : ` (${data.reviews.length})`}`],
@@ -411,7 +417,9 @@ export default function AdminPage() {
               ))}
             </div>
 
-            {tab === "users" ? (
+            {tab === "visits" ? (
+              <VisitsTab reloadKey={reloadKey} />
+            ) : tab === "users" ? (
               <section className="mt-6">
                 <div className="flex flex-wrap gap-3">
                   <input

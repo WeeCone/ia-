@@ -6,6 +6,7 @@ import { appUrl, getStripe, withBillingErrors } from "@/lib/stripe";
 import { localePath } from "@/i18n/config";
 import { DICTIONARIES } from "@/i18n/dictionaries";
 import { requestLocale } from "@/i18n/server";
+import { statKey } from "@/lib/stats";
 
 const PRICES: Record<Offer, string | undefined> = {
   monthly: process.env.STRIPE_PRICE_MONTHLY,
@@ -28,7 +29,12 @@ async function handler(request: Request) {
   const uid = await getRequestUid(request);
   if (!uid) return Response.json({ error: text.sessionExpired }, { status: 401 });
 
-  const { offer, embedded = false } = (await request.json().catch(() => ({}))) as { offer?: Offer; embedded?: boolean };
+  const { offer, embedded = false, source, campaign } = (await request.json().catch(() => ({}))) as {
+    offer?: Offer;
+    embedded?: boolean;
+    source?: string;
+    campaign?: string;
+  };
   if (offer !== "monthly" && offer !== "lifetime") {
     return Response.json({ error: text.unknownOffer }, { status: 400 });
   }
@@ -58,7 +64,8 @@ async function handler(request: Request) {
   // Back to the dashboard in the language the customer paid in.
   const dashboard = `${base}${localePath(locale, "/dashboard")}`;
   // The webhook resolves the user from this metadata (subscription invoices, or the one-off checkout session).
-  const metadata = { uid, offer };
+  // src / cmp: the ad or site that brought the buyer, for the admin "Visites" tab (anonymous counters only).
+  const metadata = { uid, offer, src: statKey(source) ?? "direct", cmp: statKey(campaign) ?? "" };
   const session = await stripe.checkout.sessions.create({
     customer: customerId,
     client_reference_id: uid,

@@ -21,6 +21,14 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // Anonymous audience counters (admin "Visites" tab) and the purchases already counted: server only.
+    match /stats/{shardId} {
+      allow read, write: if false;
+    }
+    match /statsPurchases/{sessionId} {
+      allow read, write: if false;
+    }
+
     // One review per user, moderated by hand before anything is published on the site.
     match /reviews/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;

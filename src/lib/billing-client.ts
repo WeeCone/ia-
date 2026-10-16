@@ -2,11 +2,16 @@ import type { Locale } from "@/i18n/config";
 import { DICTIONARIES } from "@/i18n/dictionaries";
 import { auth } from "./firebase";
 import type { Offer } from "./plans";
+import { checkoutAttribution, trackEvent } from "./track";
 
 async function callBilling(route: "checkout" | "portal", body: Record<string, unknown>, locale: Locale) {
   const text = DICTIONARIES[locale].checkout;
   const user = auth.currentUser;
   if (!user) throw new Error(text.sessionExpired);
+  if (route === "checkout") {
+    trackEvent("checkout");
+    body = { ...body, ...checkoutAttribution() };
+  }
   const response = await fetch(`/api/billing/${route}`, {
     method: "POST",
     headers: { Authorization: `Bearer ${await user.getIdToken()}`, "Content-Type": "application/json", "X-Locale": locale },

@@ -70,11 +70,19 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
         <li>Pièces comptables : 10 ans, conformément à la loi.</li>
       </ul>
 
-      <h2>Cookies</h2>
+      <h2>Cookies et mesure d&apos;audience</h2>
       <p>
         Le site n&apos;utilise que des traceurs strictement nécessaires à son fonctionnement (maintien de votre session de
-        connexion, sécurité du paiement, mémorisation de votre langue). Aucun cookie publicitaire ni de mesure d&apos;audience
-        n&apos;est déposé ; aucun consentement n&apos;est donc requis.
+        connexion, sécurité du paiement, mémorisation de votre langue). Aucun cookie publicitaire n&apos;est déposé.
+      </p>
+      <p>
+        Pour savoir combien de personnes visitent le site et quelles publicités les amènent, nous utilisons notre propre mesure
+        d&apos;audience, sans cookie : votre navigateur garde pendant la visite un simple indicateur de « visite commencée », et
+        pendant 30 jours au plus le nom du site ou de la campagne par lequel vous êtes arrivé. Seuls des compteurs anonymes par
+        jour sont enregistrés (pages vues, provenance, type d&apos;appareil, langue), sans adresse IP, sans identifiant et sans
+        lien avec votre compte. En cas d&apos;achat, seul le nom de cette campagne est joint au paiement, pour compter les ventes
+        par campagne. Ces données servent uniquement à nos statistiques et ne sont jamais partagées ni croisées avec
+        d&apos;autres traitements ; cette mesure est donc dispensée de consentement selon les recommandations de la CNIL.
       </p>
 
       <h2>Vos droits</h2>
@@ -145,10 +153,18 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
         <li>Accounting records: 10 years, as required by law.</li>
       </ul>
 
-      <h2>Cookies</h2>
+      <h2>Cookies and audience measurement</h2>
       <p>
         The site only uses trackers that are strictly necessary for it to work (keeping you signed in, payment security,
-        remembering your language). No advertising or audience-measurement cookie is set, so no consent is required.
+        remembering your language). No advertising cookie is set.
+      </p>
+      <p>
+        To know how many people visit the site and which ads bring them, we use our own cookie-free audience measurement: your
+        browser keeps a simple &quot;visit started&quot; flag during the visit and, for 30 days at most, the name of the site or
+        campaign you came from. Only anonymous daily counters are stored (pages viewed, origin, device type, language), with no
+        IP address, no identifier and no link to your account. When you make a purchase, only the name of that campaign is
+        attached to the payment, to count sales per campaign. This data is used for our statistics only and is never shared or
+        combined with other processing, so under the CNIL guidelines this measurement does not require consent.
       </p>
 
       <h2>Your rights</h2>
@@ -219,11 +235,19 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
         <li>Documentos contables: 10 años, conforme a la ley.</li>
       </ul>
 
-      <h2>Cookies</h2>
+      <h2>Cookies y medición de audiencia</h2>
       <p>
         El sitio solo utiliza rastreadores estrictamente necesarios para su funcionamiento (mantener su sesión, seguridad del
-        pago, recordar su idioma). No se instala ninguna cookie publicitaria ni de medición de audiencia; por tanto, no se
-        requiere consentimiento.
+        pago, recordar su idioma). No se instala ninguna cookie publicitaria.
+      </p>
+      <p>
+        Para saber cuántas personas visitan el sitio y qué anuncios las traen, utilizamos nuestra propia medición de audiencia,
+        sin cookies: su navegador guarda durante la visita un simple indicador de «visita iniciada» y, durante 30 días como
+        máximo, el nombre del sitio o de la campaña por el que llegó. Solo se registran contadores anónimos por día (páginas
+        vistas, procedencia, tipo de dispositivo, idioma), sin dirección IP, sin identificador y sin relación con su cuenta. En
+        caso de compra, solo el nombre de esa campaña se adjunta al pago, para contar las ventas por campaña. Estos datos solo
+        sirven para nuestras estadísticas y nunca se comparten ni se cruzan con otros tratamientos; por ello, según las
+        recomendaciones de la CNIL, esta medición no requiere consentimiento.
       </p>
 
       <h2>Sus derechos</h2>

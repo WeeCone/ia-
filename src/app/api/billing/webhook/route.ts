@@ -1,6 +1,7 @@
 import type Stripe from "stripe";
 import { adminDb } from "@/lib/firebase-admin";
 import { creditPeriod, MONTHLY_CREDITS } from "@/lib/plans";
+import { attribution, recordPurchase } from "@/lib/stats";
 import { getStripe } from "@/lib/stripe";
 
 const ACTIVE_STATUSES: Stripe.Subscription.Status[] = ["active", "trialing"];
@@ -34,6 +35,16 @@ async function grantLifetime(session: Stripe.Checkout.Session) {
   }
 }
 
+/** Audience stats: one purchase for the source that brought the buyer. Never blocks the webhook. */
+async function countPurchase(session: Stripe.Checkout.Session) {
+  if (session.payment_status !== "paid") return;
+  try {
+    await recordPurchase(session.id, attribution(session.metadata?.src, session.metadata?.cmp), (session.amount_total ?? 0) / 100);
+  } catch (err) {
+    console.error("purchase stat failed", err);
+  }
+}
+
 export async function POST(request: Request) {
   const signature = request.headers.get("stripe-signature");
   if (!signature) return new Response("Missing signature", { status: 400 });
@@ -50,6 +61,7 @@ export async function POST(request: Request) {
     case "checkout.session.completed":
     case "checkout.session.async_payment_succeeded":
       await grantLifetime(event.data.object);
+      await countPurchase(event.data.object);
       break;
 
     // Each paid monthly invoice (first payment and every renewal) resets the monthly credits.
