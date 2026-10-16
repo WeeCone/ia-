@@ -193,6 +193,17 @@ body {
   }
 }
 
+/* Beam crossing the hero drop bar, then resting off-screen for the rest of the cycle. */
+@keyframes scan-bar {
+  0% {
+    left: -6rem;
+  }
+  45%,
+  100% {
+    left: 100%;
+  }
+}
+
 /* Laser line sweeping down the hero drop zone. */
 @keyframes scan-y {
   0% {

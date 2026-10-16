@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ChartAnatomy } from "@/components/chart-anatomy";
 import { Faq } from "@/components/faq";
 import { DropBar } from "@/components/drop-bar";
+import { HeroFacts } from "@/components/hero-facts";
 import { ScanDemo } from "@/components/scan-demo";
 import { PhoneShowcase } from "@/components/phone-showcase";
 import { PlatformMarquee } from "@/components/platform-marquee";
@@ -48,7 +49,7 @@ export default function Home() {
             <div className="mt-10">
               <DropBar />
             </div>
-            <PriceNote className="mt-4 text-muted" />
+            <HeroFacts />
           </div>
           <div className="mx-2 rounded-[2.5rem] border border-border/70 bg-card/40 py-8 backdrop-blur sm:mx-4">
             <p className="mb-5 text-center text-sm text-muted">Fonctionne avec les captures de vos plateformes</p>
