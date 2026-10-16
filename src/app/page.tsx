@@ -3,7 +3,6 @@ import { ChartAnatomy } from "@/components/chart-anatomy";
 import { Faq } from "@/components/faq";
 import { DropBar } from "@/components/drop-bar";
 import { ScanDemo } from "@/components/scan-demo";
-import { PhoneShowcase } from "@/components/phone-showcase";
 import { PlatformMarquee } from "@/components/platform-marquee";
 import { PriceNote } from "@/components/price-note";
 import { PricingPlans } from "@/components/pricing-plans";
@@ -62,23 +61,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Markets: the 3D phone */}
-        <section id="marches" className="scroll-mt-24 overflow-hidden">
-          <div className="mx-auto max-w-6xl px-4 pb-10 pt-6">
-            <h2 className="display mx-auto max-w-3xl text-center text-4xl leading-[1] tracking-[-0.03em] sm:text-6xl">
-              Lire un graphique n&apos;a jamais été <span className="mark">aussi simple.</span>
-            </h2>
-            <p className="mx-auto mt-5 max-w-xl text-center text-lg text-muted">
-              Crypto, forex, or, indices : un seul verdict par graphique, ou « attendre » quand le signal n&apos;y est pas.
-            </p>
-            <div className="mt-10">
-              <PhoneShowcase />
-            </div>
-          </div>
-        </section>
-
         {/* Features — what the AI reads, annotated on an example capture */}
-        <section id="fonctionnalites" className="theme-dark mx-2 scroll-mt-24 rounded-[2.5rem] sm:mx-4">
+        <section id="fonctionnalites" className="scroll-mt-24">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <h2 className="display max-w-2xl text-4xl sm:text-5xl">
               Tout ce que l&apos;IA lit <span className="mark">sur votre graphique.</span>

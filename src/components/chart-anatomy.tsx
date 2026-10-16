@@ -134,7 +134,7 @@ export function ChartAnatomy() {
       </ol>
 
       <figure className="order-1 lg:sticky lg:top-28 lg:order-2">
-        <div ref={frame} className="overflow-hidden rounded-3xl border border-border bg-card shadow-[0_40px_80px_-40px_rgb(0_0_0/0.9)]">
+        <div ref={frame} className="overflow-hidden rounded-3xl border border-border bg-card shadow-[0_1px_2px_rgb(15_23_42/0.05),0_30px_60px_-30px_rgb(15_23_42/0.3)]">
           <div className="flex items-center justify-between border-b border-border px-4 py-2.5 font-mono text-xs text-muted">
             <span className="flex items-center gap-2">
               <span className="font-semibold text-foreground">BTC/USDT</span> 4H
