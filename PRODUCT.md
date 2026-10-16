@@ -27,7 +27,7 @@ A verdict, not a "maybe": the AI commits to the single most probable scenario an
 
 ## Capabilities and Constraints
 
-- Paid only, no free tier, and the public site must say so plainly near every call to action: Mensuel 40 €/mois (sans engagement) or À vie 180 € (paiement unique). Both include 45 analyses per month (fair use), sized to a hard AI-cost ceiling of 5 € per customer per month. A non-chart image is not charged.
+- Paid only, no free tier, and the public site must say so plainly near the calls to action (the owner chose no price line under the hero drop bar, 2026-10-16; prices stay in the demo, pricing and closing sections): Mensuel 40 €/mois (sans engagement) or À vie 180 € (paiement unique). Both include 45 analyses per month (fair use), sized to a hard AI-cost ceiling of 5 € per customer per month. A non-chart image is not charged.
 - Prices are display copy kept in sync with Stripe (src/lib/plans.ts); never invent other plans, discounts or trials.
 - Regulatory: French financial-influencer law / AMF. No promise of gains, no performance claims; "Ce n'est pas un conseil en investissement" must stay visible. Directive wording is framed as a conditional plan, never as a recommendation to a specific person.
 - Language: French only.
