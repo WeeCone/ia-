@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useState } from "react";
 import { DEMO_ANALYSIS } from "@/lib/demo";
 
-// What the AI reads, in the order the scan line reaches it on the capture; each is annotated under the same number.
+// What the AI reads, each one annotated on the capture under the same number.
 const READINGS = [
   {
     title: "Supports & résistances",
@@ -26,10 +26,6 @@ const READINGS = [
     text: "Le scénario le plus probable, formulé en action : acheter, vendre, attendre ou s'abstenir.",
   },
 ];
-
-// Scan position (in chart units, 0–600) at which each reading counts as read; the verdict lands once the scan is done.
-const READ_AT = [24, 300, 440, 530, 600];
-const SCAN_END = 640;
 
 // Price pane: 61 000 → y 250, 67 500 → y 20.
 const y = (price: number) => 250 - ((price - 61000) * 230) / 6500;
@@ -83,71 +79,19 @@ function Marker({ n, x, y: cy }: { n: number; x: number; y: number }) {
   );
 }
 
-const clamp = (value: number) => Math.min(1, Math.max(0, value));
-
-/**
- * Feature section body. Scrolling drives a scan line across an example capture: each annotation is drawn as the line
- * passes it, the matching reading lights up in the list, and the verdict lands once the capture is read.
- * Hovering or focusing a reading shows the finished capture with that annotation picked out.
- */
+/** Feature section body: what the AI reads, listed on one side and annotated under the same numbers on an example capture. */
 export function ChartAnatomy() {
   const [picked, setPicked] = useState<number | null>(null);
-  // 0 → 1 across the section. Starts finished so the server render and reduced motion show the whole reading.
-  const [progress, setProgress] = useState(1);
-  const scanId = useId();
-  const container = useRef<HTMLDivElement>(null);
-  const frame = useRef<HTMLElement>(null);
   const { verdict, bullish } = DEMO_ANALYSIS;
-
-  useEffect(() => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    // Must match the .pin-track media query in globals.css.
-    const pinned = matchMedia("(min-width: 1024px) and (min-height: 820px)");
-    let frameRequest = 0;
-    const measure = () => {
-      frameRequest = 0;
-      const vh = window.innerHeight;
-      let next: number;
-      if (pinned.matches) {
-        // Large screens: the list and capture are pinned; the scan spans most of the pinned scroll, the rest lets it rest.
-        const box = container.current!.getBoundingClientRect();
-        next = (96 - box.top) / Math.max(1, (box.height - vh) * 0.8);
-      } else {
-        // Phones: the capture sits above the list; it is read while it crosses the screen.
-        const box = frame.current!.getBoundingClientRect();
-        next = (0.92 * vh - box.top) / (0.62 * vh);
-      }
-      setProgress((current) => (Math.abs(current - clamp(next)) > 0.002 ? clamp(next) : current));
-    };
-    const schedule = () => {
-      if (!frameRequest) frameRequest = requestAnimationFrame(measure);
-    };
-    schedule();
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule);
-    return () => {
-      cancelAnimationFrame(frameRequest);
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", schedule);
-    };
-  }, []);
-
-  const scanX = picked === null ? progress * SCAN_END : SCAN_END;
-  const scanning = scanX > 0 && scanX < 600;
-  const reached = READ_AT.filter((at) => scanX >= at).length - 1;
-  const current = picked ?? reached;
-  const done = scanX >= SCAN_END - 1;
-  // A picked reading dims the others; while scanning, everything already drawn stays at full strength.
+  // Hovering or focusing a reading picks out its annotation and dims the others.
   const dim = (n: number) => `transition-opacity duration-300 ${picked !== null && picked !== n ? "opacity-15" : ""}`;
-  const clipId = `scan${scanId.replace(/[^a-zA-Z0-9]/g, "")}`;
 
   return (
-    <div ref={container} className="pin-track mt-12">
-      <div className="pin-inner grid items-start gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-14">
+    <div className="mt-12">
+      <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-14">
         <ol className="order-2 lg:order-1" onMouseLeave={() => setPicked(null)}>
           {READINGS.map((item, i) => {
-            const lit = current === i;
-            const read = i <= reached || picked !== null;
+            const lit = picked === i;
             return (
               <li key={item.title} className="border-t border-border last:border-b">
                 <button
@@ -158,16 +102,12 @@ export function ChartAnatomy() {
                   onBlur={() => setPicked(null)}
                   onClick={() => setPicked(i)}
                   className={`grid w-full grid-cols-[2rem_1fr] gap-x-3 py-5 text-left transition-[color,opacity] duration-300 ${
-                    lit ? "text-foreground" : read ? "text-foreground/70" : "text-foreground/45"
+                    lit || picked === null ? "text-foreground" : "text-foreground/60"
                   }`}
                 >
                   <span
                     className={`mt-0.5 grid size-7 place-items-center rounded-full font-mono text-xs font-bold transition-[background-color,color,box-shadow] duration-300 ${
-                      lit
-                        ? "bg-brand text-background shadow-[0_0_0_5px_rgb(14_116_144/0.15)]"
-                        : read
-                          ? "bg-brand/15 text-brand"
-                          : "border border-border text-muted"
+                      lit ? "bg-brand text-background shadow-[0_0_0_5px_rgb(14_116_144/0.15)]" : "border border-border text-brand"
                     }`}
                   >
                     {i + 1}
@@ -185,16 +125,13 @@ export function ChartAnatomy() {
           </li>
         </ol>
 
-        <figure ref={frame} className="order-1 lg:order-2">
+        <figure className="order-1 lg:sticky lg:top-28 lg:order-2">
           <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-[0_1px_2px_rgb(15_23_42/0.05),0_30px_60px_-30px_rgb(15_23_42/0.3)]">
             <div className="flex items-center justify-between border-b border-border px-4 py-2.5 font-mono text-xs text-muted">
               <span className="flex items-center gap-2">
                 <span className="font-semibold text-foreground">BTC/USDT</span> 4H
               </span>
-              <span className="flex items-center gap-2 tabular-nums" aria-hidden>
-                <span className={`size-1.5 rounded-full ${done ? "bg-accent" : "animate-pulse bg-brand"}`} />
-                {done ? "Lecture terminée" : `Lecture… ${Math.round(Math.min(1, scanX / 600) * 100)} %`}
-              </span>
+              <span>Lecture Scanzivo</span>
             </div>
 
             <svg
@@ -203,15 +140,6 @@ export function ChartAnatomy() {
               role="img"
               aria-label="Exemple de capture BTC/USDT 4H annotée par Scanzivo"
             >
-              <defs>
-                <clipPath id={clipId}>
-                  <rect x="0" y="0" width={Math.max(0, scanX)} height="360" />
-                </clipPath>
-                <linearGradient id={`${clipId}-beam`} x1="0" x2="1">
-                  <stop offset="0" stopColor="var(--brand)" stopOpacity="0" />
-                  <stop offset="1" stopColor="var(--brand)" stopOpacity="0.22" />
-                </linearGradient>
-              </defs>
 
               {/* Grid */}
               {[60, 120, 180, 240].map((gy) => (
@@ -240,8 +168,7 @@ export function ChartAnatomy() {
               </g>
               <line x1="0" x2="600" y1="268" y2="268" stroke="var(--border)" />
 
-              {/* Everything the reading adds is drawn only where the scan line has passed. */}
-              <g clipPath={`url(#${clipId})`}>
+                            <g>
                 {/* 1. Levels, with their price on the right axis */}
                 <g className={dim(0)}>
                   {LEVELS.map((level) => (
@@ -352,29 +279,11 @@ export function ChartAnatomy() {
                   <Marker n={4} x={492} y={y(67000) - 16} />
                 </g>
               </g>
-
-              {/* The scan line, with a soft trail behind it. */}
-              {scanning && (
-                <g aria-hidden>
-                  <rect x={scanX - 70} y="0" width="70" height="360" fill={`url(#${clipId}-beam)`} />
-                  <line x1={scanX} x2={scanX} y1="0" y2="360" stroke="var(--brand)" strokeWidth="1.5" />
-                </g>
-              )}
             </svg>
 
-            {/* 5. Verdict: lands once the whole capture is read. Its space is kept so nothing below jumps. */}
-            <div className="grid border-t border-border">
-              <p
-                aria-hidden
-                className={`flex items-center px-4 py-4 font-mono text-xs text-muted transition-opacity duration-300 [grid-area:1/1] sm:px-5 ${done ? "opacity-0" : "opacity-100"}`}
-              >
-                Verdict à la fin de la lecture…
-              </p>
-              <div
-                className={`flex items-start gap-3 bg-bull/5 px-4 py-4 transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] [grid-area:1/1] sm:px-5 ${
-                  done ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0"
-                } ${picked !== null && picked !== 4 ? "!opacity-15" : ""}`}
-              >
+            {/* 5. Verdict */}
+            <div className={`border-t border-border ${dim(4)}`}>
+              <div className="flex items-start gap-3 bg-bull/5 px-4 py-4 sm:px-5">
                 <span className="mt-0.5 grid size-[18px] shrink-0 place-items-center rounded-full bg-brand font-mono text-[10px] font-bold text-background">
                   5
                 </span>

@@ -306,18 +306,6 @@ body {
   }
 }
 
-/* Feature section on large screens: the list and the capture stay pinned while the scroll drives the scan.
-   Must match the media query in chart-anatomy.tsx. */
-@media (min-width: 1024px) and (min-height: 820px) {
-  .pin-track {
-    height: 200vh;
-  }
-  .pin-inner {
-    position: sticky;
-    top: 6rem;
-  }
-}
-
 /* Platforms band: two copies of the list slide by exactly one copy's width, so the loop is seamless. */
 @keyframes marquee {
   to {
