@@ -44,6 +44,7 @@ A verdict, not a "maybe": the AI commits to the single most probable scenario an
 
 - Real product output: example analyses (src/lib/demo.ts is illustrative; marketing/analyse-sidu.json is a real report on SIDU), the annotated-chart and report components.
 - Demo video: public/media/btc-scan.mp4/.webm with poster.
+- Photos supplied by the owner (rights to be confirmed by the owner): public/media/hero-bull.jpg (hero), public/media/nyse-facade.jpg (closing call to action, cropped to the facade without people or shop banners).
 - Customer reviews: none published yet. Real approved reviews appear automatically when they exist; never fabricate testimonials, user counts, accuracy rates or performance figures.
 
 ## Product Principles
