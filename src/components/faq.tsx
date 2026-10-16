@@ -45,12 +45,12 @@ export function Faq() {
   return (
     <section id="faq" className="scroll-mt-20">
       <div className="mx-auto grid max-w-6xl gap-12 px-4 py-20 lg:grid-cols-12">
-        <div className="lg:col-span-4">
+        <div data-reveal="fade" className="lg:col-span-4">
                     <h2 className="display text-4xl sm:text-5xl">Questions fréquentes</h2>
           <p className="mt-4 text-muted">Tout ce qu&apos;il faut savoir avant votre première analyse.</p>
           <Link href="/auth/signup" className="btn-primary mt-8">Commencer →</Link>
         </div>
-        <div className="space-y-4 lg:col-span-8">
+        <div data-reveal-stagger className="space-y-4 lg:col-span-8">
           {QUESTIONS.map(({ q, a }) => (
             <details key={q} className="group panel open:border-brand/50">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 font-medium [&::-webkit-details-marker]:hidden">

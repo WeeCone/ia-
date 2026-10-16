@@ -258,51 +258,44 @@ body {
   }
 }
 
-/* Homepage scroll motion, driven by the scroll position itself (no script): browsers without scroll timelines and
-   reduced motion simply show the final state. */
-@keyframes viewfinder-open {
-  from {
-    clip-path: inset(7% 5% round 4rem);
-  }
-  to {
-    clip-path: inset(0 round 2.5rem);
-  }
-}
-@keyframes rise-step {
-  from {
+/* Scroll reveals: one-shot transitions started by <ScrollReveal> when a block enters the screen (no work while
+   scrolling). Blocks are only hidden once the script is ready, so without it, or with reduced motion, all is shown. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready [data-reveal]:not(.is-in),
+  .reveal-ready [data-reveal-stagger]:not(.is-in) > * {
     opacity: 0;
-    transform: translateY(32px);
   }
-}
-@keyframes fill-x {
-  from {
-    transform: scaleX(0);
+  .reveal-ready [data-reveal],
+  .reveal-ready [data-reveal-stagger] > * {
+    transition:
+      opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      filter 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+      clip-path 1.1s cubic-bezier(0.65, 0, 0.35, 1);
+    transition-delay: calc(var(--i, 0) * 90ms);
   }
-}
-@supports (animation-timeline: view()) {
-  /* The dark blocks open like the scan viewfinder of the logo. */
-  .viewfinder-open {
-    animation: viewfinder-open linear both;
-    animation-timeline: view();
-    animation-range: entry 0% cover 35%;
+  /* Fade: rises from slightly below, out of a soft blur. */
+  .reveal-ready [data-reveal="fade"]:not(.is-in),
+  .reveal-ready [data-reveal-stagger]:not(.is-in) > * {
+    transform: translateY(28px);
+    filter: blur(6px);
   }
-  /* The three steps arrive in order while the line under them fills. */
-  .steps-on-view > li {
-    animation: rise-step linear both;
-    animation-timeline: view();
-    animation-range: entry 10% cover 30%;
+  /* Circle: opens from the centre, like the scan viewfinder. */
+  .reveal-ready [data-reveal="circle"] {
+    clip-path: circle(150% at 50% 50%);
   }
-  .steps-on-view > li:nth-child(2) {
-    animation-range: entry 25% cover 38%;
+  .reveal-ready [data-reveal="circle"]:not(.is-in) {
+    clip-path: circle(0% at 50% 50%);
+    opacity: 1;
   }
-  .steps-on-view > li:nth-child(3) {
-    animation-range: entry 40% cover 46%;
-  }
-  .fill-on-view {
+  /* Line: draws from the left. */
+  .reveal-ready [data-reveal="line"] {
     transform-origin: left;
-    animation: fill-x linear both;
-    animation-timeline: view();
-    animation-range: entry 20% cover 45%;
+    transition-duration: 1.2s;
+  }
+  .reveal-ready [data-reveal="line"]:not(.is-in) {
+    transform: scaleX(0);
+    opacity: 1;
   }
 }
 

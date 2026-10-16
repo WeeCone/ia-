@@ -8,6 +8,7 @@ import { PriceNote } from "@/components/price-note";
 import { PricingPlans } from "@/components/pricing-plans";
 import { MONTHLY_CREDITS } from "@/lib/plans";
 import { RotatingWord } from "@/components/rotating-word";
+import { ScrollReveal } from "@/components/scroll-reveal";
 import { ScanCta } from "@/components/scan-cta";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -49,14 +50,14 @@ export default function Home() {
               <DropBar />
             </div>
           </div>
-          <div className="mx-2 rounded-[2.5rem] border border-border/70 bg-card/40 py-8 backdrop-blur sm:mx-4">
+          <div data-reveal="fade" className="mx-2 rounded-[2.5rem] border border-border/70 bg-card/40 py-8 backdrop-blur sm:mx-4">
             <p className="mb-5 text-center text-sm text-muted">Fonctionne avec les captures de vos plateformes</p>
             <PlatformMarquee />
           </div>
         </section>
 
         {/* The scan, in video */}
-        <section id="video" className="viewfinder-open theme-dark mx-2 scroll-mt-24 rounded-[2.5rem] sm:mx-4">
+        <section id="video" data-reveal="circle" className="theme-dark mx-2 scroll-mt-24 rounded-[2.5rem] sm:mx-4">
           <div className="mx-auto max-w-6xl px-4 py-20 sm:py-24">
             <ScanDemo />
           </div>
@@ -65,10 +66,10 @@ export default function Home() {
         {/* Features — what the AI reads, annotated on an example capture */}
         <section id="fonctionnalites" className="scroll-mt-24">
           <div className="mx-auto max-w-6xl px-4 py-20">
-            <h2 className="display max-w-2xl text-4xl sm:text-5xl">
+            <h2 data-reveal="fade" className="display max-w-2xl text-4xl sm:text-5xl">
               Tout ce que l&apos;IA lit <span className="mark">sur votre graphique.</span>
             </h2>
-            <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted">Chaque point de la lecture est annoté sur la capture elle-même, au bon prix.</p>
+            <p data-reveal="fade" className="mt-5 max-w-xl text-lg leading-relaxed text-muted">Chaque point de la lecture est annoté sur la capture elle-même, au bon prix.</p>
             <ChartAnatomy />
           </div>
         </section>
@@ -76,14 +77,14 @@ export default function Home() {
         {/* Method */}
         <section id="methode" className="scroll-mt-24">
           <div className="mx-auto max-w-6xl px-4 py-20">
-            <h2 className="display text-4xl sm:text-5xl">
+            <h2 data-reveal="fade" className="display text-4xl sm:text-5xl">
               Trois étapes, <span className="mark">pas une de plus.</span>
             </h2>
             {/* Progress line over the steps: it fills as the steps arrive. */}
             <div aria-hidden className="mt-12 hidden h-0.5 overflow-hidden rounded-full bg-border md:block">
-              <div className="fill-on-view h-full bg-brand" />
+              <div data-reveal="line" className="h-full bg-brand" />
             </div>
-            <ol className="steps-on-view mt-12 grid gap-5 md:mt-6 md:grid-cols-3">
+            <ol data-reveal-stagger className="mt-12 grid gap-5 md:mt-6 md:grid-cols-3">
               {steps.map((step, index) => (
                 <li key={step.title} className="panel p-6">
                   <span className="font-mono text-sm font-medium text-brand">Étape {index + 1}</span>
@@ -107,14 +108,14 @@ export default function Home() {
             <Image src="/media/nyse-facade.jpg" alt="" fill sizes="(min-width: 640px) 55vw, 100vw" className="object-cover object-[50%_30%] opacity-[0.16] sm:opacity-[0.3]" />
           </div>
           <div className="mx-auto max-w-6xl px-4 py-20">
-            <h2 className="display text-4xl sm:text-5xl">
+            <h2 data-reveal="fade" className="display text-4xl sm:text-5xl">
               {MONTHLY_CREDITS} analyses par mois. <span className="mark">Un verdict sur chaque graphique.</span>
             </h2>
-            <p className="mt-5 max-w-xl text-lg text-muted">Un accès à vie en un seul paiement, ou un abonnement mensuel sans engagement.</p>
-            <div className="mt-12">
+            <p data-reveal="fade" className="mt-5 max-w-xl text-lg text-muted">Un accès à vie en un seul paiement, ou un abonnement mensuel sans engagement.</p>
+            <div data-reveal="fade" className="mt-12">
               <PricingPlans />
             </div>
-            <div className="mt-10 border-t border-border pt-8">
+            <div data-reveal="fade" className="mt-10 border-t border-border pt-8">
               <TrustStrip />
             </div>
           </div>
@@ -123,7 +124,7 @@ export default function Home() {
         <Faq />
 
         {/* Closing CTA */}
-        <section className="viewfinder-open theme-dark mx-2 mb-4 rounded-[2.5rem] sm:mx-4">
+        <section data-reveal="circle" className="theme-dark mx-2 mb-4 rounded-[2.5rem] sm:mx-4">
           <div className="mx-auto w-full max-w-6xl px-4 py-20">
             <div className="panel relative overflow-hidden px-6 py-16 text-center sm:px-12">
               <h2 className="display mx-auto max-w-3xl text-4xl sm:text-6xl">
@@ -137,6 +138,7 @@ export default function Home() {
         </section>
       </main>
       <SiteFooter />
+      <ScrollReveal />
     </div>
   );
 }
