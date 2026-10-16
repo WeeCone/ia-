@@ -41,9 +41,9 @@ export const fr = {
   },
   legalLinks: { mentions: "Mentions légales", terms: "CGV / CGU", privacy: "Confidentialité" },
   hero: {
-    titleLine1: "L'IA qui lit les graphiques",
-    titleLine2: "de vos",
-    highlight: "actifs préférés",
+    titleLine1: "L'IA qui lit vos graphiques",
+    titleLine2: "de vos actifs préférés :",
+    words: ["la crypto", "le forex", "l’or", "les indices", "les actions"],
     subtitle: "Une capture d'écran, un verdict clair et un plan chiffré : entrée, stop, objectifs. En moins d'une minute.",
     platforms: "Fonctionne avec les captures de vos plateformes",
     platformsLabel: "Plateformes compatibles",
