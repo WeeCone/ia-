@@ -6,6 +6,7 @@ import { ScanDemo } from "@/components/scan-demo";
 import { PlatformMarquee } from "@/components/platform-marquee";
 import { PriceNote } from "@/components/price-note";
 import { PricingPlans } from "@/components/pricing-plans";
+import { MONTHLY_CREDITS } from "@/lib/plans";
 import { RotatingWord } from "@/components/rotating-word";
 import { ScanCta } from "@/components/scan-cta";
 import { SiteFooter } from "@/components/site-footer";
@@ -96,11 +97,9 @@ export default function Home() {
         <section id="tarifs" className="scroll-mt-24">
           <div className="mx-auto max-w-6xl px-4 py-20">
             <h2 className="display text-4xl sm:text-5xl">
-              Deux offres. <span className="mark">Prix affichés.</span>
+              {MONTHLY_CREDITS} analyses par mois. <span className="mark">Un verdict sur chaque graphique.</span>
             </h2>
-            <p className="mt-5 max-w-xl text-lg text-muted">
-              Pas d&apos;offre gratuite : un abonnement mensuel sans engagement, ou un accès à vie en un seul paiement.
-            </p>
+            <p className="mt-5 max-w-xl text-lg text-muted">Un accès à vie en un seul paiement, ou un abonnement mensuel sans engagement.</p>
             <div className="mt-12">
               <PricingPlans />
             </div>

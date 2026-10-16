@@ -19,11 +19,17 @@ import type { ChartAnalysis } from "@/lib/analysis";
 import { getDownloadURL, ref } from "firebase/storage";
 import { isAdminUser } from "@/lib/admin";
 import { storage } from "@/lib/firebase";
+import { OfferDialog } from "@/components/dashboard/offer-dialog";
+import { redirectToBilling } from "@/lib/billing-client";
+import { hasPendingOffer, onOpenOffers, openOffers, takePendingOffer } from "@/lib/offers-client";
+import { hasPendingChart } from "@/lib/pending-chart";
 import { availableCredits, MONTHLY_CREDITS, PLAN_LABELS } from "@/lib/plans";
 import { subscribeUserProfile, type UserProfile } from "@/lib/users";
 
 const TOUR_KEY = "scanzivo-tour-done";
 const TEST_MODE_KEY = "scanzivo-test-mode";
+// The offer picker opens by itself once per browser session for an account without an offer.
+const OFFERS_SHOWN_KEY = "scanzivo:offers-shown";
 
 type Current = {
   analysis: ChartAnalysis;
@@ -40,6 +46,9 @@ export default function DashboardPage() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [tour, setTour] = useState<0 | 1 | 2>(0);
+  const [offersOpen, setOffersOpen] = useState(false);
+  // Set while handing over to Stripe for an offer picked before sign-up.
+  const [redirecting, setRedirecting] = useState(() => typeof window !== "undefined" && hasPendingOffer());
   // Admin-only: canned reports without calling the model (remembered on this device).
   const [testMode, setTestMode] = useState(() => {
     try {
@@ -62,9 +71,34 @@ export default function DashboardPage() {
     if (user) return subscribeUserProfile(user.uid, setProfile);
   }, [user]);
 
-  // First visit: a short two-step tour of the composer.
+  useEffect(() => onOpenOffers(() => setOffersOpen(true)), []);
+
+  // An offer picked before signing up goes straight to checkout; otherwise an account without an offer sees the offers once.
+  const plan = profile?.plan;
   useEffect(() => {
-    if (!user) return;
+    if (!plan || checkoutDone) return;
+    const offer = takePendingOffer();
+    if (offer && plan !== "lifetime") {
+      redirectToBilling("checkout", offer).catch(() => {
+        setRedirecting(false);
+        setOffersOpen(true);
+      });
+      return;
+    }
+    if (plan !== "none") return;
+    let shown = true;
+    try {
+      shown = sessionStorage.getItem(OFFERS_SHOWN_KEY) === "1";
+      sessionStorage.setItem(OFFERS_SHOWN_KEY, "1");
+    } catch {}
+    if (shown) return;
+    const timer = setTimeout(() => setOffersOpen(true), 400);
+    return () => clearTimeout(timer);
+  }, [plan, checkoutDone]);
+
+  // First visit with an offer: a short two-step tour of the composer (pointless before one can analyse).
+  useEffect(() => {
+    if (!user || !plan || plan === "none") return;
     let done = true;
     try {
       done = localStorage.getItem(TOUR_KEY) === "1";
@@ -73,7 +107,7 @@ export default function DashboardPage() {
       const timer = setTimeout(() => setTour(1), 600);
       return () => clearTimeout(timer);
     }
-  }, [user]);
+  }, [user, plan]);
 
   const endTour = useCallback(() => {
     setTour(0);
@@ -197,9 +231,9 @@ export default function DashboardPage() {
                 </button>
               )}
               {profile?.plan === "none" && (
-                <Link href="/pricing" className="btn-primary hidden px-4 py-2 sm:inline-flex">
+                <button type="button" onClick={openOffers} className="btn-primary hidden px-4 py-2 sm:inline-flex">
                   Choisir une offre
-                </Link>
+                </button>
               )}
               {/* Credits: count + gauge */}
               <div
@@ -306,6 +340,13 @@ export default function DashboardPage() {
           onClick={endTour}
           className="fixed inset-0 z-40 cursor-default bg-background/75 backdrop-blur-[2px]"
         />
+      )}
+
+      <OfferDialog open={offersOpen} onClose={() => setOffersOpen(false)} plan={profile?.plan ?? null} hasCapture={offersOpen && hasPendingChart()} />
+      {redirecting && !checkoutDone && plan !== "lifetime" && (
+        <div role="status" className="fixed inset-0 z-50 grid place-items-center bg-background/85 backdrop-blur-sm">
+          <p className="label text-muted">Redirection vers le paiement sécurisé…</p>
+        </div>
       )}
     </div>
   );

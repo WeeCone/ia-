@@ -1,4 +1,5 @@
-// Hands a chart dropped on the landing page over to the dashboard uploader (same tab, survives sign-up).
+// Hands a chart dropped on the landing page over to the dashboard uploader (same tab, survives sign-up and checkout).
+// It stays stored until analysed or replaced, so a detour through payment never loses it.
 const KEY = "scanzivo:pending-chart";
 
 export async function savePendingChart(file: File) {
@@ -15,11 +16,24 @@ export async function savePendingChart(file: File) {
   }
 }
 
-export async function takePendingChart(): Promise<File | null> {
+export function clearPendingChart() {
+  try {
+    sessionStorage.removeItem(KEY);
+  } catch {}
+}
+
+export function hasPendingChart() {
+  try {
+    return sessionStorage.getItem(KEY) !== null;
+  } catch {
+    return false;
+  }
+}
+
+export async function readPendingChart(): Promise<File | null> {
   let raw: string | null = null;
   try {
     raw = sessionStorage.getItem(KEY);
-    sessionStorage.removeItem(KEY);
   } catch {
     return null;
   }

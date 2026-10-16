@@ -74,7 +74,9 @@ export default function CgvPage() {
       <h2>7. Résiliation</h2>
       <p>
         L&apos;abonnement Mensuel est résiliable à tout moment depuis la rubrique « Mon abonnement » de votre tableau de bord.
-        La résiliation prend effet à la fin de la période en cours ; aucun prorata n&apos;est remboursé. Nous pouvons suspendre
+        La résiliation prend effet à la fin de la période en cours ; aucun prorata n&apos;est remboursé. L&apos;achat de l&apos;offre
+        À vie par un abonné Mensuel met fin au renouvellement de son abonnement : aucun prélèvement mensuel n&apos;a lieu
+        ensuite. Nous pouvons suspendre
         un compte en cas de manquement grave aux présentes conditions.
       </p>
 

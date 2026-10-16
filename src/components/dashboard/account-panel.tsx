@@ -2,6 +2,7 @@
 
 import type { User } from "firebase/auth";
 import Link from "next/link";
+import { openOffers } from "@/lib/offers-client";
 import { MONTHLY_CREDITS, PLAN_LABELS } from "@/lib/plans";
 import type { UserProfile } from "@/lib/users";
 import { BillingButton } from "../billing-button";
@@ -36,9 +37,14 @@ export function AccountPanel({ user, profile, credits, onBack }: { user: User; p
           </BillingButton>
         )}
         {profile?.plan === "none" && (
-          <Link href="/pricing" className="btn-primary">
+          <button type="button" onClick={openOffers} className="btn-primary">
             Choisir une offre
-          </Link>
+          </button>
+        )}
+        {profile?.plan === "monthly" && (
+          <button type="button" onClick={openOffers} className="btn-secondary">
+            Passer à l&apos;accès à vie
+          </button>
         )}
       </div>
       <DeleteAccount plan={profile?.plan} />

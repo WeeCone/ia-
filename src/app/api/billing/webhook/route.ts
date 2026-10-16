@@ -17,7 +17,21 @@ async function updateUser(uid: string, data: Record<string, unknown>) {
 async function grantLifetime(session: Stripe.Checkout.Session) {
   const uid = session.metadata?.uid;
   if (!uid || session.metadata?.offer !== "lifetime" || session.payment_status !== "paid") return;
-  await updateUser(uid, { plan: "lifetime", credits: MONTHLY_CREDITS, creditsPeriod: creditPeriod() });
+  const ref = userRef(uid);
+  const user = await ref.get();
+  if (!user.exists) return;
+  await ref.update({ plan: "lifetime", credits: MONTHLY_CREDITS, creditsPeriod: creditPeriod() });
+
+  // Upgrading from monthly: no more renewals. Its later subscription events are ignored for lifetime accounts.
+  const subscriptionId: string | undefined = user.get("stripeSubscriptionId");
+  if (subscriptionId) {
+    try {
+      await getStripe().subscriptions.update(subscriptionId, { cancel_at_period_end: true });
+    } catch (err) {
+      // Already cancelled or deleted: nothing left to stop.
+      console.error("Lifetime upgrade: could not stop subscription", subscriptionId, err);
+    }
+  }
 }
 
 export async function POST(request: Request) {

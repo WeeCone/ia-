@@ -1,0 +1,48 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import type { Plan } from "@/lib/plans";
+import { PricingPlans } from "../pricing-plans";
+
+/** The offer picker, opened inside the dashboard so choosing an offer goes straight to checkout. */
+export function OfferDialog({ open, onClose, plan, hasCapture }: { open: boolean; onClose: () => void; plan: Plan | null; hasCapture: boolean }) {
+  const ref = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = ref.current;
+    if (!dialog) return;
+    if (open && !dialog.open) dialog.showModal();
+    if (!open && dialog.open) dialog.close();
+  }, [open]);
+
+  return (
+    <dialog
+      ref={ref}
+      onClose={onClose}
+      onClick={(event) => event.target === event.currentTarget && onClose()}
+      aria-labelledby="offer-dialog-title"
+      className="theme-light m-auto w-[min(56rem,calc(100%-2rem))] max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-3xl border border-border bg-background p-0 text-foreground shadow-[0_40px_120px_-30px_rgb(15_23_42/0.5)] backdrop:bg-[rgb(11_14_20/0.55)] backdrop:backdrop-blur-sm open:animate-[rise-in_0.35s_cubic-bezier(0.16,1,0.3,1)]"
+    >
+      <div className="p-5 sm:p-8">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 id="offer-dialog-title" className="display text-3xl sm:text-4xl">
+              {plan === "monthly" ? "Passer à l'accès à vie" : "Choisissez votre offre"}
+            </h2>
+            <p className="mt-2 text-muted">
+              {hasCapture
+                ? "Votre capture est gardée : elle sera prête à analyser dès votre retour du paiement."
+                : "Paiement en une minute, puis vos analyses sont disponibles aussitôt."}
+            </p>
+          </div>
+          <button type="button" onClick={onClose} aria-label="Fermer" className="btn-ghost -mr-2 -mt-1 px-2 text-2xl leading-none">
+            ×
+          </button>
+        </div>
+        <div className="mt-6">
+          <PricingPlans compact currentPlan={plan} />
+        </div>
+      </div>
+    </dialog>
+  );
+}

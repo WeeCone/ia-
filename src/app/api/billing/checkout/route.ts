@@ -30,14 +30,9 @@ async function handler(request: Request) {
 
   const userRef = adminDb.collection("users").doc(uid);
   const user = await userRef.get();
+  // Monthly → lifetime is allowed: the webhook stops the subscription once lifetime access is paid.
   if (user.get("plan") === "lifetime" || (user.get("plan") === "monthly" && offer === "monthly")) {
     return Response.json({ error: "Vous avez déjà un accès actif." }, { status: 409 });
-  }
-  if (user.get("plan") === "monthly") {
-    return Response.json(
-      { error: "Résiliez d'abord votre abonnement mensuel (« Mon abonnement ») avant de passer à l'accès à vie." },
-      { status: 409 },
-    );
   }
 
   const stripe = getStripe();
@@ -61,9 +56,9 @@ async function handler(request: Request) {
     customer: customerId,
     client_reference_id: uid,
     line_items: [{ price: PRICES[offer], quantity: 1 }],
-    allow_promotion_codes: true,
+    locale: "fr",
     success_url: `${base}/dashboard?checkout=success`,
-    cancel_url: `${base}/pricing`,
+    cancel_url: `${base}/dashboard`,
     metadata,
     // Express consent required by art. L221-28 13° Code de la consommation for immediate digital access.
     // Needs a Terms of Service URL set in Stripe (Settings → Public details) pointing to /legal/cgv.

@@ -1,12 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { ChartAnalysis } from "@/lib/analysis";
 import { auth } from "@/lib/firebase";
 import { checkCapture } from "@/lib/capture-check";
 import { prepareImage } from "@/lib/image";
-import { savePendingChart, takePendingChart } from "@/lib/pending-chart";
+import { openOffers } from "@/lib/offers-client";
+import { clearPendingChart, readPendingChart, savePendingChart } from "@/lib/pending-chart";
 import { MONTHLY_CREDITS, OFFERS } from "@/lib/plans";
 import { FormError } from "./auth-card";
 import { LogoMark } from "./logo";
@@ -17,7 +17,7 @@ type Props = {
   disabled: boolean;
   /** Shown under the composer when analysing is not possible (no offer, no credits left). */
   disabledNotice?: React.ReactNode;
-  /** No offer yet: the action becomes "choose an offer" (the capture is kept for after payment) instead of a disabled button. */
+  /** No offer yet: the action opens the offer picker (the capture is kept for after payment) instead of a disabled button. */
   needsOffer?: boolean;
   /** Admin test mode: canned report, no model call, no credit. */
   testMode?: boolean;
@@ -47,7 +47,6 @@ function ArrowIcon() {
 
 /** The analysis panel: drop or pick a screenshot, add context, analyse. Shows progress while the analysis runs. */
 export function ChartUploader({ disabled, disabledNotice, needsOffer = false, testMode = false, highlight = null, onAnalyzed }: Props) {
-  const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -70,6 +69,8 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
       const ready = await prepareImage(candidate);
       setFile(ready);
       setPreview(URL.createObjectURL(ready));
+      // Without an offer the next stop is checkout: keep this capture for the way back.
+      if (needsOffer && !testMode) savePendingChart(ready);
       setAdvice(null);
       checkCapture(ready).then(setAdvice);
     } catch (err) {
@@ -89,7 +90,7 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
 
   // A chart dropped on the landing page before signing in.
   useEffect(() => {
-    takePendingChart().then((pending) => pending && pick(pending));
+    readPendingChart().then((pending) => pending && pick(pending));
     // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on mount
   }, []);
 
@@ -132,6 +133,7 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error ?? "L'analyse a échoué. Aucun crédit n'a été débité.");
       handedOff.current = true;
+      clearPendingChart();
       onAnalyzed({ analysis: data.analysis, imageUrl: preview });
     } catch (err) {
       setError(err instanceof Error ? err.message : "L'analyse a échoué. Aucun crédit n'a été débité.");
@@ -140,6 +142,7 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
   }
 
   function clear() {
+    clearPendingChart();
     setFile(null);
     setPreview(null);
     setError(null);
@@ -196,11 +199,6 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
   const canSend = Boolean(file) && !preparing && (!disabled || testMode);
   const offerFirst = needsOffer && !testMode;
 
-  // Keep the chosen capture in the tab so it is back in the composer after checkout.
-  async function chooseOffer() {
-    if (file) await savePendingChart(file);
-    router.push("/pricing");
-  }
   const addContext = (tag: string) => setNote((current) => (current.includes(tag) ? current : current ? `${current}, ${tag}` : tag));
 
   return (
@@ -321,7 +319,7 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
                   <span className="whitespace-nowrap font-medium text-foreground">{OFFERS.lifetime.price.replace(" ", "\u00a0")} à vie</span>, {MONTHLY_CREDITS} analyses par mois.
                   {file ? " Elle vous attendra ici après le paiement." : ""}
                 </p>
-                <button type="button" onClick={chooseOffer} className="btn-primary w-full">
+                <button type="button" onClick={openOffers} className="btn-primary w-full">
                   Choisir une offre et analyser <ArrowIcon />
                 </button>
               </div>

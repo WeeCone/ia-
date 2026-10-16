@@ -3,6 +3,7 @@
 import { signOut } from "firebase/auth";
 import type { User } from "firebase/auth";
 import Link from "next/link";
+import { openOffers } from "@/lib/offers-client";
 import { useState } from "react";
 import { isAdminUser } from "@/lib/admin";
 import { auth } from "@/lib/firebase";
@@ -40,9 +41,9 @@ function PlanCard({ profile }: { profile: UserProfile | null }) {
       <div className="rounded-xl border border-accent/30 bg-accent/5 p-3">
         <p className="text-sm font-medium">Aucune offre active</p>
         <p className="mt-0.5 text-xs text-muted">Choisissez une offre pour lancer vos analyses.</p>
-        <Link href="/pricing" className="btn-primary mt-3 w-full px-3 py-2 text-xs">
+        <button type="button" onClick={openOffers} className="btn-primary mt-3 w-full px-3 py-2 text-xs">
           Choisir une offre +
-        </Link>
+        </button>
       </div>
     );
   }

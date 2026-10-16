@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HeaderAccountLink } from "./header-account-link";
 import { Logo } from "./logo";
 import { ScanCta } from "./scan-cta";
 
@@ -24,9 +25,7 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="flex items-center gap-1">
-          <Link href="/auth/login" className="btn-ghost hidden sm:inline-flex">
-            Connexion
-          </Link>
+          <HeaderAccountLink className="btn-ghost hidden sm:inline-flex" />
           <ScanCta className="btn-primary ml-1 rounded-full px-4 py-2.5 sm:px-5">
             <span>
               Scanner<span className="hidden sm:inline"> un graphique</span>
@@ -41,11 +40,12 @@ export function SiteHeader() {
               </svg>
             </summary>
             <nav className="panel absolute right-0 top-full mt-4 w-60 py-2" aria-label="Menu">
-              {[...NAV, { href: "/auth/login", label: "Connexion" }].map(({ href, label }) => (
+              {NAV.map(({ href, label }) => (
                 <Link key={href} href={href} className="block px-4 py-3 font-medium text-foreground hover:text-brand">
                   {label}
                 </Link>
               ))}
+              <HeaderAccountLink className="block px-4 py-3 font-medium text-foreground hover:text-brand" />
             </nav>
           </details>
         </div>
