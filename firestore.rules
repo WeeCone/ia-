@@ -16,6 +16,11 @@ service cloud.firestore {
       }
     }
 
+    // Anonymous activity feed: written and read by the server only (Admin SDK).
+    match /activity/{entryId} {
+      allow read, write: if false;
+    }
+
     // One review per user, moderated by hand before anything is published on the site.
     match /reviews/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;

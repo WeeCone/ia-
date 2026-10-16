@@ -6,6 +6,7 @@ import { analyzeChart, AnalysisRefusedError } from "@/lib/claude";
 import { availableCredits, creditPeriod, MAX_CALL_COST_EUR, MONTHLY_BUDGET_EUR } from "@/lib/plans";
 import { adminBucket, adminDb } from "@/lib/firebase-admin";
 import { getRequestUid } from "@/lib/server-auth";
+import { recordActivity } from "@/lib/activity";
 import { TEST_ANALYSIS } from "@/lib/test-analysis";
 import { monthSpend } from "@/lib/usage-cost";
 
@@ -85,6 +86,9 @@ export async function POST(request: Request) {
     }
     throw err;
   }
+
+  // Public "recent activity" feed: what was analysed and when, never who. Best effort.
+  if (result.analysis.is_chart) recordActivity(result.analysis);
 
   // Keep the screenshot so the history can show it annotated again. Best effort: the analysis is already saved.
   if (result.analysis.is_chart) {

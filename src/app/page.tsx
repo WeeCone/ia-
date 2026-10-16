@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ChartAnatomy } from "@/components/chart-anatomy";
+import { ActivityToast } from "@/components/activity-toast";
 import { Faq } from "@/components/faq";
 import { DropBar } from "@/components/drop-bar";
 import { ScanDemo } from "@/components/scan-demo";
@@ -139,6 +140,7 @@ export default function Home() {
       </main>
       <SiteFooter />
       <ScrollReveal />
+      <ActivityToast />
     </div>
   );
 }
