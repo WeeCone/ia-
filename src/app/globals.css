@@ -258,43 +258,63 @@ body {
   }
 }
 
-/* Homepage scroll reveals: driven by the scroll position itself (no script), so content is never hidden where the
-   browser lacks scroll timelines, and reduced motion keeps everything in place. */
-@keyframes reveal-up {
+/* Homepage scroll motion, driven by the scroll position itself (no script): browsers without scroll timelines and
+   reduced motion simply show the final state. */
+@keyframes viewfinder-open {
   from {
-    opacity: 0;
-    transform: translateY(48px);
+    clip-path: inset(7% 5% round 4rem);
+  }
+  to {
+    clip-path: inset(0 round 2.5rem);
   }
 }
-@keyframes reveal-block {
+@keyframes rise-step {
   from {
-    opacity: 0.4;
-    transform: scale(0.92);
-    border-radius: 4rem;
+    opacity: 0;
+    transform: translateY(32px);
+  }
+}
+@keyframes fill-x {
+  from {
+    transform: scaleX(0);
   }
 }
 @supports (animation-timeline: view()) {
-  .reveal,
-  .reveal-each > * {
-    animation: reveal-up linear both;
+  /* The dark blocks open like the scan viewfinder of the logo. */
+  .viewfinder-open {
+    animation: viewfinder-open linear both;
     animation-timeline: view();
-    animation-range: entry 0% entry 75%;
+    animation-range: entry 0% cover 35%;
   }
-  /* Items of one row enter one after the other. */
-  .reveal-each > :nth-child(2) {
-    animation-range: entry 8% entry 83%;
-  }
-  .reveal-each > :nth-child(3) {
-    animation-range: entry 16% entry 91%;
-  }
-  .reveal-each > :nth-child(n + 4) {
-    animation-range: entry 24% entry 99%;
-  }
-  /* Large rounded dark blocks grow into place. */
-  .reveal-block {
-    animation: reveal-block linear both;
+  /* The three steps arrive in order while the line under them fills. */
+  .steps-on-view > li {
+    animation: rise-step linear both;
     animation-timeline: view();
-    animation-range: entry 0% cover 30%;
+    animation-range: entry 10% cover 30%;
+  }
+  .steps-on-view > li:nth-child(2) {
+    animation-range: entry 25% cover 38%;
+  }
+  .steps-on-view > li:nth-child(3) {
+    animation-range: entry 40% cover 46%;
+  }
+  .fill-on-view {
+    transform-origin: left;
+    animation: fill-x linear both;
+    animation-timeline: view();
+    animation-range: entry 20% cover 45%;
+  }
+}
+
+/* Feature section on large screens: the list and the capture stay pinned while the scroll drives the scan.
+   Must match the media query in chart-anatomy.tsx. */
+@media (min-width: 1024px) and (min-height: 820px) {
+  .pin-track {
+    height: 200vh;
+  }
+  .pin-inner {
+    position: sticky;
+    top: 6rem;
   }
 }
 
