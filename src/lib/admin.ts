@@ -53,3 +53,20 @@ export type AdminOverview = {
   reviews: AdminReview[];
   totals: { users: number; newUsers7d: number; none: number; monthly: number; lifetime: number; analyses: number };
 };
+
+/** One row of the admin "Analyses" tab: who ran it, on what, and the outcome. The full report loads on demand. */
+export type AdminAnalysis = {
+  id: string;
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  createdAt: number | null;
+  isChart: boolean;
+  asset: string;
+  timeframe: string;
+  trend: string | null;
+  action: string | null;
+  headline: string | null;
+  note: string | null;
+  hasImage: boolean;
+};

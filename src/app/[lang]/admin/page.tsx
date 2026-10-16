@@ -6,30 +6,21 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { FormError } from "@/components/auth-card";
 import { Logo } from "@/components/logo";
+import { AnalysesTab } from "@/components/admin-analyses";
 import type { AdminOverview, AdminReview, AdminUser, ReviewStatus } from "@/lib/admin";
+import { adminFetch } from "@/lib/admin-client";
 import { auth } from "@/lib/firebase";
-import { MONTHLY_BUDGET_EUR, OFFERS, PLAN_LABELS, type Plan } from "@/lib/plans";
+import { MONTHLY_BUDGET_EUR, OFFER_PRICE_EUR as PRICE, OFFERS, PLAN_LABELS, type Plan } from "@/lib/plans";
 
-const PRICE = { monthly: 40, lifetime: 180 };
 const euros = (value: number) => value.toLocaleString("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
-const date = (ms: number | null) => (ms ? new Date(ms).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" }) : "—");
+const date = (ms: number | null) =>
+  ms ? new Date(ms).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" }) : "—";
 
 const planChip: Record<Plan, string> = {
   none: "border-border text-muted",
   monthly: "border-brand/40 bg-brand/10 text-brand",
   lifetime: "border-accent/40 bg-accent/10 text-accent",
 };
-
-async function adminFetch(path: string, init?: RequestInit) {
-  const token = await auth.currentUser?.getIdToken();
-  const response = await fetch(path, {
-    ...init,
-    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json", ...init?.headers },
-  });
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw Object.assign(new Error(data.error ?? "Erreur serveur."), { status: response.status });
-  return data;
-}
 
 function Stat({ label, value, hint }: { label: string; value: React.ReactNode; hint?: string }) {
   return (
@@ -41,7 +32,7 @@ function Stat({ label, value, hint }: { label: string; value: React.ReactNode; h
   );
 }
 
-function UserRow({ user, onSaved }: { user: AdminUser; onSaved: () => void }) {
+function UserRow({ user, onSaved, onShowAnalyses }: { user: AdminUser; onSaved: () => void; onShowAnalyses: () => void }) {
   const [editing, setEditing] = useState(false);
   const [plan, setPlan] = useState<Plan>(user.plan);
   const [credits, setCredits] = useState(String(user.credits));
@@ -73,7 +64,20 @@ function UserRow({ user, onSaved }: { user: AdminUser; onSaved: () => void }) {
           <span className={`chip ${planChip[user.plan]}`}>{PLAN_LABELS[user.plan]}</span>
         </td>
         <td className="px-4 py-3 text-right font-mono tabular-nums">{user.credits}</td>
-        <td className="px-4 py-3 text-right font-mono tabular-nums">{user.analyses}</td>
+        <td className="px-4 py-3 text-right font-mono tabular-nums">
+          {user.analyses ? (
+            <button
+              type="button"
+              onClick={onShowAnalyses}
+              className="underline decoration-border underline-offset-4 hover:text-accent"
+              title="Voir ses analyses"
+            >
+              {user.analyses}
+            </button>
+          ) : (
+            0
+          )}
+        </td>
         <td className={`px-4 py-3 text-right font-mono tabular-nums ${user.spendEur >= MONTHLY_BUDGET_EUR * 0.8 ? "text-bear" : ""}`}>
           {user.spendEur.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €
         </td>
@@ -168,7 +172,12 @@ function ReviewCard({ review, onChanged }: { review: AdminReview; onChanged: () 
       </p>
       <div className="mt-4 flex flex-wrap gap-2">
         {review.status !== "approved" && (
-          <button type="button" onClick={() => setStatus("approved")} disabled={pending || !review.publishConsent} className="btn-primary px-3 py-1.5 text-xs">
+          <button
+            type="button"
+            onClick={() => setStatus("approved")}
+            disabled={pending || !review.publishConsent}
+            className="btn-primary px-3 py-1.5 text-xs"
+          >
             Approuver
           </button>
         )}
@@ -226,13 +235,17 @@ function ImportAnalysis() {
       <div>
         <h2 className="display text-xl">Importer une analyse dans mon historique</h2>
         <p className="mt-1 text-sm text-muted">
-          Pour une démonstration ou une analyse préparée à l&apos;avance : collez son JSON et, si possible, la capture d&apos;origine. Aucun crédit
-          n&apos;est utilisé.
+          Pour une démonstration ou une analyse préparée à l&apos;avance : collez son JSON et, si possible, la capture d&apos;origine. Aucun
+          crédit n&apos;est utilisé.
         </p>
       </div>
       <label className="field">
         <span>Capture du graphique (optionnelle)</span>
-        <input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={(event) => setImage(event.target.files?.[0] ?? null)} />
+        <input
+          type="file"
+          accept="image/png,image/jpeg,image/webp,image/gif"
+          onChange={(event) => setImage(event.target.files?.[0] ?? null)}
+        />
       </label>
       <label className="field">
         <span>Analyse (JSON)</span>
@@ -264,7 +277,8 @@ export default function AdminPage() {
   const [data, setData] = useState<AdminOverview | null>(null);
   const [error, setError] = useState<{ message: string; status?: number } | null>(null);
   const [refreshing, setRefreshing] = useState(false);
-  const [tab, setTab] = useState<"users" | "reviews" | "import">("users");
+  const [tab, setTab] = useState<"users" | "analyses" | "reviews" | "import">("users");
+  const [analysisQuery, setAnalysisQuery] = useState("");
   const [query, setQuery] = useState("");
   const [planFilter, setPlanFilter] = useState<Plan | "all">("all");
 
@@ -313,8 +327,8 @@ export default function AdminPage() {
         <Logo />
         <h1 className="display text-3xl">Accès réservé</h1>
         <p className="text-muted">
-          Cet espace est réservé à l&apos;administrateur. Si c&apos;est vous, confirmez l&apos;adresse e-mail de votre compte, ou ajoutez son identifiant
-          (UID) dans la configuration NEXT_PUBLIC_ADMIN_UIDS.
+          Cet espace est réservé à l&apos;administrateur. Si c&apos;est vous, confirmez l&apos;adresse e-mail de votre compte, ou ajoutez
+          son identifiant (UID) dans la configuration NEXT_PUBLIC_ADMIN_UIDS.
         </p>
         <Link href="/dashboard" className="btn-secondary">
           Retour au tableau de bord
@@ -335,12 +349,7 @@ export default function AdminPage() {
             <span className="chip border-bear/40 bg-bear/10 text-bear">Admin</span>
           </div>
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={load}
-              disabled={refreshing}
-              className="btn-ghost"
-            >
+            <button type="button" onClick={load} disabled={refreshing} className="btn-ghost">
               {refreshing ? "Actualisation…" : "Actualiser"}
             </button>
             <Link href="/dashboard" className="btn-secondary px-4 py-2">
@@ -382,6 +391,7 @@ export default function AdminPage() {
               {(
                 [
                   ["users", `Utilisateurs (${data.users.length})`],
+                  ["analyses", `Analyses (${totals.analyses})`],
                   ["reviews", `Avis${pendingReviews ? ` (${pendingReviews} en attente)` : ` (${data.reviews.length})`}`],
                   ["import", "Importer une analyse"],
                 ] as const
@@ -429,7 +439,10 @@ export default function AdminPage() {
                         <th className="px-4 py-3 font-medium">Offre</th>
                         <th className="px-4 py-3 text-right font-medium">Crédits</th>
                         <th className="px-4 py-3 text-right font-medium">Analyses</th>
-                        <th className="px-4 py-3 text-right font-medium" title={`Coût IA du mois, plafonné à ${MONTHLY_BUDGET_EUR} € par client`}>
+                        <th
+                          className="px-4 py-3 text-right font-medium"
+                          title={`Coût IA du mois, plafonné à ${MONTHLY_BUDGET_EUR} € par client`}
+                        >
                           Coût IA (mois)
                         </th>
                         <th className="px-4 py-3 font-medium">Inscrit le</th>
@@ -439,13 +452,23 @@ export default function AdminPage() {
                     </thead>
                     <tbody>
                       {users.map((item) => (
-                        <UserRow key={item.uid} user={item} onSaved={load} />
+                        <UserRow
+                          key={item.uid}
+                          user={item}
+                          onSaved={load}
+                          onShowAnalyses={() => {
+                            setAnalysisQuery(item.email ?? item.uid);
+                            setTab("analyses");
+                          }}
+                        />
                       ))}
                     </tbody>
                   </table>
                   {!users.length && <p className="px-4 py-6 text-center text-sm text-muted">Aucun utilisateur ne correspond.</p>}
                 </div>
               </section>
+            ) : tab === "analyses" ? (
+              <AnalysesTab query={analysisQuery} onQuery={setAnalysisQuery} reloadKey={reloadKey} />
             ) : tab === "reviews" ? (
               <section className="mt-6">
                 {data.reviews.length ? (
