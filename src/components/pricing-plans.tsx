@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { savePendingOffer } from "@/lib/offers-client";
-import { MONTHLY_CREDITS, OFFERS, type Offer, type Plan } from "@/lib/plans";
+import { OFFERS, type Offer, type Plan } from "@/lib/plans";
 import { useAuth } from "./auth-provider";
 import { BillingButton } from "./billing-button";
 
@@ -12,7 +12,6 @@ const LIFETIME_EUR = Number.parseInt(OFFERS.lifetime.price, 10);
 const MONTHS_TO_LIFETIME = (LIFETIME_EUR / MONTHLY_EUR).toLocaleString("fr-FR", { maximumFractionDigits: 1 });
 
 export const INCLUDED = [
-  `${MONTHLY_CREDITS} analyses de graphiques par mois`,
   "Crypto, forex, actions, indices, matières premières",
   "Un verdict : le scénario le plus probable, formulé en plan",
   "Entrée, stop, objectifs et ratio gain / risque",
@@ -95,7 +94,7 @@ export function PricingPlans({ compact = false, currentPlan = null }: { compact?
       </div>
       {compact ? (
         <p className="mt-4 text-center text-sm text-muted">
-          {MONTHLY_CREDITS} analyses par mois dans les deux offres · paiement sécurisé par Stripe
+          Paiement sécurisé par Stripe · sans engagement pour l&apos;offre mensuelle
         </p>
       ) : (
         <div className="panel mt-6 p-6 sm:p-8">

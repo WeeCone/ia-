@@ -4,15 +4,14 @@ import { PricingPlans } from "@/components/pricing-plans";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { TrustStrip } from "@/components/trust-strip";
-import { MONTHLY_CREDITS } from "@/lib/plans";
 
 export const metadata: Metadata = { title: "Tarifs — Scanzivo" };
 
 // The questions that stop people at the payment step.
 const QUESTIONS: { q: string; a: React.ReactNode }[] = [
   {
-    q: `Que se passe-t-il quand j'ai utilisé mes ${MONTHLY_CREDITS} analyses ?`,
-    a: "Les analyses sont rechargées au début de chaque période : à votre date d'échéance pour l'offre mensuelle, au début de chaque mois civil pour l'accès à vie. Rien n'est prélevé en plus, et une image qui n'est pas un graphique n'est pas décomptée.",
+    q: "Que se passe-t-il quand j'ai utilisé mes crédits du mois ?",
+    a: "Vos crédits sont rechargés au début de chaque période : à votre date d'échéance pour l'offre mensuelle, au début de chaque mois civil pour l'accès à vie. Rien n'est prélevé en plus, et une image qui n'est pas un graphique n'est pas décomptée.",
   },
   {
     q: "Comment résilier l'abonnement mensuel ?",
@@ -47,7 +46,7 @@ export default function PricingPage() {
       <SiteHeader />
       <main id="contenu" className="mx-auto w-full max-w-5xl flex-1 px-4 pb-24 pt-16 sm:pt-24">
         <h1 className="display max-w-3xl text-4xl sm:text-6xl">
-          {MONTHLY_CREDITS} analyses par mois. <span className="mark">Un verdict sur chaque graphique.</span>
+          Un prix clair. <span className="mark">Un verdict sur chaque graphique.</span>
         </h1>
         <p className="mt-6 max-w-xl text-lg text-muted">Un accès à vie en un seul paiement, ou un abonnement mensuel sans engagement.</p>
 

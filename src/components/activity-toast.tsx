@@ -16,7 +16,7 @@ function ago(at: number) {
 }
 
 /**
- * Real recent analyses (market, timeframe, trend; never who, never a result), shown one at a time bottom left.
+ * Real recent analyses (market and timeframe only; never who, never a reading or result), shown one at a time bottom left.
  * Each appears once per visit; nothing shows when no one analysed in the last 24 hours.
  */
 export function ActivityToast() {
@@ -80,7 +80,6 @@ export function ActivityToast() {
           {item.timeframe ? ` · ${item.timeframe}` : ""}
         </span>
       </p>
-      <p className="mt-0.5 text-xs text-muted">Tendance {item.trend} lue sur sa capture</p>
       <button
         type="button"
         onClick={() => {

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { MONTHLY_CREDITS } from "@/lib/plans";
 
 const QUESTIONS: { q: string; a: React.ReactNode }[] = [
   {
@@ -23,8 +22,8 @@ const QUESTIONS: { q: string; a: React.ReactNode }[] = [
     a: "Oui : ajoutez un contexte avant d'analyser, par exemple « scalping 5 min, je cherche un short » ou « investissement long terme ». L'IA en tient compte dans sa lecture et ses scénarios.",
   },
   {
-    q: "Combien d'analyses puis-je faire ?",
-    a: `${MONTHLY_CREDITS} par mois avec chaque offre. Une image qui n'est pas un graphique n'est pas décomptée.`,
+    q: "Comment sont comptées les analyses ?",
+    a: "Chaque offre inclut des crédits d'analyse rechargés chaque mois, visibles à tout moment dans votre espace. Une image qui n'est pas un graphique n'est pas décomptée.",
   },
   {
     q: "Puis-je résilier à tout moment ?",

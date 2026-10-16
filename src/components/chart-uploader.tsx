@@ -7,7 +7,7 @@ import { checkCapture } from "@/lib/capture-check";
 import { prepareImage } from "@/lib/image";
 import { openOffers } from "@/lib/offers-client";
 import { clearPendingChart, readPendingChart, savePendingChart } from "@/lib/pending-chart";
-import { MONTHLY_CREDITS, OFFERS } from "@/lib/plans";
+import { OFFERS } from "@/lib/plans";
 import { FormError } from "./auth-card";
 import { LogoMark } from "./logo";
 
@@ -316,7 +316,7 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
                 <p className="text-sm leading-relaxed text-muted">
                   {file ? "Votre capture est prête. " : ""}Choisissez une offre pour lancer l&apos;analyse :{" "}
                   <span className="whitespace-nowrap font-medium text-foreground">{OFFERS.monthly.price.replace(" ", "\u00a0")}/mois</span> ou{" "}
-                  <span className="whitespace-nowrap font-medium text-foreground">{OFFERS.lifetime.price.replace(" ", "\u00a0")} à vie</span>, {MONTHLY_CREDITS} analyses par mois.
+                  <span className="whitespace-nowrap font-medium text-foreground">{OFFERS.lifetime.price.replace(" ", "\u00a0")} à vie</span>.
                   {file ? " Elle vous attendra ici après le paiement." : ""}
                 </p>
                 <button type="button" onClick={openOffers} className="btn-primary w-full">

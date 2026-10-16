@@ -7,7 +7,6 @@ import { ScanDemo } from "@/components/scan-demo";
 import { PlatformMarquee } from "@/components/platform-marquee";
 import { PriceNote } from "@/components/price-note";
 import { PricingPlans } from "@/components/pricing-plans";
-import { MONTHLY_CREDITS } from "@/lib/plans";
 import { RotatingWord } from "@/components/rotating-word";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { ScanCta } from "@/components/scan-cta";
@@ -110,7 +109,7 @@ export default function Home() {
           </div>
           <div className="mx-auto max-w-6xl px-4 py-20">
             <h2 data-reveal="fade" className="display text-4xl sm:text-5xl">
-              {MONTHLY_CREDITS} analyses par mois. <span className="mark">Un verdict sur chaque graphique.</span>
+              Un prix clair. <span className="mark">Un verdict sur chaque graphique.</span>
             </h2>
             <p data-reveal="fade" className="mt-5 max-w-xl text-lg text-muted">Un accès à vie en un seul paiement, ou un abonnement mensuel sans engagement.</p>
             <div data-reveal="fade" className="mt-12">

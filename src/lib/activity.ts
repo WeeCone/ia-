@@ -2,13 +2,13 @@ import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import type { ChartAnalysis } from "./analysis";
 import { adminDb } from "./firebase-admin";
 
-export type Activity = { asset: string; timeframe: string | null; trend: ChartAnalysis["trend"]; at: number };
+export type Activity = { asset: string; timeframe: string | null; at: number };
 
 const UNKNOWN = /^(inconnu|inconnue|non identifié|n\/a|-)?$/i;
 
 /**
- * Logs a real analysis for the homepage activity feed: market, timeframe and trend only. No user id, no note,
- * no verdict (a public buy/sell line would read as a signal).
+ * Logs a real analysis for the homepage activity feed: market and timeframe only. No user id, no note, and no
+ * reading or verdict (a public trend or buy/sell line would read as a signal).
  */
 export function recordActivity(analysis: ChartAnalysis) {
   const asset = analysis.asset?.trim() ?? "";
@@ -16,7 +16,7 @@ export function recordActivity(analysis: ChartAnalysis) {
   const timeframe = analysis.timeframe?.trim() ?? "";
   adminDb
     .collection("activity")
-    .add({ asset: asset.slice(0, 24), timeframe: UNKNOWN.test(timeframe) ? null : timeframe.slice(0, 8), trend: analysis.trend, createdAt: FieldValue.serverTimestamp() })
+    .add({ asset: asset.slice(0, 24), timeframe: UNKNOWN.test(timeframe) ? null : timeframe.slice(0, 8), createdAt: FieldValue.serverTimestamp() })
     .catch((err) => console.error("activity log failed", err));
 }
 
@@ -26,6 +26,6 @@ export async function getRecentActivity(): Promise<Activity[]> {
   const snapshot = await adminDb.collection("activity").where("createdAt", ">=", since).orderBy("createdAt", "desc").limit(8).get();
   return snapshot.docs.map((doc) => {
     const data = doc.data();
-    return { asset: data.asset, timeframe: data.timeframe ?? null, trend: data.trend, at: data.createdAt.toMillis() };
+    return { asset: data.asset, timeframe: data.timeframe ?? null, at: data.createdAt.toMillis() };
   });
 }
