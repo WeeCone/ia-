@@ -8,7 +8,6 @@ import { ScanDemo } from "@/components/scan-demo";
 import { PlatformMarquee } from "@/components/platform-marquee";
 import { PriceNote } from "@/components/price-note";
 import { PricingPlans } from "@/components/pricing-plans";
-import { RotatingWord } from "@/components/rotating-word";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { ScanCta } from "@/components/scan-cta";
 import { SiteFooter } from "@/components/site-footer";
@@ -40,7 +39,10 @@ export default async function Home() {
             <h1 className="rise-in display mx-auto max-w-5xl text-[2.6rem] leading-[0.98] tracking-[-0.035em] [text-shadow:0_2px_28px_var(--background)] sm:text-7xl lg:text-[5.25rem]">
               {t.hero.titleLine1}
               <br />
-              {t.hero.titleLine2} <RotatingWord words={t.hero.words} />
+              {t.hero.titleLine2}{" "}
+              <span className="inline-block rounded-2xl bg-accent px-4 pb-1 text-background shadow-[0_10px_30px_-12px_rgb(0_245_160/0.6)] sm:rounded-3xl sm:px-6">
+                {t.hero.highlight}
+              </span>
             </h1>
             <p style={{ "--d": "0.15s" } as React.CSSProperties} className="rise-in mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl">
               {t.hero.subtitle}

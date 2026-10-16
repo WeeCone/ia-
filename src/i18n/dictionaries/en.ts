@@ -42,9 +42,9 @@ export const en: Dict = {
   },
   legalLinks: { mentions: "Legal notice", terms: "Terms of sale & use", privacy: "Privacy" },
   hero: {
-    titleLine1: "AI that reads your charts",
-    titleLine2: "and makes the call on",
-    words: ["crypto", "forex", "gold", "indices", "stocks"],
+    titleLine1: "AI that reads the charts",
+    titleLine2: "of your",
+    highlight: "favourite assets",
     subtitle: "One screenshot, a clear verdict and a plan with numbers: entry, stop, targets. In under a minute.",
     platforms: "Works with screenshots from your platforms",
     platformsLabel: "Compatible platforms",
