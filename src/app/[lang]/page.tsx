@@ -37,7 +37,7 @@ export default async function Home() {
           <div className="absolute inset-x-0 bottom-0 -z-10 h-1/3 bg-[linear-gradient(180deg,transparent,var(--background))]" aria-hidden />
           <div className="absolute -top-40 left-1/2 -z-10 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-brand/15 blur-[120px]" aria-hidden />
           <div className="mx-auto max-w-6xl px-4 pb-14 pt-14 text-center sm:pt-20">
-            <h1 className="rise-in display mx-auto max-w-5xl text-[2.6rem] leading-[0.98] tracking-[-0.035em] [text-shadow:0_2px_28px_var(--background)] sm:text-7xl lg:text-[5.25rem]">
+            <h1 className="rise-in display mx-auto max-w-6xl text-[2.6rem] leading-[0.98] tracking-[-0.035em] [text-shadow:0_2px_28px_var(--background)] sm:text-7xl lg:text-[5rem]">
               {t.hero.titleLine1}
               <br />
               {t.hero.titleLine2}

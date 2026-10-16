@@ -42,7 +42,7 @@ export const es: Dict = {
   },
   legalLinks: { mentions: "Aviso legal", terms: "Condiciones de venta y uso", privacy: "Privacidad" },
   hero: {
-    titleLine1: "La IA que lee tus gráficos",
+    titleLine1: "La IA que analiza tus gráficos",
     titleLine2: "de tus activos favoritos:",
     words: ["las criptos", "el forex", "el oro", "los índices", "las acciones"],
     subtitle: "Una captura de pantalla, un veredicto claro y un plan con cifras: entrada, stop, objetivos. En menos de un minuto.",
