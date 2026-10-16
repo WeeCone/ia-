@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo_Black, Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { AuthProvider } from "@/components/auth-provider";
+import { WhatsAppButton } from "@/components/whatsapp-button";
 import "./globals.css";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Aller au contenu
         </a>
         <AuthProvider>{children}</AuthProvider>
+        <WhatsAppButton />
       </body>
     </html>
   );
