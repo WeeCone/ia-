@@ -98,7 +98,14 @@ export default function Home() {
         <Testimonials />
 
         {/* Pricing */}
-        <section id="tarifs" className="scroll-mt-24">
+        <section id="tarifs" className="relative isolate scroll-mt-24 overflow-hidden">
+          {/* The New York Stock Exchange facade on the right, washed into the light page like the hero's bull (photo supplied by the owner). */}
+          <div
+            className="pointer-events-none absolute inset-y-0 right-0 -z-10 w-full sm:w-[55%] [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_45%),linear-gradient(to_bottom,transparent,black_18%,black_75%,transparent)]"
+            aria-hidden
+          >
+            <Image src="/media/nyse-facade.jpg" alt="" fill sizes="(min-width: 640px) 55vw, 100vw" className="object-cover object-[50%_30%] opacity-[0.16] sm:opacity-[0.3]" />
+          </div>
           <div className="mx-auto max-w-6xl px-4 py-20">
             <h2 className="display text-4xl sm:text-5xl">
               {MONTHLY_CREDITS} analyses par mois. <span className="mark">Un verdict sur chaque graphique.</span>
@@ -118,26 +125,13 @@ export default function Home() {
         {/* Closing CTA */}
         <section className="viewfinder-open theme-dark mx-2 mb-4 rounded-[2.5rem] sm:mx-4">
           <div className="mx-auto w-full max-w-6xl px-4 py-20">
-            <div className="panel relative grid overflow-hidden lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-              {/* Wall Street's exchange (photo supplied by the owner), fading into the panel on large screens. */}
-              <div className="relative h-56 sm:h-72 lg:order-2 lg:h-auto lg:min-h-[34rem] lg:[mask-image:linear-gradient(to_right,transparent,black_35%)]" aria-hidden>
-                <Image
-                  src="/media/nyse-facade.jpg"
-                  alt=""
-                  fill
-                  sizes="(min-width: 1024px) 40vw, 100vw"
-                  className="object-cover object-[50%_28%] saturate-[0.85]"
-                />
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_45%,var(--card))] lg:bg-none" />
-              </div>
-              <div className="relative px-6 py-12 text-center sm:px-12 lg:self-center lg:py-20 lg:text-left">
-                <h2 className="display mx-auto max-w-3xl text-4xl sm:text-6xl lg:mx-0">
-                  Arrêtez de deviner. <span className="mark">Analysez.</span>
-                </h2>
-                <p className="mx-auto mt-5 max-w-xl text-muted lg:mx-0">Votre prochain graphique mérite un second avis, chiffré et argumenté.</p>
-                <ScanCta className="btn-primary mt-9 text-base">Scanner un graphique →</ScanCta>
-                <PriceNote className="mt-4 text-muted" />
-              </div>
+            <div className="panel relative overflow-hidden px-6 py-16 text-center sm:px-12">
+              <h2 className="display mx-auto max-w-3xl text-4xl sm:text-6xl">
+                Arrêtez de deviner. <span className="mark">Analysez.</span>
+              </h2>
+              <p className="mx-auto mt-5 max-w-xl text-muted">Votre prochain graphique mérite un second avis, chiffré et argumenté.</p>
+              <ScanCta className="btn-primary mt-9 text-base">Scanner un graphique →</ScanCta>
+              <PriceNote className="mt-4 text-muted" />
             </div>
           </div>
         </section>
