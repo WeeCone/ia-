@@ -258,6 +258,46 @@ body {
   }
 }
 
+/* Homepage scroll reveals: driven by the scroll position itself (no script), so content is never hidden where the
+   browser lacks scroll timelines, and reduced motion keeps everything in place. */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(48px);
+  }
+}
+@keyframes reveal-block {
+  from {
+    opacity: 0.4;
+    transform: scale(0.92);
+    border-radius: 4rem;
+  }
+}
+@supports (animation-timeline: view()) {
+  .reveal,
+  .reveal-each > * {
+    animation: reveal-up linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 75%;
+  }
+  /* Items of one row enter one after the other. */
+  .reveal-each > :nth-child(2) {
+    animation-range: entry 8% entry 83%;
+  }
+  .reveal-each > :nth-child(3) {
+    animation-range: entry 16% entry 91%;
+  }
+  .reveal-each > :nth-child(n + 4) {
+    animation-range: entry 24% entry 99%;
+  }
+  /* Large rounded dark blocks grow into place. */
+  .reveal-block {
+    animation: reveal-block linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 30%;
+  }
+}
+
 /* Platforms band: two copies of the list slide by exactly one copy's width, so the loop is seamless. */
 @keyframes marquee {
   to {

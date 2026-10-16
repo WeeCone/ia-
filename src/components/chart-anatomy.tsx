@@ -100,7 +100,7 @@ export function ChartAnatomy() {
 
   return (
     <div className="mt-12 grid items-start gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-14">
-      <ol className="order-2 lg:order-1" onMouseLeave={() => setActive(null)}>
+      <ol className="reveal-each order-2 lg:order-1" onMouseLeave={() => setActive(null)}>
         {READINGS.map((item, i) => (
           <li key={item.title} className="border-t border-border last:border-b">
             <button
@@ -133,7 +133,7 @@ export function ChartAnatomy() {
         </li>
       </ol>
 
-      <figure className="order-1 lg:sticky lg:top-28 lg:order-2">
+      <figure className="reveal order-1 lg:sticky lg:top-28 lg:order-2">
         <div ref={frame} className="overflow-hidden rounded-3xl border border-border bg-card shadow-[0_1px_2px_rgb(15_23_42/0.05),0_30px_60px_-30px_rgb(15_23_42/0.3)]">
           <div className="flex items-center justify-between border-b border-border px-4 py-2.5 font-mono text-xs text-muted">
             <span className="flex items-center gap-2">

@@ -37,26 +37,26 @@ export default function Home() {
           <div className="absolute inset-x-0 bottom-0 -z-10 h-1/3 bg-[linear-gradient(180deg,transparent,var(--background))]" aria-hidden />
           <div className="absolute -top-40 left-1/2 -z-10 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-brand/15 blur-[120px]" aria-hidden />
           <div className="mx-auto max-w-6xl px-4 pb-14 pt-14 text-center sm:pt-20">
-            <h1 className="display mx-auto max-w-5xl text-[2.6rem] leading-[0.98] tracking-[-0.035em] [text-shadow:0_2px_28px_var(--background)] sm:text-7xl lg:text-[5.25rem]">
+            <h1 className="rise-in display mx-auto max-w-5xl text-[2.6rem] leading-[0.98] tracking-[-0.035em] [text-shadow:0_2px_28px_var(--background)] sm:text-7xl lg:text-[5.25rem]">
               L&apos;IA qui lit vos graphiques
               <br />
               et tranche sur <RotatingWord words={["la crypto", "le forex", "l\u2019or", "les indices", "les actions"]} />
             </h1>
-            <p className="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl">
+            <p style={{ "--d": "0.15s" } as React.CSSProperties} className="rise-in mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl">
               Une capture d&apos;écran, un verdict clair et un plan chiffré : entrée, stop, objectifs. En moins d&apos;une minute.
             </p>
-            <div className="mt-10">
+            <div style={{ "--d": "0.3s" } as React.CSSProperties} className="rise-in mt-10">
               <DropBar />
             </div>
           </div>
-          <div className="mx-2 rounded-[2.5rem] border border-border/70 bg-card/40 py-8 backdrop-blur sm:mx-4">
+          <div className="reveal mx-2 rounded-[2.5rem] border border-border/70 bg-card/40 py-8 backdrop-blur sm:mx-4">
             <p className="mb-5 text-center text-sm text-muted">Fonctionne avec les captures de vos plateformes</p>
             <PlatformMarquee />
           </div>
         </section>
 
         {/* The scan, in video */}
-        <section id="video" className="theme-dark mx-2 scroll-mt-24 rounded-[2.5rem] sm:mx-4">
+        <section id="video" className="reveal-block theme-dark mx-2 scroll-mt-24 rounded-[2.5rem] sm:mx-4">
           <div className="mx-auto max-w-6xl px-4 py-20 sm:py-24">
             <ScanDemo />
           </div>
@@ -65,10 +65,10 @@ export default function Home() {
         {/* Features — what the AI reads, annotated on an example capture */}
         <section id="fonctionnalites" className="scroll-mt-24">
           <div className="mx-auto max-w-6xl px-4 py-20">
-            <h2 className="display max-w-2xl text-4xl sm:text-5xl">
+            <h2 className="reveal display max-w-2xl text-4xl sm:text-5xl">
               Tout ce que l&apos;IA lit <span className="mark">sur votre graphique.</span>
             </h2>
-            <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted">Chaque point de la lecture est annoté sur la capture elle-même, au bon prix.</p>
+            <p className="reveal mt-5 max-w-xl text-lg leading-relaxed text-muted">Chaque point de la lecture est annoté sur la capture elle-même, au bon prix.</p>
             <ChartAnatomy />
           </div>
         </section>
@@ -76,10 +76,10 @@ export default function Home() {
         {/* Method */}
         <section id="methode" className="scroll-mt-24">
           <div className="mx-auto max-w-6xl px-4 py-20">
-            <h2 className="display text-4xl sm:text-5xl">
+            <h2 className="reveal display text-4xl sm:text-5xl">
               Trois étapes, <span className="mark">pas une de plus.</span>
             </h2>
-            <ol className="mt-12 grid gap-5 md:grid-cols-3">
+            <ol className="reveal-each mt-12 grid gap-5 md:grid-cols-3">
               {steps.map((step, index) => (
                 <li key={step.title} className="panel p-6">
                   <span className="font-mono text-sm font-medium text-brand">Étape {index + 1}</span>
@@ -96,14 +96,14 @@ export default function Home() {
         {/* Pricing */}
         <section id="tarifs" className="scroll-mt-24">
           <div className="mx-auto max-w-6xl px-4 py-20">
-            <h2 className="display text-4xl sm:text-5xl">
+            <h2 className="reveal display text-4xl sm:text-5xl">
               {MONTHLY_CREDITS} analyses par mois. <span className="mark">Un verdict sur chaque graphique.</span>
             </h2>
-            <p className="mt-5 max-w-xl text-lg text-muted">Un accès à vie en un seul paiement, ou un abonnement mensuel sans engagement.</p>
-            <div className="mt-12">
+            <p className="reveal mt-5 max-w-xl text-lg text-muted">Un accès à vie en un seul paiement, ou un abonnement mensuel sans engagement.</p>
+            <div className="reveal mt-12">
               <PricingPlans />
             </div>
-            <div className="mt-10 border-t border-border pt-8">
+            <div className="reveal mt-10 border-t border-border pt-8">
               <TrustStrip />
             </div>
           </div>
@@ -112,7 +112,7 @@ export default function Home() {
         <Faq />
 
         {/* Closing CTA */}
-        <section className="theme-dark mx-2 rounded-[2.5rem] sm:mx-4 mb-4">
+        <section className="reveal-block theme-dark mx-2 mb-4 rounded-[2.5rem] sm:mx-4">
           <div className="mx-auto w-full max-w-6xl px-4 py-20">
             <div className="panel relative overflow-hidden px-6 py-16 text-center sm:px-12">
               <h2 className="display mx-auto max-w-3xl text-4xl sm:text-6xl">
