@@ -12,6 +12,20 @@ export function onOpenOffers(listener: () => void) {
   return () => window.removeEventListener(OPEN_EVENT, listener);
 }
 
+// Payment inside the site (Stripe embedded checkout) when the publishable key is configured; otherwise Stripe's page.
+export const EMBEDDED_CHECKOUT = Boolean(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+const CHECKOUT_EVENT = "scanzivo:checkout";
+
+export function openCheckout(offer: Offer) {
+  window.dispatchEvent(new CustomEvent<Offer>(CHECKOUT_EVENT, { detail: offer }));
+}
+
+export function onOpenCheckout(listener: (offer: Offer) => void) {
+  const handler = (event: Event) => listener((event as CustomEvent<Offer>).detail);
+  window.addEventListener(CHECKOUT_EVENT, handler);
+  return () => window.removeEventListener(CHECKOUT_EVENT, handler);
+}
+
 // An offer picked on the pricing page before having an account: checkout starts as soon as the account exists.
 const PENDING_OFFER_KEY = "scanzivo:pending-offer";
 

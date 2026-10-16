@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { redirectToBilling } from "@/lib/billing-client";
+import { EMBEDDED_CHECKOUT, openCheckout } from "@/lib/offers-client";
 import type { Offer } from "@/lib/plans";
 
 type Props = { route: "checkout" | "portal"; offer?: Offer; className?: string; block?: boolean; children: React.ReactNode };
@@ -11,6 +12,11 @@ export function BillingButton({ route, offer, className = "btn-primary", block =
   const [error, setError] = useState<string | null>(null);
 
   async function handleClick() {
+    // Checkout opens inside the site when it can; the customer portal always goes to Stripe.
+    if (route === "checkout" && offer && EMBEDDED_CHECKOUT) {
+      openCheckout(offer);
+      return;
+    }
     setPending(true);
     setError(null);
     try {

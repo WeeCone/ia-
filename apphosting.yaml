@@ -44,6 +44,12 @@ env:
     value: price_1UPRZYAeyb88TK1ksRQteZMb # mode réel (live), avec la clé sk_live/rk_live du secret stripeSecretKey
     availability: [RUNTIME]
 
+  # Clé publiable Stripe (pk_live_…, publique par nature) : active le paiement intégré au site.
+  # Sans elle, le paiement s'ouvre sur la page Stripe. À copier depuis Stripe → Développeurs → Clés API.
+  # - variable: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+  #   value: pk_live_...
+  #   availability: [BUILD, RUNTIME]
+
   # Secrets (Cloud Secret Manager) : firebase apphosting:secrets:set <nom>
   - variable: ANTHROPIC_API_KEY
     secret: anthropicApiKey

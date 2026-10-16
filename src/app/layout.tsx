@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo_Black, Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { AuthProvider } from "@/components/auth-provider";
+import { CheckoutDialog } from "@/components/checkout-dialog";
 import { WhatsAppButton } from "@/components/whatsapp-button";
 import "./globals.css";
 
@@ -25,7 +26,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Aller au contenu
         </a>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          {children}
+          <CheckoutDialog />
+        </AuthProvider>
         <WhatsAppButton />
       </body>
     </html>

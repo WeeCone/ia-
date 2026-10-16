@@ -23,7 +23,7 @@ async function handler(request: Request) {
   const uid = await getRequestUid(request);
   if (!uid) return Response.json({ error: "Session expirée, reconnectez-vous." }, { status: 401 });
 
-  const { offer } = (await request.json().catch(() => ({}))) as { offer?: Offer };
+  const { offer, embedded = false } = (await request.json().catch(() => ({}))) as { offer?: Offer; embedded?: boolean };
   if (offer !== "monthly" && offer !== "lifetime") {
     return Response.json({ error: "Offre inconnue." }, { status: 400 });
   }
@@ -57,8 +57,10 @@ async function handler(request: Request) {
     client_reference_id: uid,
     line_items: [{ price: PRICES[offer], quantity: 1 }],
     locale: "fr",
-    success_url: `${base}/dashboard?checkout=success`,
-    cancel_url: `${base}/dashboard`,
+    // Embedded: Stripe's form opens inside the site and sends the page to return_url once paid.
+    ...(embedded
+      ? { ui_mode: "embedded_page" as const, return_url: `${base}/dashboard?checkout=success` }
+      : { success_url: `${base}/dashboard?checkout=success`, cancel_url: `${base}/dashboard` }),
     metadata,
     // Express consent required by art. L221-28 13° Code de la consommation for immediate digital access.
     // Needs a Terms of Service URL set in Stripe (Settings → Public details) pointing to /legal/cgv.
@@ -73,7 +75,7 @@ async function handler(request: Request) {
       : { mode: "payment", invoice_creation: { enabled: true } }),
   });
 
-  return Response.json({ url: session.url });
+  return Response.json(embedded ? { clientSecret: session.client_secret } : { url: session.url });
 }
 
 export const POST = withBillingErrors(handler);

@@ -21,7 +21,7 @@ import { isAdminUser } from "@/lib/admin";
 import { storage } from "@/lib/firebase";
 import { OfferDialog } from "@/components/dashboard/offer-dialog";
 import { redirectToBilling } from "@/lib/billing-client";
-import { hasPendingOffer, onOpenOffers, openOffers, takePendingOffer } from "@/lib/offers-client";
+import { EMBEDDED_CHECKOUT, hasPendingOffer, onOpenCheckout, onOpenOffers, openCheckout, openOffers, takePendingOffer } from "@/lib/offers-client";
 import { hasPendingChart } from "@/lib/pending-chart";
 import { availableCredits, MONTHLY_CREDITS, PLAN_LABELS } from "@/lib/plans";
 import { subscribeUserProfile, type UserProfile } from "@/lib/users";
@@ -48,7 +48,7 @@ export default function DashboardPage() {
   const [tour, setTour] = useState<0 | 1 | 2>(0);
   const [offersOpen, setOffersOpen] = useState(false);
   // Set while handing over to Stripe for an offer picked before sign-up.
-  const [redirecting, setRedirecting] = useState(() => typeof window !== "undefined" && hasPendingOffer());
+  const [redirecting, setRedirecting] = useState(() => typeof window !== "undefined" && !EMBEDDED_CHECKOUT && hasPendingOffer());
   // Admin-only: canned reports without calling the model (remembered on this device).
   const [testMode, setTestMode] = useState(() => {
     try {
@@ -72,6 +72,8 @@ export default function DashboardPage() {
   }, [user]);
 
   useEffect(() => onOpenOffers(() => setOffersOpen(true)), []);
+  // Paying happens in its own dialog: the offer picker steps aside.
+  useEffect(() => onOpenCheckout(() => setOffersOpen(false)), []);
 
   // An offer picked before signing up goes straight to checkout; otherwise an account without an offer sees the offers once.
   const plan = profile?.plan;
@@ -79,6 +81,10 @@ export default function DashboardPage() {
     if (!plan || checkoutDone) return;
     const offer = takePendingOffer();
     if (offer && plan !== "lifetime") {
+      if (EMBEDDED_CHECKOUT) {
+        const timer = setTimeout(() => openCheckout(offer), 0);
+        return () => clearTimeout(timer);
+      }
       redirectToBilling("checkout", offer).catch(() => {
         setRedirecting(false);
         setOffersOpen(true);
