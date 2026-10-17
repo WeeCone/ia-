@@ -321,11 +321,6 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
                     {formatEur(locale, OFFER_PRICE_EUR.monthly)}
                     {t.common.perMonth}
                   </span>
-                  {u.offerOr}
-                  <span className="whitespace-nowrap font-medium text-foreground">
-                    {formatEur(locale, OFFER_PRICE_EUR.lifetime)}
-                    {u.offerLifetime}
-                  </span>
                   .{file ? u.offerKept : ""}
                 </p>
                 <button type="button" onClick={openOffers} className="btn-primary w-full">

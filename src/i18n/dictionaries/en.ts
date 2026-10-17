@@ -118,18 +118,12 @@ export const en: Dict = {
   pricing: {
     titleA: "A clear price.",
     titleB: "A verdict on every chart.",
-    subtitle: "Lifetime access in a single payment, or a monthly subscription with no commitment.",
-    best: "Best value",
+    subtitle: "A monthly subscription with no commitment, cancellable in one click from your account.",
     ttcMonthly: "incl. VAT / month",
-    ttcLifetime: "incl. VAT, one-off payment",
-    lifetimePitch: (months: string) => `The price of ${months} months of subscription, then nothing more to pay.`,
-    lifetimeNote: (yearly: string) => `A year of the monthly subscription costs ${yearly}.`,
-    lifetimeCta: "Get lifetime access",
     monthlyPitch: "No commitment: cancel in one click from your account.",
     monthlyNote: "Charged every month, on your subscription date.",
     monthlyCta: "Subscribe monthly",
-    upgradeNote: "Your monthly subscription will stop automatically, with no further charge.",
-    includedTitle: "Included in both offers",
+    includedTitle: "Included in the subscription",
     included: [
       "Crypto, forex, stocks, indices, commodities",
       "A verdict: the most likely scenario, stated as a plan",
@@ -137,21 +131,17 @@ export const en: Dict = {
       "Levels drawn on your screenshot",
       "History of your analyses",
     ],
-    compactNote: "Secure payment by Stripe · no commitment on the monthly offer",
+    compactNote: "Secure payment by Stripe · no commitment",
     priceNote: (price: string) => ({ before: "From ", price: `${price}/month`, after: " · no commitment" }),
     faqTitle: "Before you pay",
     faq: [
       {
         q: "What happens when I've used my credits for the month?",
-        a: "Your credits are refilled at the start of each period: on your renewal date for the monthly offer, at the start of each calendar month for lifetime access. Nothing extra is charged, and an image that isn't a chart is not counted.",
+        a: "Your credits are refilled on each monthly renewal date of your subscription. Nothing extra is charged, and an image that isn't a chart is not counted.",
       },
       {
         q: "How do I cancel the monthly subscription?",
         a: "In one click, from “My subscription” in your account. The subscription stops at the end of the period already paid, with no further charge.",
-      },
-      {
-        q: "Can I switch from monthly to lifetime access?",
-        a: "Yes, from your account. Your monthly subscription then stops automatically: there are no more monthly charges.",
       },
       {
         q: "Can I get a refund?",
@@ -203,7 +193,7 @@ export const en: Dict = {
       },
       {
         q: "Can I cancel at any time?",
-        a: "Yes. The monthly subscription has no commitment and can be cancelled in one click from your dashboard; the Lifetime offer is a one-off payment with no renewal.",
+        a: "Yes. The monthly subscription has no commitment and can be cancelled in one click from your dashboard.",
         terms: true,
       },
       {
@@ -246,7 +236,6 @@ export const en: Dict = {
   },
   offerDialog: {
     title: "Choose your offer",
-    upgradeTitle: "Switch to lifetime access",
     withCapture: "Your screenshot is kept: it will be ready to analyse as soon as you're back from payment.",
     withoutCapture: "Pay in a minute, and your analyses are available right away.",
   },
@@ -367,11 +356,9 @@ export const en: Dict = {
     checkHint: "You can still run the analysis, or change the screenshot.",
     captureOk: "✓ Sharp screenshot, good size",
     offerReady: "Your screenshot is ready. ",
-    offerChoose: "Choose an offer to run the analysis: ",
-    offerOr: " or ",
-    offerLifetime: " lifetime",
+    offerChoose: "Subscribe to run the analysis: ",
     offerKept: " It will be waiting here after payment.",
-    offerCta: "Choose an offer and analyse",
+    offerCta: "Subscribe and analyse",
     test: "Test (no AI, free)",
     retry: "Try again",
     analyse: "Analyse (1 credit)",
@@ -402,7 +389,6 @@ export const en: Dict = {
     rowCredits: "Credits this month",
     manageSubscription: "Manage my subscription",
     chooseOfferPlain: "Choose an offer",
-    upgrade: "Switch to lifetime access",
   },
   deleteAccount: {
     confirmWord: "DELETE",

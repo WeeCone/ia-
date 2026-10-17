@@ -117,18 +117,12 @@ export const fr = {
   pricing: {
     titleA: "Un prix clair.",
     titleB: "Un verdict sur chaque graphique.",
-    subtitle: "Un accès à vie en un seul paiement, ou un abonnement mensuel sans engagement.",
-    best: "Meilleure offre",
+    subtitle: "Un abonnement mensuel sans engagement, résiliable en un clic depuis votre espace.",
     ttcMonthly: "TTC / mois",
-    ttcLifetime: "TTC, paiement unique",
-    lifetimePitch: (months: string) => `Le prix de ${months} mois d'abonnement, puis plus rien à payer.`,
-    lifetimeNote: (yearly: string) => `Une année d'abonnement mensuel coûte ${yearly}.`,
-    lifetimeCta: "Obtenir l'accès à vie",
     monthlyPitch: "Sans engagement : résiliable en un clic, depuis votre espace.",
     monthlyNote: "Prélevé chaque mois, à la date de souscription.",
     monthlyCta: "S'abonner au mois",
-    upgradeNote: "Votre abonnement mensuel sera arrêté automatiquement, sans nouveau prélèvement.",
-    includedTitle: "Inclus dans les deux offres",
+    includedTitle: "Inclus dans l'abonnement",
     included: [
       "Crypto, forex, actions, indices, matières premières",
       "Un verdict : le scénario le plus probable, formulé en plan",
@@ -136,21 +130,17 @@ export const fr = {
       "Niveaux tracés sur votre capture",
       "Historique de vos analyses",
     ],
-    compactNote: "Paiement sécurisé par Stripe · sans engagement pour l'offre mensuelle",
+    compactNote: "Paiement sécurisé par Stripe · sans engagement",
     priceNote: (price: string) => ({ before: "Dès ", price: `${price}/mois`, after: " · sans engagement" }),
     faqTitle: "Avant de payer",
     faq: [
       {
         q: "Que se passe-t-il quand j'ai utilisé mes crédits du mois ?",
-        a: "Vos crédits sont rechargés au début de chaque période : à votre date d'échéance pour l'offre mensuelle, au début de chaque mois civil pour l'accès à vie. Rien n'est prélevé en plus, et une image qui n'est pas un graphique n'est pas décomptée.",
+        a: "Vos crédits sont rechargés à chaque échéance mensuelle de votre abonnement. Rien n'est prélevé en plus, et une image qui n'est pas un graphique n'est pas décomptée.",
       },
       {
         q: "Comment résilier l'abonnement mensuel ?",
         a: "En un clic, depuis « Mon abonnement » dans votre espace. L'abonnement s'arrête à la fin de la période déjà payée, sans autre prélèvement.",
-      },
-      {
-        q: "Puis-je passer du mensuel à l'accès à vie ?",
-        a: "Oui, depuis votre espace. Votre abonnement mensuel est alors arrêté automatiquement : il n'y a plus aucun prélèvement mensuel.",
       },
       {
         q: "Puis-je être remboursé ?",
@@ -202,7 +192,7 @@ export const fr = {
       },
       {
         q: "Puis-je résilier à tout moment ?",
-        a: "Oui. L'abonnement mensuel est sans engagement et se résilie en un clic depuis votre tableau de bord ; l'offre À vie est un paiement unique, sans renouvellement.",
+        a: "Oui. L'abonnement mensuel est sans engagement et se résilie en un clic depuis votre tableau de bord .",
         terms: true,
       },
       {
@@ -245,7 +235,6 @@ export const fr = {
   },
   offerDialog: {
     title: "Choisissez votre offre",
-    upgradeTitle: "Passer à l'accès à vie",
     withCapture: "Votre capture est gardée : elle sera prête à analyser dès votre retour du paiement.",
     withoutCapture: "Paiement en une minute, puis vos analyses sont disponibles aussitôt.",
   },
@@ -367,11 +356,9 @@ export const fr = {
     checkHint: "Vous pouvez quand même lancer l'analyse, ou changer de capture.",
     captureOk: "✓ Capture nette et de bonne taille",
     offerReady: "Votre capture est prête. ",
-    offerChoose: "Choisissez une offre pour lancer l'analyse : ",
-    offerOr: " ou ",
-    offerLifetime: " à vie",
+    offerChoose: "Abonnez-vous pour lancer l'analyse : ",
     offerKept: " Elle vous attendra ici après le paiement.",
-    offerCta: "Choisir une offre et analyser",
+    offerCta: "S'abonner et analyser",
     test: "Tester (sans IA, gratuit)",
     retry: "Réessayer",
     analyse: "Analyser (1 crédit)",
@@ -402,7 +389,6 @@ export const fr = {
     rowCredits: "Crédits ce mois-ci",
     manageSubscription: "Gérer mon abonnement",
     chooseOfferPlain: "Choisir une offre",
-    upgrade: "Passer à l'accès à vie",
   },
   deleteAccount: {
     confirmWord: "SUPPRIMER",

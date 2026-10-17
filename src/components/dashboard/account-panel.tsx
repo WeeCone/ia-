@@ -44,11 +44,6 @@ export function AccountPanel({ user, profile, credits, onBack }: { user: User; p
             {a.chooseOfferPlain}
           </button>
         )}
-        {profile?.plan === "monthly" && (
-          <button type="button" onClick={openOffers} className="btn-secondary">
-            {a.upgrade}
-          </button>
-        )}
       </div>
       <DeleteAccount plan={profile?.plan} />
     </div>

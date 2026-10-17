@@ -29,7 +29,7 @@ export function OfferDialog({ open, onClose, plan, hasCapture }: { open: boolean
         <div className="flex items-start justify-between gap-4">
           <div>
             <h2 id="offer-dialog-title" className="display text-3xl sm:text-4xl">
-              {plan === "monthly" ? t.offerDialog.upgradeTitle : t.offerDialog.title}
+              {t.offerDialog.title}
             </h2>
             <p className="mt-2 text-muted">
               {hasCapture ? t.offerDialog.withCapture : t.offerDialog.withoutCapture}

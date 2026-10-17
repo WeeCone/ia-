@@ -35,14 +35,14 @@ async function handler(request: Request) {
     source?: string;
     campaign?: string;
   };
-  if (offer !== "monthly" && offer !== "lifetime") {
+  // Lifetime access is no longer sold (existing owners keep it; the webhook still honours their past purchases).
+  if (offer !== "monthly") {
     return Response.json({ error: text.unknownOffer }, { status: 400 });
   }
 
   const userRef = adminDb.collection("users").doc(uid);
   const user = await userRef.get();
-  // Monthly → lifetime is allowed: the webhook stops the subscription once lifetime access is paid.
-  if (user.get("plan") === "lifetime" || (user.get("plan") === "monthly" && offer === "monthly")) {
+  if (user.get("plan") === "lifetime" || user.get("plan") === "monthly") {
     return Response.json({ error: text.alreadyActive }, { status: 409 });
   }
 

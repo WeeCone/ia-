@@ -118,18 +118,12 @@ export const es: Dict = {
   pricing: {
     titleA: "Un precio claro.",
     titleB: "Un veredicto en cada gráfico.",
-    subtitle: "Acceso de por vida con un único pago, o una suscripción mensual sin permanencia.",
-    best: "Mejor oferta",
+    subtitle: "Una suscripción mensual sin permanencia, cancelable en un clic desde tu cuenta.",
     ttcMonthly: "IVA incl. / mes",
-    ttcLifetime: "IVA incl., pago único",
-    lifetimePitch: (months: string) => `El precio de ${months} meses de suscripción, y luego nada más que pagar.`,
-    lifetimeNote: (yearly: string) => `Un año de suscripción mensual cuesta ${yearly}.`,
-    lifetimeCta: "Obtener el acceso de por vida",
     monthlyPitch: "Sin permanencia: cancela en un clic desde tu cuenta.",
     monthlyNote: "Se cobra cada mes, en la fecha de suscripción.",
     monthlyCta: "Suscribirme al mes",
-    upgradeNote: "Tu suscripción mensual se detendrá automáticamente, sin ningún cargo más.",
-    includedTitle: "Incluido en las dos ofertas",
+    includedTitle: "Incluido en la suscripción",
     included: [
       "Criptos, forex, acciones, índices, materias primas",
       "Un veredicto: el escenario más probable, formulado como plan",
@@ -137,21 +131,17 @@ export const es: Dict = {
       "Niveles trazados sobre tu captura",
       "Historial de tus análisis",
     ],
-    compactNote: "Pago seguro con Stripe · sin permanencia en la oferta mensual",
+    compactNote: "Pago seguro con Stripe · sin permanencia",
     priceNote: (price: string) => ({ before: "Desde ", price: `${price}/mes`, after: " · sin permanencia" }),
     faqTitle: "Antes de pagar",
     faq: [
       {
         q: "¿Qué pasa cuando he usado mis créditos del mes?",
-        a: "Tus créditos se recargan al inicio de cada periodo: en tu fecha de renovación para la oferta mensual, al inicio de cada mes natural para el acceso de por vida. No se cobra nada más, y una imagen que no es un gráfico no se descuenta.",
+        a: "Tus créditos se recargan en cada fecha de renovación mensual de tu suscripción. No se cobra nada más, y una imagen que no es un gráfico no se descuenta.",
       },
       {
         q: "¿Cómo cancelo la suscripción mensual?",
         a: "En un clic, desde «Mi suscripción» en tu cuenta. La suscripción termina al final del periodo ya pagado, sin ningún otro cargo.",
-      },
-      {
-        q: "¿Puedo pasar de mensual a acceso de por vida?",
-        a: "Sí, desde tu cuenta. Tu suscripción mensual se detiene entonces automáticamente: ya no hay ningún cargo mensual.",
       },
       {
         q: "¿Puedo pedir un reembolso?",
@@ -203,7 +193,7 @@ export const es: Dict = {
       },
       {
         q: "¿Puedo cancelar en cualquier momento?",
-        a: "Sí. La suscripción mensual no tiene permanencia y se cancela en un clic desde tu panel; la oferta De por vida es un pago único, sin renovación.",
+        a: "Sí. La suscripción mensual no tiene permanencia y se cancela en un clic desde tu panel.",
         terms: true,
       },
       {
@@ -246,7 +236,6 @@ export const es: Dict = {
   },
   offerDialog: {
     title: "Elige tu oferta",
-    upgradeTitle: "Pasar al acceso de por vida",
     withCapture: "Tu captura se conserva: estará lista para analizar en cuanto vuelvas del pago.",
     withoutCapture: "Paga en un minuto y tus análisis estarán disponibles al instante.",
   },
@@ -367,11 +356,9 @@ export const es: Dict = {
     checkHint: "Puedes lanzar el análisis igualmente, o cambiar de captura.",
     captureOk: "✓ Captura nítida y de buen tamaño",
     offerReady: "Tu captura está lista. ",
-    offerChoose: "Elige una oferta para lanzar el análisis: ",
-    offerOr: " o ",
-    offerLifetime: " de por vida",
+    offerChoose: "Suscríbete para lanzar el análisis: ",
     offerKept: " Te esperará aquí después del pago.",
-    offerCta: "Elegir una oferta y analizar",
+    offerCta: "Suscribirse y analizar",
     test: "Probar (sin IA, gratis)",
     retry: "Reintentar",
     analyse: "Analizar (1 crédito)",
@@ -402,7 +389,6 @@ export const es: Dict = {
     rowCredits: "Créditos este mes",
     manageSubscription: "Gestionar mi suscripción",
     chooseOfferPlain: "Elegir una oferta",
-    upgrade: "Pasar al acceso de por vida",
   },
   deleteAccount: {
     confirmWord: "ELIMINAR",

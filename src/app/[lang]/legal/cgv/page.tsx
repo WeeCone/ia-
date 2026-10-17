@@ -47,15 +47,15 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
           <strong>Mensuel — {formatEur("fr", OFFER_PRICE_EUR.monthly)} / mois</strong> : abonnement sans engagement, renouvelé
           automatiquement chaque mois.
         </li>
-        <li>
-          <strong>À vie — {formatEur("fr", OFFER_PRICE_EUR.lifetime)} (paiement unique)</strong> : accès au Service pour toute la
-          durée de son exploitation, sans renouvellement.
-        </li>
       </ul>
       <p>
-        Les deux offres incluent {MONTHLY_CREDITS} analyses par mois (usage raisonnable). Le quota est rechargé à chaque
-        échéance mensuelle (offre Mensuelle) ou au début de chaque mois civil (offre À vie) ; les analyses non utilisées ne
-        sont pas reportées. Une analyse n&apos;est décomptée que si l&apos;image est reconnue comme un graphique de prix.
+        L&apos;abonnement inclut {MONTHLY_CREDITS} analyses par mois (usage raisonnable), rechargées à chaque échéance mensuelle ;
+        les analyses non utilisées ne sont pas reportées. Une analyse n&apos;est décomptée que si l&apos;image est reconnue comme un graphique de prix.
+      </p>
+      <p>
+        L&apos;offre À vie (paiement unique) n&apos;est plus proposée à la vente. Les clients qui l&apos;ont achetée conservent leur
+        accès et leurs {MONTHLY_CREDITS} analyses par mois, rechargées au début de chaque mois civil, dans les conditions en
+        vigueur lors de leur achat.
       </p>
       <p>Les prix sont indiqués en euros, toutes taxes comprises. Il n&apos;existe pas d&apos;offre gratuite.</p>
 
@@ -76,9 +76,7 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
       <h2>7. Résiliation</h2>
       <p>
         L&apos;abonnement Mensuel est résiliable à tout moment depuis la rubrique « Mon abonnement » de votre tableau de bord.
-        La résiliation prend effet à la fin de la période en cours ; aucun prorata n&apos;est remboursé. L&apos;achat de
-        l&apos;offre À vie par un abonné Mensuel met fin au renouvellement de son abonnement : aucun prélèvement mensuel n&apos;a
-        lieu ensuite. Nous pouvons suspendre un compte en cas de manquement grave aux présentes conditions.
+        La résiliation prend effet à la fin de la période en cours ; aucun prorata n&apos;est remboursé. Nous pouvons suspendre un compte en cas de manquement grave aux présentes conditions.
       </p>
 
       <h2>8. Disponibilité et responsabilité</h2>
@@ -132,15 +130,16 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
           <strong>Monthly — {formatEur("en", OFFER_PRICE_EUR.monthly)} / month</strong>: subscription with no commitment, renewed
           automatically every month.
         </li>
-        <li>
-          <strong>Lifetime — {formatEur("en", OFFER_PRICE_EUR.lifetime)} (one-off payment)</strong>: access to the Service for as
-          long as it is operated, with no renewal.
-        </li>
       </ul>
       <p>
-        Both offers include {MONTHLY_CREDITS} analyses per month (fair use). The quota is refilled at each monthly due date
-        (Monthly offer) or at the start of each calendar month (Lifetime offer); unused analyses do not roll over. An analysis is
+        The subscription includes {MONTHLY_CREDITS} analyses per month (fair use), refilled at each monthly due date; unused
+        analyses do not roll over. An analysis is
         only counted if the image is recognised as a price chart.
+      </p>
+      <p>
+        The Lifetime offer (one-off payment) is no longer sold. Customers who bought it keep their access and their{" "}
+        {MONTHLY_CREDITS} analyses per month, refilled at the start of each calendar month, under the terms in force when they
+        bought it.
       </p>
       <p>Prices are in euros, all taxes included. There is no free offer.</p>
 
@@ -160,8 +159,7 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
       <h2>7. Cancellation</h2>
       <p>
         The Monthly subscription can be cancelled at any time from &quot;My subscription&quot; in your dashboard. Cancellation
-        takes effect at the end of the current period; no pro-rata refund is made. Buying the Lifetime offer as a Monthly
-        subscriber ends the renewal of the subscription: no further monthly payment is taken. We may suspend an account in the
+        takes effect at the end of the current period; no pro-rata refund is made. We may suspend an account in the
         event of a serious breach of these terms.
       </p>
 
@@ -214,15 +212,16 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
           <strong>Mensual — {formatEur("es", OFFER_PRICE_EUR.monthly)} / mes</strong>: suscripción sin permanencia, renovada
           automáticamente cada mes.
         </li>
-        <li>
-          <strong>De por vida — {formatEur("es", OFFER_PRICE_EUR.lifetime)} (pago único)</strong>: acceso al Servicio durante
-          todo el tiempo que se explote, sin renovación.
-        </li>
       </ul>
       <p>
-        Ambas ofertas incluyen {MONTHLY_CREDITS} análisis al mes (uso razonable). La cuota se recarga en cada vencimiento mensual
-        (oferta Mensual) o al inicio de cada mes natural (oferta De por vida); los análisis no utilizados no se acumulan. Un
+        La suscripción incluye {MONTHLY_CREDITS} análisis al mes (uso razonable), recargados en cada vencimiento mensual; los
+        análisis no utilizados no se acumulan. Un
         análisis solo se descuenta si la imagen se reconoce como un gráfico de precios.
+      </p>
+      <p>
+        La oferta De por vida (pago único) ya no se comercializa. Los clientes que la compraron conservan su acceso y sus{" "}
+        {MONTHLY_CREDITS} análisis al mes, recargados al inicio de cada mes natural, en las condiciones vigentes en el momento de
+        su compra.
       </p>
       <p>Los precios se indican en euros, impuestos incluidos. No existe oferta gratuita.</p>
 
@@ -243,8 +242,7 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
       <h2>7. Cancelación</h2>
       <p>
         La suscripción Mensual puede cancelarse en cualquier momento desde «Mi suscripción» en su panel. La cancelación surte
-        efecto al final del periodo en curso; no se reembolsa ningún prorrateo. La compra de la oferta De por vida por un
-        suscriptor Mensual pone fin a la renovación de su suscripción: no se realiza ningún cargo mensual posterior. Podemos
+        efecto al final del periodo en curso; no se reembolsa ningún prorrateo. Podemos
         suspender una cuenta en caso de incumplimiento grave de las presentes condiciones.
       </p>
 
