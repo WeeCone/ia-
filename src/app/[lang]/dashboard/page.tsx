@@ -72,6 +72,34 @@ export default function DashboardPage() {
     if (!loading && !user) router.replace(href("/auth/login"));
   }, [loading, user, router]);
 
+  // Back from payment: ask the server to check the session with Stripe and open what was paid, without depending on the
+  // webhook alone. A few tries while Stripe finishes the payment; the profile listener shows the result.
+  useEffect(() => {
+    if (!user) return;
+    const sessionId = new URLSearchParams(window.location.search).get("session_id");
+    if (!sessionId) return;
+    let stale = false;
+    (async () => {
+      for (let attempt = 0; attempt < 5 && !stale; attempt++) {
+        try {
+          const response = await fetch("/api/billing/confirm", {
+            method: "POST",
+            headers: { Authorization: `Bearer ${await user.getIdToken()}`, "Content-Type": "application/json", "X-Locale": locale },
+            body: JSON.stringify({ sessionId }),
+          });
+          const data = await response.json().catch(() => ({}));
+          if (data.ok || !data.pending) break;
+        } catch {}
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+      }
+      // Done with the return parameters: a reload must not confirm again.
+      if (!stale) window.history.replaceState(null, "", window.location.pathname);
+    })();
+    return () => {
+      stale = true;
+    };
+  }, [user, locale]);
+
   // Most payments start from here: have Stripe's script ready before anyone clicks.
   useEffect(() => preloadStripe(), []);
 

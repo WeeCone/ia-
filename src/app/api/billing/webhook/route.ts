@@ -1,7 +1,8 @@
 import type Stripe from "stripe";
 import { adminDb } from "@/lib/firebase-admin";
-import { creditPeriod, MONTHLY_CREDITS, TRIAL_CREDITS } from "@/lib/plans";
+import { creditPeriod, MONTHLY_CREDITS } from "@/lib/plans";
 import { attribution, recordPurchase } from "@/lib/stats";
+import { creditPaidInvoice } from "@/lib/billing-grants";
 import { appUrl, getStripe } from "@/lib/stripe";
 import { sendTrialEmail } from "@/lib/email";
 import { hasLocale, type Locale } from "@/i18n/config";
@@ -102,12 +103,7 @@ export async function POST(request: Request) {
       if (!uid) break;
       const subscription = details.subscription;
       const trialStart = details.metadata?.offer === "trial" && invoice.billing_reason === "subscription_create";
-      await updateUser(uid, {
-        plan: "monthly",
-        credits: trialStart ? TRIAL_CREDITS : MONTHLY_CREDITS,
-        creditsPeriod: creditPeriod(),
-        stripeSubscriptionId: typeof subscription === "string" ? subscription : subscription.id,
-      });
+      await creditPaidInvoice(uid, { id: invoice.id!, trialStart }, typeof subscription === "string" ? subscription : subscription.id);
       break;
     }
 

@@ -95,8 +95,8 @@ async function handler(request: Request) {
       locale,
       // Embedded: Stripe's form opens inside the site and sends the page to return_url once paid.
       ...(embedded
-        ? { ui_mode: "embedded_page" as const, return_url: `${dashboard}?checkout=success` }
-        : { success_url: `${dashboard}?checkout=success`, cancel_url: dashboard }),
+        ? { ui_mode: "embedded_page" as const, return_url: `${dashboard}?checkout=success&session_id={CHECKOUT_SESSION_ID}` }
+        : { success_url: `${dashboard}?checkout=success&session_id={CHECKOUT_SESSION_ID}`, cancel_url: dashboard }),
       metadata,
       // Stripe's form in Scanzivo's colours and type. No logo, icon or name here: Stripe refuses them for the embedded
       // form (the dialog around it already shows the brand).
