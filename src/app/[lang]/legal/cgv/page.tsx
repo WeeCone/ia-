@@ -5,7 +5,7 @@ import type { Locale } from "@/i18n/config";
 import { formatEur } from "@/i18n/format";
 import { getI18n, languageAlternates } from "@/i18n/server";
 import { COMPANY } from "@/lib/legal";
-import { MONTHLY_CREDITS, OFFER_PRICE_EUR } from "@/lib/plans";
+import { MONTHLY_CREDITS, OFFER_PRICE_EUR, TRIAL_CREDITS, TRIAL_DAYS } from "@/lib/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { locale, t } = await getI18n();
@@ -48,8 +48,12 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
           automatiquement chaque mois.
         </li>
         <li>
-          <strong>Essai — {formatEur("fr", OFFER_PRICE_EUR.trial)} (paiement unique)</strong> : une analyse, achetable une seule fois
-          par compte, sans abonnement ni renouvellement. Le crédit d&apos;essai reste disponible jusqu&apos;à son utilisation.
+          <strong>Essai — {formatEur("fr", OFFER_PRICE_EUR.trial)} pour {TRIAL_DAYS} jours</strong> : {TRIAL_CREDITS} analyse pendant
+          l&apos;essai, une seule fois par compte et réservé aux nouveaux clients. Le moyen de paiement est enregistré : à la fin
+          de l&apos;essai, l&apos;abonnement Mensuel démarre automatiquement au prix indiqué ci-dessus, sauf résiliation avant la
+          fin de l&apos;essai depuis la rubrique « Mon abonnement » de votre tableau de bord. La date de début de
+          l&apos;abonnement est indiquée au moment du paiement. Les {formatEur("fr", OFFER_PRICE_EUR.trial)} de l&apos;essai ne
+          sont pas déduits de l&apos;abonnement.
         </li>
       </ul>
       <p>
@@ -135,8 +139,11 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
           automatically every month.
         </li>
         <li>
-          <strong>Trial — {formatEur("en", OFFER_PRICE_EUR.trial)} (one-off payment)</strong>: one analysis, which can be bought only
-          once per account, with no subscription or renewal. The trial credit remains available until it is used.
+          <strong>Trial — {formatEur("en", OFFER_PRICE_EUR.trial)} for {TRIAL_DAYS} days</strong>: {TRIAL_CREDITS} analysis during the
+          trial, once per account and for new customers only. Your payment method is saved: when the trial ends, the Monthly
+          subscription starts automatically at the price stated above, unless you cancel before the end of the trial from
+          &quot;My subscription&quot; in your dashboard. The subscription start date is shown at payment. The trial&apos;s{" "}
+          {formatEur("en", OFFER_PRICE_EUR.trial)} is not deducted from the subscription.
         </li>
       </ul>
       <p>
@@ -221,8 +228,11 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
           automáticamente cada mes.
         </li>
         <li>
-          <strong>Prueba — {formatEur("es", OFFER_PRICE_EUR.trial)} (pago único)</strong>: un análisis, que solo puede comprarse una
-          vez por cuenta, sin suscripción ni renovación. El crédito de prueba sigue disponible hasta que se utilice.
+          <strong>Prueba — {formatEur("es", OFFER_PRICE_EUR.trial)} por {TRIAL_DAYS} días</strong>: {TRIAL_CREDITS} análisis durante la
+          prueba, una sola vez por cuenta y solo para nuevos clientes. Su medio de pago queda registrado: al final de la prueba, la
+          suscripción Mensual empieza automáticamente al precio indicado arriba, salvo cancelación antes del final de la prueba
+          desde «Mi suscripción» en su panel. La fecha de inicio de la suscripción se indica en el momento del pago. Los{" "}
+          {formatEur("es", OFFER_PRICE_EUR.trial)} de la prueba no se descuentan de la suscripción.
         </li>
       </ul>
       <p>

@@ -1,6 +1,6 @@
 import type Stripe from "stripe";
 import { adminDb } from "@/lib/firebase-admin";
-import { availableCredits, creditPeriod, MONTHLY_CREDITS, TRIAL_CREDITS } from "@/lib/plans";
+import { creditPeriod, MONTHLY_CREDITS, TRIAL_CREDITS } from "@/lib/plans";
 import { attribution, recordPurchase } from "@/lib/stats";
 import { getStripe } from "@/lib/stripe";
 
@@ -45,20 +45,18 @@ async function countPurchase(session: Stripe.Checkout.Session) {
   }
 }
 
-/** The one-off trial: adds its credit once, keyed on the session so a retried event never adds it twice. */
-async function grantTrial(session: Stripe.Checkout.Session) {
+/** The paid trial: marks the account (one trial each) and records when the subscription's first payment is due. */
+async function markTrial(session: Stripe.Checkout.Session) {
   const uid = session.metadata?.uid;
   if (!uid || session.metadata?.offer !== "trial" || session.payment_status !== "paid") return;
-  const ref = userRef(uid);
-  await adminDb.runTransaction(async (tx) => {
-    const user = await tx.get(ref);
-    if (!user.exists || user.get("trialSessionId") === session.id) return;
-    tx.update(ref, {
-      credits: availableCredits(user.data() ?? {}) + TRIAL_CREDITS,
-      creditsPeriod: creditPeriod(),
-      trialSessionId: session.id,
-    });
-  });
+  let trialEndsAt: number | null = null;
+  const subscription = session.subscription;
+  if (subscription) {
+    const id = typeof subscription === "string" ? subscription : subscription.id;
+    const trialEnd = (await getStripe().subscriptions.retrieve(id)).trial_end;
+    trialEndsAt = trialEnd ? trialEnd * 1000 : null;
+  }
+  await updateUser(uid, { trialSessionId: session.id, trialEndsAt });
 }
 
 export async function POST(request: Request) {
@@ -77,19 +75,22 @@ export async function POST(request: Request) {
     case "checkout.session.completed":
     case "checkout.session.async_payment_succeeded":
       await grantLifetime(event.data.object);
-      await grantTrial(event.data.object);
+      await markTrial(event.data.object);
       await countPurchase(event.data.object);
       break;
 
-    // Each paid monthly invoice (first payment and every renewal) resets the monthly credits.
+    // Each paid monthly invoice (first payment and every renewal) resets the monthly credits. A trial's first invoice
+    // (the 0,99 € fee) opens the trial's credits only; the full quota comes with the first monthly payment.
     case "invoice.paid": {
-      const details = event.data.object.parent?.subscription_details;
+      const invoice = event.data.object;
+      const details = invoice.parent?.subscription_details;
       const uid = details?.metadata?.uid;
       if (!uid) break;
       const subscription = details.subscription;
+      const trialStart = details.metadata?.offer === "trial" && invoice.billing_reason === "subscription_create";
       await updateUser(uid, {
         plan: "monthly",
-        credits: MONTHLY_CREDITS,
+        credits: trialStart ? TRIAL_CREDITS : MONTHLY_CREDITS,
         creditsPeriod: creditPeriod(),
         stripeSubscriptionId: typeof subscription === "string" ? subscription : subscription.id,
       });
@@ -105,7 +106,8 @@ export async function POST(request: Request) {
       if ((await userRef(uid).get()).get("plan") === "lifetime") break;
       const active = event.type === "customer.subscription.updated" && ACTIVE_STATUSES.includes(subscription.status);
       // Losing the subscription keeps any credits left; they simply stop being refilled.
-      await updateUser(uid, { plan: active ? "monthly" : "none" });
+      const trialing = active && subscription.status === "trialing" && subscription.trial_end;
+      await updateUser(uid, { plan: active ? "monthly" : "none", trialEndsAt: trialing ? subscription.trial_end! * 1000 : null });
       break;
     }
   }

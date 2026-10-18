@@ -9,6 +9,7 @@ import { isAdminUser } from "@/lib/admin";
 import { auth } from "@/lib/firebase";
 import { availableCredits, MONTHLY_CREDITS } from "@/lib/plans";
 import type { UserProfile } from "@/lib/users";
+import { INTL_LOCALE } from "@/i18n/config";
 import { useI18n } from "@/i18n/client";
 import { HistoryList, type StoredAnalysis } from "../analysis-history";
 import { BillingButton } from "../billing-button";
@@ -36,7 +37,7 @@ function initials(user: User) {
 }
 
 function PlanCard({ profile }: { profile: UserProfile | null }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   if (!profile) return null;
   if (profile.plan === "none" && availableCredits(profile) > 0) {
     return (
@@ -60,7 +61,12 @@ function PlanCard({ profile }: { profile: UserProfile | null }) {
   return (
     <div className="rounded-xl border border-border bg-card/70 p-3">
       <p className="text-sm font-medium">{profile.plan === "monthly" ? t.account.monthlyPlan : t.account.lifetimePlan}</p>
-      <p className="mt-0.5 text-xs text-muted">{t.account.perMonth(MONTHLY_CREDITS)}</p>
+      <p className="mt-0.5 text-xs text-muted">
+        {/* Cleared by the webhook once the first monthly payment goes through. */}
+        {profile.trialEndsAt
+          ? t.account.trialUntil(new Date(profile.trialEndsAt).toLocaleDateString(INTL_LOCALE[locale], { day: "numeric", month: "long" }))
+          : t.account.perMonth(MONTHLY_CREDITS)}
+      </p>
     </div>
   );
 }

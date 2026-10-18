@@ -11,7 +11,7 @@ import { BillingButton } from "./billing-button";
 type SoldOffer = "monthly" | "trial";
 
 /**
- * One offer on sale: the monthly subscription (the main offer) or the one-off trial analysis.
+ * One offer on sale: the monthly subscription (the main offer) or the paid trial that turns into it.
  * Lifetime access is no longer sold; existing owners keep it.
  */
 function OfferCard({ offer, compact }: { offer: SoldOffer; compact: boolean }) {
@@ -23,7 +23,13 @@ function OfferCard({ offer, compact }: { offer: SoldOffer; compact: boolean }) {
   const price = formatEur(locale, OFFER_PRICE_EUR[offer]);
   const { name, unit, pitch, note, cta } = main
     ? { name: t.common.monthly, unit: p.ttcMonthly, pitch: p.monthlyPitch, note: p.monthlyNote, cta: p.monthlyCta }
-    : { name: t.common.trial, unit: p.ttcTrial, pitch: p.trialPitch, note: p.trialNote, cta: p.trialCta(price) };
+    : {
+        name: t.common.trial,
+        unit: p.ttcTrial,
+        pitch: p.trialPitch,
+        note: p.trialNote(formatEur(locale, OFFER_PRICE_EUR.monthly)),
+        cta: p.trialCta(price),
+      };
   const button = `${main ? "btn-primary" : "btn-secondary"} w-full ${compact ? "mt-6" : "mt-8"}`;
 
   return (

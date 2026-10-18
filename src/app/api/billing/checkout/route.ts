@@ -1,9 +1,9 @@
 import Stripe from "stripe";
 import { adminDb } from "@/lib/firebase-admin";
-import { TRIAL_PRICE_CENTS, type Offer } from "@/lib/plans";
+import { TRIAL_DAYS, TRIAL_PRICE_CENTS, type Offer } from "@/lib/plans";
 import { getRequestUid } from "@/lib/server-auth";
 import { appUrl, getStripe, withBillingErrors } from "@/lib/stripe";
-import { localePath } from "@/i18n/config";
+import { INTL_LOCALE, localePath } from "@/i18n/config";
 import { DICTIONARIES } from "@/i18n/dictionaries";
 import { requestLocale } from "@/i18n/server";
 import { statKey } from "@/lib/stats";
@@ -29,6 +29,15 @@ async function customerExists(id: string) {
   }
 }
 
+/** The date the trial's subscription starts, as the customer will read it. */
+function trialEnd(locale: "fr" | "en" | "es") {
+  return new Date(Date.now() + TRIAL_DAYS * 24 * 3600 * 1000).toLocaleDateString(INTL_LOCALE[locale], {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 async function handler(request: Request) {
   const locale = requestLocale(request);
   const text = DICTIONARIES[locale].api;
@@ -51,8 +60,8 @@ async function handler(request: Request) {
   if (user.get("plan") === "lifetime" || user.get("plan") === "monthly") {
     return Response.json({ error: text.alreadyActive }, { status: 409 });
   }
-  // One trial per account.
-  if (offer === "trial" && user.get("trialSessionId")) {
+  // One trial per account, and only for accounts that never subscribed.
+  if (offer === "trial" && (user.get("trialSessionId") || user.get("stripeSubscriptionId"))) {
     return Response.json({ error: text.trialUsed }, { status: 409 });
   }
 
@@ -79,10 +88,12 @@ async function handler(request: Request) {
   const session = await stripe.checkout.sessions.create({
     customer: customerId,
     client_reference_id: uid,
+    // Trial: the monthly price with a trial period, plus the 0,99 € fee charged today on the first invoice.
     line_items: [
-      offer === "trial"
-        ? { price_data: { currency: "eur", unit_amount: TRIAL_PRICE_CENTS, product_data: { name: TRIAL_NAMES[locale] } }, quantity: 1 }
-        : { price: PRICES[offer], quantity: 1 },
+      { price: PRICES.monthly, quantity: 1 },
+      ...(offer === "trial"
+        ? [{ price_data: { currency: "eur", unit_amount: TRIAL_PRICE_CENTS, product_data: { name: TRIAL_NAMES[locale] } }, quantity: 1 }]
+        : []),
     ],
     locale,
     // Embedded: Stripe's form opens inside the site and sends the page to return_url once paid.
@@ -97,10 +108,11 @@ async function handler(request: Request) {
       terms_of_service_acceptance: {
         message: text.checkoutConsent(`${base}${localePath(locale, "/legal/cgv")}`),
       },
+      // The trial's terms, right above the pay button: what is charged today, and when the subscription starts.
+      ...(offer === "trial" ? { submit: { message: text.trialTerms(trialEnd(locale)) } } : {}),
     },
-    ...(offer === "monthly"
-      ? { mode: "subscription", subscription_data: { metadata } }
-      : { mode: "payment", invoice_creation: { enabled: true } }),
+    mode: "subscription",
+    subscription_data: { metadata, ...(offer === "trial" ? { trial_period_days: TRIAL_DAYS } : {}) },
   });
 
   return Response.json(embedded ? { clientSecret: session.client_secret } : { url: session.url });

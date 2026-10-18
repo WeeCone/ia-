@@ -13,8 +13,10 @@ export type UserProfile = {
   credits: number;
   creditsPeriod?: string;
   stripeCustomerId?: string;
-  /** Set once the one-off trial is paid: it can be bought only once per account. */
+  /** Set once the trial is paid: it can be taken only once per account. */
   trialSessionId?: string;
+  /** End of the running trial (ms); the subscription's first monthly payment happens then. Absent outside a trial. */
+  trialEndsAt?: number | null;
   /** Language chosen at sign-up: emails and analyses default to it. */
   locale?: Locale;
 };
