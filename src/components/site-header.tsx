@@ -3,16 +3,17 @@ import { formatEur } from "@/i18n/format";
 import { getI18n } from "@/i18n/server";
 import { OFFER_PRICE_EUR } from "@/lib/plans";
 import { HeaderAccountLink } from "./header-account-link";
+import { LanguageMenu } from "./language-menu";
 import { LanguageSwitcher } from "./language-switcher";
 import { Logo } from "./logo";
 import { ScanCta } from "./scan-cta";
 
 export async function SiteHeader() {
   const { t, locale, href } = await getI18n();
-  // The paid trial, as a plain link like the others: it opens the pricing section, where its terms are spelled out.
+  // The paid trial label: the price picked out in the brand green.
   const trial = (
     <>
-      {t.common.trial} <strong className="font-semibold">{formatEur(locale, OFFER_PRICE_EUR.trial)}</strong>
+      {t.common.trial} <strong className="font-bold text-accent">{formatEur(locale, OFFER_PRICE_EUR.trial)}</strong>
     </>
   );
   const NAV = [
@@ -33,13 +34,14 @@ export async function SiteHeader() {
               {label}
             </Link>
           ))}
-          <Link href={href("/#tarifs")} className="btn-ghost hidden gap-1.5 whitespace-nowrap xl:inline-flex">
-            {trial}
-          </Link>
         </nav>
         <div className="flex items-center gap-1">
-          <LanguageSwitcher className="mr-1 hidden lg:flex" />
+          <LanguageMenu className="hidden xl:block" />
           <HeaderAccountLink className="btn-ghost hidden sm:inline-flex" />
+          {/* The trial stands next to the main button, as its lighter alternative; it opens the pricing section and its terms. */}
+          <Link href={href("/#tarifs")} className="btn-secondary ml-1 hidden whitespace-nowrap rounded-full px-4 py-2.5 lg:inline-flex">
+            {trial}
+          </Link>
           <ScanCta className="btn-primary ml-1 whitespace-nowrap rounded-full px-4 py-2.5 sm:px-5">
             <span>
               {t.header.scan}
