@@ -46,7 +46,7 @@ export const fr = {
     titleLine1: "L'IA qui analyse vos graphiques",
     titleLine2: "de vos actifs préférés :",
     words: ["la crypto", "le forex", "l’or", "les indices", "les actions"],
-    subtitle: "Une capture d'écran, un verdict clair et un plan chiffré : entrée, stop, objectifs. En moins d'une minute.",
+    subtitle: "Envoyez une capture de votre graphique. En moins d'une minute, vous savez où entrer, où placer votre stop et quoi viser.",
     trialLine: (trial: string, monthly: string) => ({
       before: "Envie d'essayer d'abord ? ",
       offer: `3 jours pour ${trial}`,
@@ -67,8 +67,8 @@ export const fr = {
     titleB: "lire un graphique.",
     points: [
       "Les niveaux clés tracés directement sur votre capture, avec leur prix.",
-      "La structure, les moyennes mobiles et le momentum lus comme par un analyste.",
-      "Un verdict et un plan chiffré : entrée, stop, objectifs. En moins d’une minute.",
+      "La structure du marché, les moyennes mobiles et le momentum, lus comme le ferait un analyste.",
+      "Un verdict, avec l’entrée, le stop et les objectifs chiffrés.",
     ],
     cta: "Analyser mon graphique",
     caption: "Bitcoin en hebdomadaire · résultats floutés, l'analyse complète est réservée aux abonnés. Pas un conseil en investissement.",
@@ -79,7 +79,7 @@ export const fr = {
   features: {
     titleA: "Tout ce que l'IA lit",
     titleB: "sur votre graphique.",
-    subtitle: "Chaque point de la lecture est annoté sur la capture elle-même, au bon prix.",
+    subtitle: "Ce que l'IA relève est noté directement sur votre capture, au bon niveau de prix.",
     readings: [
       { title: "Supports & résistances", text: "Les niveaux clés sont tracés sur votre capture, à leur vraie hauteur, avec leur prix." },
       {
@@ -88,7 +88,7 @@ export const fr = {
       },
       { title: "Indicateurs visibles", text: "RSI, MACD, moyennes mobiles, volumes : s'ils figurent sur la capture, ils comptent dans la lecture." },
       { title: "Un plan chiffré", text: "Entrée, stop, objectifs et ratio gain / risque, calculés à partir des prix du graphique." },
-      { title: "Un verdict, pas un « peut-être »", text: "Le scénario le plus probable, formulé en action : acheter, vendre, attendre ou s'abstenir." },
+      { title: "Un verdict franc", text: "Le scénario le plus probable, traduit en action : acheter, vendre, attendre ou ne rien faire." },
     ],
     platforms: "Fonctionne avec TradingView, Binance, MetaTrader… de la bougie 1 minute à l'hebdomadaire.",
     reading: "Lecture Scanzivo",
@@ -102,15 +102,15 @@ export const fr = {
     headline: "Acheter sur clôture 4H au-dessus de 65 400, stop 64 300, objectifs 66 600 puis 67 000.",
   },
   method: {
-    titleA: "Trois étapes,",
-    titleB: "pas une de plus.",
+    titleA: "De la capture",
+    titleB: "au plan de trade.",
     step: "Étape",
     steps: [
       { title: "Capturez", text: "Un screenshot de votre graphique, sur n'importe quelle plateforme : TradingView, Binance, MetaTrader…" },
       { title: "Déposez", text: "Glissez l'image ou collez-la avec Ctrl+V. Ajoutez un mot de contexte si vous voulez." },
       {
         title: "Décidez",
-        text: "Un verdict clair : le scénario le plus probable, avec entrée, stop et objectifs. Ou « attendre » quand le signal n'y est pas.",
+        text: "Vous obtenez le scénario le plus probable, avec l'entrée, le stop et les objectifs. Ou « attendre », quand le signal n'y est pas encore.",
       },
     ],
   },
@@ -122,11 +122,11 @@ export const fr = {
     stars: (rating: number) => `${rating} sur 5`,
   },
   pricing: {
-    titleA: "Un prix clair.",
-    titleB: "Un verdict sur chaque graphique.",
-    subtitle: "Un abonnement au mois, sans engagement. Vous pouvez d'abord l'essayer 3\u00a0jours pour 0,99\u00a0€.",
+    titleA: "Un abonnement simple,",
+    titleB: "sans engagement.",
+    subtitle: "Vous pouvez d'abord l'essayer 3\u00a0jours pour 0,99\u00a0€.",
     ttcMonthly: "TTC / mois",
-    monthlyPitch: "Sans engagement : résiliable en un clic, depuis votre espace.",
+    monthlyPitch: "Vous arrêtez quand vous voulez, depuis votre espace.",
     monthlyNote: "Prélevé chaque mois, à la date de souscription.",
     monthlyCta: "S'abonner au mois",
     ttcTrial: "TTC, aujourd'hui",
@@ -144,7 +144,7 @@ export const fr = {
     includedTitle: "Inclus dans l'abonnement",
     included: [
       "Crypto, forex, actions, indices, matières premières",
-      "Un verdict : le scénario le plus probable, formulé en plan",
+      "Le scénario le plus probable, traduit en plan d'action",
       "Entrée, stop, objectifs et ratio gain / risque",
       "Niveaux tracés sur votre capture",
       "Historique de vos analyses",
@@ -167,7 +167,7 @@ export const fr = {
       },
       {
         q: "Puis-je être remboursé ?",
-        a: "L'accès est ouvert dès le paiement : au moment de payer, vous demandez cet accès immédiat et renoncez au délai de rétractation, comme le prévoit la loi pour un service numérique.",
+        a: "Non. L'accès est ouvert dès le paiement : en payant, vous demandez cet accès immédiat et renoncez au délai de rétractation, comme la loi le permet pour un service numérique.",
         terms: true,
       },
       {
@@ -179,13 +179,13 @@ export const fr = {
   },
   trust: [
     "Paiement sécurisé par Stripe",
-    "Sans engagement, résiliable en un clic",
+    "Sans engagement",
     "Vos captures restent visibles par vous seul",
     "Une image qui n'est pas un graphique n'est pas décomptée",
   ],
   faq: {
     title: "Questions fréquentes",
-    subtitle: "Tout ce qu'il faut savoir avant votre première analyse.",
+    subtitle: "Les questions qu'on nous pose le plus souvent.",
     cta: "Commencer →",
     termsLink: "Détails dans les conditions générales",
     items: [
@@ -207,7 +207,7 @@ export const fr = {
       },
       {
         q: "Puis-je adapter l'analyse à ma façon de trader ?",
-        a: "Oui : ajoutez un contexte avant d'analyser, par exemple « scalping 5 min, je cherche un short » ou « investissement long terme ». L'IA en tient compte dans sa lecture et ses scénarios.",
+        a: "Oui. Ajoutez un contexte avant d'analyser, par exemple « scalping 5 min, je cherche un short » ou « investissement long terme ». L'IA en tient compte dans sa lecture et ses scénarios.",
       },
       {
         q: "Comment sont comptées les analyses ?",
@@ -215,7 +215,7 @@ export const fr = {
       },
       {
         q: "Puis-je résilier à tout moment ?",
-        a: "Oui. L'abonnement mensuel est sans engagement et se résilie en un clic depuis votre tableau de bord .",
+        a: "Oui. L'abonnement est sans engagement : vous le résiliez depuis votre espace et il s'arrête à la fin du mois déjà payé.",
         terms: true,
       },
       {
@@ -225,9 +225,9 @@ export const fr = {
     ],
   },
   closing: {
-    titleA: "Arrêtez de deviner.",
-    titleB: "Analysez.",
-    subtitle: "Votre prochain graphique mérite un second avis, chiffré et argumenté.",
+    titleA: "Avant votre prochain trade,",
+    titleB: "demandez un second avis.",
+    subtitle: "Scanzivo lit votre graphique et vous répond avec des niveaux précis.",
     cta: "Scanner un graphique →",
     trialCta: (price: string) => `Essayer 3 jours pour ${price}`,
     trialNote: (monthly: string) => `Ensuite ${monthly}/mois si vous continuez. Vous pouvez résilier pendant l'essai.`,
@@ -264,8 +264,8 @@ export const fr = {
   },
   offerDialog: {
     title: "Choisissez votre offre",
-    withCapture: "Votre capture est gardée : elle sera prête à analyser dès votre retour du paiement.",
-    withoutCapture: "Paiement en une minute, puis vos analyses sont disponibles aussitôt.",
+    withCapture: "On garde votre capture de côté : elle sera prête à analyser après le paiement.",
+    withoutCapture: "Le paiement prend une minute, et vous pouvez analyser tout de suite après.",
     trialTitle: (price: string) => `Votre graphique est prêt. Analysez-le pour ${price}.`,
     trialSubtitle: (monthly: string) => `C'est le prix de l'essai de 3 jours. Ensuite ${monthly}/mois si vous gardez l'abonnement, résiliable quand vous voulez.`,
   },
@@ -279,7 +279,7 @@ export const fr = {
     password: "Mot de passe",
     google: "Continuer avec Google",
     login: {
-      title: "Bon retour",
+      title: "Content de vous revoir",
       subtitle: "Connectez-vous pour analyser vos graphiques.",
       forgot: "Oublié ?",
       submit: "Se connecter",
@@ -289,7 +289,7 @@ export const fr = {
     },
     signup: {
       title: "Ouvrir un compte",
-      subtitleOffer: "Créez votre compte : le paiement sécurisé s'ouvre juste après.",
+      subtitleOffer: "Créez votre compte, le paiement s'ouvre juste après.",
       subtitleChart: "Votre capture est prête. Créez votre compte pour l'analyser.",
       subtitle: "Créez votre compte, puis choisissez votre offre.",
       passwordPlaceholder: "6 caractères minimum",
@@ -360,7 +360,7 @@ export const fr = {
     hello: "Salut",
     welcome: "et bienvenue",
     intro:
-      "Importez une capture de graphique : Scanzivo la lit comme un analyste et vous rend un plan d'action chiffré sur le scénario le plus probable, avec les niveaux tracés.",
+      "Déposez une capture de graphique. Scanzivo vous rend le scénario le plus probable, un plan chiffré et les niveaux tracés sur l'image.",
     testMode: "Mode test (admin)",
     testModeHint: " : rapport d'exemple, sans appeler l'IA ni débiter de crédit",
     skipTour: "Passer la visite",
@@ -458,7 +458,7 @@ export const fr = {
     needRating: "Choisissez une note de 1 à 5.",
     needText: "Écrivez au moins quelques mots.",
     failed: "Envoi impossible pour le moment. Réessayez plus tard.",
-    title: "Votre avis compte",
+    title: "Un avis sur Scanzivo ?",
     intro: (count: number) => `Vous avez fait ${count} analyses. Qu'en pensez-vous ?`,
     later: "Plus tard",
     rating: "Note",

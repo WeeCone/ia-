@@ -47,7 +47,7 @@ export const es: Dict = {
     titleLine1: "La IA que analiza tus gráficos",
     titleLine2: "de tus activos favoritos:",
     words: ["las criptos", "el forex", "el oro", "los índices", "las acciones"],
-    subtitle: "Una captura de pantalla, un veredicto claro y un plan con cifras: entrada, stop, objetivos. En menos de un minuto.",
+    subtitle: "Envía una captura de tu gráfico. En menos de un minuto sabes dónde entrar, dónde poner el stop y a qué apuntar.",
     trialLine: (trial: string, monthly: string) => ({
       before: "¿Quieres probarlo antes? ",
       offer: `3 días por ${trial}`,
@@ -68,8 +68,8 @@ export const es: Dict = {
     titleB: "lee un gráfico.",
     points: [
       "Los niveles clave trazados directamente sobre tu captura, con su precio.",
-      "La estructura, las medias móviles y el momentum leídos como lo haría un analista.",
-      "Un veredicto y un plan con cifras: entrada, stop, objetivos. En menos de un minuto.",
+      "La estructura del mercado, las medias móviles y el momentum, leídos como lo haría un analista.",
+      "Un veredicto, con la entrada, el stop y los objetivos en cifras.",
     ],
     cta: "Analizar mi gráfico",
     caption: "Bitcoin en semanal · resultados difuminados, el análisis completo es para suscriptores. No es un asesoramiento de inversión.",
@@ -80,7 +80,7 @@ export const es: Dict = {
   features: {
     titleA: "Todo lo que la IA lee",
     titleB: "en tu gráfico.",
-    subtitle: "Cada punto de la lectura se anota sobre la propia captura, en el precio exacto.",
+    subtitle: "Lo que la IA detecta se marca directamente sobre tu captura, en el nivel de precio exacto.",
     readings: [
       { title: "Soportes y resistencias", text: "Los niveles clave se trazan sobre tu captura, a su altura real, con su precio." },
       {
@@ -89,7 +89,7 @@ export const es: Dict = {
       },
       { title: "Indicadores visibles", text: "RSI, MACD, medias móviles, volumen: si aparecen en la captura, cuentan en la lectura." },
       { title: "Un plan con cifras", text: "Entrada, stop, objetivos y ratio beneficio/riesgo, calculados a partir de los precios del gráfico." },
-      { title: "Un veredicto, no un «quizás»", text: "El escenario más probable, formulado como acción: comprar, vender, esperar o abstenerse." },
+      { title: "Un veredicto claro", text: "El escenario más probable, convertido en acción: comprar, vender, esperar o no hacer nada." },
     ],
     platforms: "Funciona con TradingView, Binance, MetaTrader… de la vela de 1 minuto al semanal.",
     reading: "Lectura Scanzivo",
@@ -103,15 +103,15 @@ export const es: Dict = {
     headline: "Comprar con cierre de 4H por encima de 65.400, stop 64.300, objetivos 66.600 y luego 67.000.",
   },
   method: {
-    titleA: "Tres pasos,",
-    titleB: "ni uno más.",
+    titleA: "De la captura",
+    titleB: "al plan de trading.",
     step: "Paso",
     steps: [
       { title: "Captura", text: "Una captura de pantalla de tu gráfico, en cualquier plataforma: TradingView, Binance, MetaTrader…" },
       { title: "Suelta", text: "Arrastra la imagen o pégala con Ctrl+V. Añade una palabra de contexto si quieres." },
       {
         title: "Decide",
-        text: "Un veredicto claro: el escenario más probable, con entrada, stop y objetivos. O «esperar» cuando la señal no está.",
+        text: "Obtienes el escenario más probable, con la entrada, el stop y los objetivos. O «esperar», cuando la señal aún no está.",
       },
     ],
   },
@@ -123,11 +123,11 @@ export const es: Dict = {
     stars: (rating: number) => `${rating} de 5`,
   },
   pricing: {
-    titleA: "Un precio claro.",
-    titleB: "Un veredicto en cada gráfico.",
-    subtitle: "Una suscripción mensual sin permanencia. Puedes probarla antes 3\u00a0días por 0,99\u00a0€.",
+    titleA: "Una suscripción sencilla,",
+    titleB: "sin permanencia.",
+    subtitle: "Puedes probarla antes 3\u00a0días por 0,99\u00a0€.",
     ttcMonthly: "IVA incl. / mes",
-    monthlyPitch: "Sin permanencia: cancela en un clic desde tu cuenta.",
+    monthlyPitch: "Lo dejas cuando quieras, desde tu cuenta.",
     monthlyNote: "Se cobra cada mes, en la fecha de suscripción.",
     monthlyCta: "Suscribirme al mes",
     ttcTrial: "IVA incl., hoy",
@@ -145,7 +145,7 @@ export const es: Dict = {
     includedTitle: "Incluido en la suscripción",
     included: [
       "Criptos, forex, acciones, índices, materias primas",
-      "Un veredicto: el escenario más probable, formulado como plan",
+      "El escenario más probable, convertido en plan de acción",
       "Entrada, stop, objetivos y ratio beneficio/riesgo",
       "Niveles trazados sobre tu captura",
       "Historial de tus análisis",
@@ -168,7 +168,7 @@ export const es: Dict = {
       },
       {
         q: "¿Puedo pedir un reembolso?",
-        a: "El acceso se abre en cuanto pagas: al pagar, solicitas este acceso inmediato y renuncias al plazo de desistimiento, como prevé la ley para un servicio digital.",
+        a: "No. El acceso se abre en cuanto pagas: al pagar, pides este acceso inmediato y renuncias al plazo de desistimiento, como permite la ley para un servicio digital.",
         terms: true,
       },
       {
@@ -180,13 +180,13 @@ export const es: Dict = {
   },
   trust: [
     "Pago seguro con Stripe",
-    "Sin permanencia, cancela en un clic",
+    "Sin permanencia",
     "Tus capturas solo las ves tú",
     "Una imagen que no es un gráfico no se descuenta",
   ],
   faq: {
     title: "Preguntas frecuentes",
-    subtitle: "Todo lo que necesitas saber antes de tu primer análisis.",
+    subtitle: "Las preguntas que más nos hacen.",
     cta: "Empezar →",
     termsLink: "Detalles en las condiciones de venta",
     items: [
@@ -208,7 +208,7 @@ export const es: Dict = {
       },
       {
         q: "¿Puedo adaptar el análisis a mi forma de operar?",
-        a: "Sí: añade un contexto antes de analizar, por ejemplo «scalping 5 min, busco un corto» o «inversión a largo plazo». La IA lo tiene en cuenta en su lectura y sus escenarios.",
+        a: "Sí. Añade un contexto antes de analizar, por ejemplo «scalping 5 min, busco un corto» o «inversión a largo plazo». La IA lo tiene en cuenta en su lectura y sus escenarios.",
       },
       {
         q: "¿Cómo se cuentan los análisis?",
@@ -216,7 +216,7 @@ export const es: Dict = {
       },
       {
         q: "¿Puedo cancelar en cualquier momento?",
-        a: "Sí. La suscripción mensual no tiene permanencia y se cancela en un clic desde tu panel.",
+        a: "Sí. No hay permanencia: cancelas desde tu cuenta y la suscripción se detiene al final del mes ya pagado.",
         terms: true,
       },
       {
@@ -226,9 +226,9 @@ export const es: Dict = {
     ],
   },
   closing: {
-    titleA: "Deja de adivinar.",
-    titleB: "Analiza.",
-    subtitle: "Tu próximo gráfico merece una segunda opinión, con cifras y argumentos.",
+    titleA: "Antes de tu próximo trade,",
+    titleB: "pide una segunda opinión.",
+    subtitle: "Scanzivo lee tu gráfico y te responde con niveles precisos.",
     cta: "Escanear un gráfico →",
     trialCta: (price: string) => `Probar 3 días por ${price}`,
     trialNote: (monthly: string) => `Luego ${monthly}/mes si continúas. Puedes cancelar durante la prueba.`,
@@ -265,8 +265,8 @@ export const es: Dict = {
   },
   offerDialog: {
     title: "Elige tu oferta",
-    withCapture: "Tu captura se conserva: estará lista para analizar en cuanto vuelvas del pago.",
-    withoutCapture: "Paga en un minuto y tus análisis estarán disponibles al instante.",
+    withCapture: "Guardamos tu captura: estará lista para analizar después del pago.",
+    withoutCapture: "El pago lleva un minuto y puedes analizar justo después.",
     trialTitle: (price: string) => `Tu gráfico está listo. Analízalo por ${price}.`,
     trialSubtitle: (monthly: string) => `Es el precio de la prueba de 3 días. Luego ${monthly}/mes si mantienes la suscripción, cancelable cuando quieras.`,
   },
@@ -290,7 +290,7 @@ export const es: Dict = {
     },
     signup: {
       title: "Crear una cuenta",
-      subtitleOffer: "Crea tu cuenta: el pago seguro se abre justo después.",
+      subtitleOffer: "Crea tu cuenta, el pago se abre justo después.",
       subtitleChart: "Tu captura está lista. Crea tu cuenta para analizarla.",
       subtitle: "Crea tu cuenta y luego elige tu oferta.",
       passwordPlaceholder: "Mínimo 6 caracteres",
@@ -360,7 +360,7 @@ export const es: Dict = {
     hello: "Hola",
     welcome: "y bienvenido",
     intro:
-      "Sube una captura de un gráfico: Scanzivo la lee como un analista y te da un plan de acción con cifras sobre el escenario más probable, con los niveles trazados.",
+      "Sube una captura de un gráfico. Scanzivo te da el escenario más probable, un plan con cifras y los niveles trazados sobre la imagen.",
     testMode: "Modo de prueba (admin)",
     testModeHint: ": informe de ejemplo, sin llamar a la IA ni gastar créditos",
     skipTour: "Saltar la visita",
@@ -458,7 +458,7 @@ export const es: Dict = {
     needRating: "Elige una nota del 1 al 5.",
     needText: "Escribe al menos unas palabras.",
     failed: "No se puede enviar por el momento. Vuelve a intentarlo más tarde.",
-    title: "Tu opinión cuenta",
+    title: "¿Qué te parece Scanzivo?",
     intro: (count: number) => `Has hecho ${count} análisis. ¿Qué te parece?`,
     later: "Más tarde",
     rating: "Nota",

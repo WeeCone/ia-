@@ -47,7 +47,7 @@ export const en: Dict = {
     titleLine1: "AI that analyses your charts",
     titleLine2: "of your favourite assets:",
     words: ["crypto", "forex", "gold", "indices", "stocks"],
-    subtitle: "One screenshot, a clear verdict and a plan with numbers: entry, stop, targets. In under a minute.",
+    subtitle: "Send a screenshot of your chart. In under a minute, you know where to enter, where to put your stop and what to aim for.",
     trialLine: (trial: string, monthly: string) => ({
       before: "Want to try it first? ",
       offer: `3 days for ${trial}`,
@@ -68,8 +68,8 @@ export const en: Dict = {
     titleB: "read a chart.",
     points: [
       "Key levels drawn right on your screenshot, with their price.",
-      "Structure, moving averages and momentum read the way an analyst would.",
-      "A verdict and a plan with numbers: entry, stop, targets. In under a minute.",
+      "Market structure, moving averages and momentum, read the way an analyst would.",
+      "A verdict, with the entry, stop and targets in numbers.",
     ],
     cta: "Analyse my chart",
     caption: "Bitcoin, weekly · results blurred, the full analysis is for subscribers. Not investment advice.",
@@ -80,7 +80,7 @@ export const en: Dict = {
   features: {
     titleA: "Everything the AI reads",
     titleB: "on your chart.",
-    subtitle: "Every point of the reading is annotated on the screenshot itself, at the right price.",
+    subtitle: "What the AI spots is marked right on your screenshot, at the right price level.",
     readings: [
       { title: "Support & resistance", text: "Key levels are drawn on your screenshot, at their true height, with their price." },
       {
@@ -89,7 +89,7 @@ export const en: Dict = {
       },
       { title: "Visible indicators", text: "RSI, MACD, moving averages, volume: if they are on the screenshot, they count in the reading." },
       { title: "A plan with numbers", text: "Entry, stop, targets and reward/risk ratio, computed from the chart's prices." },
-      { title: "A verdict, not a “maybe”", text: "The most likely scenario, stated as an action: buy, sell, wait or stay out." },
+      { title: "A straight verdict", text: "The most likely scenario, turned into an action: buy, sell, wait or do nothing." },
     ],
     platforms: "Works with TradingView, Binance, MetaTrader… from 1-minute candles to weekly.",
     reading: "Scanzivo reading",
@@ -103,15 +103,15 @@ export const en: Dict = {
     headline: "Buy on a 4H close above 65,400, stop 64,300, targets 66,600 then 67,000.",
   },
   method: {
-    titleA: "Three steps,",
-    titleB: "not one more.",
+    titleA: "From screenshot",
+    titleB: "to trade plan.",
     step: "Step",
     steps: [
       { title: "Capture", text: "A screenshot of your chart, from any platform: TradingView, Binance, MetaTrader…" },
       { title: "Drop", text: "Drag the image in or paste it with Ctrl+V. Add a word of context if you like." },
       {
         title: "Decide",
-        text: "A clear verdict: the most likely scenario, with entry, stop and targets. Or “wait” when the signal isn't there.",
+        text: "You get the most likely scenario, with the entry, stop and targets. Or “wait”, when the signal isn't there yet.",
       },
     ],
   },
@@ -123,11 +123,11 @@ export const en: Dict = {
     stars: (rating: number) => `${rating} out of 5`,
   },
   pricing: {
-    titleA: "A clear price.",
-    titleB: "A verdict on every chart.",
-    subtitle: "A monthly subscription with no commitment. You can try it first for 3\u00a0days at €0.99.",
+    titleA: "One simple subscription,",
+    titleB: "no commitment.",
+    subtitle: "You can try it first for 3\u00a0days at €0.99.",
     ttcMonthly: "incl. VAT / month",
-    monthlyPitch: "No commitment: cancel in one click from your account.",
+    monthlyPitch: "Stop whenever you like, from your account.",
     monthlyNote: "Charged every month, on your subscription date.",
     monthlyCta: "Subscribe monthly",
     ttcTrial: "incl. VAT, today",
@@ -145,7 +145,7 @@ export const en: Dict = {
     includedTitle: "Included in the subscription",
     included: [
       "Crypto, forex, stocks, indices, commodities",
-      "A verdict: the most likely scenario, stated as a plan",
+      "The most likely scenario, turned into an action plan",
       "Entry, stop, targets and reward/risk ratio",
       "Levels drawn on your screenshot",
       "History of your analyses",
@@ -168,7 +168,7 @@ export const en: Dict = {
       },
       {
         q: "Can I get a refund?",
-        a: "Access opens as soon as you pay: when paying, you request this immediate access and waive the withdrawal period, as the law provides for a digital service.",
+        a: "No. Access opens as soon as you pay: by paying, you ask for this immediate access and waive the withdrawal period, as the law allows for a digital service.",
         terms: true,
       },
       {
@@ -180,13 +180,13 @@ export const en: Dict = {
   },
   trust: [
     "Secure payment by Stripe",
-    "No commitment, cancel in one click",
+    "No commitment",
     "Your screenshots are visible to you only",
     "An image that isn't a chart is not counted",
   ],
   faq: {
     title: "Frequently asked questions",
-    subtitle: "Everything you need to know before your first analysis.",
+    subtitle: "The questions we get asked most.",
     cta: "Get started →",
     termsLink: "Details in the terms of sale",
     items: [
@@ -208,7 +208,7 @@ export const en: Dict = {
       },
       {
         q: "Can I adapt the analysis to my trading style?",
-        a: "Yes: add some context before analysing, for example “5-min scalping, looking for a short” or “long-term investing”. The AI takes it into account in its reading and scenarios.",
+        a: "Yes. Add some context before analysing, for example “5-min scalping, looking for a short” or “long-term investing”. The AI takes it into account in its reading and scenarios.",
       },
       {
         q: "How are analyses counted?",
@@ -216,7 +216,7 @@ export const en: Dict = {
       },
       {
         q: "Can I cancel at any time?",
-        a: "Yes. The monthly subscription has no commitment and can be cancelled in one click from your dashboard.",
+        a: "Yes. There is no commitment: you cancel from your account and the subscription stops at the end of the month already paid.",
         terms: true,
       },
       {
@@ -226,9 +226,9 @@ export const en: Dict = {
     ],
   },
   closing: {
-    titleA: "Stop guessing.",
-    titleB: "Analyse.",
-    subtitle: "Your next chart deserves a second opinion, with numbers and reasons.",
+    titleA: "Before your next trade,",
+    titleB: "get a second opinion.",
+    subtitle: "Scanzivo reads your chart and answers with precise levels.",
     cta: "Scan a chart →",
     trialCta: (price: string) => `Try 3 days for ${price}`,
     trialNote: (monthly: string) => `Then ${monthly}/month if you stay. You can cancel during the trial.`,
@@ -265,8 +265,8 @@ export const en: Dict = {
   },
   offerDialog: {
     title: "Choose your offer",
-    withCapture: "Your screenshot is kept: it will be ready to analyse as soon as you're back from payment.",
-    withoutCapture: "Pay in a minute, and your analyses are available right away.",
+    withCapture: "We keep your screenshot aside: it will be ready to analyse after payment.",
+    withoutCapture: "Payment takes a minute, and you can analyse straight after.",
     trialTitle: (price: string) => `Your chart is ready. Analyse it for ${price}.`,
     trialSubtitle: (monthly: string) => `That's the price of the 3-day trial. Then ${monthly}/month if you keep the subscription, cancel whenever you like.`,
   },
@@ -290,7 +290,7 @@ export const en: Dict = {
     },
     signup: {
       title: "Create an account",
-      subtitleOffer: "Create your account: secure payment opens right after.",
+      subtitleOffer: "Create your account, payment opens right after.",
       subtitleChart: "Your screenshot is ready. Create your account to analyse it.",
       subtitle: "Create your account, then choose your offer.",
       passwordPlaceholder: "At least 6 characters",
@@ -360,7 +360,7 @@ export const en: Dict = {
     hello: "Hi",
     welcome: "and welcome",
     intro:
-      "Upload a chart screenshot: Scanzivo reads it like an analyst and gives you an action plan with numbers on the most likely scenario, with the levels drawn.",
+      "Drop a chart screenshot. Scanzivo gives you the most likely scenario, a plan with numbers and the levels drawn on the image.",
     testMode: "Test mode (admin)",
     testModeHint: ": sample report, without calling the AI or using a credit",
     skipTour: "Skip the tour",
@@ -458,7 +458,7 @@ export const en: Dict = {
     needRating: "Choose a rating from 1 to 5.",
     needText: "Write at least a few words.",
     failed: "Can't send right now. Please try again later.",
-    title: "Your opinion matters",
+    title: "What do you think of Scanzivo?",
     intro: (count: number) => `You have run ${count} analyses. What do you think?`,
     later: "Later",
     rating: "Rating",
