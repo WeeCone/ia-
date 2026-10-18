@@ -29,7 +29,6 @@ export const es: Dict = {
     mySpace: "Mi cuenta",
     scan: "Escanear",
     scanSuffix: " un gráfico",
-    trial: "Prueba 0,99 €",
     menu: "Menú",
   },
   footer: {

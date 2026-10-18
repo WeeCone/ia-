@@ -1,12 +1,20 @@
 import Link from "next/link";
+import { formatEur } from "@/i18n/format";
 import { getI18n } from "@/i18n/server";
+import { OFFER_PRICE_EUR } from "@/lib/plans";
 import { HeaderAccountLink } from "./header-account-link";
 import { LanguageSwitcher } from "./language-switcher";
 import { Logo } from "./logo";
 import { ScanCta } from "./scan-cta";
 
 export async function SiteHeader() {
-  const { t, href } = await getI18n();
+  const { t, locale, href } = await getI18n();
+  // The paid trial, as a plain link like the others: it opens the pricing section, where its terms are spelled out.
+  const trial = (
+    <>
+      {t.common.trial} <strong className="font-semibold">{formatEur(locale, OFFER_PRICE_EUR.trial)}</strong>
+    </>
+  );
   const NAV = [
     { href: href("/#fonctionnalites"), label: t.header.nav.features },
     { href: href("/#video"), label: t.header.nav.demo },
@@ -25,22 +33,17 @@ export async function SiteHeader() {
               {label}
             </Link>
           ))}
+          <Link href={href("/#tarifs")} className="btn-ghost hidden gap-1.5 whitespace-nowrap xl:inline-flex">
+            {trial}
+          </Link>
         </nav>
         <div className="flex items-center gap-1">
           <LanguageSwitcher className="mr-1 hidden lg:flex" />
           <HeaderAccountLink className="btn-ghost hidden sm:inline-flex" />
-          {/* The paid trial, one click from anywhere: it opens the pricing section, where its terms are spelled out. */}
-          <Link
-            href={href("/#tarifs")}
-            className="hidden items-center gap-2 whitespace-nowrap rounded-full border border-accent/50 bg-accent/10 px-3.5 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-accent/20 xl:inline-flex"
-          >
-            <span className="size-1.5 rounded-full bg-accent" aria-hidden />
-            {t.header.trial}
-          </Link>
           <ScanCta className="btn-primary ml-1 whitespace-nowrap rounded-full px-4 py-2.5 sm:px-5">
             <span>
               {t.header.scan}
-              {/* The full label only where the bar has room for it next to the trial pill. */}
+              {/* The full label only where the bar has room for it. */}
               <span className="hidden 2xl:inline">{t.header.scanSuffix}</span>
             </span>
           </ScanCta>
@@ -58,9 +61,8 @@ export async function SiteHeader() {
                   {label}
                 </Link>
               ))}
-              <Link href={href("/#tarifs")} className="flex items-center gap-2 px-4 py-3 font-semibold text-foreground hover:text-brand">
-                <span className="size-1.5 rounded-full bg-accent" aria-hidden />
-                {t.header.trial}
+              <Link href={href("/#tarifs")} className="block px-4 py-3 font-medium text-foreground hover:text-brand">
+                {trial}
               </Link>
               <HeaderAccountLink className="block px-4 py-3 font-medium text-foreground hover:text-brand" />
               <LanguageSwitcher className="border-t border-border px-3 pb-1 pt-3" />

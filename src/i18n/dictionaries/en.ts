@@ -29,7 +29,6 @@ export const en: Dict = {
     mySpace: "My account",
     scan: "Scan",
     scanSuffix: " a chart",
-    trial: "Trial €0.99",
     menu: "Menu",
   },
   footer: {

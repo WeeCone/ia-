@@ -28,7 +28,6 @@ export const fr = {
     mySpace: "Mon espace",
     scan: "Scanner",
     scanSuffix: " un graphique",
-    trial: "Essai 0,99 €",
     menu: "Menu",
   },
   footer: {
