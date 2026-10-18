@@ -9,9 +9,10 @@ import { useAuth } from "./auth-provider";
 
 /**
  * Starts the paid trial from anywhere on the public site: the choice is remembered, then the visitor signs up (or lands
- * on the dashboard when already signed in) and the payment opens there.
+ * on the dashboard when already signed in) and the payment opens there, with the trial's terms beside the card form.
+ * The dashboard only opens it for an account that can still take the trial.
  */
-export function TrialButton({ className }: { className?: string }) {
+export function TrialButton({ className, children }: { className?: string; children?: React.ReactNode }) {
   const { user } = useAuth();
   const router = useRouter();
   const { t, locale, href } = useI18n();
@@ -24,7 +25,7 @@ export function TrialButton({ className }: { className?: string }) {
       }}
       className={className}
     >
-      {t.closing.trialCta(formatEur(locale, OFFER_PRICE_EUR.trial))}
+      {children ?? t.closing.trialCta(formatEur(locale, OFFER_PRICE_EUR.trial))}
     </button>
   );
 }

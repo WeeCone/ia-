@@ -53,9 +53,9 @@ export default async function Home() {
               <DropBar />
               <p className="mx-auto mt-4 max-w-xl text-sm text-muted [text-shadow:0_1px_12px_var(--background)]">
                 {trialLine.before}
-                <a href="#tarifs" className="font-semibold text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">
+                <TrialButton className="font-semibold text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">
                   {trialLine.offer}
-                </a>
+                </TrialButton>
                 {trialLine.after}
               </p>
             </div>
