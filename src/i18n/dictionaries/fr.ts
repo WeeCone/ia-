@@ -540,6 +540,13 @@ export const fr = {
     supports: "Supports",
     risk: "Gestion du risque",
     footer: "Analyse générée par IA, à titre informatif uniquement. Ce n'est pas un conseil en investissement.",
+    macro: {
+      title: "Macro et actualité",
+      impact: { fort: "Impact fort", moyen: "Impact moyen", faible: "Impact faible" },
+      noEvents: "Aucun événement majeur prévu dans les 7 prochains jours.",
+      forThisTrade: "Pour ce trade :",
+      sources: "Sources :",
+    },
     summary: {
       entry: "Entrée",
       targets: "Objectifs",
@@ -556,6 +563,7 @@ export const fr = {
       alternative: (bias: string) => `Alternative ${bias}`,
       risk: "Gestion du risque :",
       disclaimer: "Analyse Scanzivo, à titre informatif. Pas un conseil en investissement.",
+      macro: "Macro et actualité :",
     },
   },
   // Messages returned by the API routes.

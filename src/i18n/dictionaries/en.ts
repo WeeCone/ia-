@@ -539,6 +539,13 @@ export const en: Dict = {
     supports: "Support",
     risk: "Risk management",
     footer: "AI-generated analysis, for information only. This is not investment advice.",
+    macro: {
+      title: "Macro and news",
+      impact: { fort: "High impact", moyen: "Medium impact", faible: "Low impact" },
+      noEvents: "No major event scheduled in the next 7 days.",
+      forThisTrade: "For this trade:",
+      sources: "Sources:",
+    },
     summary: {
       entry: "Entry",
       targets: "Targets",
@@ -555,6 +562,7 @@ export const en: Dict = {
       alternative: (bias: string) => `${bias.charAt(0).toUpperCase()}${bias.slice(1)} alternative`,
       risk: "Risk management:",
       disclaimer: "Scanzivo analysis, for information only. Not investment advice.",
+      macro: "Macro and news:",
     },
   },
   api: {

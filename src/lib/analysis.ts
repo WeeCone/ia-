@@ -12,6 +12,23 @@ const Scenario = z.object({
   invalidation: z.string().describe("Ce qui invalide ce scénario, en une phrase avec un niveau précis."),
 });
 
+/** The news side of a report (lib/macro.ts): events and news that can move the asset, found by web search. */
+export const MacroReport = z.object({
+  asset: z.string(),
+  context: z.string(),
+  events: z.array(
+    z.object({
+      date: z.string(),
+      title: z.string(),
+      impact: z.enum(["fort", "moyen", "faible"]),
+      why: z.string(),
+    }),
+  ),
+  plan_impact: z.string(),
+  sources: z.array(z.object({ title: z.string(), url: z.string() })),
+});
+export type MacroReport = z.infer<typeof MacroReport>;
+
 export const ChartAnalysis = z.object({
   is_chart: z.boolean().describe("false si l'image n'est pas un graphique de prix exploitable."),
   asset: z.string().describe("Actif identifié (ex. BTC/USDT), ou « Inconnu »."),
@@ -70,7 +87,8 @@ export const ChartAnalysis = z.object({
     .describe("2 à 4 conseils concrets de gestion du risque propres à ce graphique (taille de position, attente de confirmation, volatilité…)."),
 });
 
-export type ChartAnalysis = z.infer<typeof ChartAnalysis>;
+/** A report as stored and shown: the chart reading, plus the news side when it could be gathered (older reports have none). */
+export type ChartAnalysis = z.infer<typeof ChartAnalysis> & { macro?: MacroReport | null };
 export type LevelMark = ChartAnalysis["level_marks"][number];
 export type Scenario = ChartAnalysis["bullish"];
 

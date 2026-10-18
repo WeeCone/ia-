@@ -35,6 +35,13 @@ function summaryText(analysis: ChartAnalysis, t: Dict) {
     scenario(w.preferred(t.enums.bias[bias]), preferred, bias === "haussier" ? "long" : "short"),
     scenario(w.alternative(t.enums.trend[other]), alternative, bias === "haussier" ? "short" : "long"),
     analysis.risk_notes?.length ? `${w.risk}\n- ${analysis.risk_notes.join("\n- ")}` : null,
+    analysis.macro
+      ? [
+          `${w.macro}\n${analysis.macro.context}`,
+          ...analysis.macro.events.map((event) => `- ${event.date} · ${event.title} (${t.report.macro.impact[event.impact]})`),
+          analysis.macro.plan_impact,
+        ].join("\n")
+      : null,
     w.disclaimer,
   ]
     .filter(Boolean)

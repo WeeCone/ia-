@@ -12,16 +12,17 @@ export const TRIAL_CREDITS = 1;
  * Hard ceiling on what one customer can cost in AI calls per calendar month, in euros.
  * Every call is priced from its real token usage and recorded on the user; once the ceiling is near, analyses stop until next month.
  */
-export const MONTHLY_BUDGET_EUR = 5;
+export const MONTHLY_BUDGET_EUR = 10;
 
 /** Typical cost of one analysis, in euros (measured on real reports; keep it pessimistic). */
-export const ANALYSIS_COST_EUR = 0.1;
+export const ANALYSIS_COST_EUR = 0.2;
 
 /**
- * Worst case for a single call (16 000 output tokens at Opus prices, plus the image and prompt).
+ * Worst case for a single analysis: the chart reading (16 000 output tokens at Opus prices, plus the image and prompt)
+ * and its news side (up to 4 web searches, their results read as input, 6 000 output tokens).
  * An analysis only starts if this much budget is left, so the ceiling is never crossed.
  */
-export const MAX_CALL_COST_EUR = 0.35;
+export const MAX_CALL_COST_EUR = 0.7;
 
 /** Fair-use quota per month, for both offers: one credit per analysis, sized to fit the budget (rounded down to 5). */
 export const MONTHLY_CREDITS = Math.floor((MONTHLY_BUDGET_EUR - MAX_CALL_COST_EUR) / ANALYSIS_COST_EUR / 5) * 5;

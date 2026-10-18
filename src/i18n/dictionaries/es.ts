@@ -539,6 +539,13 @@ export const es: Dict = {
     supports: "Soportes",
     risk: "Gestión del riesgo",
     footer: "Análisis generado por IA, solo a título informativo. No es un asesoramiento de inversión.",
+    macro: {
+      title: "Macro y actualidad",
+      impact: { fort: "Impacto alto", moyen: "Impacto medio", faible: "Impacto bajo" },
+      noEvents: "No hay ningún evento importante previsto en los próximos 7 días.",
+      forThisTrade: "Para este trade:",
+      sources: "Fuentes:",
+    },
     summary: {
       entry: "Entrada",
       targets: "Objetivos",
@@ -555,6 +562,7 @@ export const es: Dict = {
       alternative: (bias: string) => `Alternativa ${bias}`,
       risk: "Gestión del riesgo:",
       disclaimer: "Análisis de Scanzivo, a título informativo. No es un asesoramiento de inversión.",
+      macro: "Macro y actualidad:",
     },
   },
   api: {

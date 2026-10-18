@@ -3,6 +3,7 @@ import { FieldValue } from "firebase-admin/firestore";
 import { isAdminRequest } from "@/lib/admin-auth";
 import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_BYTES, type AllowedImageType } from "@/lib/analysis";
 import { analyzeChart, AnalysisRefusedError } from "@/lib/claude";
+import { macroContext } from "@/lib/macro";
 import { availableCredits, creditPeriod, MAX_CALL_COST_EUR, MONTHLY_BUDGET_EUR } from "@/lib/plans";
 import { adminBucket, adminDb } from "@/lib/firebase-admin";
 import { getRequestUid } from "@/lib/server-auth";
@@ -54,9 +55,13 @@ export async function POST(request: Request) {
   let result: Awaited<ReturnType<typeof analyzeChart>>;
   const bytes = Buffer.from(await image.arrayBuffer());
   const startedAt = Date.now();
+  // The news side runs alongside the chart reading (no extra wait) and never throws; its cost counts in every case.
+  const macroPromise = macroContext(bytes.toString("base64"), image.type as AllowedImageType, locale);
   try {
     result = await analyzeChart(bytes.toString("base64"), image.type as AllowedImageType, note || undefined, locale);
   } catch (err) {
+    // Not awaited: the error answers at once, the news side's cost is recorded when it ends.
+    void macroPromise.then((macro) => recordSpend(userRef, macro.costEur));
     if (err instanceof AnalysisRefusedError) {
       await recordSpend(userRef, err.costEur);
       return error(text.refused, 422);
@@ -77,8 +82,11 @@ export async function POST(request: Request) {
     return error(admin ? `${text.failed} [admin · ${seconds} s · ${detail.slice(0, 300)}]` : text.failed, 502);
   }
 
+  const macro = await macroPromise;
   // Every call counts toward the monthly budget, even one that is not charged a credit.
-  await recordSpend(userRef, result.costEur);
+  await recordSpend(userRef, result.costEur + macro.costEur);
+  // Not for an image that is not a chart: there is no asset to report on.
+  const analysis = { ...result.analysis, macro: result.analysis.is_chart ? macro.report : null };
 
   // Only charge for a usable chart; re-check credits inside the transaction to avoid double spending.
   const charged = result.analysis.is_chart;
@@ -90,7 +98,7 @@ export async function POST(request: Request) {
       // Absolute write (not increment) so a lifetime monthly refill and the debit land together.
       if (charged) tx.update(userRef, { credits: credits - 1, creditsPeriod: creditPeriod() });
       tx.set(analysisRef, {
-        ...result.analysis,
+        ...analysis,
         note: note || null,
         model: result.model,
         createdAt: FieldValue.serverTimestamp(),
@@ -117,7 +125,7 @@ export async function POST(request: Request) {
     }
   }
 
-  return Response.json({ id: analysisRef.id, analysis: result.analysis, charged });
+  return Response.json({ id: analysisRef.id, analysis, charged });
 }
 
 /** Adds a call's cost to the user's spend for the current month (reset when the month changes). */

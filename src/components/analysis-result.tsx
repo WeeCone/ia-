@@ -2,7 +2,7 @@
 
 import { useI18n } from "@/i18n/client";
 import { keepNumbers } from "@/i18n/format";
-import { type ChartAnalysis, preferredPlan } from "@/lib/analysis";
+import { type ChartAnalysis, type MacroReport, preferredPlan } from "@/lib/analysis";
 import { formatRatio, rewardRatios } from "@/lib/risk";
 
 const confidenceStyle = {
@@ -22,6 +22,12 @@ const actionStyle = {
   "vendre sur confirmation": "bg-bear text-background",
   attendre: "bg-amber-400 text-background",
   "ne pas trader": "bg-muted text-background",
+} as const;
+
+const impactStyle = {
+  fort: "border-bear/40 bg-bear/10 text-bear",
+  moyen: "border-amber-400/40 bg-amber-400/10 text-warn",
+  faible: "border-border text-muted",
 } as const;
 
 const trendStyle = {
@@ -153,6 +159,56 @@ function AlternativeScenario({ analysis }: { analysis: ChartAnalysis }) {
   );
 }
 
+/** Scheduled events and recent news that can move the asset, found on the web when the analysis ran. */
+function MacroSection({ macro }: { macro: MacroReport }) {
+  const { t } = useI18n();
+  const m = t.report.macro;
+  return (
+    <section className="border-t border-border p-5">
+      <h3 className="label text-muted">{m.title}</h3>
+      <p className="mt-3 leading-relaxed">{macro.context}</p>
+
+      {macro.events.length > 0 ? (
+        <ul className="mt-4 divide-y divide-border/70 rounded-xl border border-border">
+          {macro.events.map((event) => (
+            <li key={`${event.date}-${event.title}`} className="grid gap-1 px-4 py-3 sm:grid-cols-[9rem_1fr_auto] sm:items-baseline sm:gap-4">
+              <span className="font-mono text-sm tabular-nums text-muted">{event.date}</span>
+              <span>
+                <span className="font-medium">{event.title}</span>
+                <span className="block text-sm text-muted">{event.why}</span>
+              </span>
+              <span className={`chip justify-self-start ${impactStyle[event.impact]}`}>{m.impact[event.impact]}</span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="mt-3 text-sm text-muted">{m.noEvents}</p>
+      )}
+
+      {macro.plan_impact && (
+        <p className="mt-4 rounded-xl border border-brand/30 bg-brand/5 px-4 py-3 text-sm">
+          <span className="font-semibold text-brand">{m.forThisTrade} </span>
+          {macro.plan_impact}
+        </p>
+      )}
+
+      {macro.sources.length > 0 && (
+        <p className="mt-4 text-xs text-muted">
+          {m.sources}{" "}
+          {macro.sources.map((source, index) => (
+            <span key={source.url}>
+              {index > 0 && " · "}
+              <a href={source.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-foreground">
+                {source.title}
+              </a>
+            </span>
+          ))}
+        </p>
+      )}
+    </section>
+  );
+}
+
 export function AnalysisResult({ analysis }: { analysis: ChartAnalysis }) {
   const { t } = useI18n();
   const r = t.report;
@@ -235,6 +291,9 @@ export function AnalysisResult({ analysis }: { analysis: ChartAnalysis }) {
       </div>
 
       <AlternativeScenario analysis={analysis} />
+
+      {/* Reports made before the news side existed, or whose search failed, have none. */}
+      {analysis.macro && <MacroSection macro={analysis.macro} />}
 
       {analysis.risk_notes?.length > 0 && (
         <section className="border-t border-border p-5">
