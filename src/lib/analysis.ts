@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const Scenario = z.object({
-  probability: z.number().describe("Probabilité estimée en pourcentage (0-100). Haussier + baissier = 100."),
+  probability: z.number().describe("Probabilité estimée en pourcentage (0-100). Haussier + baissier = 100. Le scénario dominant est à 65-80 dès que la structure penche d'un côté."),
   thesis: z.string().describe("Raisonnement en 1-2 phrases."),
   entry: z.string().describe("Condition ou zone d'entrée, telle que lisible sur le graphique (ex. « Clôture 4H au-dessus de 65 400 »)."),
   entry_price: z.number().nullable().describe("Prix d'entrée de référence, en nombre (ex. 65400). null si illisible."),
@@ -54,9 +54,13 @@ export const ChartAnalysis = z.object({
       action: z
         .enum(["acheter sur confirmation", "vendre sur confirmation", "attendre", "ne pas trader"])
         .describe(
-          "Ce que le trader devrait faire. « attendre » si le signal n'est pas encore là ; « ne pas trader » si le gain/risque du scénario privilégié est inférieur à 1 ou si le graphique est trop incertain.",
+          "Ce que le trader devrait faire. « acheter / vendre sur confirmation » dès qu'un scénario domine ; « attendre » seulement si le prix est au milieu d'un range sans signal ; « ne pas trader » si le gain/risque du scénario privilégié est inférieur à 1 ou si le graphique est illisible.",
         ),
-      headline: z.string().describe("Le plan en une phrase directive, avec les niveaux (ex. « Vendre sur clôture journalière sous 1,50, stop 1,82, objectifs 1,20 puis 1,00 »)."),
+      headline: z
+        .string()
+        .describe(
+          "Le plan en une phrase directive, avec les niveaux (ex. « Vendre sur clôture journalière sous 1,50, stop 1,82, objectifs 1,20 puis 1,00 »). Pour « attendre » : les deux déclencheurs chiffrés et quand refaire une analyse (ex. « Attendre : achat sur clôture 4H au-dessus de 65 400, stop 64 300, objectif 66 600 ; vente sous 64 300. Refaire une analyse après la prochaine clôture 4H. »).",
+        ),
       rationale: z.string().describe("Pourquoi ce scénario plutôt que l'autre, en 1-2 phrases."),
       change_mind: z.string().describe("Ce qui ferait changer d'avis, avec un niveau précis."),
     })
