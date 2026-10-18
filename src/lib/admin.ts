@@ -76,6 +76,18 @@ export type AdminAnalysis = {
 export type FunnelCounts = { visits: number; signup: number; analysis: number; checkout: number; purchase: number; revenue: number };
 
 /** The admin "Visites" tab, over a period. */
+/** One page open on the site right now (admin "En ce moment"). */
+export type LiveVisitor = {
+  id: string;
+  page: string;
+  source: string;
+  campaign: string | null;
+  device: string;
+  locale: string;
+  /** Seconds since the page was opened. */
+  onSiteSeconds: number;
+};
+
 export type AdminStats = {
   days: { day: string; visits: number; views: number; signup: number; purchase: number }[];
   totals: FunnelCounts & { views: number };

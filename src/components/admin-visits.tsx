@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { AdminStats, FunnelCounts } from "@/lib/admin";
+import type { AdminStats, FunnelCounts, LiveVisitor } from "@/lib/admin";
 import { adminFetch } from "@/lib/admin-client";
 import { FormError } from "./auth-card";
 
@@ -33,6 +33,7 @@ const PAGE_LABELS: Record<string, string> = {
   dashboard: "Espace client",
   "auth-signup": "Inscription",
   "auth-login": "Connexion",
+  welcome: "Retour de paiement",
 };
 
 function Tile({ label, value, hint }: { label: string; value: string; hint?: string }) {
@@ -240,6 +241,95 @@ function Breakdown({ title, counts, labels = {} }: { title: string; counts: Reco
   );
 }
 
+const LIVE_REFRESH_MS = 10_000;
+const LIVE_ROWS = 15;
+
+const pageLabel = (page: string) => PAGE_LABELS[page] ?? page;
+
+function onSite(seconds: number) {
+  if (seconds < 60) return "à l'instant";
+  const minutes = Math.floor(seconds / 60);
+  return minutes < 60 ? `depuis ${minutes} min` : `depuis ${Math.floor(minutes / 60)} h ${String(minutes % 60).padStart(2, "0")}`;
+}
+
+/** Who is on the site right now, refreshed every 10 s while this tab is in front. */
+function LiveNow() {
+  const [visitors, setVisitors] = useState<LiveVisitor[] | null>(null);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    let stale = false;
+    const load = () => {
+      if (document.hidden) return;
+      adminFetch("/api/admin/live")
+        .then((data: { visitors: LiveVisitor[] }) => {
+          if (stale) return;
+          setVisitors(data.visitors);
+          setError(false);
+        })
+        .catch(() => !stale && setError(true));
+    };
+    load();
+    const timer = setInterval(load, LIVE_REFRESH_MS);
+    document.addEventListener("visibilitychange", load);
+    return () => {
+      stale = true;
+      clearInterval(timer);
+      document.removeEventListener("visibilitychange", load);
+    };
+  }, []);
+
+  const count = visitors?.length ?? 0;
+  const byPage = Object.entries(
+    (visitors ?? []).reduce<Record<string, number>>((acc, visitor) => ({ ...acc, [visitor.page]: (acc[visitor.page] ?? 0) + 1 }), {}),
+  ).sort((a, b) => b[1] - a[1]);
+
+  return (
+    <section className="panel p-5" aria-live="polite">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <span className="relative flex size-3" aria-hidden>
+            {count > 0 && <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-60" />}
+            <span className={`relative inline-flex size-3 rounded-full ${count > 0 ? "bg-accent" : "bg-border"}`} />
+          </span>
+          <p className="label text-muted">En ce moment</p>
+        </div>
+        <p className="text-xs text-muted">{error ? "Mise à jour impossible, nouvel essai dans 10 s." : "Mis à jour toutes les 10 secondes"}</p>
+      </div>
+      <p className="mt-3 flex items-baseline gap-2">
+        <span className="display text-5xl tabular-nums">{visitors ? int(count) : "–"}</span>
+        <span className="text-muted">{count > 1 ? "visiteurs sur le site" : "visiteur sur le site"}</span>
+      </p>
+      {byPage.length > 0 && (
+        <p className="mt-2 text-sm text-muted">
+          {byPage.map(([page, value]) => `${pageLabel(page)} ${int(value)}`).join(" · ")}
+        </p>
+      )}
+
+      {count > 0 && (
+        <ul className="mt-4 divide-y divide-border/70 border-t border-border/70 text-sm">
+          {visitors!.slice(0, LIVE_ROWS).map((visitor) => (
+            <li key={visitor.id} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-2.5">
+              <span className="font-medium">{pageLabel(visitor.page)}</span>
+              <span className="flex flex-wrap gap-x-3 text-muted">
+                <span>
+                  {sourceLabel(visitor.source)}
+                  {visitor.campaign && <span className="text-xs"> · {visitor.campaign}</span>}
+                </span>
+                <span>{visitor.device === "mobile" ? "Mobile" : "Ordinateur"}</span>
+                <span className="uppercase">{visitor.locale}</span>
+                <span className="tabular-nums">{onSite(visitor.onSiteSeconds)}</span>
+              </span>
+            </li>
+          ))}
+          {count > LIVE_ROWS && <li className="py-2.5 text-muted">et {int(count - LIVE_ROWS)} autres</li>}
+        </ul>
+      )}
+      {visitors && count === 0 && <p className="mt-2 text-sm text-muted">Personne sur le site pour l&apos;instant.</p>}
+    </section>
+  );
+}
+
 /** Anonymous audience stats and the sign-up / purchase funnel by source and by ad campaign. */
 export function VisitsTab({ reloadKey }: { reloadKey: number }) {
   const [period, setPeriod] = useState<(typeof PERIODS)[number]>(30);
@@ -263,7 +353,9 @@ export function VisitsTab({ reloadKey }: { reloadKey: number }) {
   const totals = stats?.totals;
   return (
     <section className="mt-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <LiveNow />
+
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
         <div className="flex gap-1 rounded-xl border border-border p-1" role="group" aria-label="Période">
           {PERIODS.map((value) => (
             <button

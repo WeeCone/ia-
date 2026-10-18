@@ -8,6 +8,7 @@ import { EMBEDDED_CHECKOUT, onOpenCheckout } from "@/lib/offers-client";
 import { useI18n } from "@/i18n/client";
 import { formatEur } from "@/i18n/format";
 import { OFFER_PRICE_EUR, type Offer } from "@/lib/plans";
+import { useAuth } from "./auth-provider";
 import { LogoMark } from "./logo";
 import { TrialTimeline } from "./pricing-plans";
 
@@ -28,6 +29,7 @@ export function CheckoutDialog() {
   const [attempt, setAttempt] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const { t, locale } = useI18n();
+  const { user } = useAuth();
   const c = t.checkout;
 
   useEffect(() => {
@@ -95,6 +97,8 @@ export function CheckoutDialog() {
                   <span className={`display text-5xl ${offer === "trial" ? "text-accent" : ""}`}>{price}</span>
                   <span className="text-sm text-muted">{offer === "trial" ? t.pricing.ttcTrial : c.monthlyPeriod}</span>
                 </p>
+                {/* Signed out: no sign-up step, the email typed beside it becomes the account. */}
+                {!user && <p className="mt-4 text-sm leading-relaxed text-muted">{c.guestHint}</p>}
                 <div className="hidden md:block">
                   {offer === "trial" ? (
                     <TrialTimeline />

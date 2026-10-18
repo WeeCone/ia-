@@ -94,3 +94,24 @@ export function splitCampaignKey(key: string) {
   const [source, campaign] = key.split("__");
   return { source, campaign: campaign === "sans-campagne" ? null : campaign };
 }
+
+/**
+ * Live presence for the admin "En ce moment" panel: one short-lived document per open page, keyed by a random id the
+ * page keeps in memory only (nothing stored on the device). Refreshed every 30 s while the tab is visible, deleted when
+ * it closes; the admin view drops anything not refreshed lately and clears the leftovers.
+ */
+export const LIVE_WINDOW_MS = 70_000;
+
+export function recordLive(
+  id: string,
+  input: { page: string; device: "mobile" | "desktop"; locale: string; from: Attribution; since: number },
+) {
+  return adminDb
+    .collection("live")
+    .doc(id)
+    .set({ at: Date.now(), since: input.since, page: input.page, device: input.device, locale: input.locale, ...input.from });
+}
+
+export function endLive(id: string) {
+  return adminDb.collection("live").doc(id).delete();
+}

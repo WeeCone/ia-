@@ -232,6 +232,16 @@ body {
     transform: scale(0.8);
   }
 }
+/* Welcome page: the account being made after payment. */
+@keyframes welcome-progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+
 @keyframes rise-in {
   from {
     opacity: 0;

@@ -3,14 +3,15 @@
 import { useRouter } from "next/navigation";
 import { useI18n } from "@/i18n/client";
 import { formatEur } from "@/i18n/format";
-import { savePendingOffer } from "@/lib/offers-client";
+import { redirectToBilling } from "@/lib/billing-client";
+import { EMBEDDED_CHECKOUT, openCheckout, savePendingOffer } from "@/lib/offers-client";
 import { OFFER_PRICE_EUR } from "@/lib/plans";
 import { useAuth } from "./auth-provider";
 
 /**
- * Starts the paid trial from anywhere on the public site: the choice is remembered, then the visitor signs up (or lands
- * on the dashboard when already signed in) and the payment opens there, with the trial's terms beside the card form.
- * The dashboard only opens it for an account that can still take the trial.
+ * Starts the paid trial from anywhere on the public site. Signed out, the payment opens right away: Stripe asks for the
+ * email and the account is made from it once paid. Signed in, the dashboard opens the payment, and only for an account
+ * that can still take the trial.
  */
 export function TrialButton({ className, children }: { className?: string; children?: React.ReactNode }) {
   const { user } = useAuth();
@@ -20,8 +21,14 @@ export function TrialButton({ className, children }: { className?: string; child
     <button
       type="button"
       onClick={() => {
-        savePendingOffer("trial");
-        router.push(href(user ? "/dashboard" : "/auth/signup"));
+        if (user) {
+          savePendingOffer("trial");
+          router.push(href("/dashboard"));
+        } else if (EMBEDDED_CHECKOUT) {
+          openCheckout("trial");
+        } else {
+          redirectToBilling("checkout", "trial", locale).catch(() => router.push(href("/auth/signup")));
+        }
       }}
       className={className}
     >

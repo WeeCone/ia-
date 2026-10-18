@@ -64,7 +64,8 @@ function OfferCard({ offer, compact }: { offer: SoldOffer; compact: boolean }) {
       <p className="mt-3 font-medium leading-snug">{pitch}</p>
       {main ? <p className="mt-1 text-sm text-muted">{p.monthlyNote}</p> : <TrialTimeline />}
       <div className="mt-auto">
-        {user ? (
+        {/* The trial is paid straight away, signed in or not; the subscription asks for an account first. */}
+        {user || offer === "trial" ? (
           <BillingButton route="checkout" offer={offer} block className={button}>
             {cta}
           </BillingButton>

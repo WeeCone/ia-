@@ -3,9 +3,14 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useI18n } from "@/i18n/client";
-import { trackView } from "@/lib/track";
+import { trackLeave, trackLive, trackView } from "@/lib/track";
 
-/** Counts page views for the admin "Visites" tab (anonymous, no cookie). The admin pages are never counted. */
+const LIVE_EVERY_MS = 30_000;
+
+/**
+ * Counts page views for the admin "Visites" tab and keeps the visitor on its live count while the tab is visible
+ * (anonymous, no cookie). The admin pages are never counted.
+ */
 export function VisitTracker() {
   const pathname = usePathname();
   const { locale } = useI18n();
@@ -13,6 +18,20 @@ export function VisitTracker() {
     const path = pathname.replace(/^\/(fr|en|es)(?=\/|$)/, "") || "/";
     if (path.startsWith("/admin")) return;
     trackView(path, locale);
+
+    const live = () => {
+      if (!document.hidden) trackLive(path, locale);
+    };
+    const onVisibility = () => (document.hidden ? trackLeave() : live());
+    live();
+    const timer = setInterval(live, LIVE_EVERY_MS);
+    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("pagehide", trackLeave);
+    return () => {
+      clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("pagehide", trackLeave);
+    };
   }, [pathname, locale]);
   return null;
 }

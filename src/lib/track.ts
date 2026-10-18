@@ -101,6 +101,24 @@ export function trackView(path: string, locale: string) {
   send({ type: "view", path, locale, newVisit });
 }
 
+// Live presence: one random id per page load, in memory only, so nothing is written on the device for it.
+let liveId: string | null = null;
+let liveSince = 0;
+
+/** "This page is open": sent on each page and every 30 s while the tab is visible (admin "En ce moment"). */
+export function trackLive(path: string, locale: string) {
+  if (!liveId) {
+    liveId = typeof crypto.randomUUID === "function" ? crypto.randomUUID() : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+    liveSince = Date.now();
+  }
+  send({ type: "live", id: liveId, path, locale, since: liveSince });
+}
+
+/** The tab was hidden or closed: off the live count at once rather than after the timeout. */
+export function trackLeave() {
+  if (liveId) send({ type: "leave", id: liveId });
+}
+
 export function trackEvent(event: "signup" | "analysis" | "checkout") {
   send({ type: "event", event });
 }

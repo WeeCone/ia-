@@ -7,14 +7,19 @@ import { checkoutAttribution, trackEvent } from "./track";
 async function callBilling(route: "checkout" | "portal", body: Record<string, unknown>, locale: Locale) {
   const text = DICTIONARIES[locale].checkout;
   const user = auth.currentUser;
-  if (!user) throw new Error(text.sessionExpired);
+  // Signed out, only the trial can be bought: Stripe then asks for the email and the account is made from it.
+  if (!user && !(route === "checkout" && body.offer === "trial")) throw new Error(text.sessionExpired);
   if (route === "checkout") {
     trackEvent("checkout");
     body = { ...body, ...checkoutAttribution() };
   }
   const response = await fetch(`/api/billing/${route}`, {
     method: "POST",
-    headers: { Authorization: `Bearer ${await user.getIdToken()}`, "Content-Type": "application/json", "X-Locale": locale },
+    headers: {
+      ...(user ? { Authorization: `Bearer ${await user.getIdToken()}` } : {}),
+      "Content-Type": "application/json",
+      "X-Locale": locale,
+    },
     body: JSON.stringify({ ...body, locale }),
   });
   const data = await response.json().catch(() => ({}));

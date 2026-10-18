@@ -31,6 +31,9 @@ service cloud.firestore {
     match /analysisErrors/{errorId} {
       allow read, write: if false;
     }
+    match /live/{visitorId} {
+      allow read, write: if false;
+    }
 
     // One review per user, moderated by hand before anything is published on the site.
     match /reviews/{uid} {

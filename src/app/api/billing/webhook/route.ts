@@ -5,6 +5,7 @@ import { attribution, recordPurchase } from "@/lib/stats";
 import { creditPaidInvoice } from "@/lib/billing-grants";
 import { appUrl, getStripe } from "@/lib/stripe";
 import { sendTrialEmail } from "@/lib/email";
+import { claimGuestSession } from "@/lib/guest-checkout";
 import { hasLocale, type Locale } from "@/i18n/config";
 
 const ACTIVE_STATUSES: Stripe.Subscription.Status[] = ["active", "trialing"];
@@ -91,6 +92,8 @@ export async function POST(request: Request) {
     case "checkout.session.async_payment_succeeded":
       await grantLifetime(event.data.object);
       await markTrial(event.data.object, appUrl(request));
+      // Trial bought without an account: the account is made here if the buyer closed the page before it could.
+      if (event.data.object.metadata?.guest === "1") await claimGuestSession(event.data.object, appUrl(request));
       await countPurchase(event.data.object);
       break;
 
@@ -99,6 +102,7 @@ export async function POST(request: Request) {
     case "invoice.paid": {
       const invoice = event.data.object;
       const details = invoice.parent?.subscription_details;
+      // No uid yet on a guest trial's first invoice: claimGuestSession credits it once the account exists.
       const uid = details?.metadata?.uid;
       if (!uid) break;
       const subscription = details.subscription;

@@ -79,7 +79,15 @@ function welcomeHtml(name: string | null, appUrl: string, pricingUrl: string, t:
  * Sent when a paid trial starts: the date the subscription will be charged and how to stop it before then.
  * Returns false when email is not configured or the provider rejects it.
  */
-export async function sendTrialEmail(to: string, name: string | null, trialEndsAt: number, appUrl: string, locale: Locale) {
+export async function sendTrialEmail(
+  to: string,
+  name: string | null,
+  trialEndsAt: number,
+  appUrl: string,
+  locale: Locale,
+  /** For an account made at payment (trial bought without an account): the link to choose its password. */
+  passwordUrl?: string,
+) {
   const resend = getResend();
   if (!resend || !process.env.EMAIL_FROM) {
     console.warn("trial email skipped: RESEND_API_KEY / EMAIL_FROM not set");
@@ -96,7 +104,18 @@ export async function sendTrialEmail(to: string, name: string | null, trialEndsA
     from: process.env.EMAIL_FROM,
     to,
     subject: t.subject,
-    text: [t.greeting(name), "", t.active, charge, t.cancel, "", `${t.cta} : ${dashboardUrl}`, "", disclaimer].join("\n"),
+    text: [
+      t.greeting(name),
+      "",
+      t.active,
+      charge,
+      t.cancel,
+      "",
+      `${t.cta} : ${dashboardUrl}`,
+      ...(passwordUrl ? ["", `${t.password} ${passwordUrl}`] : []),
+      "",
+      disclaimer,
+    ].join("\n"),
     html: `<!doctype html>
 <html lang="${locale}">
   <body style="margin:0;background:#0b0f19;font-family:Arial,Helvetica,sans-serif;color:#f1f5f9">
@@ -114,7 +133,14 @@ export async function sendTrialEmail(to: string, name: string | null, trialEndsA
             <p style="margin:0 0 28px;line-height:1.6;color:#94a3b8">${escapeHtml(t.cancel)}</p>
             <a href="${dashboardUrl}" style="display:inline-block;background:#00f5a0;color:#0b0f19;font-weight:700;text-decoration:none;padding:14px 24px;border-radius:999px">
               ${t.cta}
-            </a>
+            </a>${
+              passwordUrl
+                ? `
+            <p style="margin:28px 0 0;line-height:1.6;color:#94a3b8">${escapeHtml(t.password)}
+              <a href="${escapeHtml(passwordUrl)}" style="color:#00f5a0;font-weight:700">${t.passwordCta}</a>
+            </p>`
+                : ""
+            }
           </td></tr>
           <tr><td style="padding:16px 28px;border-top:2px solid #263247;font-size:12px;line-height:1.5;color:#94a3b8">
             ${disclaimer}

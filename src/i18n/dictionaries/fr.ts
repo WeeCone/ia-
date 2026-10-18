@@ -260,6 +260,7 @@ export const fr = {
     unavailable: "Paiement indisponible pour le moment.",
     sessionExpired: "Session expirée, reconnectez-vous.",
     redirecting: "Redirection…",
+    guestHint: "Pas besoin de créer un compte avant : il est ouvert avec l'e-mail que vous saisissez ici.",
   },
   offerDialog: {
     title: "Choisissez votre offre",
@@ -591,6 +592,20 @@ export const fr = {
     charge: (date: string, monthly: string) => `Sans résiliation de votre part, l'abonnement démarrera le ${date} à ${monthly}/mois.`,
     cancel: "Si vous ne voulez pas continuer, résiliez avant cette date depuis Mon compte → Gérer mon abonnement. Rien ne sera prélevé.",
     cta: "Ouvrir mon espace",
+    password: "Pour vous reconnecter plus tard, choisissez un mot de passe :",
+    passwordCta: "Choisir mon mot de passe",
+  },
+  welcome: {
+    title: "Paiement reçu",
+    working: "On ouvre votre espace, ça prend quelques secondes.",
+    slow: "Stripe met plus de temps que d'habitude à confirmer le paiement.",
+    retry: "Réessayer",
+    expired: "Votre espace est prêt. Pour y entrer, choisissez votre mot de passe avec le lien que vous avez reçu par e-mail.",
+    existing: (email: string) => `${email} a déjà un compte Scanzivo : l'essai y a été ajouté. Connectez-vous pour lancer votre analyse.`,
+    alreadyActiveTitle: "Vous êtes déjà abonné",
+    alreadyActive: (email: string) => `${email} a déjà un abonnement en cours. L'essai a été annulé et les 0,99 € vous sont remboursés.`,
+    failed: "Votre paiement est bien enregistré, mais votre espace n'a pas pu s'ouvrir. Réessayez, ou écrivez-nous sur WhatsApp.",
+    login: "Me connecter",
   },
   welcomeEmail: {
     subject: "Bienvenue sur Scanzivo",

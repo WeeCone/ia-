@@ -261,6 +261,7 @@ export const en: Dict = {
     unavailable: "Payment unavailable at the moment.",
     sessionExpired: "Session expired, please log in again.",
     redirecting: "Redirecting…",
+    guestHint: "No need to sign up first: your account is opened with the email you enter here.",
   },
   offerDialog: {
     title: "Choose your offer",
@@ -589,6 +590,20 @@ export const en: Dict = {
     charge: (date: string, monthly: string) => `Unless you cancel, the subscription will start on ${date} at ${monthly}/month.`,
     cancel: "If you don't want to continue, cancel before that date from My account → Manage my subscription. Nothing will be charged.",
     cta: "Open my account",
+    password: "To sign back in later, choose a password:",
+    passwordCta: "Choose my password",
+  },
+  welcome: {
+    title: "Payment received",
+    working: "Opening your account, this takes a few seconds.",
+    slow: "Stripe is taking longer than usual to confirm the payment.",
+    retry: "Try again",
+    expired: "Your account is ready. To get in, choose your password with the link we emailed you.",
+    existing: (email: string) => `${email} already has a Scanzivo account: the trial was added to it. Log in to run your analysis.`,
+    alreadyActiveTitle: "You're already subscribed",
+    alreadyActive: (email: string) => `${email} already has an active subscription. The trial was cancelled and your €0.99 is being refunded.`,
+    failed: "Your payment went through, but your account couldn't be opened. Try again, or message us on WhatsApp.",
+    login: "Log in",
   },
   welcomeEmail: {
     subject: "Welcome to Scanzivo",

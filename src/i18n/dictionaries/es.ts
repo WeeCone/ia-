@@ -261,6 +261,7 @@ export const es: Dict = {
     unavailable: "Pago no disponible por el momento.",
     sessionExpired: "Sesión caducada, vuelve a iniciar sesión.",
     redirecting: "Redirigiendo…",
+    guestHint: "No hace falta registrarse antes: la cuenta se abre con el email que escribas aquí.",
   },
   offerDialog: {
     title: "Elige tu oferta",
@@ -589,6 +590,20 @@ export const es: Dict = {
     charge: (date: string, monthly: string) => `Si no cancelas, la suscripción empezará el ${date} a ${monthly}/mes.`,
     cancel: "Si no quieres continuar, cancela antes de esa fecha desde Mi cuenta → Gestionar mi suscripción. No se cobrará nada.",
     cta: "Abrir mi cuenta",
+    password: "Para volver a entrar más adelante, elige una contraseña:",
+    passwordCta: "Elegir mi contraseña",
+  },
+  welcome: {
+    title: "Pago recibido",
+    working: "Estamos abriendo tu cuenta, tarda unos segundos.",
+    slow: "Stripe está tardando más de lo normal en confirmar el pago.",
+    retry: "Reintentar",
+    expired: "Tu cuenta está lista. Para entrar, elige tu contraseña con el enlace que te enviamos por email.",
+    existing: (email: string) => `${email} ya tiene una cuenta Scanzivo: la prueba se ha añadido a ella. Inicia sesión para lanzar tu análisis.`,
+    alreadyActiveTitle: "Ya tienes una suscripción",
+    alreadyActive: (email: string) => `${email} ya tiene una suscripción activa. La prueba se ha cancelado y te devolvemos los 0,99 €.`,
+    failed: "Tu pago se ha registrado, pero no hemos podido abrir tu cuenta. Reinténtalo o escríbenos por WhatsApp.",
+    login: "Iniciar sesión",
   },
   welcomeEmail: {
     subject: "Bienvenido a Scanzivo",

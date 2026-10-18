@@ -1,4 +1,4 @@
-import { attribution, recordEvent, recordView, STAT_EVENTS, statKey, type StatEvent } from "@/lib/stats";
+import { attribution, endLive, recordEvent, recordLive, recordView, STAT_EVENTS, statKey, type StatEvent } from "@/lib/stats";
 
 const BOT = /bot|crawl|spider|slurp|preview|facebookexternalhit|headless|lighthouse|pingdom|monitor|curl|wget|python|axios/i;
 const MOBILE = /mobile|android|iphone|ipad|ipod/i;
@@ -17,16 +17,22 @@ export async function POST(request: Request) {
   const from = attribution(body.source, body.campaign);
 
   try {
+    const path = typeof body.path === "string" && /^\/[a-z0-9/_-]{0,60}$/i.test(body.path) ? body.path : null;
+    const page = path === "/" ? "accueil" : path ? (statKey(path.slice(1), 60) ?? "autre") : null;
+    const device = MOBILE.test(agent) ? "mobile" : "desktop";
+    const locale = statKey(body.locale, 5) ?? "fr";
+    const liveId = typeof body.id === "string" && /^[a-z0-9-]{8,40}$/i.test(body.id) ? body.id : null;
     if (body.type === "view") {
-      const path = typeof body.path === "string" && /^\/[a-z0-9/_-]{0,60}$/i.test(body.path) ? body.path : null;
-      if (!path) return done();
-      await recordView({
-        page: path === "/" ? "accueil" : (statKey(path.slice(1), 60) ?? "autre"),
-        newVisit: body.newVisit === true,
-        device: MOBILE.test(agent) ? "mobile" : "desktop",
-        locale: statKey(body.locale, 5) ?? "fr",
-        from,
-      });
+      if (!page) return done();
+      await recordView({ page, newVisit: body.newVisit === true, device, locale, from });
+    } else if (body.type === "live") {
+      if (!page || !liveId) return done();
+      // When the page was opened, as the browser says it; kept within the last six hours.
+      const now = Date.now();
+      const since = typeof body.since === "number" ? Math.min(now, Math.max(now - 6 * 3600 * 1000, body.since)) : now;
+      await recordLive(liveId, { page, device, locale, from, since });
+    } else if (body.type === "leave") {
+      if (liveId) await endLive(liveId);
     } else if (body.type === "event" && STAT_EVENTS.includes(body.event as StatEvent) && body.event !== "purchase") {
       // Purchases are counted by the Stripe webhook, from the payment itself.
       await recordEvent(body.event as StatEvent, from);
