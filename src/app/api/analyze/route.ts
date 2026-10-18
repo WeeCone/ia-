@@ -25,7 +25,9 @@ export async function POST(request: Request) {
 
   const form = await request.formData();
   const image = form.get("image");
-  const note = String(form.get("note") ?? "").trim().slice(0, 500);
+  const note = String(form.get("note") ?? "")
+    .trim()
+    .slice(0, 500);
 
   if (!(image instanceof File)) return error(text.noImage, 400);
   if (!ALLOWED_IMAGE_TYPES.includes(image.type as AllowedImageType)) {
@@ -51,6 +53,7 @@ export async function POST(request: Request) {
 
   let result: Awaited<ReturnType<typeof analyzeChart>>;
   const bytes = Buffer.from(await image.arrayBuffer());
+  const startedAt = Date.now();
   try {
     result = await analyzeChart(bytes.toString("base64"), image.type as AllowedImageType, note || undefined, locale);
   } catch (err) {
@@ -59,8 +62,14 @@ export async function POST(request: Request) {
       return error(text.refused, 422);
     }
     if (err instanceof Anthropic.RateLimitError) return error(text.busy, 503);
-    console.error("analyze failed", err);
-    return error(text.failed, 502);
+    // What really failed (API status and message, or the error itself) and how long the call ran: in the logs for
+    // everyone, and appended to the message for the admin so a failure can be diagnosed from the dashboard.
+    const seconds = Math.round((Date.now() - startedAt) / 1000);
+    const detail =
+      err instanceof Anthropic.APIError ? `API ${err.status ?? "?"} : ${err.message}` : err instanceof Error ? err.message : String(err);
+    console.error("analyze failed", { seconds, detail, err });
+    const admin = await isAdminRequest(request).catch(() => false);
+    return error(admin ? `${text.failed} [admin · ${seconds} s · ${detail.slice(0, 300)}]` : text.failed, 502);
   }
 
   // Every call counts toward the monthly budget, even one that is not charged a credit.

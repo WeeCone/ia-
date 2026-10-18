@@ -133,7 +133,8 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, tr
         body,
       });
       const data = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(data.error ?? u.failed);
+      // No JSON back usually means the hosting cut the request (time limit): keep the status so it can be traced.
+      if (!response.ok) throw new Error(data.error ?? `${u.failed} (HTTP ${response.status})`);
       handedOff.current = true;
       clearPendingChart();
       trackEvent("analysis");
