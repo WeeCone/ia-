@@ -249,6 +249,10 @@ export const fr = {
   },
   checkout: {
     secure: "Paiement sécurisé par Stripe",
+    summary: "Votre commande",
+    trustBank: "Vos données bancaires sont traitées par Stripe, jamais par Scanzivo.",
+    trustCancel: "Résiliable en un clic depuis votre espace.",
+    monthlyPeriod: "par mois, sans engagement",
     dialogLabel: "Paiement sécurisé",
     closeLabel: "Fermer le paiement",
     loading: "Chargement du paiement sécurisé…",

@@ -250,6 +250,10 @@ export const en: Dict = {
   },
   checkout: {
     secure: "Secure payment by Stripe",
+    summary: "Your order",
+    trustBank: "Your card details are handled by Stripe, never by Scanzivo.",
+    trustCancel: "Cancel in one click from your account.",
+    monthlyPeriod: "per month, no commitment",
     dialogLabel: "Secure payment",
     closeLabel: "Close payment",
     loading: "Loading secure payment…",

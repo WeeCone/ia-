@@ -250,6 +250,10 @@ export const es: Dict = {
   },
   checkout: {
     secure: "Pago seguro con Stripe",
+    summary: "Tu pedido",
+    trustBank: "Tus datos bancarios los gestiona Stripe, nunca Scanzivo.",
+    trustCancel: "Cancelable en un clic desde tu cuenta.",
+    monthlyPeriod: "al mes, sin permanencia",
     dialogLabel: "Pago seguro",
     closeLabel: "Cerrar el pago",
     loading: "Cargando el pago seguro…",

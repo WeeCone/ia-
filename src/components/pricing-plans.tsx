@@ -11,7 +11,7 @@ import { BillingButton } from "./billing-button";
 type SoldOffer = "monthly" | "trial";
 
 /** What the trial costs and when, in order: today's fee, the subscription in 3 days if kept, cancelling any time. */
-function TrialTimeline() {
+export function TrialTimeline() {
   const { t, locale } = useI18n();
   const s = t.pricing.trialSteps;
   const steps = [
