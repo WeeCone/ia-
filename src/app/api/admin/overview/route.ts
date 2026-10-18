@@ -29,6 +29,7 @@ export async function GET(request: Request) {
         spendEur: monthSpend(data),
         createdAt: millis(data.createdAt),
         hasStripe: Boolean(data.stripeCustomerId),
+        trial: Boolean(data.trialSessionId),
       };
     }),
   );

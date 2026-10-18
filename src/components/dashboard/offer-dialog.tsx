@@ -6,7 +6,19 @@ import { useI18n } from "@/i18n/client";
 import { PricingPlans } from "../pricing-plans";
 
 /** The offer picker, opened inside the dashboard so choosing an offer goes straight to checkout. */
-export function OfferDialog({ open, onClose, plan, hasCapture }: { open: boolean; onClose: () => void; plan: Plan | null; hasCapture: boolean }) {
+export function OfferDialog({
+  open,
+  onClose,
+  plan,
+  trialUsed,
+  hasCapture,
+}: {
+  open: boolean;
+  onClose: () => void;
+  plan: Plan | null;
+  trialUsed: boolean;
+  hasCapture: boolean;
+}) {
   const ref = useRef<HTMLDialogElement>(null);
   const { t } = useI18n();
 
@@ -40,7 +52,7 @@ export function OfferDialog({ open, onClose, plan, hasCapture }: { open: boolean
           </button>
         </div>
         <div className="mt-6">
-          <PricingPlans compact currentPlan={plan} />
+          <PricingPlans compact currentPlan={plan} trialUsed={trialUsed} />
         </div>
       </div>
     </dialog>

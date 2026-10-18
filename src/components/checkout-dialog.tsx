@@ -68,7 +68,7 @@ export function CheckoutDialog() {
             <path d="M6 10V7a6 6 0 0 1 12 0v3M5 10h14v11H5z" />
           </svg>
           {c.secure}
-          {offer ? ` · ${t.common.monthly}, ${formatEur(locale, OFFER_PRICE_EUR[offer])}` : ""}
+          {offer ? ` · ${offer === "trial" ? t.common.trial : t.common.monthly}, ${formatEur(locale, OFFER_PRICE_EUR[offer])}` : ""}
         </p>
         <button type="button" onClick={close} aria-label={c.closeLabel} className="rounded-lg px-2 text-2xl leading-none text-[#57606a] hover:text-[#0b0e14]">
           ×

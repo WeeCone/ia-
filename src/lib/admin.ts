@@ -34,6 +34,8 @@ export type AdminUser = {
   spendEur: number;
   createdAt: number | null;
   hasStripe: boolean;
+  /** Bought the 0,99 € trial analysis. */
+  trial: boolean;
 };
 
 export type ReviewStatus = "pending" | "approved" | "hidden";

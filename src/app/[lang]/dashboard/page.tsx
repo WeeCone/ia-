@@ -80,6 +80,8 @@ export default function DashboardPage() {
 
   // An offer picked before signing up goes straight to checkout; otherwise an account without an offer sees the offers once.
   const plan = profile?.plan;
+  // A paid trial leaves the plan at "none" with a credit to spend: such an account can analyse.
+  const hasCredits = profile ? availableCredits(profile) > 0 : false;
   useEffect(() => {
     if (!plan || checkoutDone) return;
     const offer = takePendingOffer();
@@ -94,7 +96,7 @@ export default function DashboardPage() {
       });
       return;
     }
-    if (plan !== "none") return;
+    if (plan !== "none" || hasCredits) return;
     let shown = true;
     try {
       shown = sessionStorage.getItem(OFFERS_SHOWN_KEY) === "1";
@@ -103,11 +105,11 @@ export default function DashboardPage() {
     if (shown) return;
     const timer = setTimeout(() => setOffersOpen(true), 400);
     return () => clearTimeout(timer);
-  }, [plan, checkoutDone]);
+  }, [plan, hasCredits, checkoutDone]);
 
   // First visit with an offer: a short two-step tour of the composer (pointless before one can analyse).
   useEffect(() => {
-    if (!user || !plan || plan === "none") return;
+    if (!user || !plan || (plan === "none" && !hasCredits)) return;
     let done = true;
     try {
       done = localStorage.getItem(TOUR_KEY) === "1";
@@ -116,7 +118,7 @@ export default function DashboardPage() {
       const timer = setTimeout(() => setTour(1), 600);
       return () => clearTimeout(timer);
     }
-  }, [user, plan]);
+  }, [user, plan, hasCredits]);
 
   const endTour = useCallback(() => {
     setTour(0);
@@ -319,7 +321,8 @@ export default function DashboardPage() {
                 <ChartUploader
                   disabled={noCredits}
                   disabledNotice={disabledNotice}
-                  needsOffer={profile?.plan === "none"}
+                  needsOffer={profile?.plan === "none" && !hasCredits}
+                  trialAvailable={!profile?.trialSessionId}
                   testMode={testMode && isAdminUser(user)}
                   highlight={tour === 1 ? "zone" : tour === 2 ? "send" : null}
                   onAnalyzed={(outcome: AnalysisOutcome) => {
@@ -350,7 +353,13 @@ export default function DashboardPage() {
         />
       )}
 
-      <OfferDialog open={offersOpen} onClose={() => setOffersOpen(false)} plan={profile?.plan ?? null} hasCapture={offersOpen && hasPendingChart()} />
+      <OfferDialog
+        open={offersOpen}
+        onClose={() => setOffersOpen(false)}
+        plan={profile?.plan ?? null}
+        trialUsed={Boolean(profile?.trialSessionId)}
+        hasCapture={offersOpen && hasPendingChart()}
+      />
       {redirecting && !checkoutDone && plan !== "lifetime" && (
         <div role="status" className="fixed inset-0 z-50 grid place-items-center bg-background/85 backdrop-blur-sm">
           <p className="label text-muted">{d.redirecting}</p>

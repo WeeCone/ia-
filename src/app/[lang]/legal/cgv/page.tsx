@@ -47,6 +47,10 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
           <strong>Mensuel — {formatEur("fr", OFFER_PRICE_EUR.monthly)} / mois</strong> : abonnement sans engagement, renouvelé
           automatiquement chaque mois.
         </li>
+        <li>
+          <strong>Essai — {formatEur("fr", OFFER_PRICE_EUR.trial)} (paiement unique)</strong> : une analyse, achetable une seule fois
+          par compte, sans abonnement ni renouvellement. Le crédit d&apos;essai reste disponible jusqu&apos;à son utilisation.
+        </li>
       </ul>
       <p>
         L&apos;abonnement inclut {MONTHLY_CREDITS} analyses par mois (usage raisonnable), rechargées à chaque échéance mensuelle ;
@@ -130,6 +134,10 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
           <strong>Monthly — {formatEur("en", OFFER_PRICE_EUR.monthly)} / month</strong>: subscription with no commitment, renewed
           automatically every month.
         </li>
+        <li>
+          <strong>Trial — {formatEur("en", OFFER_PRICE_EUR.trial)} (one-off payment)</strong>: one analysis, which can be bought only
+          once per account, with no subscription or renewal. The trial credit remains available until it is used.
+        </li>
       </ul>
       <p>
         The subscription includes {MONTHLY_CREDITS} analyses per month (fair use), refilled at each monthly due date; unused
@@ -211,6 +219,10 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
         <li>
           <strong>Mensual — {formatEur("es", OFFER_PRICE_EUR.monthly)} / mes</strong>: suscripción sin permanencia, renovada
           automáticamente cada mes.
+        </li>
+        <li>
+          <strong>Prueba — {formatEur("es", OFFER_PRICE_EUR.trial)} (pago único)</strong>: un análisis, que solo puede comprarse una
+          vez por cuenta, sin suscripción ni renovación. El crédito de prueba sigue disponible hasta que se utilice.
         </li>
       </ul>
       <p>

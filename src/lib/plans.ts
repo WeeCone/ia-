@@ -1,5 +1,9 @@
 export type Plan = "none" | "monthly" | "lifetime";
-export type Offer = Exclude<Plan, "none">;
+/** What can be bought: a plan, or the one-off trial (a single analysis, once per account, plan unchanged). */
+export type Offer = Exclude<Plan, "none"> | "trial";
+
+/** Credits the trial adds. */
+export const TRIAL_CREDITS = 1;
 
 /**
  * Hard ceiling on what one customer can cost in AI calls per calendar month, in euros.
@@ -23,10 +27,13 @@ export const MONTHLY_CREDITS = Math.floor((MONTHLY_BUDGET_EUR - MAX_CALL_COST_EU
 export const OFFERS: Record<Offer, { name: string; price: string; period: string }> = {
   monthly: { name: "Mensuel", price: "40 €", period: "/ mois" },
   lifetime: { name: "À vie", price: "180 €", period: "paiement unique" },
+  trial: { name: "Essai", price: "0,99 €", period: "une analyse" },
 };
 
 /** Prices in euros (display; keep in sync with Stripe). Format with formatEur() for the visitor's language. */
-export const OFFER_PRICE_EUR: Record<Offer, number> = { monthly: 40, lifetime: 180 };
+// The trial has no Stripe price to create: the checkout route sends its amount inline (TRIAL_PRICE_CENTS).
+export const OFFER_PRICE_EUR: Record<Offer, number> = { monthly: 40, lifetime: 180, trial: 0.99 };
+export const TRIAL_PRICE_CENTS = 99;
 
 export const PLAN_LABELS: Record<Plan, string> = { none: "Aucune offre", monthly: "Mensuel", lifetime: "À vie" };
 

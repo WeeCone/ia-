@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { adminDb } from "@/lib/firebase-admin";
-import type { Offer } from "@/lib/plans";
+import { TRIAL_PRICE_CENTS, type Offer } from "@/lib/plans";
 import { getRequestUid } from "@/lib/server-auth";
 import { appUrl, getStripe, withBillingErrors } from "@/lib/stripe";
 import { localePath } from "@/i18n/config";
@@ -8,9 +8,15 @@ import { DICTIONARIES } from "@/i18n/dictionaries";
 import { requestLocale } from "@/i18n/server";
 import { statKey } from "@/lib/stats";
 
-const PRICES: Record<Offer, string | undefined> = {
+const PRICES: Record<Exclude<Offer, "trial">, string | undefined> = {
   monthly: process.env.STRIPE_PRICE_MONTHLY,
   lifetime: process.env.STRIPE_PRICE_LIFETIME,
+};
+
+const TRIAL_NAMES: Record<string, string> = {
+  fr: "Scanzivo — analyse d'essai",
+  en: "Scanzivo — trial analysis",
+  es: "Scanzivo — análisis de prueba",
 };
 
 async function customerExists(id: string) {
@@ -36,7 +42,7 @@ async function handler(request: Request) {
     campaign?: string;
   };
   // Lifetime access is no longer sold (existing owners keep it; the webhook still honours their past purchases).
-  if (offer !== "monthly") {
+  if (offer !== "monthly" && offer !== "trial") {
     return Response.json({ error: text.unknownOffer }, { status: 400 });
   }
 
@@ -44,6 +50,10 @@ async function handler(request: Request) {
   const user = await userRef.get();
   if (user.get("plan") === "lifetime" || user.get("plan") === "monthly") {
     return Response.json({ error: text.alreadyActive }, { status: 409 });
+  }
+  // One trial per account.
+  if (offer === "trial" && user.get("trialSessionId")) {
+    return Response.json({ error: text.trialUsed }, { status: 409 });
   }
 
   const stripe = getStripe();
@@ -69,7 +79,11 @@ async function handler(request: Request) {
   const session = await stripe.checkout.sessions.create({
     customer: customerId,
     client_reference_id: uid,
-    line_items: [{ price: PRICES[offer], quantity: 1 }],
+    line_items: [
+      offer === "trial"
+        ? { price_data: { currency: "eur", unit_amount: TRIAL_PRICE_CENTS, product_data: { name: TRIAL_NAMES[locale] } }, quantity: 1 }
+        : { price: PRICES[offer], quantity: 1 },
+    ],
     locale,
     // Embedded: Stripe's form opens inside the site and sends the page to return_url once paid.
     ...(embedded

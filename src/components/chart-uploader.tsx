@@ -22,6 +22,8 @@ type Props = {
   disabledNotice?: React.ReactNode;
   /** No offer yet: the action opens the offer picker (the capture is kept for after payment) instead of a disabled button. */
   needsOffer?: boolean;
+  /** Offer the one-off trial next to the subscription (accounts that haven't used it). */
+  trialAvailable?: boolean;
   /** Admin test mode: canned report, no model call, no credit. */
   testMode?: boolean;
   /** Onboarding tour: which part of the composer to spotlight. */
@@ -42,7 +44,7 @@ function ArrowIcon() {
 }
 
 /** The analysis panel: drop or pick a screenshot, add context, analyse. Shows progress while the analysis runs. */
-export function ChartUploader({ disabled, disabledNotice, needsOffer = false, testMode = false, highlight = null, onAnalyzed }: Props) {
+export function ChartUploader({ disabled, disabledNotice, needsOffer = false, trialAvailable = false, testMode = false, highlight = null, onAnalyzed }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -321,6 +323,13 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, te
                     {formatEur(locale, OFFER_PRICE_EUR.monthly)}
                     {t.common.perMonth}
                   </span>
+                  {trialAvailable && (
+                    <>
+                      {u.offerOr}
+                      <span className="whitespace-nowrap font-medium text-foreground">{formatEur(locale, OFFER_PRICE_EUR.trial)}</span>
+                      {u.offerTrial}
+                    </>
+                  )}
                   .{file ? u.offerKept : ""}
                 </p>
                 <button type="button" onClick={openOffers} className="btn-primary w-full">

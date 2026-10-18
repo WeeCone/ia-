@@ -13,6 +13,8 @@ export type UserProfile = {
   credits: number;
   creditsPeriod?: string;
   stripeCustomerId?: string;
+  /** Set once the one-off trial is paid: it can be bought only once per account. */
+  trialSessionId?: string;
   /** Language chosen at sign-up: emails and analyses default to it. */
   locale?: Locale;
 };

@@ -7,7 +7,7 @@ import { openOffers } from "@/lib/offers-client";
 import { useState } from "react";
 import { isAdminUser } from "@/lib/admin";
 import { auth } from "@/lib/firebase";
-import { MONTHLY_CREDITS } from "@/lib/plans";
+import { availableCredits, MONTHLY_CREDITS } from "@/lib/plans";
 import type { UserProfile } from "@/lib/users";
 import { useI18n } from "@/i18n/client";
 import { HistoryList, type StoredAnalysis } from "../analysis-history";
@@ -38,6 +38,14 @@ function initials(user: User) {
 function PlanCard({ profile }: { profile: UserProfile | null }) {
   const { t } = useI18n();
   if (!profile) return null;
+  if (profile.plan === "none" && availableCredits(profile) > 0) {
+    return (
+      <div className="rounded-xl border border-accent/30 bg-accent/5 p-3">
+        <p className="text-sm font-medium">{t.account.trialPlan}</p>
+        <p className="mt-0.5 text-xs text-muted">{t.account.trialHint}</p>
+      </div>
+    );
+  }
   if (profile.plan === "none") {
     return (
       <div className="rounded-xl border border-accent/30 bg-accent/5 p-3">

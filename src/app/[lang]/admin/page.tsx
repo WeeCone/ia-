@@ -64,6 +64,7 @@ function UserRow({ user, onSaved, onShowAnalyses }: { user: AdminUser; onSaved: 
         </td>
         <td className="px-4 py-3">
           <span className={`chip ${planChip[user.plan]}`}>{PLAN_LABELS[user.plan]}</span>
+          {user.trial && <span className="ml-1.5 chip border-accent/40 text-accent">Essai</span>}
         </td>
         <td className="px-4 py-3 text-right font-mono tabular-nums">{user.credits}</td>
         <td className="px-4 py-3 text-right font-mono tabular-nums">

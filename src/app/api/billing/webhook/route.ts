@@ -1,6 +1,6 @@
 import type Stripe from "stripe";
 import { adminDb } from "@/lib/firebase-admin";
-import { creditPeriod, MONTHLY_CREDITS } from "@/lib/plans";
+import { availableCredits, creditPeriod, MONTHLY_CREDITS, TRIAL_CREDITS } from "@/lib/plans";
 import { attribution, recordPurchase } from "@/lib/stats";
 import { getStripe } from "@/lib/stripe";
 
@@ -45,6 +45,22 @@ async function countPurchase(session: Stripe.Checkout.Session) {
   }
 }
 
+/** The one-off trial: adds its credit once, keyed on the session so a retried event never adds it twice. */
+async function grantTrial(session: Stripe.Checkout.Session) {
+  const uid = session.metadata?.uid;
+  if (!uid || session.metadata?.offer !== "trial" || session.payment_status !== "paid") return;
+  const ref = userRef(uid);
+  await adminDb.runTransaction(async (tx) => {
+    const user = await tx.get(ref);
+    if (!user.exists || user.get("trialSessionId") === session.id) return;
+    tx.update(ref, {
+      credits: availableCredits(user.data() ?? {}) + TRIAL_CREDITS,
+      creditsPeriod: creditPeriod(),
+      trialSessionId: session.id,
+    });
+  });
+}
+
 export async function POST(request: Request) {
   const signature = request.headers.get("stripe-signature");
   if (!signature) return new Response("Missing signature", { status: 400 });
@@ -61,6 +77,7 @@ export async function POST(request: Request) {
     case "checkout.session.completed":
     case "checkout.session.async_payment_succeeded":
       await grantLifetime(event.data.object);
+      await grantTrial(event.data.object);
       await countPurchase(event.data.object);
       break;
 
