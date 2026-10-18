@@ -101,15 +101,13 @@ async function handler(request: Request) {
       ? { ui_mode: "embedded_page" as const, return_url: `${dashboard}?checkout=success` }
       : { success_url: `${dashboard}?checkout=success`, cancel_url: dashboard }),
     metadata,
-    // Stripe's form in Scanzivo's colours, type and logo (the images are served by the live site).
+    // Stripe's form in Scanzivo's colours and type. No logo, icon or name here: Stripe refuses them for the embedded
+    // form (the dialog around it already shows the brand).
     branding_settings: {
-      display_name: "Scanzivo",
       background_color: "#ffffff",
       button_color: "#047857",
       border_style: "rounded",
       font_family: "inter",
-      icon: { type: "url", url: "https://scanzivo.com/brand/scanzivo-icon-512.png" },
-      logo: { type: "url", url: "https://scanzivo.com/brand/scanzivo-logo-on-light.png" },
     },
     // Express consent required by art. L221-28 13° Code de la consommation for immediate digital access.
     // Needs a Terms of Service URL set in Stripe (Settings → Public details) pointing to /legal/cgv.
