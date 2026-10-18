@@ -5,7 +5,8 @@ import type { Locale } from "@/i18n/config";
 import { ChartAnalysis, type AllowedImageType } from "./analysis";
 import { callCostEur } from "./usage-cost";
 
-const client = new Anthropic();
+// Trimmed: a secret pasted with a trailing newline is otherwise sent as is and rejected as an invalid key.
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY?.trim() });
 
 const SYSTEM_PROMPT = `Tu es un analyste technique expérimenté. On te fournit la capture d'écran d'un graphique de prix (crypto, forex, actions, matières premières).
 Analyse uniquement ce qui est visible : structure de marché, tendance, supports et résistances, figures chartistes, indicateurs affichés.
