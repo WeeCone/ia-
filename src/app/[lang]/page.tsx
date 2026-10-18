@@ -6,16 +6,17 @@ import { Faq } from "@/components/faq";
 import { DropBar } from "@/components/drop-bar";
 import { ScanDemo } from "@/components/scan-demo";
 import { PlatformMarquee } from "@/components/platform-marquee";
-import { PriceNote } from "@/components/price-note";
 import { PricingPlans } from "@/components/pricing-plans";
 import { RotatingWord } from "@/components/rotating-word";
 import { ScrollReveal } from "@/components/scroll-reveal";
-import { ScanCta } from "@/components/scan-cta";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Testimonials } from "@/components/testimonials";
 import { TrustStrip } from "@/components/trust-strip";
+import { TrialButton } from "@/components/trial-button";
+import { formatEur } from "@/i18n/format";
 import { getI18n, languageAlternates } from "@/i18n/server";
+import { OFFER_PRICE_EUR } from "@/lib/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { locale } = await getI18n();
@@ -23,7 +24,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const { t } = await getI18n();
+  const { t, locale } = await getI18n();
+  const trialLine = t.hero.trialLine(formatEur(locale, OFFER_PRICE_EUR.trial), formatEur(locale, OFFER_PRICE_EUR.monthly));
   return (
     <div className="theme-light flex flex-1 flex-col">
       <SiteHeader />
@@ -49,6 +51,13 @@ export default async function Home() {
             </p>
             <div style={{ "--d": "0.3s" } as React.CSSProperties} className="rise-in mt-10">
               <DropBar />
+              <p className="mx-auto mt-4 max-w-xl text-sm text-muted [text-shadow:0_1px_12px_var(--background)]">
+                {trialLine.before}
+                <a href="#tarifs" className="font-semibold text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">
+                  {trialLine.offer}
+                </a>
+                {trialLine.after}
+              </p>
             </div>
           </div>
           <div data-reveal="fade" className="mx-2 rounded-[2.5rem] border border-border/70 bg-card/40 py-8 backdrop-blur sm:mx-4">
@@ -136,8 +145,8 @@ export default async function Home() {
                 {t.closing.titleA} <span className="mark">{t.closing.titleB}</span>
               </h2>
               <p className="mx-auto mt-5 max-w-xl text-muted">{t.closing.subtitle}</p>
-              <ScanCta className="btn-primary mt-9 text-base">{t.closing.cta}</ScanCta>
-              <PriceNote className="mt-4 text-muted" />
+              <TrialButton className="btn-primary mt-9 text-base" />
+              <p className="mt-4 text-sm text-muted">{t.closing.trialNote(formatEur(locale, OFFER_PRICE_EUR.monthly))}</p>
             </div>
           </div>
         </section>

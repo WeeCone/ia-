@@ -82,10 +82,13 @@ export default function DashboardPage() {
   const plan = profile?.plan;
   // A paid trial leaves the plan at "none" with a credit to spend: such an account can analyse.
   const hasCredits = profile ? availableCredits(profile) > 0 : false;
+  const trialTaken = Boolean(profile?.trialSessionId);
   useEffect(() => {
     if (!plan || checkoutDone) return;
     const offer = takePendingOffer();
-    if (offer && plan !== "lifetime") {
+    // The trial is for accounts without an offer that never had one; otherwise the choice is simply dropped.
+    const allowed = offer === "trial" ? plan === "none" && !trialTaken : plan !== "lifetime";
+    if (offer && allowed) {
       if (EMBEDDED_CHECKOUT) {
         const timer = setTimeout(() => openCheckout(offer), 0);
         return () => clearTimeout(timer);
@@ -105,7 +108,7 @@ export default function DashboardPage() {
     if (shown) return;
     const timer = setTimeout(() => setOffersOpen(true), 400);
     return () => clearTimeout(timer);
-  }, [plan, hasCredits, checkoutDone]);
+  }, [plan, hasCredits, trialTaken, checkoutDone]);
 
   // First visit with an offer: a short two-step tour of the composer (pointless before one can analyse).
   useEffect(() => {

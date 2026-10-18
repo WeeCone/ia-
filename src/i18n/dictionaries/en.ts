@@ -29,6 +29,7 @@ export const en: Dict = {
     mySpace: "My account",
     scan: "Scan",
     scanSuffix: " a chart",
+    trial: "Trial €0.99",
     menu: "Menu",
   },
   footer: {
@@ -47,6 +48,11 @@ export const en: Dict = {
     titleLine2: "of your favourite assets:",
     words: ["crypto", "forex", "gold", "indices", "stocks"],
     subtitle: "One screenshot, a clear verdict and a plan with numbers: entry, stop, targets. In under a minute.",
+    trialLine: (trial: string, monthly: string) => ({
+      before: "Test it on your own chart: ",
+      offer: `3 days for ${trial}`,
+      after: `, then ${monthly}/month with no commitment.`,
+    }),
     platforms: "Works with screenshots from your platforms",
     platformsLabel: "Compatible platforms",
   },
@@ -126,7 +132,15 @@ export const en: Dict = {
     monthlyCta: "Subscribe monthly",
     ttcTrial: "incl. VAT, today",
     trialPitch: "3 days and 1 full analysis to test it on your own chart.",
-    trialNote: (monthly: string) => `Then ${monthly}/month automatically, unless you cancel in one click during the trial.`,
+    trialSteps: {
+      today: (price: string) => `Today: ${price}`,
+      todayHint: "1 full analysis, on your chart",
+      later: (monthly: string) => `In 3 days: ${monthly}/month`,
+      laterHint: "only if you continue",
+      anytime: "Any time",
+      anytimeHint: "cancel in one click, from your account",
+      email: "An email gives you the exact date of the first charge.",
+    },
     trialCta: (price: string) => `Try 3 days for ${price}`,
     includedTitle: "Included in the subscription",
     included: [
@@ -216,6 +230,8 @@ export const en: Dict = {
     titleB: "Analyse.",
     subtitle: "Your next chart deserves a second opinion, with numbers and reasons.",
     cta: "Scan a chart →",
+    trialCta: (price: string) => `Try 3 days for ${price}`,
+    trialNote: (monthly: string) => `Then ${monthly}/month, cancel in one click during the trial.`,
   },
   activity: {
     live: "Live analysis",
@@ -247,6 +263,8 @@ export const en: Dict = {
     title: "Choose your offer",
     withCapture: "Your screenshot is kept: it will be ready to analyse as soon as you're back from payment.",
     withoutCapture: "Pay in a minute, and your analyses are available right away.",
+    trialTitle: (price: string) => `Your chart is ready. Analyse it for ${price}.`,
+    trialSubtitle: (monthly: string) => `3-day trial, then ${monthly}/month. Cancel in one click.`,
   },
   auth: {
     asideTitleA: "The chart says it all.",
@@ -549,6 +567,15 @@ export const en: Dict = {
     checkoutConsent: (termsUrl: string) =>
       `I accept the [terms of sale](${termsUrl}), I request immediate access to the service and I waive my right of withdrawal.`,
     cancelFailed: "Your subscription can't be cancelled right now. Try again or contact us.",
+  },
+  trialEmail: {
+    subject: "Your Scanzivo trial has started",
+    heading: "Your trial has started",
+    greeting: (name: string | null) => (name ? `Hello ${name},` : "Hello,"),
+    active: "Your 3-day trial is active: your analysis is waiting for you.",
+    charge: (date: string, monthly: string) => `On ${date}, the monthly subscription will start automatically at ${monthly}/month.`,
+    cancel: "To stop, cancel before that date from your account (My account → Manage my subscription): nothing will be charged.",
+    cta: "Open my account",
   },
   welcomeEmail: {
     subject: "Welcome to Scanzivo",

@@ -29,6 +29,7 @@ export const es: Dict = {
     mySpace: "Mi cuenta",
     scan: "Escanear",
     scanSuffix: " un gráfico",
+    trial: "Prueba 0,99 €",
     menu: "Menú",
   },
   footer: {
@@ -47,6 +48,11 @@ export const es: Dict = {
     titleLine2: "de tus activos favoritos:",
     words: ["las criptos", "el forex", "el oro", "los índices", "las acciones"],
     subtitle: "Una captura de pantalla, un veredicto claro y un plan con cifras: entrada, stop, objetivos. En menos de un minuto.",
+    trialLine: (trial: string, monthly: string) => ({
+      before: "Pruébalo con tu propio gráfico: ",
+      offer: `3 días por ${trial}`,
+      after: `, luego ${monthly}/mes sin permanencia.`,
+    }),
     platforms: "Funciona con las capturas de tus plataformas",
     platformsLabel: "Plataformas compatibles",
   },
@@ -126,7 +132,15 @@ export const es: Dict = {
     monthlyCta: "Suscribirme al mes",
     ttcTrial: "IVA incl., hoy",
     trialPitch: "3 días y 1 análisis completo para probarlo con tu propio gráfico.",
-    trialNote: (monthly: string) => `Después ${monthly}/mes automáticamente, salvo que canceles en un clic durante la prueba.`,
+    trialSteps: {
+      today: (price: string) => `Hoy: ${price}`,
+      todayHint: "1 análisis completo, sobre tu gráfico",
+      later: (monthly: string) => `En 3 días: ${monthly}/mes`,
+      laterHint: "solo si continúas",
+      anytime: "En cualquier momento",
+      anytimeHint: "cancelación en un clic, desde tu cuenta",
+      email: "Un e-mail te indica la fecha exacta del primer cargo.",
+    },
     trialCta: (price: string) => `Probar 3 días por ${price}`,
     includedTitle: "Incluido en la suscripción",
     included: [
@@ -216,6 +230,8 @@ export const es: Dict = {
     titleB: "Analiza.",
     subtitle: "Tu próximo gráfico merece una segunda opinión, con cifras y argumentos.",
     cta: "Escanear un gráfico →",
+    trialCta: (price: string) => `Probar 3 días por ${price}`,
+    trialNote: (monthly: string) => `Luego ${monthly}/mes, cancelable en un clic durante la prueba.`,
   },
   activity: {
     live: "Análisis en directo",
@@ -247,6 +263,8 @@ export const es: Dict = {
     title: "Elige tu oferta",
     withCapture: "Tu captura se conserva: estará lista para analizar en cuanto vuelvas del pago.",
     withoutCapture: "Paga en un minuto y tus análisis estarán disponibles al instante.",
+    trialTitle: (price: string) => `Tu gráfico está listo. Analízalo por ${price}.`,
+    trialSubtitle: (monthly: string) => `3 días de prueba, luego ${monthly}/mes. Cancelable en un clic.`,
   },
   auth: {
     asideTitleA: "El gráfico lo dice todo.",
@@ -549,6 +567,15 @@ export const es: Dict = {
     checkoutConsent: (termsUrl: string) =>
       `Acepto las [condiciones de venta](${termsUrl}), solicito el acceso inmediato al servicio y renuncio a mi derecho de desistimiento.`,
     cancelFailed: "No se puede cancelar tu suscripción por el momento. Vuelve a intentarlo o contáctanos.",
+  },
+  trialEmail: {
+    subject: "Tu prueba de Scanzivo ha empezado",
+    heading: "Tu prueba ha empezado",
+    greeting: (name: string | null) => (name ? `Hola ${name}:` : "Hola:"),
+    active: "Tu prueba de 3 días está activa: tu análisis te espera.",
+    charge: (date: string, monthly: string) => `El ${date}, la suscripción mensual empezará automáticamente a ${monthly}/mes.`,
+    cancel: "Para no continuar, cancela antes de esa fecha desde tu cuenta (Mi cuenta → Gestionar mi suscripción): no se hará ningún cargo.",
+    cta: "Abrir mi cuenta",
   },
   welcomeEmail: {
     subject: "Bienvenido a Scanzivo",

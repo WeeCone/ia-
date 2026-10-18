@@ -46,3 +46,13 @@ export async function readPendingChart(): Promise<File | null> {
     return null;
   }
 }
+
+/** The waiting chart as an image URL (data URL), for a preview; null when there is none. */
+export function pendingChartUrl(): string | null {
+  try {
+    const raw = sessionStorage.getItem(KEY);
+    return raw ? (JSON.parse(raw) as { url: string }).url : null;
+  } catch {
+    return null;
+  }
+}

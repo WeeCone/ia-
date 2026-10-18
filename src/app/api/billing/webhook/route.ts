@@ -2,7 +2,9 @@ import type Stripe from "stripe";
 import { adminDb } from "@/lib/firebase-admin";
 import { creditPeriod, MONTHLY_CREDITS, TRIAL_CREDITS } from "@/lib/plans";
 import { attribution, recordPurchase } from "@/lib/stats";
-import { getStripe } from "@/lib/stripe";
+import { appUrl, getStripe } from "@/lib/stripe";
+import { sendTrialEmail } from "@/lib/email";
+import { hasLocale, type Locale } from "@/i18n/config";
 
 const ACTIVE_STATUSES: Stripe.Subscription.Status[] = ["active", "trialing"];
 
@@ -46,7 +48,7 @@ async function countPurchase(session: Stripe.Checkout.Session) {
 }
 
 /** The paid trial: marks the account (one trial each) and records when the subscription's first payment is due. */
-async function markTrial(session: Stripe.Checkout.Session) {
+async function markTrial(session: Stripe.Checkout.Session, baseUrl: string) {
   const uid = session.metadata?.uid;
   if (!uid || session.metadata?.offer !== "trial" || session.payment_status !== "paid") return;
   let trialEndsAt: number | null = null;
@@ -56,7 +58,19 @@ async function markTrial(session: Stripe.Checkout.Session) {
     const trialEnd = (await getStripe().subscriptions.retrieve(id)).trial_end;
     trialEndsAt = trialEnd ? trialEnd * 1000 : null;
   }
-  await updateUser(uid, { trialSessionId: session.id, trialEndsAt });
+  // Once per trial: a retried event finds the session already recorded and sends nothing.
+  const user = await userRef(uid).get();
+  if (!user.exists || user.get("trialSessionId") === session.id) return;
+  await userRef(uid).update({ trialSessionId: session.id, trialEndsAt });
+  const email = user.get("email");
+  if (email && trialEndsAt) {
+    // The language the customer paid in, else the one chosen at sign-up.
+    const stored = user.get("locale");
+    const locale: Locale = hasLocale(session.locale) ? session.locale : hasLocale(stored) ? stored : "fr";
+    await sendTrialEmail(email, user.get("displayName") ?? null, trialEndsAt, baseUrl, locale).catch((err) =>
+      console.error("trial email failed", err),
+    );
+  }
 }
 
 export async function POST(request: Request) {
@@ -75,7 +89,7 @@ export async function POST(request: Request) {
     case "checkout.session.completed":
     case "checkout.session.async_payment_succeeded":
       await grantLifetime(event.data.object);
-      await markTrial(event.data.object);
+      await markTrial(event.data.object, appUrl(request));
       await countPurchase(event.data.object);
       break;
 

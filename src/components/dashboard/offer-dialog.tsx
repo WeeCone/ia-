@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import type { Plan } from "@/lib/plans";
+import { formatEur } from "@/i18n/format";
+import { pendingChartUrl } from "@/lib/pending-chart";
+import { OFFER_PRICE_EUR, type Plan } from "@/lib/plans";
 import { useI18n } from "@/i18n/client";
 import { PricingPlans } from "../pricing-plans";
 
@@ -20,7 +22,10 @@ export function OfferDialog({
   hasCapture: boolean;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  // A chart waiting to be analysed and a trial still available: lead with the trial, on that very chart.
+  const chartUrl = open && hasCapture ? pendingChartUrl() : null;
+  const trialFirst = Boolean(chartUrl) && !trialUsed && plan === "none";
 
   useEffect(() => {
     const dialog = ref.current;
@@ -39,20 +44,30 @@ export function OfferDialog({
     >
       <div className="p-5 sm:p-8">
         <div className="flex items-start justify-between gap-4">
-          <div>
-            <h2 id="offer-dialog-title" className="display text-3xl sm:text-4xl">
-              {t.offerDialog.title}
-            </h2>
-            <p className="mt-2 text-muted">
-              {hasCapture ? t.offerDialog.withCapture : t.offerDialog.withoutCapture}
-            </p>
+          <div className="flex items-center gap-4">
+            {trialFirst && chartUrl && (
+              // eslint-disable-next-line @next/next/no-img-element -- a local data URL, nothing for next/image to optimise
+              <img src={chartUrl} alt="" className="hidden h-20 w-28 shrink-0 rounded-xl border border-border object-cover shadow-[0_8px_24px_-12px_rgb(15_23_42/0.5)] sm:block" />
+            )}
+            <div>
+              <h2 id="offer-dialog-title" className="display text-3xl sm:text-4xl">
+                {trialFirst ? t.offerDialog.trialTitle(formatEur(locale, OFFER_PRICE_EUR.trial)) : t.offerDialog.title}
+              </h2>
+              <p className="mt-2 text-muted">
+                {trialFirst
+                  ? t.offerDialog.trialSubtitle(formatEur(locale, OFFER_PRICE_EUR.monthly))
+                  : hasCapture
+                    ? t.offerDialog.withCapture
+                    : t.offerDialog.withoutCapture}
+              </p>
+            </div>
           </div>
           <button type="button" onClick={onClose} aria-label={t.common.close} className="btn-ghost -mr-2 -mt-1 px-2 text-2xl leading-none">
             ×
           </button>
         </div>
         <div className="mt-6">
-          <PricingPlans compact currentPlan={plan} trialUsed={trialUsed} />
+          <PricingPlans compact currentPlan={plan} trialUsed={trialUsed} lead={trialFirst ? "trial" : "monthly"} />
         </div>
       </div>
     </dialog>

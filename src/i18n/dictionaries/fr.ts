@@ -28,6 +28,7 @@ export const fr = {
     mySpace: "Mon espace",
     scan: "Scanner",
     scanSuffix: " un graphique",
+    trial: "Essai 0,99 €",
     menu: "Menu",
   },
   footer: {
@@ -46,6 +47,11 @@ export const fr = {
     titleLine2: "de vos actifs préférés :",
     words: ["la crypto", "le forex", "l’or", "les indices", "les actions"],
     subtitle: "Une capture d'écran, un verdict clair et un plan chiffré : entrée, stop, objectifs. En moins d'une minute.",
+    trialLine: (trial: string, monthly: string) => ({
+      before: "Testez sur votre propre graphique : ",
+      offer: `3 jours pour ${trial}`,
+      after: `, puis ${monthly}/mois sans engagement.`,
+    }),
     platforms: "Fonctionne avec les captures de vos plateformes",
     platformsLabel: "Plateformes compatibles",
   },
@@ -125,7 +131,15 @@ export const fr = {
     monthlyCta: "S'abonner au mois",
     ttcTrial: "TTC aujourd'hui",
     trialPitch: "3 jours et 1 analyse complète pour tester sur votre propre graphique.",
-    trialNote: (monthly: string) => `Puis ${monthly}/mois automatiquement, sauf résiliation en un clic pendant l'essai.`,
+    trialSteps: {
+      today: (price: string) => `Aujourd'hui : ${price}`,
+      todayHint: "1 analyse complète, sur votre graphique",
+      later: (monthly: string) => `Dans 3 jours : ${monthly}/mois`,
+      laterHint: "seulement si vous continuez",
+      anytime: "À tout moment",
+      anytimeHint: "résiliation en un clic, depuis votre espace",
+      email: "Un e-mail vous donne la date exacte du premier prélèvement.",
+    },
     trialCta: (price: string) => `Essayer 3 jours pour ${price}`,
     includedTitle: "Inclus dans l'abonnement",
     included: [
@@ -215,6 +229,8 @@ export const fr = {
     titleB: "Analysez.",
     subtitle: "Votre prochain graphique mérite un second avis, chiffré et argumenté.",
     cta: "Scanner un graphique →",
+    trialCta: (price: string) => `Essayer 3 jours pour ${price}`,
+    trialNote: (monthly: string) => `Puis ${monthly}/mois, résiliable en un clic pendant l'essai.`,
   },
   activity: {
     live: "Analyse en direct",
@@ -246,6 +262,8 @@ export const fr = {
     title: "Choisissez votre offre",
     withCapture: "Votre capture est gardée : elle sera prête à analyser dès votre retour du paiement.",
     withoutCapture: "Paiement en une minute, puis vos analyses sont disponibles aussitôt.",
+    trialTitle: (price: string) => `Votre graphique est prêt. Analysez-le pour ${price}.`,
+    trialSubtitle: (monthly: string) => `3 jours d'essai, puis ${monthly}/mois. Résiliable en un clic.`,
   },
   auth: {
     asideTitleA: "Le graphique dit tout.",
@@ -551,6 +569,15 @@ export const fr = {
     checkoutConsent: (termsUrl: string) =>
       `J'accepte les [conditions générales](${termsUrl}), je demande l'accès immédiat au service et je renonce à mon droit de rétractation.`,
     cancelFailed: "Impossible de résilier votre abonnement pour le moment. Réessayez ou contactez-nous.",
+  },
+  trialEmail: {
+    subject: "Votre essai Scanzivo a commencé",
+    heading: "Votre essai a commencé",
+    greeting: (name: string | null) => (name ? `Bonjour ${name},` : "Bonjour,"),
+    active: "Votre essai de 3 jours est actif : votre analyse vous attend.",
+    charge: (date: string, monthly: string) => `Le ${date}, l'abonnement mensuel démarrera automatiquement à ${monthly}/mois.`,
+    cancel: "Pour ne pas continuer, résiliez avant cette date depuis votre espace (Mon compte → Gérer mon abonnement) : aucun prélèvement ne sera effectué.",
+    cta: "Ouvrir mon espace",
   },
   welcomeEmail: {
     subject: "Bienvenue sur Scanzivo",
