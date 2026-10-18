@@ -7,7 +7,7 @@ import { useAuth } from "@/components/auth-provider";
 import { FormError } from "@/components/auth-card";
 import { Logo } from "@/components/logo";
 import { AnalysesTab } from "@/components/admin-analyses";
-import { VisitsTab } from "@/components/admin-visits";
+import { LiveBadge, useLiveVisitors, VisitsTab } from "@/components/admin-visits";
 import type { AdminOverview, AdminReview, AdminUser, ReviewStatus } from "@/lib/admin";
 import { adminFetch } from "@/lib/admin-client";
 import { optOutOfTracking } from "@/lib/track";
@@ -292,6 +292,8 @@ export default function AdminPage() {
     if (!loading && !user) router.replace("/auth/login");
   }, [loading, user, router]);
 
+  const live = useLiveVisitors(Boolean(data));
+
   const [reloadKey, setReloadKey] = useState(0);
   const load = useCallback(() => {
     setRefreshing(true);
@@ -366,7 +368,18 @@ export default function AdminPage() {
       </header>
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
-        <h1 className="display text-3xl sm:text-4xl">Administration</h1>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <h1 className="display text-3xl sm:text-4xl">Administration</h1>
+          {data && (
+            <LiveBadge
+              live={live}
+              onClick={() => {
+                setTab("visits");
+                requestAnimationFrame(() => document.getElementById("en-direct")?.scrollIntoView({ behavior: "smooth" }));
+              }}
+            />
+          )}
+        </div>
         {error && (
           <div className="mt-4">
             <FormError message={error.message} />
@@ -419,7 +432,7 @@ export default function AdminPage() {
             </div>
 
             {tab === "visits" ? (
-              <VisitsTab reloadKey={reloadKey} />
+              <VisitsTab reloadKey={reloadKey} live={live} />
             ) : tab === "users" ? (
               <section className="mt-6">
                 <div className="flex flex-wrap gap-3">

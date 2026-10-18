@@ -252,12 +252,14 @@ function onSite(seconds: number) {
   return minutes < 60 ? `depuis ${minutes} min` : `depuis ${Math.floor(minutes / 60)} h ${String(minutes % 60).padStart(2, "0")}`;
 }
 
-/** Who is on the site right now, refreshed every 10 s while this tab is in front. */
-function LiveNow() {
+/** Who is on the site right now, refreshed every 10 s while the admin page is in front. Null until the first answer. */
+export function useLiveVisitors(enabled: boolean) {
   const [visitors, setVisitors] = useState<LiveVisitor[] | null>(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
+    // Only once the admin is confirmed: no polling for a page still loading or refused.
+    if (!enabled) return;
     let stale = false;
     const load = () => {
       if (document.hidden) return;
@@ -277,21 +279,53 @@ function LiveNow() {
       clearInterval(timer);
       document.removeEventListener("visibilitychange", load);
     };
-  }, []);
+  }, [enabled]);
 
+  return { visitors, error };
+}
+
+export type LiveState = ReturnType<typeof useLiveVisitors>;
+
+function LiveDot({ on }: { on: boolean }) {
+  return (
+    <span className="relative flex size-3" aria-hidden>
+      {on && <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-60" />}
+      <span className={`relative inline-flex size-3 rounded-full ${on ? "bg-accent" : "bg-border"}`} />
+    </span>
+  );
+}
+
+/** The live count beside the admin title, on every tab. */
+export function LiveBadge({ live, onClick }: { live: LiveState; onClick: () => void }) {
+  const count = live.visitors?.length ?? 0;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="inline-flex items-center gap-2.5 rounded-full border border-border px-4 py-2 text-sm hover:border-accent/60"
+      aria-live="polite"
+    >
+      <LiveDot on={count > 0} />
+      <span>
+        <strong className="font-semibold tabular-nums">{live.visitors ? int(count) : "–"}</strong>{" "}
+        <span className="text-muted">{count > 1 ? "personnes sur le site" : "personne sur le site"}</span>
+      </span>
+    </button>
+  );
+}
+
+/** The pages open on the site right now, with where each visitor came from. */
+function LiveNow({ live: { visitors, error } }: { live: LiveState }) {
   const count = visitors?.length ?? 0;
   const byPage = Object.entries(
     (visitors ?? []).reduce<Record<string, number>>((acc, visitor) => ({ ...acc, [visitor.page]: (acc[visitor.page] ?? 0) + 1 }), {}),
   ).sort((a, b) => b[1] - a[1]);
 
   return (
-    <section className="panel p-5" aria-live="polite">
+    <section id="en-direct" className="panel scroll-mt-6 p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <span className="relative flex size-3" aria-hidden>
-            {count > 0 && <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-60" />}
-            <span className={`relative inline-flex size-3 rounded-full ${count > 0 ? "bg-accent" : "bg-border"}`} />
-          </span>
+          <LiveDot on={count > 0} />
           <p className="label text-muted">En ce moment</p>
         </div>
         <p className="text-xs text-muted">{error ? "Mise à jour impossible, nouvel essai dans 10 s." : "Mis à jour toutes les 10 secondes"}</p>
@@ -331,7 +365,7 @@ function LiveNow() {
 }
 
 /** Anonymous audience stats and the sign-up / purchase funnel by source and by ad campaign. */
-export function VisitsTab({ reloadKey }: { reloadKey: number }) {
+export function VisitsTab({ reloadKey, live }: { reloadKey: number; live: LiveState }) {
   const [period, setPeriod] = useState<(typeof PERIODS)[number]>(30);
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -353,7 +387,7 @@ export function VisitsTab({ reloadKey }: { reloadKey: number }) {
   const totals = stats?.totals;
   return (
     <section className="mt-6">
-      <LiveNow />
+      <LiveNow live={live} />
 
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
         <div className="flex gap-1 rounded-xl border border-border p-1" role="group" aria-label="Période">
