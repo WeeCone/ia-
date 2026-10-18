@@ -3,7 +3,8 @@
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { preloadStripe } from "@/components/checkout-dialog";
 import { hasPendingOffer } from "@/lib/offers-client";
 import { hasPendingChart } from "@/lib/pending-chart";
 import { AuthCard, Divider, FormError } from "@/components/auth-card";
@@ -28,6 +29,10 @@ export default function SignupPage() {
     () => (hasPendingOffer() ? "offer" : hasPendingChart() ? "chart" : null),
     () => null,
   );
+  // A payment opens right after sign-up: fetch Stripe's script while the visitor fills the form.
+  useEffect(() => {
+    if (context === "offer") preloadStripe();
+  }, [context]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

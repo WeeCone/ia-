@@ -19,6 +19,7 @@ import type { ChartAnalysis } from "@/lib/analysis";
 import { getDownloadURL, ref } from "firebase/storage";
 import { isAdminUser } from "@/lib/admin";
 import { storage } from "@/lib/firebase";
+import { preloadStripe } from "@/components/checkout-dialog";
 import { OfferDialog } from "@/components/dashboard/offer-dialog";
 import { UpgradeNow } from "@/components/dashboard/upgrade-now";
 import { redirectToBilling } from "@/lib/billing-client";
@@ -70,6 +71,9 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!loading && !user) router.replace(href("/auth/login"));
   }, [loading, user, router]);
+
+  // Most payments start from here: have Stripe's script ready before anyone clicks.
+  useEffect(() => preloadStripe(), []);
 
   useEffect(() => {
     if (user) return subscribeUserProfile(user.uid, setProfile);

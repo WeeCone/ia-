@@ -15,6 +15,11 @@ import { TrialTimeline } from "./pricing-plans";
 let stripePromise: ReturnType<typeof loadStripe> | null = null;
 const getStripe = () => (stripePromise ??= loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!));
 
+/** Starts downloading Stripe.js ahead of time, where a payment is likely next, so the form appears sooner. */
+export function preloadStripe() {
+  if (EMBEDDED_CHECKOUT) getStripe().catch(() => {});
+}
+
 /** Stripe's payment form inside a dialog, so paying never leaves the site. Mounted once, opened with openCheckout(). */
 export function CheckoutDialog() {
   const ref = useRef<HTMLDialogElement>(null);
