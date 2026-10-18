@@ -20,6 +20,7 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { isAdminUser } from "@/lib/admin";
 import { storage } from "@/lib/firebase";
 import { OfferDialog } from "@/components/dashboard/offer-dialog";
+import { UpgradeNow } from "@/components/dashboard/upgrade-now";
 import { redirectToBilling } from "@/lib/billing-client";
 import { EMBEDDED_CHECKOUT, hasPendingOffer, onOpenCheckout, onOpenOffers, openCheckout, openOffers, takePendingOffer } from "@/lib/offers-client";
 import { hasPendingChart } from "@/lib/pending-chart";
@@ -193,10 +194,11 @@ export default function DashboardPage() {
 
   const noCredits = credits !== null && credits < 1;
   // No offer: the uploader itself turns into "choose an offer". Out of credits: a notice under it.
-  const disabledNotice = (
-    <p className="text-center text-sm text-muted">
-      {d.outOfCredits}
-    </p>
+  // A trial whose analysis is spent: offer to start the subscription now rather than wait for its end.
+  const disabledNotice = profile?.trialEndsAt ? (
+    <UpgradeNow trialEndsAt={profile.trialEndsAt} />
+  ) : (
+    <p className="text-center text-sm text-muted">{d.outOfCredits}</p>
   );
 
   return (

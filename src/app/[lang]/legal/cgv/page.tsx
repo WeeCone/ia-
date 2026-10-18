@@ -53,7 +53,8 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
           de l&apos;essai, l&apos;abonnement Mensuel démarre automatiquement au prix indiqué ci-dessus, sauf résiliation avant la
           fin de l&apos;essai depuis la rubrique « Mon abonnement » de votre tableau de bord. La date de début de
           l&apos;abonnement est indiquée au moment du paiement. Les {formatEur("fr", OFFER_PRICE_EUR.trial)} de l&apos;essai ne
-          sont pas déduits de l&apos;abonnement.
+          sont pas déduits de l&apos;abonnement. Vous pouvez aussi démarrer l&apos;abonnement avant la fin de l&apos;essai depuis
+          votre espace : le premier mois est alors prélevé immédiatement.
         </li>
       </ul>
       <p>
@@ -143,7 +144,8 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
           trial, once per account and for new customers only. Your payment method is saved: when the trial ends, the Monthly
           subscription starts automatically at the price stated above, unless you cancel before the end of the trial from
           &quot;My subscription&quot; in your dashboard. The subscription start date is shown at payment. The trial&apos;s{" "}
-          {formatEur("en", OFFER_PRICE_EUR.trial)} is not deducted from the subscription.
+          {formatEur("en", OFFER_PRICE_EUR.trial)} is not deducted from the subscription. You may also start the subscription before the
+          trial ends from your dashboard: the first month is then charged immediately.
         </li>
       </ul>
       <p>
@@ -232,7 +234,8 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
           prueba, una sola vez por cuenta y solo para nuevos clientes. Su medio de pago queda registrado: al final de la prueba, la
           suscripción Mensual empieza automáticamente al precio indicado arriba, salvo cancelación antes del final de la prueba
           desde «Mi suscripción» en su panel. La fecha de inicio de la suscripción se indica en el momento del pago. Los{" "}
-          {formatEur("es", OFFER_PRICE_EUR.trial)} de la prueba no se descuentan de la suscripción.
+          {formatEur("es", OFFER_PRICE_EUR.trial)} de la prueba no se descuentan de la suscripción. También puede iniciar la suscripción
+          antes del final de la prueba desde su panel: el primer mes se cobra entonces de inmediato.
         </li>
       </ul>
       <p>

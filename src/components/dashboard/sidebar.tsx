@@ -14,6 +14,7 @@ import { useI18n } from "@/i18n/client";
 import { HistoryList, type StoredAnalysis } from "../analysis-history";
 import { BillingButton } from "../billing-button";
 import { Logo } from "../logo";
+import { UpgradeNow } from "./upgrade-now";
 
 type Props = {
   user: User;
@@ -67,6 +68,7 @@ function PlanCard({ profile }: { profile: UserProfile | null }) {
           ? t.account.trialUntil(new Date(profile.trialEndsAt).toLocaleDateString(INTL_LOCALE[locale], { day: "numeric", month: "long" }))
           : t.account.perMonth(MONTHLY_CREDITS)}
       </p>
+      {profile.trialEndsAt && <UpgradeNow trialEndsAt={profile.trialEndsAt} compact />}
     </div>
   );
 }
