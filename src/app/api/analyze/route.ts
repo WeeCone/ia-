@@ -68,6 +68,11 @@ export async function POST(request: Request) {
     const detail =
       err instanceof Anthropic.APIError ? `API ${err.status ?? "?"} : ${err.message}` : err instanceof Error ? err.message : String(err);
     console.error("analyze failed", { seconds, detail, err });
+    // Kept for the admin "Analyses" tab, so failures can be read without the hosting logs.
+    await adminDb
+      .collection("analysisErrors")
+      .add({ uid, seconds, detail: detail.slice(0, 500), createdAt: FieldValue.serverTimestamp() })
+      .catch(() => {});
     const admin = await isAdminRequest(request).catch(() => false);
     return error(admin ? `${text.failed} [admin · ${seconds} s · ${detail.slice(0, 300)}]` : text.failed, 502);
   }

@@ -46,9 +46,16 @@ export async function GET(request: Request) {
     }),
   );
 
+  const errorSnap = await adminDb.collection("analysisErrors").orderBy("createdAt", "desc").limit(20).get();
+  const emails = new Map(userSnap.docs.map((doc) => [doc.id, doc.get("email") ?? null]));
+  const errors = errorSnap.docs.map((doc) => {
+    const data = doc.data();
+    return { email: emails.get(data.uid) ?? data.uid, seconds: data.seconds ?? null, detail: data.detail ?? "", createdAt: millis(data.createdAt) };
+  });
+
   const analyses = perUser
     .flat()
     .sort((a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0))
     .slice(0, MAX_ROWS);
-  return Response.json({ analyses });
+  return Response.json({ analyses, errors });
 }

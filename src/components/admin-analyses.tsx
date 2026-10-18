@@ -97,6 +97,7 @@ function AnalysisDetail({ row, onClose }: { row: AdminAnalysis; onClose: () => v
 export function AnalysesTab({ query, onQuery, reloadKey }: { query: string; onQuery: (value: string) => void; reloadKey: number }) {
   const { t } = useI18n();
   const [rows, setRows] = useState<AdminAnalysis[] | null>(null);
+  const [failures, setFailures] = useState<{ email: string; seconds: number | null; detail: string; createdAt: number | null }[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [kind, setKind] = useState<"all" | "charts" | "refused">("all");
   const [open, setOpen] = useState<AdminAnalysis | null>(null);
@@ -104,9 +105,10 @@ export function AnalysesTab({ query, onQuery, reloadKey }: { query: string; onQu
   useEffect(() => {
     let stale = false;
     adminFetch("/api/admin/analyses")
-      .then((data: { analyses: AdminAnalysis[] }) => {
+      .then((data: { analyses: AdminAnalysis[]; errors?: typeof failures }) => {
         if (stale) return;
         setRows(data.analyses);
+        setFailures(data.errors ?? []);
         setError(null);
       })
       .catch((err) => !stale && setError(err instanceof Error ? err.message : "Chargement impossible."));
@@ -135,6 +137,21 @@ export function AnalysesTab({ query, onQuery, reloadKey }: { query: string; onQu
 
   return (
     <section className="mt-6">
+      {failures.length > 0 && (
+        <details className="panel mb-4 border-bear/40 p-4" open>
+          <summary className="cursor-pointer text-sm font-semibold text-bear">Analyses en échec ({failures.length})</summary>
+          <ul className="mt-3 space-y-2 text-xs">
+            {failures.map((failure, index) => (
+              <li key={index} className="rounded-lg border border-border bg-background/60 p-2">
+                <p className="text-muted">
+                  {dateTime(failure.createdAt)} · {failure.email} · {failure.seconds ?? "?"} s
+                </p>
+                <p className="mt-1 break-words font-mono">{failure.detail}</p>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
       {topAssets.length > 0 && (
         <div className="mb-4 flex flex-wrap items-center gap-2 text-sm">
           <span className="label text-muted">Les plus analysés</span>
