@@ -100,6 +100,21 @@ export default function DashboardPage() {
     };
   }, [user, locale]);
 
+  // An account with a Stripe customer but no offer may have paid without being activated: ask the server to check
+  // Stripe once per visit and repair it. Nothing changes for an account that simply never paid.
+  const needsSync = profile?.plan === "none" && Boolean(profile?.stripeCustomerId);
+  useEffect(() => {
+    if (!user || !needsSync) return;
+    try {
+      if (sessionStorage.getItem("scanzivo:synced") === "1") return;
+      sessionStorage.setItem("scanzivo:synced", "1");
+    } catch {}
+    user
+      .getIdToken()
+      .then((token) => fetch("/api/billing/sync", { method: "POST", headers: { Authorization: `Bearer ${token}`, "X-Locale": locale } }))
+      .catch(() => {});
+  }, [user, needsSync, locale]);
+
   // Most payments start from here: have Stripe's script ready before anyone clicks.
   useEffect(() => preloadStripe(), []);
 
