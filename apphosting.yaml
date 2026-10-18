@@ -51,6 +51,7 @@ env:
     availability: [BUILD, RUNTIME]
 
   # Secrets (Cloud Secret Manager) : firebase apphosting:secrets:set <nom>
+  # Workspace-scoped key with no expiry (Claude Console → API keys); an organisation-scoped key is rejected here.
   - variable: ANTHROPIC_API_KEY
     secret: anthropicApiKey
     availability: [RUNTIME]
