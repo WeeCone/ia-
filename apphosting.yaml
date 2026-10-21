@@ -32,6 +32,11 @@ env:
     value: d.mougin@hotmail.com
     availability: [BUILD, RUNTIME]
 
+  # Pixel Meta (public, inclus dans le code du site). Chargé seulement après accord dans le bandeau cookies.
+  - variable: NEXT_PUBLIC_META_PIXEL_ID
+    value: "1451450885397108"
+    availability: [BUILD, RUNTIME]
+
   # --- Paiement (Stripe, mode test) ----------------------------------------------------
   # URL publique de l'app, pour les redirections Stripe (sinon : l'adresse de la requête).
   - variable: APP_URL
