@@ -4,12 +4,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { prepareImage } from "@/lib/image";
+import { openChartReady } from "@/lib/offers-client";
 import { savePendingChart } from "@/lib/pending-chart";
 import { useI18n } from "@/i18n/client";
 
 /**
- * Takes a chart screenshot from the landing page (drop, file picker or paste) and carries it to the dashboard,
- * via sign-up when the visitor has no account. `listenPaste` must be on for one intake per page only.
+ * Takes a chart screenshot from the landing page (drop, file picker or paste). Signed in, it is carried to the
+ * dashboard; otherwise it is shown back with its "Analyse" button, which leads to the trial payment. `listenPaste` must be on for one intake per page only.
  */
 export function useChartIntake({ listenPaste = false }: { listenPaste?: boolean } = {}) {
   const router = useRouter();
@@ -26,7 +27,12 @@ export function useChartIntake({ listenPaste = false }: { listenPaste?: boolean 
     setBusy(true);
     try {
       await savePendingChart(await prepareImage(file, t.image));
-      router.push(href(user ? "/dashboard" : "/auth/signup"));
+      if (user) {
+        router.push(href("/dashboard"));
+        return;
+      }
+      openChartReady();
+      setBusy(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : t.intake.readError);
       setBusy(false);

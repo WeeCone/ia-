@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo_Black, Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { AuthProvider } from "@/components/auth-provider";
+import { ChartReadyDialog } from "@/components/chart-ready-dialog";
 import { CheckoutDialog } from "@/components/checkout-dialog";
 import { LanguageSuggestion } from "@/components/language-suggestion";
 import { VisitTracker } from "@/components/visit-tracker";
@@ -44,6 +45,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
           <AuthProvider>
             {children}
             <CheckoutDialog />
+            <ChartReadyDialog />
           </AuthProvider>
           <WhatsAppButton />
           <LanguageSuggestion />

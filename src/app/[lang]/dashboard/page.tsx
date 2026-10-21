@@ -372,6 +372,7 @@ export default function DashboardPage() {
                 {tour > 0 && <TourPopover step={tour as 1 | 2} onNext={() => (tour === 1 ? setTour(2) : endTour())} onSkip={endTour} />}
                 <ChartUploader
                   disabled={noCredits}
+                  canAutoRun={credits !== null && credits > 0}
                   disabledNotice={disabledNotice}
                   needsOffer={profile?.plan === "none" && !hasCredits}
                   trialAvailable={!profile?.trialSessionId}

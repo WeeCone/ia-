@@ -53,3 +53,34 @@ export function hasPendingOffer() {
     return false;
   }
 }
+
+// A chart dropped on the landing page by a visitor without an account: shown back with its "Analyse" button.
+const CHART_READY_EVENT = "scanzivo:chart-ready";
+
+export function openChartReady() {
+  window.dispatchEvent(new Event(CHART_READY_EVENT));
+}
+
+export function onOpenChartReady(listener: () => void) {
+  window.addEventListener(CHART_READY_EVENT, listener);
+  return () => window.removeEventListener(CHART_READY_EVENT, listener);
+}
+
+// "Analyse" was clicked before paying: the dashboard runs the waiting chart by itself once the account has credits.
+const AUTO_ANALYZE_KEY = "scanzivo:auto-analyze";
+
+export function requestAutoAnalyze() {
+  try {
+    sessionStorage.setItem(AUTO_ANALYZE_KEY, "1");
+  } catch {}
+}
+
+export function takeAutoAnalyze() {
+  try {
+    const requested = sessionStorage.getItem(AUTO_ANALYZE_KEY) === "1";
+    sessionStorage.removeItem(AUTO_ANALYZE_KEY);
+    return requested;
+  } catch {
+    return false;
+  }
+}

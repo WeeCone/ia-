@@ -5,7 +5,7 @@ import type { ChartAnalysis } from "@/lib/analysis";
 import { auth } from "@/lib/firebase";
 import { checkCapture } from "@/lib/capture-check";
 import { prepareImage } from "@/lib/image";
-import { openOffers } from "@/lib/offers-client";
+import { openOffers, takeAutoAnalyze } from "@/lib/offers-client";
 import { clearPendingChart, readPendingChart, savePendingChart } from "@/lib/pending-chart";
 import { OFFER_PRICE_EUR } from "@/lib/plans";
 import { useI18n } from "@/i18n/client";
@@ -26,6 +26,8 @@ type Props = {
   trialAvailable?: boolean;
   /** Admin test mode: canned report, no model call, no credit. */
   testMode?: boolean;
+  /** Credits are confirmed: a chart sent with "Analyse" before paying may now run by itself. */
+  canAutoRun?: boolean;
   /** Onboarding tour: which part of the composer to spotlight. */
   highlight?: "zone" | "send" | null;
   onAnalyzed: (outcome: AnalysisOutcome) => void;
@@ -44,7 +46,16 @@ function ArrowIcon() {
 }
 
 /** The analysis panel: drop or pick a screenshot, add context, analyse. Shows progress while the analysis runs. */
-export function ChartUploader({ disabled, disabledNotice, needsOffer = false, trialAvailable = false, testMode = false, highlight = null, onAnalyzed }: Props) {
+export function ChartUploader({
+  disabled,
+  disabledNotice,
+  needsOffer = false,
+  trialAvailable = false,
+  testMode = false,
+  canAutoRun = false,
+  highlight = null,
+  onAnalyzed,
+}: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -58,6 +69,8 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, tr
   // Instant capture advice: null until checked, [] when nothing to flag.
   const [advice, setAdvice] = useState<string[] | null>(null);
   const handedOff = useRef(false);
+  // "Analyse" was clicked on the landing page before paying: run the waiting chart once, as soon as it can.
+  const autoRun = useRef(false);
   const { t, locale } = useI18n();
   const u = t.uploader;
 
@@ -90,7 +103,12 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, tr
 
   // A chart dropped on the landing page before signing in.
   useEffect(() => {
-    readPendingChart().then((pending) => pending && pick(pending));
+    const requested = takeAutoAnalyze();
+    readPendingChart().then((pending) => {
+      if (!pending) return;
+      autoRun.current = requested;
+      pick(pending);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on mount
   }, []);
 
@@ -114,6 +132,12 @@ export function ChartUploader({ disabled, disabledNotice, needsOffer = false, tr
       setElapsed(0);
     };
   }, [pending]);
+
+  useEffect(() => {
+    if (!autoRun.current || !canAutoRun || !file || preparing || pending || disabled) return;
+    autoRun.current = false;
+    submit();
+  });
 
   async function submit() {
     const user = auth.currentUser;

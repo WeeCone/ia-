@@ -5,6 +5,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createEmbeddedCheckout, redirectToBilling } from "@/lib/billing-client";
 import { EMBEDDED_CHECKOUT, onOpenCheckout } from "@/lib/offers-client";
+import { pendingChartUrl } from "@/lib/pending-chart";
 import { useI18n } from "@/i18n/client";
 import { formatEur } from "@/i18n/format";
 import { OFFER_PRICE_EUR, type Offer } from "@/lib/plans";
@@ -28,6 +29,8 @@ export function CheckoutDialog() {
   // A new session per opening: Stripe sessions are single-use once completed.
   const [attempt, setAttempt] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  // The chart waiting to be analysed, if any: shown beside the order so the visitor sees what they are paying for.
+  const [chartUrl, setChartUrl] = useState<string | null>(null);
   const { t, locale } = useI18n();
   const { user } = useAuth();
   const c = t.checkout;
@@ -36,6 +39,7 @@ export function CheckoutDialog() {
     if (!EMBEDDED_CHECKOUT) return;
     return onOpenCheckout((next) => {
       setError(null);
+      setChartUrl(pendingChartUrl());
       setOffer(next);
       setAttempt((count) => count + 1);
     });
@@ -99,6 +103,13 @@ export function CheckoutDialog() {
                 </p>
                 {/* Signed out: no sign-up step, the email typed beside it becomes the account. */}
                 {!user && <p className="mt-4 text-sm leading-relaxed text-muted">{c.guestHint}</p>}
+                {chartUrl && (
+                  <div className="mt-5 flex items-center gap-3 rounded-xl border border-border bg-card/60 p-2.5">
+                    {/* eslint-disable-next-line @next/next/no-img-element -- a local data URL, nothing to optimise */}
+                    <img src={chartUrl} alt="" className="h-12 w-16 shrink-0 rounded-md object-cover" />
+                    <p className="text-sm leading-snug">{c.chartWaiting}</p>
+                  </div>
+                )}
                 <div className="hidden md:block">
                   {offer === "trial" ? (
                     <TrialTimeline />
