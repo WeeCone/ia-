@@ -24,6 +24,7 @@ import { OfferDialog } from "@/components/dashboard/offer-dialog";
 import { UpgradeNow } from "@/components/dashboard/upgrade-now";
 import { redirectToBilling } from "@/lib/billing-client";
 import { EMBEDDED_CHECKOUT, hasPendingOffer, onOpenCheckout, onOpenOffers, openCheckout, openOffers, takePendingOffer } from "@/lib/offers-client";
+import { pixel } from "@/lib/meta-pixel";
 import { hasPendingChart } from "@/lib/pending-chart";
 import { availableCredits, MONTHLY_CREDITS } from "@/lib/plans";
 import { useI18n } from "@/i18n/client";
@@ -88,6 +89,8 @@ export default function DashboardPage() {
             body: JSON.stringify({ sessionId }),
           });
           const data = await response.json().catch(() => ({}));
+          // The ad pixel's purchase event (consent permitting); the session id keeps it counted once.
+          if (data.ok && data.purchase) pixel("Purchase", { value: data.purchase.value, currency: "EUR" }, data.purchase.id);
           if (data.ok || !data.pending) break;
         } catch {}
         await new Promise((resolve) => setTimeout(resolve, 2000));

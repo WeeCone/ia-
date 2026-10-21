@@ -41,6 +41,14 @@ export const es: Dict = {
     dashboard: "Panel",
     rights: "© 2026 Scanzivo. Todos los derechos reservados.",
   },
+  cookies: {
+    title: "Cookies publicitarias",
+    text: "Con su consentimiento, usamos el píxel de Meta (Facebook, Instagram) para saber qué anuncios generan registros y compras. Sin él, no se guarda nada y el sitio funciona igual.",
+    more: "Más información",
+    accept: "Aceptar",
+    refuse: "Rechazar",
+    manage: "Gestionar cookies",
+  },
   legalLinks: { mentions: "Aviso legal", terms: "Condiciones de venta y uso", privacy: "Privacidad" },
   hero: {
     titleLine1: "La IA que analiza tus gráficos",

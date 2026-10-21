@@ -73,7 +73,15 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
       <h2>Cookies et mesure d&apos;audience</h2>
       <p>
         Le site n&apos;utilise que des traceurs strictement nécessaires à son fonctionnement (maintien de votre session de
-        connexion, sécurité du paiement, mémorisation de votre langue). Aucun cookie publicitaire n&apos;est déposé.
+        connexion, sécurité du paiement, mémorisation de votre langue).
+      </p>
+      <p>
+        Seulement si vous l&apos;acceptez dans le bandeau cookies, le site charge le pixel de Meta (Meta Platforms Ireland
+        Ltd., éditeur de Facebook et Instagram). Il dépose des cookies et transmet à Meta les pages vues et les étapes clés
+        (inscription, paiement lancé, achat et son montant), pour mesurer l&apos;efficacité de nos publicités et les montrer à
+        des personnes susceptibles d&apos;être intéressées. Meta peut traiter ces données hors de l&apos;Union européenne,
+        dans le cadre de ses propres garanties. Sans votre accord, rien n&apos;est chargé. Votre choix est conservé 6 mois dans
+        votre navigateur et vous pouvez le changer à tout moment avec le lien « Gérer les cookies » en bas de chaque page.
       </p>
       <p>
         Pour savoir combien de personnes visitent le site et quelles publicités les amènent, nous utilisons notre propre mesure
@@ -156,7 +164,15 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
       <h2>Cookies and audience measurement</h2>
       <p>
         The site only uses trackers that are strictly necessary for it to work (keeping you signed in, payment security,
-        remembering your language). No advertising cookie is set.
+        remembering your language).
+      </p>
+      <p>
+        Only if you accept it in the cookie banner, the site loads the Meta pixel (Meta Platforms Ireland Ltd., publisher of
+        Facebook and Instagram). It sets cookies and sends Meta the pages viewed and the key steps (sign-up, checkout started,
+        purchase and its amount), to measure how well our ads work and show them to people likely to be interested. Meta may
+        process this data outside the European Union under its own safeguards. Without your consent, nothing is loaded. Your
+        choice is kept for 6 months in your browser and you can change it at any time with the &quot;Cookie settings&quot;
+        link at the bottom of every page.
       </p>
       <p>
         To know how many people visit the site and which ads bring them, we use our own cookie-free audience measurement: your
@@ -238,7 +254,15 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
       <h2>Cookies y medición de audiencia</h2>
       <p>
         El sitio solo utiliza rastreadores estrictamente necesarios para su funcionamiento (mantener su sesión, seguridad del
-        pago, recordar su idioma). No se instala ninguna cookie publicitaria.
+        pago, recordar su idioma).
+      </p>
+      <p>
+        Solo si lo acepta en el banner de cookies, el sitio carga el píxel de Meta (Meta Platforms Ireland Ltd., editor de
+        Facebook e Instagram). Instala cookies y envía a Meta las páginas vistas y los pasos clave (registro, pago iniciado,
+        compra y su importe), para medir la eficacia de nuestros anuncios y mostrarlos a personas que puedan estar
+        interesadas. Meta puede tratar estos datos fuera de la Unión Europea con sus propias garantías. Sin su consentimiento,
+        no se carga nada. Su elección se conserva 6 meses en su navegador y puede cambiarla en cualquier momento con el enlace
+        «Gestionar cookies» al pie de cada página.
       </p>
       <p>
         Para saber cuántas personas visitan el sitio y qué anuncios las traen, utilizamos nuestra propia medición de audiencia,

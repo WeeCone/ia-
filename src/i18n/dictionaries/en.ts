@@ -41,6 +41,14 @@ export const en: Dict = {
     dashboard: "Dashboard",
     rights: "© 2026 Scanzivo. All rights reserved.",
   },
+  cookies: {
+    title: "Advertising cookies",
+    text: "With your consent, we use the Meta pixel (Facebook, Instagram) to see which ads lead to sign-ups and purchases. Without it, nothing is stored and the site works the same.",
+    more: "Learn more",
+    accept: "Accept",
+    refuse: "Decline",
+    manage: "Cookie settings",
+  },
   legalLinks: { mentions: "Legal notice", terms: "Terms of sale & use", privacy: "Privacy" },
   hero: {
     titleLine1: "AI that analyses your charts",

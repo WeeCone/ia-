@@ -38,7 +38,8 @@ async function handler(request: Request) {
       await ref.update({ trialSessionId: session.id, trialEndsAt: subscription.trial_end ? subscription.trial_end * 1000 : null });
     }
   }
-  return Response.json({ ok: true });
+  // What was paid, for the ad pixel's purchase event (the session id lets Meta drop duplicates).
+  return Response.json({ ok: true, purchase: { id: session.id, value: (session.amount_total ?? 0) / 100 } });
 }
 
 export const POST = withBillingErrors(handler);

@@ -3,6 +3,7 @@ import { doc, getDoc, onSnapshot, serverTimestamp, setDoc } from "firebase/fires
 import { db } from "./firebase";
 import type { Locale } from "@/i18n/config";
 import type { Plan } from "./plans";
+import { pixel } from "./meta-pixel";
 import { trackEvent } from "./track";
 
 export type UserProfile = {
@@ -36,6 +37,7 @@ export async function ensureUserProfile(user: User, displayName?: string, locale
     createdAt: serverTimestamp(),
   });
   trackEvent("signup");
+  pixel("CompleteRegistration");
   // Fire-and-forget: a failed welcome email must never block sign-up.
   user
     .getIdToken()
