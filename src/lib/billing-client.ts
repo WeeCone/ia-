@@ -1,7 +1,8 @@
 import type { Locale } from "@/i18n/config";
 import { DICTIONARIES } from "@/i18n/dictionaries";
 import { auth } from "./firebase";
-import type { Offer } from "./plans";
+import { pixel } from "./meta-pixel";
+import { OFFER_PRICE_EUR, type Offer } from "./plans";
 import { checkoutAttribution, trackEvent } from "./track";
 
 async function callBilling(route: "checkout" | "portal", body: Record<string, unknown>, locale: Locale) {
@@ -11,6 +12,8 @@ async function callBilling(route: "checkout" | "portal", body: Record<string, un
   if (!user && !(route === "checkout" && body.offer === "trial")) throw new Error(text.sessionExpired);
   if (route === "checkout") {
     trackEvent("checkout");
+    const offer = body.offer as Offer | undefined;
+    if (offer) pixel("InitiateCheckout", { value: OFFER_PRICE_EUR[offer], currency: "EUR" });
     body = { ...body, ...checkoutAttribution() };
   }
   const response = await fetch(`/api/billing/${route}`, {

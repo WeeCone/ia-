@@ -40,6 +40,14 @@ export const fr = {
     dashboard: "Tableau de bord",
     rights: "© 2026 Scanzivo. Tous droits réservés.",
   },
+  cookies: {
+    title: "Cookies publicitaires",
+    text: "Avec votre accord, nous utilisons le pixel de Meta (Facebook, Instagram) pour savoir quelles publicités amènent des inscriptions et des achats. Sans accord, rien n'est déposé et le site fonctionne pareil.",
+    more: "En savoir plus",
+    accept: "Accepter",
+    refuse: "Refuser",
+    manage: "Gérer les cookies",
+  },
   legalLinks: { mentions: "Mentions légales", terms: "CGV / CGU", privacy: "Confidentialité" },
   hero: {
     titleLine1: "L'IA qui analyse vos graphiques",

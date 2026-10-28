@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AuthCard } from "@/components/auth-card";
 import { auth } from "@/lib/firebase";
+import { pixel } from "@/lib/meta-pixel";
 import { useI18n } from "@/i18n/client";
 
 type Claim =
@@ -38,9 +39,16 @@ export default function WelcomePage() {
           headers: { "Content-Type": "application/json", "X-Locale": locale },
           body: JSON.stringify({ sessionId }),
         }).catch(() => null);
-        const data = (await response?.json().catch(() => null)) as { status?: string; token?: string; email?: string } | null;
+        const data = (await response?.json().catch(() => null)) as {
+          status?: string;
+          token?: string;
+          email?: string;
+          purchase?: { id: string; value: number };
+        } | null;
         if (cancelled) return;
         if (!response?.ok || !data?.status) return setClaim({ status: "failed" });
+        // Once per payment: Meta merges repeats of the same session id.
+        if (data.purchase) pixel("Purchase", { value: data.purchase.value, currency: "EUR" }, data.purchase.id);
         if (data.status === "created" && data.token) {
           try {
             await signInWithCustomToken(auth, data.token);

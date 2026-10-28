@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useI18n } from "@/i18n/client";
+import { pixel } from "@/lib/meta-pixel";
 import { trackLeave, trackLive, trackView } from "@/lib/track";
 
 const LIVE_EVERY_MS = 30_000;
@@ -18,6 +19,8 @@ export function VisitTracker() {
     const path = pathname.replace(/^\/(fr|en|es)(?=\/|$)/, "") || "/";
     if (path.startsWith("/admin")) return;
     trackView(path, locale);
+    // Meta pixel, only with the visitor's consent (lib/meta-pixel.ts).
+    pixel("PageView");
 
     const live = () => {
       if (!document.hidden) trackLive(path, locale);

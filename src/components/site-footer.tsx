@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { LEGAL_LINKS } from "@/lib/legal";
 import { getI18n } from "@/i18n/server";
+import { CookieSettingsLink } from "./cookie-banner";
 import { LanguageSwitcher } from "./language-switcher";
 import { Logo } from "./logo";
 
@@ -51,7 +52,10 @@ export async function SiteFooter() {
       </div>
       <div className="border-t border-border/70">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-xs text-muted sm:flex-row sm:justify-between">
-          <span>{t.footer.rights}</span>
+          <span className="flex flex-wrap gap-x-4">
+            {t.footer.rights}
+            <CookieSettingsLink />
+          </span>
           <span>{t.common.riskWarning}</span>
         </div>
       </div>
