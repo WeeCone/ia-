@@ -21,6 +21,7 @@ import { isAdminUser } from "@/lib/admin";
 import { storage } from "@/lib/firebase";
 import { preloadStripe } from "@/components/checkout-dialog";
 import { OfferDialog } from "@/components/dashboard/offer-dialog";
+import { TrialUpsell } from "@/components/dashboard/trial-upsell";
 import { UpgradeNow } from "@/components/dashboard/upgrade-now";
 import { redirectToBilling } from "@/lib/billing-client";
 import { EMBEDDED_CHECKOUT, hasPendingOffer, onOpenCheckout, onOpenOffers, openCheckout, openOffers, takePendingOffer } from "@/lib/offers-client";
@@ -340,7 +341,11 @@ export default function DashboardPage() {
               <AccountPanel user={user} profile={profile} credits={credits} onBack={() => setView("analyze")} />
             </div>
           ) : current ? (
-            <AnalysisView analysis={current.analysis} imageUrl={current.imageUrl} onNew={startNew} />
+            <>
+              <AnalysisView analysis={current.analysis} imageUrl={current.imageUrl} onNew={startNew} />
+              {/* The trial's analysis is spent: offer a second one, through the subscription, after the report. */}
+              {profile?.trialEndsAt && noCredits && <TrialUpsell trialEndsAt={profile.trialEndsAt} />}
+            </>
           ) : (
             <>
               <h1 className="display text-4xl sm:text-5xl">

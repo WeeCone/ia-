@@ -358,6 +358,10 @@ export const en: Dict = {
   dashboard: {
     loading: "Loading…",
     outOfCredits: "You have used all your analyses for the month. They will be refilled at your next renewal.",
+    upsellTitle: "Want a second analysis?",
+    upsellText: (monthly: string, credits: number) =>
+      `Start your subscription now: ${credits} analyses a month for ${monthly}, available right away. Cancel anytime.`,
+    upsellLater: "Later",
     upgradeTitle: "You've used your trial analysis.",
     upgradeText: (monthly: string, credits: number, date: string) =>
       `If Scanzivo works for you, start the subscription now (${monthly}) and your ${credits} analyses for the month are available straight away. Otherwise it starts by itself on ${date}, unless you cancel.`,

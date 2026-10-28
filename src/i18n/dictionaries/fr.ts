@@ -358,6 +358,10 @@ export const fr = {
   dashboard: {
     loading: "Chargement…",
     outOfCredits: "Vous avez utilisé toutes vos analyses du mois. Elles seront rechargées au prochain renouvellement.",
+    upsellTitle: "Une deuxième analyse ?",
+    upsellText: (monthly: string, credits: number) =>
+      `Démarrez votre abonnement maintenant : ${credits} analyses par mois pour ${monthly}, disponibles tout de suite. Résiliable à tout moment.`,
+    upsellLater: "Plus tard",
     upgradeTitle: "Vous avez utilisé votre analyse d'essai.",
     upgradeText: (monthly: string, credits: number, date: string) =>
       `Si Scanzivo vous convient, démarrez l'abonnement maintenant (${monthly}) et vos ${credits} analyses du mois sont disponibles tout de suite. Sinon, il démarrera de lui-même le ${date}, sauf si vous résiliez.`,

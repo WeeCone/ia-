@@ -12,7 +12,18 @@ import { FormError } from "../auth-card";
  * Ends the trial early and starts the subscription now. Two steps, because the second click takes the monthly price from the saved
  * card: the button first turns into an explicit confirmation stating the amount.
  */
-export function UpgradeNow({ trialEndsAt, compact = false }: { trialEndsAt: number; compact?: boolean }) {
+export function UpgradeNow({
+  trialEndsAt,
+  compact = false,
+  heading,
+  text,
+}: {
+  trialEndsAt: number;
+  compact?: boolean;
+  /** Replace the default "trial used" title and explanation (the pop-up after the trial's report). */
+  heading?: string;
+  text?: string;
+}) {
   const { t, locale } = useI18n();
   const d = t.dashboard;
   const monthly = formatEur(locale, OFFER_PRICE_EUR.monthly);
@@ -67,8 +78,8 @@ export function UpgradeNow({ trialEndsAt, compact = false }: { trialEndsAt: numb
   const date = new Date(trialEndsAt).toLocaleDateString(INTL_LOCALE[locale], { day: "numeric", month: "long" });
   return (
     <div className="panel space-y-3 border-accent/40 p-5 text-left">
-      <p className="font-semibold">{d.upgradeTitle}</p>
-      <p className="text-sm text-muted">{d.upgradeText(monthly, MONTHLY_CREDITS, date)}</p>
+      <p className="font-semibold">{heading ?? d.upgradeTitle}</p>
+      <p className="text-sm text-muted">{text ?? d.upgradeText(monthly, MONTHLY_CREDITS, date)}</p>
       {button}
       <FormError message={error} />
     </div>
