@@ -55,8 +55,13 @@ export async function POST(request: Request) {
   let result: Awaited<ReturnType<typeof analyzeChart>>;
   const bytes = Buffer.from(await image.arrayBuffer());
   const startedAt = Date.now();
-  // The news side runs alongside the chart reading (no extra wait) and never throws; its cost counts in every case.
-  const macroPromise = macroContext(bytes.toString("base64"), image.type as AllowedImageType, locale);
+  // The news side comes with the trial's analysis only (and for the admin, to check it). It runs alongside the chart
+  // reading (no extra wait) and never throws; its cost counts in every case.
+  const inTrial = typeof userData.trialEndsAt === "number" && userData.trialEndsAt > Date.now();
+  const withMacro = inTrial || (await isAdminRequest(request).catch(() => false));
+  const macroPromise = withMacro
+    ? macroContext(bytes.toString("base64"), image.type as AllowedImageType, locale)
+    : Promise.resolve({ report: null, costEur: 0 });
   try {
     result = await analyzeChart(bytes.toString("base64"), image.type as AllowedImageType, note || undefined, locale);
   } catch (err) {
