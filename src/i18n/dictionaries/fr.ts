@@ -39,6 +39,7 @@ export const fr = {
     login: "Connexion",
     dashboard: "Tableau de bord",
     rights: "© 2026 Scanzivo. Tous droits réservés.",
+    blog: "Blog",
   },
   cookies: {
     title: "Cookies publicitaires",
@@ -47,6 +48,17 @@ export const fr = {
     accept: "Accepter",
     refuse: "Refuser",
     manage: "Gérer les cookies",
+  },
+  blog: {
+    title: "Le blog Scanzivo",
+    subtitle: "Lire un graphique, placer un stop, calculer un ratio : des guides pratiques, sans promesse de gains.",
+    minutes: (n: number) => `${n} min de lecture`,
+    back: "Tous les articles",
+    related: "À lire aussi",
+    disclaimer: "Cet article est pédagogique. Il ne constitue pas un conseil en investissement. Le trading comporte un risque de perte en capital.",
+    ctaTitle: "Faites lire votre graphique",
+    ctaText: (trial: string, monthly: string) => `Envoyez une capture : vous recevez la tendance, les niveaux clés et un plan chiffré. Essai 3 jours à ${trial}, puis ${monthly}/mois, résiliable à tout moment.`,
+    ctaButton: "Analyser un graphique",
   },
   legalLinks: { mentions: "Mentions légales", terms: "CGV / CGU", privacy: "Confidentialité" },
   hero: {

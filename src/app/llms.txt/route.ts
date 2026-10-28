@@ -1,3 +1,5 @@
+import { ARTICLES } from "@/content/blog";
+import { localePath } from "@/i18n/config";
 import { MONTHLY_CREDITS, OFFER_PRICE_EUR, TRIAL_CREDITS, TRIAL_DAYS } from "@/lib/plans";
 
 /**
@@ -32,6 +34,9 @@ export function GET() {
 - Pricing: https://scanzivo.com/pricing
 - Terms of sale: https://scanzivo.com/legal/cgv
 - Privacy: https://scanzivo.com/legal/confidentialite
+
+## Guides (blog, French)
+${ARTICLES.map((article) => `- [${article.title}](https://scanzivo.com${localePath(article.locale, `/blog/${article.slug}`)}): ${article.description}`).join("\n")}
 `;
   return new Response(body, { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" } });
 }

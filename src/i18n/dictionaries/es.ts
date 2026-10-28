@@ -40,6 +40,7 @@ export const es: Dict = {
     login: "Iniciar sesión",
     dashboard: "Panel",
     rights: "© 2026 Scanzivo. Todos los derechos reservados.",
+    blog: "Blog",
   },
   cookies: {
     title: "Cookies publicitarias",
@@ -48,6 +49,17 @@ export const es: Dict = {
     accept: "Aceptar",
     refuse: "Rechazar",
     manage: "Gestionar cookies",
+  },
+  blog: {
+    title: "El blog de Scanzivo",
+    subtitle: "Leer un gráfico, colocar un stop, calcular un ratio: guías prácticas, sin promesas de ganancias.",
+    minutes: (n: number) => `${n} min de lectura`,
+    back: "Todos los artículos",
+    related: "Para seguir leyendo",
+    disclaimer: "Este artículo es pedagógico. No constituye un asesoramiento de inversión. El trading conlleva un riesgo de pérdida de capital.",
+    ctaTitle: "Haz leer tu gráfico",
+    ctaText: (trial: string, monthly: string) => `Envía una captura: recibes la tendencia, los niveles clave y un plan con cifras. Prueba de 3 días por ${trial}, luego ${monthly}/mes, cancelable en cualquier momento.`,
+    ctaButton: "Analizar un gráfico",
   },
   legalLinks: { mentions: "Aviso legal", terms: "Condiciones de venta y uso", privacy: "Privacidad" },
   hero: {

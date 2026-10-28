@@ -183,6 +183,48 @@ body {
   text-underline-offset: 3px;
 }
 
+/* Blog articles: the legal prose, in the foreground colour and with room for sub-headings and numbered lists. */
+.article {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: color-mix(in srgb, var(--foreground) 86%, transparent);
+}
+.article h2 {
+  margin-top: 3rem;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-display);
+  font-size: 1.625rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--foreground);
+}
+.article h3 {
+  margin-top: 2rem;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+.article p,
+.article ul,
+.article ol {
+  margin-top: 1rem;
+}
+.article ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+.article ol {
+  list-style: decimal;
+  padding-left: 1.4rem;
+}
+.article li + li {
+  margin-top: 0.5rem;
+}
+.article strong {
+  color: var(--foreground);
+}
+
 /* Sweep used on the screenshot while an analysis runs. */
 @keyframes scan {
   from {

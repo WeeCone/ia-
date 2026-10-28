@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { articlesFor } from "@/content/blog";
 import { LEGAL_LINKS } from "@/lib/legal";
 import { getI18n } from "@/i18n/server";
 import { CookieSettingsLink } from "./cookie-banner";
@@ -6,7 +7,7 @@ import { LanguageSwitcher } from "./language-switcher";
 import { Logo } from "./logo";
 
 export async function SiteFooter() {
-  const { t, href } = await getI18n();
+  const { t, href, locale } = await getI18n();
   const COLUMNS = [
     {
       title: t.footer.product,
@@ -15,6 +16,8 @@ export async function SiteFooter() {
         { href: href("/#methode"), label: t.header.nav.method },
         { href: href("/#tarifs"), label: t.header.nav.pricing },
         { href: href("/#faq"), label: t.header.nav.faq },
+        // The blog is linked from here only, in the languages that have articles.
+        ...(articlesFor(locale).length ? [{ href: href("/blog"), label: t.footer.blog }] : []),
       ],
     },
     {
