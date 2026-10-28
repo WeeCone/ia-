@@ -12,7 +12,7 @@ export const TRIAL_CREDITS = 1;
  * Hard ceiling on what one customer can cost in AI calls per calendar month, in euros.
  * Every call is priced from its real token usage and recorded on the user; once the ceiling is near, analyses stop until next month.
  */
-export const MONTHLY_BUDGET_EUR = 10;
+export const MONTHLY_BUDGET_EUR = 7;
 
 /** Typical cost of one analysis, in euros (measured on real reports; keep it pessimistic). */
 export const ANALYSIS_COST_EUR = 0.2;
@@ -29,14 +29,16 @@ export const MONTHLY_CREDITS = Math.floor((MONTHLY_BUDGET_EUR - MAX_CALL_COST_EU
 
 // Display only: keep prices in sync with the Stripe prices set in STRIPE_PRICE_MONTHLY / STRIPE_PRICE_LIFETIME.
 export const OFFERS: Record<Offer, { name: string; price: string; period: string }> = {
-  monthly: { name: "Mensuel", price: "40 €", period: "/ mois" },
+  monthly: { name: "Mensuel", price: "19,99 €", period: "/ mois" },
   lifetime: { name: "À vie", price: "180 €", period: "paiement unique" },
-  trial: { name: "Essai", price: "0,99 €", period: "3 jours, puis 40 € / mois" },
+  trial: { name: "Essai", price: "0,99 €", period: "3 jours, puis 19,99 € / mois" },
 };
 
 /** Prices in euros (display; keep in sync with Stripe). Format with formatEur() for the visitor's language. */
 // The trial fee has no Stripe price to create: the checkout route sends its amount inline (TRIAL_PRICE_CENTS).
-export const OFFER_PRICE_EUR: Record<Offer, number> = { monthly: 40, lifetime: 180, trial: 0.99 };
+export const OFFER_PRICE_EUR: Record<Offer, number> = { monthly: 19.99, lifetime: 180, trial: 0.99 };
+/** The monthly price as Stripe bills it, in cents (the checkout sets it inline, see api/billing/checkout). */
+export const MONTHLY_PRICE_CENTS = 1999;
 export const TRIAL_PRICE_CENTS = 99;
 
 export const PLAN_LABELS: Record<Plan, string> = { none: "Aucune offre", monthly: "Mensuel", lifetime: "À vie" };

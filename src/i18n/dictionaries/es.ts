@@ -155,7 +155,7 @@ export const es: Dict = {
     faq: [
       {
         q: "¿Puedo probar antes de suscribirme?",
-        a: "Sí. La prueba cuesta 0,99 € y dura 3 días, con un análisis completo. Tu tarjeta queda registrada al pagar: si no cancelas antes de que termine la prueba, la suscripción empieza después a 40 €/mes. Para no pagar nada más, cancela desde tu cuenta durante esos 3 días. Una prueba por cuenta.",
+        a: "Sí. La prueba cuesta 0,99 € y dura 3 días, con un análisis completo. Tu tarjeta queda registrada al pagar: si no cancelas antes de que termine la prueba, la suscripción empieza después a 19,99 €/mes. Para no pagar nada más, cancela desde tu cuenta durante esos 3 días. Una prueba por cuenta.",
       },
       {
         q: "¿Qué pasa cuando he usado mis créditos del mes?",
@@ -583,7 +583,7 @@ export const es: Dict = {
     alreadyActive: "Ya tienes un acceso activo.",
     trialUsed: "Esta cuenta ya ha disfrutado de la prueba.",
     noTrial: "Esta cuenta no tiene ninguna prueba en curso.",
-    trialTerms: (date: string) => `Pagas 0,99 € hoy. Si no cancelas, la suscripción empieza el ${date} a 40 €/mes. Puedes cancelar en cualquier momento desde tu cuenta de Scanzivo.`,
+    trialTerms: (date: string) => `Pagas 0,99 € hoy. Si no cancelas, la suscripción empieza el ${date} a 19,99 €/mes. Puedes cancelar en cualquier momento desde tu cuenta de Scanzivo.`,
     noSubscription: "No se ha encontrado ninguna suscripción.",
     noCredits: "No te quedan créditos de análisis.",
     budget: "Cuota mensual de análisis alcanzada. Se recargará el día 1 del próximo mes.",

@@ -9,7 +9,7 @@ import { MONTHLY_CREDITS, OFFER_PRICE_EUR } from "@/lib/plans";
 import { FormError } from "../auth-card";
 
 /**
- * Ends the trial early and starts the subscription now. Two steps, because the second click takes 40 € from the saved
+ * Ends the trial early and starts the subscription now. Two steps, because the second click takes the monthly price from the saved
  * card: the button first turns into an explicit confirmation stating the amount.
  */
 export function UpgradeNow({ trialEndsAt, compact = false }: { trialEndsAt: number; compact?: boolean }) {

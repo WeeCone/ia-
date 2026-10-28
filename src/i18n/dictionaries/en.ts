@@ -155,7 +155,7 @@ export const en: Dict = {
     faq: [
       {
         q: "Can I try before subscribing?",
-        a: "Yes. The trial costs €0.99 and lasts 3 days, with one full analysis. Your card is saved when you pay: if you don't cancel before the trial ends, the subscription then starts at €40/month. To pay nothing more, cancel from your account during those 3 days. One trial per account.",
+        a: "Yes. The trial costs €0.99 and lasts 3 days, with one full analysis. Your card is saved when you pay: if you don't cancel before the trial ends, the subscription then starts at €19.99/month. To pay nothing more, cancel from your account during those 3 days. One trial per account.",
       },
       {
         q: "What happens when I've used my credits for the month?",
@@ -583,7 +583,7 @@ export const en: Dict = {
     alreadyActive: "You already have active access.",
     trialUsed: "This account has already had its trial.",
     noTrial: "This account has no trial running.",
-    trialTerms: (date: string) => `You pay €0.99 today. Unless you cancel, the subscription starts on ${date} at €40/month. You can cancel at any time from your Scanzivo account.`,
+    trialTerms: (date: string) => `You pay €0.99 today. Unless you cancel, the subscription starts on ${date} at €19.99/month. You can cancel at any time from your Scanzivo account.`,
     noSubscription: "No subscription found.",
     noCredits: "No analysis credits left.",
     budget: "Monthly analysis quota reached. It will be refilled on the 1st of next month.",

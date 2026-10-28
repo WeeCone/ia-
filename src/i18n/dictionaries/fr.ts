@@ -154,7 +154,7 @@ export const fr = {
     faq: [
       {
         q: "Puis-je essayer avant de m'abonner ?",
-        a: "Oui. L'essai coûte 0,99 € et dure 3 jours, avec une analyse complète. Votre carte est enregistrée au paiement : si vous ne résiliez pas avant la fin de l'essai, l'abonnement démarre ensuite à 40 €/mois. Pour ne rien payer de plus, résiliez depuis votre espace pendant ces 3 jours. Un seul essai par compte.",
+        a: "Oui. L'essai coûte 0,99 € et dure 3 jours, avec une analyse complète. Votre carte est enregistrée au paiement : si vous ne résiliez pas avant la fin de l'essai, l'abonnement démarre ensuite à 19,99 €/mois. Pour ne rien payer de plus, résiliez depuis votre espace pendant ces 3 jours. Un seul essai par compte.",
       },
       {
         q: "Que se passe-t-il quand j'ai utilisé mes crédits du mois ?",
@@ -585,7 +585,7 @@ export const fr = {
     alreadyActive: "Vous avez déjà un accès actif.",
     trialUsed: "Vous avez déjà profité de l'essai sur ce compte.",
     noTrial: "Ce compte n'a pas d'essai en cours.",
-    trialTerms: (date: string) => `Vous payez 0,99 € aujourd'hui. Sans résiliation de votre part, l'abonnement démarre le ${date} à 40 €/mois. Vous pouvez résilier à tout moment depuis votre espace Scanzivo.`,
+    trialTerms: (date: string) => `Vous payez 0,99 € aujourd'hui. Sans résiliation de votre part, l'abonnement démarre le ${date} à 19,99 €/mois. Vous pouvez résilier à tout moment depuis votre espace Scanzivo.`,
     noSubscription: "Aucun abonnement trouvé.",
     noCredits: "Plus de crédits d'analyse disponibles.",
     budget: "Quota mensuel d'analyses atteint. Il sera rechargé le 1er du mois prochain.",

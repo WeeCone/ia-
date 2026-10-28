@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { adminDb } from "@/lib/firebase-admin";
-import { TRIAL_DAYS, TRIAL_PRICE_CENTS, type Offer } from "@/lib/plans";
+import { MONTHLY_PRICE_CENTS, TRIAL_DAYS, TRIAL_PRICE_CENTS, type Offer } from "@/lib/plans";
 import { getRequestUid } from "@/lib/server-auth";
 import { appUrl, getStripe, withBillingErrors } from "@/lib/stripe";
 import { INTL_LOCALE, localePath, type Locale } from "@/i18n/config";
@@ -18,6 +18,25 @@ const TRIAL_NAMES: Record<string, string> = {
   en: "Scanzivo — trial analysis",
   es: "Scanzivo — análisis de prueba",
 };
+
+/**
+ * The monthly line, billed at MONTHLY_PRICE_CENTS on the existing "Scanzivo – Mensuel" product: the price is set here,
+ * so changing it never needs a new Price in the Stripe dashboard. The product is read once from STRIPE_PRICE_MONTHLY.
+ */
+let monthlyProduct: Promise<string> | null = null;
+async function monthlyLine() {
+  monthlyProduct ??= getStripe()
+    .prices.retrieve(PRICES.monthly!)
+    .then((price) => (typeof price.product === "string" ? price.product : price.product.id))
+    .catch((err) => {
+      monthlyProduct = null;
+      throw err;
+    });
+  return {
+    price_data: { currency: "eur", unit_amount: MONTHLY_PRICE_CENTS, recurring: { interval: "month" as const }, product: await monthlyProduct },
+    quantity: 1,
+  };
+}
 
 /** Stripe's answer when a saved customer no longer exists (deleted, or saved in the other test/live mode). */
 const isMissingCustomer = (err: unknown) =>
@@ -85,9 +104,10 @@ async function handler(request: Request) {
   // The webhook resolves the user from this metadata (subscription invoices, or the one-off checkout session).
   // src / cmp: the ad or site that brought the buyer, for the admin "Visites" tab (anonymous counters only).
   const metadata = { uid, offer, src: statKey(source) ?? "direct", cmp: statKey(campaign) ?? "" };
+  const monthly = await monthlyLine();
   const createSession = (customer: string) =>
     stripe.checkout.sessions.create({
-      ...sessionParams(request, locale, offer, embedded, `${dashboard}?checkout=success&session_id={CHECKOUT_SESSION_ID}`, dashboard),
+      ...sessionParams(request, locale, offer, embedded, `${dashboard}?checkout=success&session_id={CHECKOUT_SESSION_ID}`, dashboard, monthly),
       customer,
       client_reference_id: uid,
       metadata,
@@ -115,7 +135,7 @@ async function guestTrial(request: Request, locale: Locale, embedded: boolean, s
   // guest: lets the webhook and the welcome page know the account is still to be made (no uid yet).
   const metadata = { guest: "1", offer: "trial", locale, src: statKey(source) ?? "direct", cmp: statKey(campaign) ?? "" };
   const session = await getStripe().checkout.sessions.create({
-    ...sessionParams(request, locale, "trial", embedded, welcome, base + localePath(locale, "/")),
+    ...sessionParams(request, locale, "trial", embedded, welcome, base + localePath(locale, "/"), await monthlyLine()),
     metadata,
     subscription_data: { metadata, trial_period_days: TRIAL_DAYS },
   });
@@ -130,13 +150,14 @@ function sessionParams(
   embedded: boolean,
   successUrl: string,
   cancelUrl: string,
+  monthly: Awaited<ReturnType<typeof monthlyLine>>,
 ) {
   const text = DICTIONARIES[locale].api;
   const base = appUrl(request);
   return {
     // Trial: the monthly price with a trial period, plus the 0,99 € fee charged today on the first invoice.
     line_items: [
-      { price: PRICES.monthly, quantity: 1 },
+      monthly,
       ...(offer === "trial"
         ? [{ price_data: { currency: "eur", unit_amount: TRIAL_PRICE_CENTS, product_data: { name: TRIAL_NAMES[locale] } }, quantity: 1 }]
         : []),
