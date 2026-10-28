@@ -35,7 +35,7 @@ export function GET() {
 - Terms of sale: https://scanzivo.com/legal/cgv
 - Privacy: https://scanzivo.com/legal/confidentialite
 
-## Guides (blog, French)
+## Guides (blog, in French, English and Spanish)
 ${ARTICLES.map((article) => `- [${article.title}](https://scanzivo.com${localePath(article.locale, `/blog/${article.slug}`)}): ${article.description}`).join("\n")}
 `;
   return new Response(body, { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" } });

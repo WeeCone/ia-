@@ -1,4 +1,6 @@
 import type { Locale } from "@/i18n/config";
+import { ARTICLES_EN } from "./blog-en";
+import { ARTICLES_ES } from "./blog-es";
 
 /**
  * Blog articles: educational pieces on reading charts, for search engines and AI assistants as much as for readers.
@@ -14,6 +16,8 @@ export type Block =
   | { tip: string };
 
 export type Article = {
+  /** Same in every language: links an article to its translations (hreflang). The French slug. */
+  key: string;
   slug: string;
   locale: Locale;
   title: string;
@@ -23,7 +27,7 @@ export type Article = {
   body: Block[];
 };
 
-const ARTICLES_FR: Omit<Article, "locale">[] = [
+const ARTICLES_FR: Omit<Article, "locale" | "key">[] = [
   {
     slug: "comment-lire-un-graphique-de-trading",
     title: "Comment lire un graphique de trading quand on débute",
@@ -293,9 +297,189 @@ const ARTICLES_FR: Omit<Article, "locale">[] = [
       },
     ],
   },
+  {
+    slug: "ia-et-trading",
+    title: "IA et trading : ce qu'une intelligence artificielle peut vraiment faire pour vous",
+    description:
+      "Lire un graphique, résumer l'actualité, tenir un plan : ce que l'IA apporte à un trader particulier, et ce qu'elle ne fera jamais à sa place.",
+    date: "2026-10-28",
+    body: [
+      {
+        p: "« Trader avec l'IA » recouvre des choses très différentes : un assistant qui commente un graphique, un outil qui résume l'actualité, un robot qui passe des ordres seul. Pour un trader particulier, la question utile n'est pas de savoir si l'IA est puissante, mais à quelle étape de votre décision elle vous aide.",
+      },
+      { h2: "Là où elle aide vraiment" },
+      { h3: "Lire un graphique sans se raconter d'histoire" },
+      {
+        p: "Un modèle capable de lire des images repère la tendance, les zones de réaction et les figures en quelques secondes. Surtout, il le fait de la même manière à chaque fois. Vous, après trois pertes d'affilée, vous ne lisez plus le même graphique qu'en début de semaine.",
+      },
+      { h3: "Poser un plan avant de cliquer" },
+      {
+        p: "Le point faible de la plupart des traders particuliers n'est pas l'analyse, c'est l'absence de plan : on entre sans savoir où sortir. Un outil qui vous rend systématiquement une entrée, un stop, un objectif et le niveau qui invalide l'idée vous oblige à vous poser ces questions avant d'acheter, pas après.",
+      },
+      { h3: "Faire le tri dans l'actualité" },
+      {
+        p: "Une décision de taux, un chiffre d'inflation ou des résultats d'entreprise peuvent effacer n'importe quel signal technique. Une IA connectée au web peut relever les annonces des prochains jours qui concernent votre actif, avec leurs sources, en quelques secondes.",
+      },
+      { h2: "Ce qu'elle ne fera pas à votre place" },
+      {
+        ul: [
+          "**Prédire le prix.** Elle estime des scénarios. Un scénario donné à 70 % se trompe, par définition, environ trois fois sur dix.",
+          "**Choisir combien risquer.** Elle ne connaît ni votre capital, ni vos autres positions, ni ce que vous pouvez vous permettre de perdre.",
+          "**Vous empêcher de cliquer.** Le meilleur plan ne sert à rien si vous déplacez votre stop au premier mouvement contraire.",
+        ],
+      },
+      { tip: "Méfiez-vous de tout service qui présente l'IA comme une machine à gagner. Les outils sérieux parlent de probabilités, de plans et de risques, jamais de rendement garanti." },
+      { h2: "Par où commencer" },
+      {
+        p: "Le plus simple est de l'utiliser comme second avis sur des trades que vous auriez pris de toute façon. Analysez d'abord le graphique vous-même, notez votre plan, puis comparez avec la lecture de l'IA. Là où vous êtes d'accord, vous gagnez en confiance. Là où vous divergez, vous apprenez quelque chose : soit sur le marché, soit sur vos propres biais.",
+      },
+      {
+        p: "C'est l'usage pour lequel Scanzivo a été conçu : une capture de graphique, une lecture structurée, un plan chiffré, et la décision qui reste la vôtre.",
+      },
+    ],
+  },
+  {
+    slug: "analyser-un-graphique-avec-chatgpt",
+    title: "Analyser un graphique avec ChatGPT : ce qui marche, ce qui coince",
+    description:
+      "ChatGPT sait lire une capture de graphique. Voici ce qu'il fait bien, les erreurs à surveiller, et comment formuler votre demande pour obtenir une réponse exploitable.",
+    date: "2026-10-28",
+    body: [
+      {
+        p: "Les assistants généralistes comme ChatGPT, Claude ou Gemini acceptent les images. Vous pouvez donc leur envoyer une capture de votre graphique et demander une analyse. Le résultat est souvent intéressant. Il est aussi très variable, et il vaut mieux savoir pourquoi.",
+      },
+      { h2: "Ce qui marche bien" },
+      {
+        ul: [
+          "Décrire la tendance générale et la structure (sommets, creux, range).",
+          "Reconnaître les figures classiques : double sommet, triangle, canal.",
+          "Expliquer un indicateur affiché, par exemple ce que signifie un RSI au-dessus de 70.",
+          "Répondre à vos questions de suivi, ce qui en fait un bon outil pour apprendre.",
+        ],
+      },
+      { h2: "Ce qui coince" },
+      {
+        ul: [
+          "**Des niveaux approximatifs.** Un assistant généraliste lit parfois mal l'axe des prix et cite un support qui n'existe pas, avec beaucoup d'assurance.",
+          "**Des réponses qui changent.** La même capture envoyée deux fois peut donner deux conclusions différentes, faute de méthode fixe.",
+          "**Des réponses tièdes.** Sans consigne précise, la réponse décrit beaucoup et tranche peu : « le marché pourrait monter ou baisser ».",
+          "**Pas de plan complet.** Entrée, stop, objectif et ratio gain/risque n'arrivent que si vous les demandez, et pas toujours de façon cohérente.",
+        ],
+      },
+      { h2: "Comment mieux formuler votre demande" },
+      {
+        p: "Une bonne partie du résultat dépend de la question. Donnez le contexte et imposez le format de réponse. Par exemple :",
+      },
+      {
+        tip: "« Voici un graphique BTC/USDT en 4 heures. Indique la tendance, les deux supports et résistances les plus proches avec leur prix lu sur l'axe, puis un seul scénario privilégié avec entrée, stop, objectif et ratio gain/risque. Si aucun trade n'a un ratio supérieur à 1,5, dis-le. »",
+      },
+      {
+        p: "Vérifiez ensuite chaque niveau cité sur votre propre graphique. Si un prix ne correspond à rien de visible, ne l'utilisez pas.",
+      },
+      { h2: "Généraliste ou outil spécialisé" },
+      {
+        p: "Un assistant généraliste convient très bien pour apprendre et poser des questions. Un outil spécialisé, comme Scanzivo, applique la même méthode à chaque capture, trace les niveaux sur votre graphique, calcule le ratio gain/risque et sait conclure « attendre » ou « ne pas trader ». Le premier explique, le second vous rend un plan. Dans les deux cas, la décision reste la vôtre.",
+      },
+    ],
+  },
+  {
+    slug: "bots-de-trading-ia-arnaques",
+    title: "Bots de trading « IA » : repérer les promesses trompeuses",
+    description:
+      "Rendements garantis, robots qui « ne perdent jamais », groupes privés payants : les signaux d'alerte à connaître avant de confier de l'argent à un bot de trading IA.",
+    date: "2026-10-28",
+    body: [
+      {
+        p: "Le mot « IA » est devenu un argument de vente pour toutes sortes de services de trading. Certains sont des outils honnêtes. D'autres reprennent les recettes de toujours, avec un vernis technologique. Quelques signaux permettent de faire le tri.",
+      },
+      { h2: "Les signaux d'alerte" },
+      {
+        ul: [
+          "**Un rendement promis**, surtout chiffré à l'avance : « +5 % par semaine », « 30 % par mois ». Aucun outil ne peut garantir un rendement sur les marchés.",
+          "**Des captures de gains sans pertes.** Un historique qui ne montre que des trades gagnants est soit incomplet, soit inventé.",
+          "**L'urgence** : places limitées, offre qui expire ce soir, « dernière chance ».",
+          "**On vous demande de déposer de l'argent** sur une plateforme que vous ne connaissez pas, ou de donner l'accès à votre compte de courtage.",
+          "**Un parrainage rémunéré** au cœur du modèle : vous gagnez surtout en recrutant d'autres personnes.",
+        ],
+      },
+      { tip: "Un outil d'analyse sérieux vous montre comment il raisonne, affiche ses limites et vous laisse décider. Un service qui « trade pour vous » sans rien expliquer vous demande surtout de lui faire confiance." },
+      { h2: "Ce qui doit être autorisé" },
+      {
+        p: "En France, un service qui gère votre argent, place vos ordres à votre place ou vous recommande personnellement quoi acheter exerce une activité réglementée. Il doit être autorisé, par exemple comme prestataire de services d'investissement (vérifiable sur le registre REGAFI) ou comme conseiller en investissements financiers (registre ORIAS).",
+      },
+      {
+        p: "L'Autorité des marchés financiers publie aussi des listes noires de sites et d'entités qui proposent des investissements sans autorisation. Une recherche de quelques secondes sur le site de l'AMF avant de payer évite bien des déconvenues.",
+      },
+      { h2: "Les bonnes questions à poser" },
+      {
+        ol: [
+          "Qui est derrière le service : une société identifiable, avec des mentions légales ?",
+          "Est-ce que je garde la main sur mon argent et sur mes ordres ?",
+          "Le service parle-t-il de risques et de pertes, ou seulement de gains ?",
+          "Puis-je arrêter facilement, sans frais cachés ?",
+        ],
+      },
+      {
+        p: "Un outil qui vous aide à analyser, sans toucher à votre argent et sans promettre de résultat, ne relève pas de ces activités réglementées : c'est à vous de décider et de passer vos ordres. C'est le cas de Scanzivo, qui fournit une lecture de graphique à titre informatif et ne constitue pas un conseil en investissement.",
+      },
+    ],
+  },
+  {
+    slug: "choisir-un-outil-ia-de-trading",
+    title: "Choisir un outil d'IA pour le trading : 7 questions à se poser",
+    description:
+      "Avant de payer un outil d'IA pour le trading, sept questions simples pour savoir s'il vous fera progresser ou s'il vend surtout une promesse.",
+    date: "2026-10-28",
+    body: [
+      {
+        p: "Les outils d'IA pour le trading se multiplient, à tous les prix. Plutôt qu'un classement qui serait vite dépassé, voici les questions qui permettent de juger n'importe lequel en quelques minutes.",
+      },
+      { h2: "1. Que fait-il exactement ?" },
+      {
+        p: "Analyser un graphique, envoyer des signaux, passer des ordres automatiquement : ce sont trois métiers différents, avec trois niveaux de risque. Un outil d'analyse vous laisse décider. Un robot qui trade à votre place décide pour vous.",
+      },
+      { h2: "2. Montre-t-il son raisonnement ?" },
+      {
+        p: "Un « achetez maintenant » sans explication ne vous apprend rien et ne vous permet pas de vérifier. Une bonne analyse dit pourquoi : la tendance, les niveaux, ce qui invaliderait le scénario.",
+      },
+      { h2: "3. Sait-il dire « ne faites rien » ?" },
+      {
+        p: "Un outil qui trouve un trade sur chaque graphique pousse à surtrader. Les meilleures décisions sont souvent d'attendre. Vérifiez que l'outil sait le dire.",
+      },
+      { h2: "4. Donne-t-il un plan chiffré ?" },
+      {
+        p: "Entrée, stop, objectif et ratio gain/risque : sans ces quatre éléments, une analyse reste une opinion. Avec eux, vous savez avant d'entrer combien vous risquez et pour quoi.",
+      },
+      { h2: "5. Fonctionne-t-il avec vos outils ?" },
+      {
+        p: "Si vous tradez sur TradingView, Binance ou MetaTrader, l'outil doit s'adapter à votre plateforme, pas l'inverse. Une simple capture d'écran est souvent le moyen le plus universel.",
+      },
+      { h2: "6. Que promet-il ?" },
+      {
+        p: "Un taux de réussite affiché en gros, des rendements mensuels, des gains « garantis » : fuyez. Un outil honnête parle de probabilités et rappelle que le trading comporte un risque de perte en capital.",
+      },
+      { h2: "7. Combien coûte-t-il, et comment arrêter ?" },
+      {
+        p: "Regardez le prix réel après l'essai, ce qui est inclus, et la façon de résilier. Un abonnement qui se résilie en un clic depuis votre espace est bon signe. Un engagement de douze mois sur un outil que vous n'avez pas testé l'est beaucoup moins.",
+      },
+      {
+        tip: "Testez l'outil sur des graphiques passés dont vous connaissez la suite. Vous verrez vite s'il lit le marché avec justesse ou s'il récite des généralités.",
+      },
+      {
+        p: "Pour la transparence : Scanzivo est un outil d'analyse de graphique par capture d'écran. Il répond à ces questions de la façon suivante : il explique son raisonnement, sait conclure « attendre » ou « ne pas trader », donne un plan chiffré, ne promet aucun gain, et l'abonnement se résilie à tout moment depuis votre espace.",
+      },
+    ],
+  },
 ];
 
-export const ARTICLES: Article[] = ARTICLES_FR.map((article) => ({ ...article, locale: "fr" as const }));
+export const ARTICLES: Article[] = [
+  ...ARTICLES_FR.map((article) => ({ ...article, key: article.slug, locale: "fr" as const })),
+  ...ARTICLES_EN.map((article) => ({ ...article, locale: "en" as const })),
+  ...ARTICLES_ES.map((article) => ({ ...article, locale: "es" as const })),
+];
+
+/** The same article in the other languages that have it, for hreflang links. */
+export const translationsOf = (article: Article) => ARTICLES.filter((other) => other.key === article.key);
 
 export const articlesFor = (locale: Locale) => ARTICLES.filter((article) => article.locale === locale);
 

@@ -4,12 +4,13 @@ import { notFound } from "next/navigation";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { articlesFor, readingMinutes } from "@/content/blog";
-import { INTL_LOCALE, localePath } from "@/i18n/config";
+import { INTL_LOCALE, localePath, LOCALES } from "@/i18n/config";
 import { getI18n } from "@/i18n/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { locale, t } = await getI18n();
-  return { title: `${t.blog.title}`, description: t.blog.subtitle, alternates: { canonical: localePath(locale, "/blog") } };
+  const languages = Object.fromEntries(LOCALES.filter((other) => articlesFor(other).length).map((other) => [other, localePath(other, "/blog")]));
+  return { title: t.blog.title, description: t.blog.subtitle, alternates: { canonical: localePath(locale, "/blog"), languages } };
 }
 
 /** The blog index: reached from the footer only, written for readers who search how to read a chart. */

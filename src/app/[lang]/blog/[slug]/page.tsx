@@ -5,7 +5,7 @@ import { ArticleBody } from "@/components/blog/article-body";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { TrialButton } from "@/components/trial-button";
-import { ARTICLES, articlesFor, findArticle, readingMinutes } from "@/content/blog";
+import { ARTICLES, articlesFor, findArticle, readingMinutes, translationsOf } from "@/content/blog";
 import { INTL_LOCALE, localePath } from "@/i18n/config";
 import { formatEur } from "@/i18n/format";
 import { getI18n } from "@/i18n/server";
@@ -28,7 +28,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${article.title} — Scanzivo`,
     description: article.description,
-    alternates: { canonical: path },
+    // The same guide in the other languages, so search engines show each reader their own.
+    alternates: {
+      canonical: path,
+      languages: Object.fromEntries(translationsOf(article).map((other) => [other.locale, localePath(other.locale, `/blog/${other.slug}`)])),
+    },
     openGraph: { type: "article", title: article.title, description: article.description, publishedTime: article.date, url: `${SITE}${path}` },
   };
 }
