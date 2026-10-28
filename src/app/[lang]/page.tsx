@@ -26,8 +26,33 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Home() {
   const { t, locale } = await getI18n();
   const trialLine = t.hero.trialLine(formatEur(locale, OFFER_PRICE_EUR.trial), formatEur(locale, OFFER_PRICE_EUR.monthly));
+  // What search engines and AI assistants read about the product: the offer and the FAQ, as structured data.
+  const site = `https://scanzivo.com${locale === "fr" ? "" : `/${locale}`}`;
+  const structured = [
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      name: "Scanzivo",
+      url: site,
+      applicationCategory: "FinanceApplication",
+      operatingSystem: "Web",
+      inLanguage: locale,
+      description: t.hero.subtitle,
+      offers: [
+        { "@type": "Offer", name: t.common.trial, price: OFFER_PRICE_EUR.trial, priceCurrency: "EUR" },
+        { "@type": "Offer", name: t.common.monthly, price: OFFER_PRICE_EUR.monthly, priceCurrency: "EUR" },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      inLanguage: locale,
+      mainEntity: t.faq.items.map((item) => ({ "@type": "Question", name: item.q, acceptedAnswer: { "@type": "Answer", text: item.a } })),
+    },
+  ];
   return (
     <div className="theme-light flex flex-1 flex-col">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structured).replace(/</g, "\\u003c") }} />
       <SiteHeader />
       <main id="contenu" className="flex-1">
         {/* Hero */}

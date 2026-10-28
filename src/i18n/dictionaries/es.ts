@@ -211,7 +211,7 @@ export const es: Dict = {
       },
       {
         q: "¿En qué se basan los análisis?",
-        a: "Solo en lo que se ve en tu captura. Scanzivo no se conecta a las cotizaciones en tiempo real ni ve las noticias: una captura nítida, con el eje de precios legible, da un mejor análisis.",
+        a: "La lectura técnica se basa solo en lo que se ve en tu captura: una captura nítida, con el eje de precios legible, da un mejor análisis. Además, Scanzivo busca las noticias recientes y los eventos económicos de los próximos 7 días que pueden mover el activo, con sus fuentes. No se conecta a las cotizaciones en tiempo real.",
       },
       {
         q: "¿Puedo adaptar el análisis a mi forma de operar?",

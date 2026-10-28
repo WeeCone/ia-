@@ -24,6 +24,16 @@ const SOURCE_LABELS: Record<string, string> = {
   x: "X (Twitter)",
   linkedin: "LinkedIn",
   whatsapp: "WhatsApp",
+  "chatgpt-com": "ChatGPT",
+  perplexity: "Perplexity",
+  "perplexity-ai": "Perplexity",
+  claude: "Claude",
+  "claude-ai": "Claude",
+  gemini: "Gemini",
+  copilot: "Copilot",
+  mistral: "Le Chat (Mistral)",
+  ig: "Instagram (pub)",
+  fb: "Facebook (pub)",
 };
 const sourceLabel = (source: string) => SOURCE_LABELS[source] ?? source;
 

@@ -24,6 +24,14 @@ const REFERRERS: [RegExp, string][] = [
   [/(^|\.)linkedin\.com$|(^|\.)lnkd\.in$/, "linkedin"],
   [/(^|\.)(whatsapp\.com|wa\.me)$/, "whatsapp"],
   [/(^|\.)reddit\.com$/, "reddit"],
+  // AI assistants first: gemini.google.com must not count as Google search. ChatGPT also tags its links
+  // utm_source=chatgpt.com, which lands under the same key.
+  [/(^|\.)chatgpt\.com$|(^|\.)openai\.com$/, "chatgpt-com"],
+  [/(^|\.)perplexity\.ai$/, "perplexity"],
+  [/(^|\.)claude\.ai$/, "claude"],
+  [/^gemini\.google\.com$/, "gemini"],
+  [/(^|\.)copilot\.microsoft\.com$/, "copilot"],
+  [/(^|\.)mistral\.ai$/, "mistral"],
   [/(^|\.)google\./, "google"],
   [/(^|\.)bing\.com$/, "bing"],
   [/(^|\.)duckduckgo\.com$/, "duckduckgo"],

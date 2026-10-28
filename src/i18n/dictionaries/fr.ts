@@ -210,7 +210,7 @@ export const fr = {
       },
       {
         q: "Sur quoi reposent les analyses ?",
-        a: "Uniquement sur ce qui est visible dans votre capture. Scanzivo ne se connecte pas aux cotations en temps réel et ne voit pas l'actualité : une capture nette, avec l'axe des prix lisible, donne une meilleure analyse.",
+        a: "La lecture technique repose uniquement sur ce qui est visible dans votre capture : une capture nette, avec l'axe des prix lisible, donne une meilleure analyse. En complément, Scanzivo recherche l'actualité récente et les événements économiques des 7 prochains jours qui peuvent faire bouger l'actif, avec leurs sources. Il ne se connecte pas aux cotations en temps réel.",
       },
       {
         q: "Puis-je adapter l'analyse à ma façon de trader ?",

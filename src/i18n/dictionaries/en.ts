@@ -211,7 +211,7 @@ export const en: Dict = {
       },
       {
         q: "What are the analyses based on?",
-        a: "Only on what is visible in your screenshot. Scanzivo does not connect to live quotes and does not see the news: a sharp screenshot with a readable price axis gives a better analysis.",
+        a: "The technical reading relies only on what is visible in your screenshot: a sharp screenshot with a readable price axis gives a better analysis. On top of that, Scanzivo looks up recent news and the economic events of the next 7 days that could move the asset, with their sources. It does not connect to live quotes.",
       },
       {
         q: "Can I adapt the analysis to my trading style?",
