@@ -5,7 +5,7 @@ import type { Locale } from "@/i18n/config";
 import { formatEur } from "@/i18n/format";
 import { getI18n, languageAlternates } from "@/i18n/server";
 import { COMPANY } from "@/lib/legal";
-import { MONTHLY_CREDITS, OFFER_PRICE_EUR, TRIAL_CREDITS, TRIAL_DAYS } from "@/lib/plans";
+import { MONTHLY_CREDITS, OFFER_PRICE_EUR, STARTER_DAILY_CREDITS } from "@/lib/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { locale, t } = await getI18n();
@@ -44,29 +44,32 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
       <h2>4. Offres et prix</h2>
       <ul>
         <li>
-          <strong>Mensuel — {formatEur("fr", OFFER_PRICE_EUR.monthly)} / mois</strong> : abonnement sans engagement, renouvelé
-          automatiquement chaque mois.
+          <strong>Starter — {formatEur("fr", OFFER_PRICE_EUR.starter)} / mois</strong> : abonnement sans engagement, renouvelé
+          automatiquement chaque mois. {STARTER_DAILY_CREDITS} analyse par jour, rechargée chaque jour ; l&apos;analyse Starter
+          comprend le verdict, le plan chiffré et les niveaux, sans le volet actualité.
         </li>
         <li>
-          <strong>Essai — {formatEur("fr", OFFER_PRICE_EUR.trial)} pour {TRIAL_DAYS} jours</strong> : {TRIAL_CREDITS} analyse pendant
-          l&apos;essai, une seule fois par compte et réservé aux nouveaux clients. Le moyen de paiement est enregistré : à la fin
-          de l&apos;essai, l&apos;abonnement Mensuel démarre automatiquement au prix indiqué ci-dessus, sauf résiliation avant la
-          fin de l&apos;essai depuis la rubrique « Mon abonnement » de votre tableau de bord. La date de début de
-          l&apos;abonnement est indiquée au moment du paiement. Les {formatEur("fr", OFFER_PRICE_EUR.trial)} de l&apos;essai ne
-          sont pas déduits de l&apos;abonnement. Vous pouvez aussi démarrer l&apos;abonnement avant la fin de l&apos;essai depuis
-          votre espace : le premier mois est alors prélevé immédiatement.
+          <strong>Pro — {formatEur("fr", OFFER_PRICE_EUR.monthly)} / mois</strong> : abonnement sans engagement, renouvelé
+          automatiquement chaque mois. {MONTHLY_CREDITS} analyses complètes par mois (usage raisonnable), avec le volet actualité,
+          rechargées à chaque échéance mensuelle.
+        </li>
+        <li>
+          <strong>À vie — {formatEur("fr", OFFER_PRICE_EUR.lifetime)}, paiement unique</strong> : le contenu du pack Pro, avec{" "}
+          {MONTHLY_CREDITS} analyses complètes par mois, rechargées au début de chaque mois civil, pour la durée de vie du Service,
+          sans abonnement.
         </li>
       </ul>
       <p>
-        L&apos;abonnement inclut {MONTHLY_CREDITS} analyses par mois (usage raisonnable), rechargées à chaque échéance mensuelle ;
-        les analyses non utilisées ne sont pas reportées. Une analyse n&apos;est décomptée que si l&apos;image est reconnue comme un graphique de prix.
+        Les analyses non utilisées ne sont pas reportées. Une analyse n&apos;est décomptée que si l&apos;image est reconnue comme un
+        graphique de prix. Avant tout achat, une lecture gratuite d&apos;un graphique (tendance, structure, figures) peut être
+        obtenue sans compte ; le plan chiffré n&apos;est accessible qu&apos;avec un pack.
       </p>
       <p>
-        L&apos;offre À vie (paiement unique) n&apos;est plus proposée à la vente. Les clients qui l&apos;ont achetée conservent leur
-        accès et leurs {MONTHLY_CREDITS} analyses par mois, rechargées au début de chaque mois civil, dans les conditions en
-        vigueur lors de leur achat.
+        Les clients ayant souscrit une offre retirée de la vente (essai à 0,99 €, Mensuel à 19,99 € ou 40 €, À vie à 180 €)
+        conservent leur accès dans les conditions en vigueur lors de leur achat. Le passage de Starter à Pro arrête
+        l&apos;abonnement Starter sans remboursement de la période en cours.
       </p>
-      <p>Les prix sont indiqués en euros, toutes taxes comprises. Il n&apos;existe pas d&apos;offre gratuite.</p>
+      <p>Les prix sont indiqués en euros, toutes taxes comprises. Il n&apos;existe pas d&apos;abonnement gratuit.</p>
 
       <h2>5. Paiement</h2>
       <p>
@@ -136,29 +139,32 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
       <h2>4. Offers and prices</h2>
       <ul>
         <li>
-          <strong>Monthly — {formatEur("en", OFFER_PRICE_EUR.monthly)} / month</strong>: subscription with no commitment, renewed
-          automatically every month.
+          <strong>Starter — {formatEur("en", OFFER_PRICE_EUR.starter)} / month</strong>: subscription with no commitment, renewed
+          automatically every month. {STARTER_DAILY_CREDITS} analysis per day, refilled each day; the Starter analysis includes the
+          verdict, the plan with numbers and the levels, without the news side.
         </li>
         <li>
-          <strong>Trial — {formatEur("en", OFFER_PRICE_EUR.trial)} for {TRIAL_DAYS} days</strong>: {TRIAL_CREDITS} analysis during the
-          trial, once per account and for new customers only. Your payment method is saved: when the trial ends, the Monthly
-          subscription starts automatically at the price stated above, unless you cancel before the end of the trial from
-          &quot;My subscription&quot; in your dashboard. The subscription start date is shown at payment. The trial&apos;s{" "}
-          {formatEur("en", OFFER_PRICE_EUR.trial)} is not deducted from the subscription. You may also start the subscription before the
-          trial ends from your dashboard: the first month is then charged immediately.
+          <strong>Pro — {formatEur("en", OFFER_PRICE_EUR.monthly)} / month</strong>: subscription with no commitment, renewed
+          automatically every month. {MONTHLY_CREDITS} full analyses per month (fair use), with the news side, refilled at each
+          monthly due date.
+        </li>
+        <li>
+          <strong>Lifetime — {formatEur("en", OFFER_PRICE_EUR.lifetime)}, one-off payment</strong>: the Pro pack&apos;s content, with{" "}
+          {MONTHLY_CREDITS} full analyses per month, refilled at the start of each calendar month, for the lifetime of the Service,
+          with no subscription.
         </li>
       </ul>
       <p>
-        The subscription includes {MONTHLY_CREDITS} analyses per month (fair use), refilled at each monthly due date; unused
-        analyses do not roll over. An analysis is
-        only counted if the image is recognised as a price chart.
+        Unused analyses do not roll over. An analysis is only counted if the image is recognised as a price chart. Before any
+        purchase, a free reading of a chart (trend, structure, patterns) can be obtained without an account; the plan with
+        numbers is only available with a pack.
       </p>
       <p>
-        The Lifetime offer (one-off payment) is no longer sold. Customers who bought it keep their access and their{" "}
-        {MONTHLY_CREDITS} analyses per month, refilled at the start of each calendar month, under the terms in force when they
-        bought it.
+        Customers who bought an offer that is no longer sold (€0.99 trial, Monthly at €19.99 or €40, Lifetime at €180) keep
+        their access under the terms in force when they bought it. Moving from Starter to Pro stops the Starter subscription
+        without refunding the current period.
       </p>
-      <p>Prices are in euros, all taxes included. There is no free offer.</p>
+      <p>Prices are in euros, all taxes included. There is no free subscription.</p>
 
       <h2>5. Payment</h2>
       <p>
@@ -226,29 +232,32 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
       <h2>4. Ofertas y precios</h2>
       <ul>
         <li>
-          <strong>Mensual — {formatEur("es", OFFER_PRICE_EUR.monthly)} / mes</strong>: suscripción sin permanencia, renovada
-          automáticamente cada mes.
+          <strong>Starter — {formatEur("es", OFFER_PRICE_EUR.starter)} / mes</strong>: suscripción sin permanencia, renovada
+          automáticamente cada mes. {STARTER_DAILY_CREDITS} análisis al día, recargado cada día; el análisis Starter incluye el
+          veredicto, el plan con cifras y los niveles, sin la parte de noticias.
         </li>
         <li>
-          <strong>Prueba — {formatEur("es", OFFER_PRICE_EUR.trial)} por {TRIAL_DAYS} días</strong>: {TRIAL_CREDITS} análisis durante la
-          prueba, una sola vez por cuenta y solo para nuevos clientes. Su medio de pago queda registrado: al final de la prueba, la
-          suscripción Mensual empieza automáticamente al precio indicado arriba, salvo cancelación antes del final de la prueba
-          desde «Mi suscripción» en su panel. La fecha de inicio de la suscripción se indica en el momento del pago. Los{" "}
-          {formatEur("es", OFFER_PRICE_EUR.trial)} de la prueba no se descuentan de la suscripción. También puede iniciar la suscripción
-          antes del final de la prueba desde su panel: el primer mes se cobra entonces de inmediato.
+          <strong>Pro — {formatEur("es", OFFER_PRICE_EUR.monthly)} / mes</strong>: suscripción sin permanencia, renovada
+          automáticamente cada mes. {MONTHLY_CREDITS} análisis completos al mes (uso razonable), con la parte de noticias,
+          recargados en cada vencimiento mensual.
+        </li>
+        <li>
+          <strong>De por vida — {formatEur("es", OFFER_PRICE_EUR.lifetime)}, pago único</strong>: el contenido del pack Pro, con{" "}
+          {MONTHLY_CREDITS} análisis completos al mes, recargados al inicio de cada mes natural, durante la vida del Servicio, sin
+          suscripción.
         </li>
       </ul>
       <p>
-        La suscripción incluye {MONTHLY_CREDITS} análisis al mes (uso razonable), recargados en cada vencimiento mensual; los
-        análisis no utilizados no se acumulan. Un
-        análisis solo se descuenta si la imagen se reconoce como un gráfico de precios.
+        Los análisis no utilizados no se acumulan. Un análisis solo se descuenta si la imagen se reconoce como un gráfico de
+        precios. Antes de cualquier compra, puede obtenerse sin cuenta una lectura gratuita de un gráfico (tendencia, estructura,
+        figuras); el plan con cifras solo está disponible con un pack.
       </p>
       <p>
-        La oferta De por vida (pago único) ya no se comercializa. Los clientes que la compraron conservan su acceso y sus{" "}
-        {MONTHLY_CREDITS} análisis al mes, recargados al inicio de cada mes natural, en las condiciones vigentes en el momento de
-        su compra.
+        Los clientes que compraron una oferta que ya no se comercializa (prueba a 0,99 €, Mensual a 19,99 € o 40 €, De por vida a
+        180 €) conservan su acceso en las condiciones vigentes en el momento de su compra. Pasar de Starter a Pro detiene la
+        suscripción Starter sin reembolso del periodo en curso.
       </p>
-      <p>Los precios se indican en euros, impuestos incluidos. No existe oferta gratuita.</p>
+      <p>Los precios se indican en euros, impuestos incluidos. No existe suscripción gratuita.</p>
 
       <h2>5. Pago</h2>
       <p>

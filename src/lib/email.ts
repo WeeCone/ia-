@@ -75,69 +75,66 @@ function welcomeHtml(name: string | null, appUrl: string, pricingUrl: string, t:
 </html>`;
 }
 
-/**
- * Sent when a paid trial starts: the date the subscription will be charged and how to stop it before then.
- * Returns false when email is not configured or the provider rejects it.
- */
-export async function sendTrialEmail(
-  to: string,
-  name: string | null,
-  trialEndsAt: number,
-  appUrl: string,
-  locale: Locale,
-  /** For an account made at payment (trial bought without an account): the link to choose its password. */
-  passwordUrl?: string,
-) {
+type Message = {
+  to: string;
+  subject: string;
+  heading: string;
+  /** Plain paragraphs, in order; `strong` is set apart in bold. */
+  lines: string[];
+  strong: string;
+  after: string;
+  cta: string;
+  url: string;
+  password?: { text: string; cta: string; url: string };
+  locale: Locale;
+  appUrl: string;
+  label: string;
+};
+
+/** The house layout shared by the purchase emails. Returns false when email is not configured or the provider rejects it. */
+async function sendMessage(m: Message) {
   const resend = getResend();
   if (!resend || !process.env.EMAIL_FROM) {
-    console.warn("trial email skipped: RESEND_API_KEY / EMAIL_FROM not set");
+    console.warn(`${m.label} skipped: RESEND_API_KEY / EMAIL_FROM not set`);
     return false;
   }
-
-  const t = DICTIONARIES[locale].trialEmail;
-  const date = new Date(trialEndsAt).toLocaleDateString(INTL_LOCALE[locale], { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Paris" });
-  const charge = t.charge(date, formatEur(locale, OFFER_PRICE_EUR.monthly));
-  const dashboardUrl = `${appUrl}${localePath(locale, "/dashboard")}`;
-  const disclaimer = DICTIONARIES[locale].welcomeEmail.disclaimer;
-  const safeName = name ? escapeHtml(name) : null;
+  const disclaimer = DICTIONARIES[m.locale].welcomeEmail.disclaimer;
+  const paragraph = (text: string, color = "#94a3b8") => `<p style="margin:0 0 12px;line-height:1.6;color:${color}">${escapeHtml(text)}</p>`;
   const { error } = await resend.emails.send({
     from: process.env.EMAIL_FROM,
-    to,
-    subject: t.subject,
+    to: m.to,
+    subject: m.subject,
     text: [
-      t.greeting(name),
+      ...m.lines.flatMap((line, index) => (index === 0 ? [line, ""] : [line])),
+      m.strong,
+      m.after,
       "",
-      t.active,
-      charge,
-      t.cancel,
-      "",
-      `${t.cta} : ${dashboardUrl}`,
-      ...(passwordUrl ? ["", `${t.password} ${passwordUrl}`] : []),
+      `${m.cta} : ${m.url}`,
+      ...(m.password ? ["", `${m.password.text} ${m.password.url}`] : []),
       "",
       disclaimer,
     ].join("\n"),
     html: `<!doctype html>
-<html lang="${locale}">
+<html lang="${m.locale}">
   <body style="margin:0;background:#0b0f19;font-family:Arial,Helvetica,sans-serif;color:#f1f5f9">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0b0f19;padding:32px 16px">
       <tr><td align="center">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#151d2c;border:2px solid #263247">
           <tr><td style="padding:20px 28px;border-bottom:2px solid #263247">
-            <img src="${appUrl}/brand/scanzivo-logo-transparent.png" alt="Scanzivo" width="180" height="52" style="display:block;border:0">
+            <img src="${m.appUrl}/brand/scanzivo-logo-transparent.png" alt="Scanzivo" width="180" height="52" style="display:block;border:0">
           </td></tr>
           <tr><td style="padding:32px 28px">
-            <h1 style="margin:0 0 20px;font-size:28px;line-height:1.15">${t.heading}</h1>
-            <p style="margin:0 0 12px;line-height:1.6;color:#94a3b8">${escapeHtml(t.greeting(safeName))}</p>
-            <p style="margin:0 0 12px;line-height:1.6;color:#94a3b8">${escapeHtml(t.active)}</p>
-            <p style="margin:0 0 12px;line-height:1.6;color:#f1f5f9"><strong>${escapeHtml(charge)}</strong></p>
-            <p style="margin:0 0 28px;line-height:1.6;color:#94a3b8">${escapeHtml(t.cancel)}</p>
-            <a href="${dashboardUrl}" style="display:inline-block;background:#00f5a0;color:#0b0f19;font-weight:700;text-decoration:none;padding:14px 24px;border-radius:999px">
-              ${t.cta}
+            <h1 style="margin:0 0 20px;font-size:28px;line-height:1.15">${m.heading}</h1>
+            ${m.lines.map((line) => paragraph(line)).join("\n            ")}
+            <p style="margin:0 0 12px;line-height:1.6;color:#f1f5f9"><strong>${escapeHtml(m.strong)}</strong></p>
+            <p style="margin:0 0 28px;line-height:1.6;color:#94a3b8">${escapeHtml(m.after)}</p>
+            <a href="${m.url}" style="display:inline-block;background:#00f5a0;color:#0b0f19;font-weight:700;text-decoration:none;padding:14px 24px;border-radius:999px">
+              ${m.cta}
             </a>${
-              passwordUrl
+              m.password
                 ? `
-            <p style="margin:28px 0 0;line-height:1.6;color:#94a3b8">${escapeHtml(t.password)}
-              <a href="${escapeHtml(passwordUrl)}" style="color:#00f5a0;font-weight:700">${t.passwordCta}</a>
+            <p style="margin:28px 0 0;line-height:1.6;color:#94a3b8">${escapeHtml(m.password.text)}
+              <a href="${escapeHtml(m.password.url)}" style="color:#00f5a0;font-weight:700">${m.password.cta}</a>
             </p>`
                 : ""
             }
@@ -151,10 +148,68 @@ export async function sendTrialEmail(
   </body>
 </html>`,
   });
-
   if (error) {
-    console.error("trial email failed", error);
+    console.error(`${m.label} failed`, error);
     return false;
   }
   return true;
+}
+
+/**
+ * Sent when a paid trial starts (trials bought before they were withdrawn): the date the subscription will be charged
+ * and how to stop it before then.
+ */
+export async function sendTrialEmail(
+  to: string,
+  name: string | null,
+  trialEndsAt: number,
+  appUrl: string,
+  locale: Locale,
+  /** For an account made at payment (bought without an account): the link to choose its password. */
+  passwordUrl?: string,
+) {
+  const t = DICTIONARIES[locale].trialEmail;
+  const date = new Date(trialEndsAt).toLocaleDateString(INTL_LOCALE[locale], { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Paris" });
+  return sendMessage({
+    to,
+    subject: t.subject,
+    heading: t.heading,
+    lines: [t.greeting(name), t.active],
+    strong: t.charge(date, formatEur(locale, 19.99)),
+    after: t.cancel,
+    cta: t.cta,
+    url: `${appUrl}${localePath(locale, "/dashboard")}`,
+    password: passwordUrl ? { text: t.password, cta: t.passwordCta, url: passwordUrl } : undefined,
+    locale,
+    appUrl,
+    label: "trial email",
+  });
+}
+
+/** Sent once a pack is paid: what it opens, how it renews (or not), and the way into the dashboard. */
+export async function sendPurchaseEmail(
+  to: string,
+  name: string | null,
+  offer: string,
+  appUrl: string,
+  locale: Locale,
+  /** For an account made at payment (bought without an account): the link to choose its password. */
+  passwordUrl?: string,
+) {
+  const t = DICTIONARIES[locale].purchaseEmail;
+  const pack = offer === "starter" ? "starter" : offer === "lifetime" ? "lifetime" : "monthly";
+  return sendMessage({
+    to,
+    subject: t.subject(t.names[pack]),
+    heading: t.heading(t.names[pack]),
+    lines: [t.greeting(name)],
+    strong: t.includes[pack](formatEur(locale, OFFER_PRICE_EUR[pack])),
+    after: pack === "lifetime" ? t.oneOff : t.cancel,
+    cta: t.cta,
+    url: `${appUrl}${localePath(locale, "/dashboard")}`,
+    password: passwordUrl ? { text: t.password, cta: t.passwordCta, url: passwordUrl } : undefined,
+    locale,
+    appUrl,
+    label: "purchase email",
+  });
 }

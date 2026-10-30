@@ -7,14 +7,13 @@ import { LanguageMenu } from "./language-menu";
 import { LanguageSwitcher } from "./language-switcher";
 import { Logo } from "./logo";
 import { ScanCta } from "./scan-cta";
-import { TrialButton } from "./trial-button";
 
 export async function SiteHeader() {
   const { t, locale, href } = await getI18n();
-  // The paid trial label: the price picked out in the brand green.
-  const trial = (
+  // The entry price, picked out in the brand green.
+  const from = (
     <>
-      {t.common.trial} <strong className="font-bold text-accent">{formatEur(locale, OFFER_PRICE_EUR.trial)}</strong>
+      {t.header.from} <strong className="font-bold text-accent">{formatEur(locale, OFFER_PRICE_EUR.starter)}</strong>
     </>
   );
   const NAV = [
@@ -39,8 +38,10 @@ export async function SiteHeader() {
         <div className="flex items-center gap-1">
           <LanguageMenu className="hidden xl:block" />
           <HeaderAccountLink className="btn-ghost hidden sm:inline-flex" />
-          {/* The trial stands next to the main button, as its lighter alternative; it goes straight to sign-up and payment. */}
-          <TrialButton className="btn-secondary ml-1 hidden whitespace-nowrap rounded-full px-4 py-2.5 lg:inline-flex">{trial}</TrialButton>
+          {/* The packs, next to the main button: the entry price and a way to the comparison. */}
+          <Link href={href("/#tarifs")} className="btn-secondary ml-1 hidden whitespace-nowrap rounded-full px-4 py-2.5 lg:inline-flex">
+            {from}
+          </Link>
           <ScanCta className="btn-primary ml-1 whitespace-nowrap rounded-full px-4 py-2.5 sm:px-5">
             <span>
               {t.header.scan}
@@ -62,7 +63,6 @@ export async function SiteHeader() {
                   {label}
                 </Link>
               ))}
-              <TrialButton className="block w-full px-4 py-3 text-left font-medium text-foreground hover:text-brand">{trial}</TrialButton>
               <HeaderAccountLink className="block px-4 py-3 font-medium text-foreground hover:text-brand" />
               <LanguageSwitcher className="border-t border-border px-3 pb-1 pt-3" />
             </nav>

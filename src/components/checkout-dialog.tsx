@@ -11,7 +11,6 @@ import { formatEur } from "@/i18n/format";
 import { OFFER_PRICE_EUR, type Offer } from "@/lib/plans";
 import { useAuth } from "./auth-provider";
 import { LogoMark } from "./logo";
-import { TrialTimeline } from "./pricing-plans";
 
 // Loaded once, on the first payment only.
 let stripePromise: ReturnType<typeof loadStripe> | null = null;
@@ -69,7 +68,7 @@ export function CheckoutDialog() {
   const close = () => ref.current?.close();
 
   const price = offer ? formatEur(locale, OFFER_PRICE_EUR[offer]) : "";
-  const name = offer === "trial" ? t.common.trial : t.common.monthly;
+  const name = offer ? t.common[offer] : "";
 
   return (
     <dialog
@@ -98,8 +97,8 @@ export function CheckoutDialog() {
                 <p className="label mt-8 text-muted">{c.summary}</p>
                 <p className="display mt-2 text-2xl">{name}</p>
                 <p className="mt-3 flex flex-wrap items-baseline gap-x-2">
-                  <span className={`display text-5xl ${offer === "trial" ? "text-accent" : ""}`}>{price}</span>
-                  <span className="text-sm text-muted">{offer === "trial" ? t.pricing.ttcTrial : c.monthlyPeriod}</span>
+                  <span className="display text-5xl">{price}</span>
+                  <span className="text-sm text-muted">{offer === "lifetime" ? c.oneOffPeriod : c.monthlyPeriod}</span>
                 </p>
                 {/* Signed out: no sign-up step, the email typed beside it becomes the account. */}
                 {!user && <p className="mt-4 text-sm leading-relaxed text-muted">{c.guestHint}</p>}
@@ -110,20 +109,14 @@ export function CheckoutDialog() {
                     <p className="text-sm leading-snug">{c.chartWaiting}</p>
                   </div>
                 )}
-                <div className="hidden md:block">
-                  {offer === "trial" ? (
-                    <TrialTimeline />
-                  ) : (
-                    <ul className="mt-6 space-y-2.5">
-                      {t.pricing.included.map((feature) => (
-                        <li key={feature} className="flex gap-2.5 text-sm text-muted">
-                          <CheckIcon />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
+                <ul className="mt-6 hidden space-y-2.5 md:block">
+                  {t.pricing.packs[offer].features.map((feature) => (
+                    <li key={feature} className="flex gap-2.5 text-sm text-muted">
+                      <CheckIcon />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
                 {/* Pushes the reassurance to the bottom of the column, never closer than 2rem to the offer. */}
                 <div className="min-h-8 flex-1" aria-hidden />
                 <ul className="space-y-2 border-t border-border pt-5 text-xs text-muted">
@@ -133,7 +126,7 @@ export function CheckoutDialog() {
                   </li>
                   <li className="flex gap-2">
                     <CheckIcon />
-                    {c.trustCancel}
+                    {offer === "lifetime" ? c.trustOneOff : c.trustCancel}
                   </li>
                 </ul>
               </>

@@ -58,6 +58,7 @@ export async function GET(request: Request) {
       users: users.length,
       newUsers7d: users.filter((user) => (user.createdAt ?? 0) >= weekAgo).length,
       none: users.filter((user) => user.plan === "none").length,
+      starter: users.filter((user) => user.plan === "starter").length,
       monthly: users.filter((user) => user.plan === "monthly").length,
       lifetime: users.filter((user) => user.plan === "lifetime").length,
       analyses: users.reduce((sum, user) => sum + user.analyses, 0),

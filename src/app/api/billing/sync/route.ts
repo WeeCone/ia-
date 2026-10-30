@@ -25,8 +25,9 @@ async function handler(request: Request) {
   const invoice = subscription?.latest_invoice as Stripe.Invoice | null | undefined;
   if (!subscription || !invoice || invoice.status !== "paid") return Response.json({ ok: false });
 
-  const trial = subscription.metadata?.offer === "trial";
-  await creditPaidInvoice(uid, { id: invoice.id!, trialStart: trial && invoice.billing_reason === "subscription_create" }, subscription.id);
+  const offer = subscription.metadata?.offer;
+  const trial = offer === "trial";
+  await creditPaidInvoice(uid, { id: invoice.id!, trialStart: trial && invoice.billing_reason === "subscription_create" }, subscription.id, offer);
   if (trial && !user.get("trialSessionId")) {
     await ref.update({ trialSessionId: `sync_${subscription.id}`, trialEndsAt: subscription.trial_end ? subscription.trial_end * 1000 : null });
   }

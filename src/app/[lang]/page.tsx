@@ -13,7 +13,6 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Testimonials } from "@/components/testimonials";
 import { TrustStrip } from "@/components/trust-strip";
-import { TrialButton } from "@/components/trial-button";
 import { formatEur } from "@/i18n/format";
 import { getI18n, languageAlternates } from "@/i18n/server";
 import { OFFER_PRICE_EUR } from "@/lib/plans";
@@ -25,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Home() {
   const { t, locale } = await getI18n();
-  const trialLine = t.hero.trialLine(formatEur(locale, OFFER_PRICE_EUR.trial), formatEur(locale, OFFER_PRICE_EUR.monthly));
+  const priceLine = t.hero.priceLine(formatEur(locale, OFFER_PRICE_EUR.starter));
   // What search engines and AI assistants read about the product: the offer and the FAQ, as structured data.
   const site = `https://scanzivo.com${locale === "fr" ? "" : `/${locale}`}`;
   const structured = [
@@ -39,8 +38,9 @@ export default async function Home() {
       inLanguage: locale,
       description: t.hero.subtitle,
       offers: [
-        { "@type": "Offer", name: t.common.trial, price: OFFER_PRICE_EUR.trial, priceCurrency: "EUR" },
+        { "@type": "Offer", name: t.common.starter, price: OFFER_PRICE_EUR.starter, priceCurrency: "EUR" },
         { "@type": "Offer", name: t.common.monthly, price: OFFER_PRICE_EUR.monthly, priceCurrency: "EUR" },
+        { "@type": "Offer", name: t.common.lifetime, price: OFFER_PRICE_EUR.lifetime, priceCurrency: "EUR" },
       ],
     },
     {
@@ -74,14 +74,14 @@ export default async function Home() {
             <p style={{ "--d": "0.15s" } as React.CSSProperties} className="rise-in mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl">
               {t.hero.subtitle}
             </p>
-            <div style={{ "--d": "0.3s" } as React.CSSProperties} className="rise-in mt-10">
+            <div id="analyser" style={{ "--d": "0.3s" } as React.CSSProperties} className="rise-in mt-10 scroll-mt-32">
               <DropBar />
               <p className="mx-auto mt-4 max-w-xl text-sm text-muted [text-shadow:0_1px_12px_var(--background)]">
-                {trialLine.before}
-                <TrialButton className="font-semibold text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">
-                  {trialLine.offer}
-                </TrialButton>
-                {trialLine.after}
+                {priceLine.before}
+                <a href="#tarifs" className="font-semibold text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">
+                  {priceLine.offer}
+                </a>
+                {priceLine.after}
               </p>
             </div>
           </div>
@@ -170,8 +170,10 @@ export default async function Home() {
                 {t.closing.titleA} <span className="mark">{t.closing.titleB}</span>
               </h2>
               <p className="mx-auto mt-5 max-w-xl text-muted">{t.closing.subtitle}</p>
-              <TrialButton className="btn-primary mt-9 text-base" />
-              <p className="mt-4 text-sm text-muted">{t.closing.trialNote(formatEur(locale, OFFER_PRICE_EUR.monthly))}</p>
+              <a href="#analyser" className="btn-primary mt-9 text-base">
+                {t.closing.cta}
+              </a>
+              <p className="mt-4 text-sm text-muted">{t.closing.note(formatEur(locale, OFFER_PRICE_EUR.starter))}</p>
             </div>
           </div>
         </section>

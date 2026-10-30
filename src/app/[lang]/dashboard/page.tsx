@@ -21,13 +21,14 @@ import { isAdminUser } from "@/lib/admin";
 import { storage } from "@/lib/firebase";
 import { preloadStripe } from "@/components/checkout-dialog";
 import { OfferDialog } from "@/components/dashboard/offer-dialog";
+import { buyableOffers } from "@/components/pricing-plans";
 import { TrialUpsell } from "@/components/dashboard/trial-upsell";
 import { UpgradeNow } from "@/components/dashboard/upgrade-now";
 import { redirectToBilling } from "@/lib/billing-client";
 import { EMBEDDED_CHECKOUT, hasPendingOffer, onOpenCheckout, onOpenOffers, openCheckout, openOffers, takePendingOffer } from "@/lib/offers-client";
 import { pixel } from "@/lib/meta-pixel";
 import { hasPendingChart } from "@/lib/pending-chart";
-import { availableCredits, MONTHLY_CREDITS } from "@/lib/plans";
+import { availableCredits, MONTHLY_CREDITS, STARTER_DAILY_CREDITS } from "@/lib/plans";
 import { useI18n } from "@/i18n/client";
 import { subscribeUserProfile, type UserProfile } from "@/lib/users";
 
@@ -134,13 +135,11 @@ export default function DashboardPage() {
   const plan = profile?.plan;
   // A paid trial leaves the plan at "none" with a credit to spend: such an account can analyse.
   const hasCredits = profile ? availableCredits(profile) > 0 : false;
-  const trialTaken = Boolean(profile?.trialSessionId);
   useEffect(() => {
     if (!plan || checkoutDone) return;
     const offer = takePendingOffer();
-    // The trial is for accounts without an offer that never had one; otherwise the choice is simply dropped.
-    const allowed = offer === "trial" ? plan === "none" && !trialTaken : plan !== "lifetime";
-    if (offer && allowed) {
+    // A pack the account can no longer buy (already has it, or more) is simply dropped.
+    if (offer && buyableOffers(plan).includes(offer)) {
       if (EMBEDDED_CHECKOUT) {
         const timer = setTimeout(() => openCheckout(offer), 0);
         return () => clearTimeout(timer);
@@ -160,7 +159,7 @@ export default function DashboardPage() {
     if (shown) return;
     const timer = setTimeout(() => setOffersOpen(true), 400);
     return () => clearTimeout(timer);
-  }, [plan, hasCredits, trialTaken, checkoutDone]);
+  }, [plan, hasCredits, checkoutDone]);
 
   // First visit with an offer: a short two-step tour of the composer (pointless before one can analyse).
   useEffect(() => {
@@ -225,7 +224,8 @@ export default function DashboardPage() {
   }
 
   const firstName = (user.displayName || "").split(" ")[0];
-  const gauge = Math.round((Math.min(credits ?? 0, MONTHLY_CREDITS) / MONTHLY_CREDITS) * 100);
+  const quota = plan === "starter" ? STARTER_DAILY_CREDITS : MONTHLY_CREDITS;
+  const gauge = Math.round((Math.min(credits ?? 0, quota) / quota) * 100);
 
   const sidebar = (
     <Sidebar
@@ -246,8 +246,16 @@ export default function DashboardPage() {
   const noCredits = credits !== null && credits < 1;
   // No offer: the uploader itself turns into "choose an offer". Out of credits: a notice under it.
   // A trial whose analysis is spent: offer to start the subscription now rather than wait for its end.
+  // Starter's daily analysis is spent: it comes back tomorrow, or Pro gives more today.
   const disabledNotice = profile?.trialEndsAt ? (
     <UpgradeNow trialEndsAt={profile.trialEndsAt} />
+  ) : plan === "starter" ? (
+    <p className="text-center text-sm text-muted">
+      {d.starterSpent}{" "}
+      <button type="button" onClick={openOffers} className="font-semibold text-brand underline underline-offset-2">
+        {d.starterUpgrade}
+      </button>
+    </p>
   ) : (
     <p className="text-center text-sm text-muted">{d.outOfCredits}</p>
   );
@@ -383,7 +391,6 @@ export default function DashboardPage() {
                   canAutoRun={credits !== null && credits > 0}
                   disabledNotice={disabledNotice}
                   needsOffer={profile?.plan === "none" && !hasCredits}
-                  trialAvailable={!profile?.trialSessionId}
                   testMode={testMode && isAdminUser(user)}
                   highlight={tour === 1 ? "zone" : tour === 2 ? "send" : null}
                   onAnalyzed={(outcome: AnalysisOutcome) => {
@@ -418,7 +425,6 @@ export default function DashboardPage() {
         open={offersOpen}
         onClose={() => setOffersOpen(false)}
         plan={profile?.plan ?? null}
-        trialUsed={Boolean(profile?.trialSessionId)}
         hasCapture={offersOpen && hasPendingChart()}
       />
       {redirecting && !checkoutDone && plan !== "lifetime" && (

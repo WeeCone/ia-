@@ -39,8 +39,8 @@ export function takePendingOffer(): Offer | null {
   try {
     const offer = sessionStorage.getItem(PENDING_OFFER_KEY);
     sessionStorage.removeItem(PENDING_OFFER_KEY);
-    // Lifetime is no longer sold: an old saved choice falls back to nothing.
-    return offer === "monthly" || offer === "trial" ? offer : null;
+    // The trial is no longer sold: an old saved choice falls back to nothing.
+    return offer === "starter" || offer === "monthly" || offer === "lifetime" ? offer : null;
   } catch {
     return null;
   }

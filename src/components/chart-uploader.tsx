@@ -22,8 +22,6 @@ type Props = {
   disabledNotice?: React.ReactNode;
   /** No offer yet: the action opens the offer picker (the capture is kept for after payment) instead of a disabled button. */
   needsOffer?: boolean;
-  /** Offer the one-off trial next to the subscription (accounts that haven't used it). */
-  trialAvailable?: boolean;
   /** Admin test mode: canned report, no model call, no credit. */
   testMode?: boolean;
   /** Credits are confirmed: a chart sent with "Analyse" before paying may now run by itself. */
@@ -50,7 +48,6 @@ export function ChartUploader({
   disabled,
   disabledNotice,
   needsOffer = false,
-  trialAvailable = false,
   testMode = false,
   canAutoRun = false,
   highlight = null,
@@ -351,16 +348,9 @@ export function ChartUploader({
                   {file ? u.offerReady : ""}
                   {u.offerChoose}
                   <span className="whitespace-nowrap font-medium text-foreground">
-                    {formatEur(locale, OFFER_PRICE_EUR.monthly)}
+                    {formatEur(locale, OFFER_PRICE_EUR.starter)}
                     {t.common.perMonth}
                   </span>
-                  {trialAvailable && (
-                    <>
-                      {u.offerOr}
-                      <span className="whitespace-nowrap font-medium text-foreground">{formatEur(locale, OFFER_PRICE_EUR.trial)}</span>
-                      {u.offerTrial}
-                    </>
-                  )}
                   .{file ? u.offerKept : ""}
                 </p>
                 <button type="button" onClick={openOffers} className="btn-primary w-full">

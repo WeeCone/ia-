@@ -12,7 +12,7 @@ import type { AdminOverview, AdminReview, AdminUser, ReviewStatus } from "@/lib/
 import { adminFetch } from "@/lib/admin-client";
 import { optOutOfTracking } from "@/lib/track";
 import { auth } from "@/lib/firebase";
-import { MONTHLY_BUDGET_EUR, OFFER_PRICE_EUR as PRICE, OFFERS, PLAN_LABELS, type Plan } from "@/lib/plans";
+import { MONTHLY_BUDGET_EUR, OFFER_PRICE_EUR as PRICE, PLAN_LABELS, type Plan } from "@/lib/plans";
 
 const euros = (value: number) => value.toLocaleString("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
 const date = (ms: number | null) =>
@@ -20,6 +20,7 @@ const date = (ms: number | null) =>
 
 const planChip: Record<Plan, string> = {
   none: "border-border text-muted",
+  starter: "border-amber-400/40 bg-amber-400/10 text-warn",
   monthly: "border-brand/40 bg-brand/10 text-brand",
   lifetime: "border-accent/40 bg-accent/10 text-accent",
 };
@@ -390,15 +391,16 @@ export default function AdminPage() {
 
         {totals && (
           <>
-            <section className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6" aria-label="Chiffres clés">
+            <section className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-7" aria-label="Chiffres clés">
               <Stat label="Utilisateurs" value={totals.users} hint={`+${totals.newUsers7d} ces 7 derniers jours`} />
               <Stat label="Sans offre" value={totals.none} />
-              <Stat label={OFFERS.monthly.name} value={totals.monthly} hint={`${euros(totals.monthly * PRICE.monthly)} / mois`} />
-              <Stat label={OFFERS.lifetime.name} value={totals.lifetime} hint={`${euros(totals.lifetime * PRICE.lifetime)} encaissés`} />
+              <Stat label={PLAN_LABELS.starter} value={totals.starter} hint={`${euros(totals.starter * PRICE.starter)} / mois`} />
+              <Stat label={PLAN_LABELS.monthly} value={totals.monthly} hint={`${euros(totals.monthly * PRICE.monthly)} / mois (19 à 19,99 €)`} />
+              <Stat label={PLAN_LABELS.lifetime} value={totals.lifetime} hint="99 € (ou 180 € avant le 17/10) chacun" />
               <Stat label="Analyses" value={totals.analyses} hint="depuis le lancement" />
               <Stat
                 label="Conversion"
-                value={totals.users ? `${Math.round(((totals.monthly + totals.lifetime) / totals.users) * 100)} %` : "—"}
+                value={totals.users ? `${Math.round(((totals.starter + totals.monthly + totals.lifetime) / totals.users) * 100)} %` : "—"}
                 hint="comptes avec une offre"
               />
             </section>

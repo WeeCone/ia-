@@ -3,14 +3,15 @@ import { createHash } from "node:crypto";
 import { FieldValue } from "firebase-admin/firestore";
 import type Stripe from "stripe";
 import { hasLocale, localePath, type Locale } from "@/i18n/config";
-import { creditPaidInvoice } from "./billing-grants";
-import { sendTrialEmail } from "./email";
+import { creditPaidInvoice, grantLifetimeTo } from "./billing-grants";
+import { sendPurchaseEmail, sendTrialEmail } from "./email";
 import { adminAuth, adminDb } from "./firebase-admin";
 import { getStripe } from "./stripe";
 
 /**
- * The trial bought without an account: Stripe collects the email with the card, then the account is made from it here.
+ * A purchase made without an account: Stripe collects the email with the card, then the account is made from it here.
  * Called by the return page and by the webhook, whichever comes first; every step is idempotent so both may run.
+ * Covers the subscriptions (Starter, Pro, and the former trial) and the one-off À vie payment.
  */
 
 export type GuestClaim =
@@ -19,7 +20,7 @@ export type GuestClaim =
   | { status: "created"; uid: string }
   /** The email already had an account: the trial is added to it, the buyer signs in as usual. */
   | { status: "existing"; email: string }
-  /** The email's account already pays a subscription: the new one is cancelled and the 0,99 € refunded. */
+  /** The email's account already has this access or more: the new purchase is cancelled and refunded. */
   | { status: "alreadyActive"; email: string };
 
 /**
@@ -28,8 +29,10 @@ export type GuestClaim =
  */
 export const guestUid = (sessionId: string) => `g${createHash("sha256").update(sessionId).digest("hex").slice(0, 27)}`;
 
-const isGuestSession = (session: Stripe.Checkout.Session) =>
-  session.metadata?.guest === "1" && session.metadata?.offer === "trial";
+const isGuestSession = (session: Stripe.Checkout.Session) => session.metadata?.guest === "1";
+
+/** Plan ranks: a purchase is refused (and refunded) when the account already has at least this much. */
+const RANK: Record<string, number> = { none: 0, starter: 1, trial: 2, monthly: 2, lifetime: 3 };
 
 const authCode = (err: unknown) => (err as { code?: string } | null)?.code ?? "";
 
@@ -44,6 +47,10 @@ async function accountFor(email: string, sessionId: string) {
     if (authCode(err) !== "auth/email-already-exists") throw err;
     return (await adminAuth.getUserByEmail(email)).uid;
   }
+}
+
+async function refundPayment(paymentIntent: string | Stripe.PaymentIntent | null) {
+  if (paymentIntent) await getStripe().refunds.create({ payment_intent: typeof paymentIntent === "string" ? paymentIntent : paymentIntent.id });
 }
 
 async function refundInvoice(invoiceId: string) {
@@ -71,11 +78,13 @@ export async function claimGuestSession(
       : sessionOrId;
   if (!isGuestSession(session)) return null;
 
+  const offer = session.metadata?.offer ?? "trial";
+  const oneOff = session.mode === "payment";
   const subscription = session.subscription as Stripe.Subscription | null;
   const invoice = subscription?.latest_invoice as Stripe.Invoice | null | undefined;
   const email = session.customer_details?.email?.trim().toLowerCase();
-  if (session.status !== "complete" || !subscription || !invoice || invoice.status !== "paid" || !email)
-    return { status: "pending" };
+  const paid = oneOff ? session.payment_status === "paid" : Boolean(subscription && invoice && invoice.status === "paid");
+  if (session.status !== "complete" || !paid || !email) return { status: "pending" };
 
   const uid = await accountFor(email, session.id);
   const created = uid === guestUid(session.id);
@@ -109,27 +118,38 @@ export async function claimGuestSession(
   });
 
   const existing = await ref.get();
-  const plan = existing.get("plan");
-  if (!created && (plan === "monthly" || plan === "lifetime") && existing.get("stripeSubscriptionId") !== subscription.id) {
-    // Already subscribed: never two subscriptions on one person. Stops this one and gives the 0,99 € back.
+  const plan: string = existing.get("plan") ?? "none";
+  const alreadyThis = subscription ? existing.get("stripeSubscriptionId") === subscription.id : existing.get("lifetimeSessionId") === session.id;
+  if (!created && !alreadyThis && (RANK[plan] ?? 0) >= (RANK[offer] ?? 0)) {
+    // Already has this access or more: never two subscriptions on one person. Stops this purchase and refunds it.
     if (firstClaim) {
-      await stripe.subscriptions
-        .cancel(subscription.id)
-        .catch((err) => console.error("guest trial: cancel failed", subscription.id, err));
-      await refundInvoice(invoice.id!).catch((err) => console.error("guest trial: refund failed", invoice.id, err));
+      if (subscription) {
+        await stripe.subscriptions.cancel(subscription.id).catch((err) => console.error("guest purchase: cancel failed", subscription.id, err));
+        await refundInvoice(invoice!.id!).catch((err) => console.error("guest purchase: refund failed", invoice!.id, err));
+      } else {
+        await refundPayment(session.payment_intent).catch((err) => console.error("guest purchase: refund failed", session.id, err));
+      }
     }
     return { status: "alreadyActive", email };
   }
 
-  // Later invoices and subscription events find the account from this metadata, as for a trial bought signed in.
-  if (subscription.metadata.uid !== uid) {
-    await stripe.subscriptions.update(subscription.id, { metadata: { ...subscription.metadata, uid } });
-  }
   if (customerId) await ref.update({ stripeCustomerId: customerId });
-  await creditPaidInvoice(uid, { id: invoice.id!, trialStart: invoice.billing_reason === "subscription_create" }, subscription.id);
-
-  const trialEndsAt = subscription.trial_end ? subscription.trial_end * 1000 : null;
-  if (existing.get("trialSessionId") !== session.id) await ref.update({ trialSessionId: session.id, trialEndsAt });
+  let trialEndsAt: number | null = null;
+  if (subscription && invoice) {
+    // Later invoices and subscription events find the account from this metadata, as for a purchase made signed in.
+    if (subscription.metadata.uid !== uid) {
+      await stripe.subscriptions.update(subscription.id, { metadata: { ...subscription.metadata, uid } });
+    }
+    const trialStart = offer === "trial" && invoice.billing_reason === "subscription_create";
+    await creditPaidInvoice(uid, { id: invoice.id!, trialStart }, subscription.id, offer);
+    if (offer === "trial") {
+      trialEndsAt = subscription.trial_end ? subscription.trial_end * 1000 : null;
+      if (existing.get("trialSessionId") !== session.id) await ref.update({ trialSessionId: session.id, trialEndsAt });
+    }
+  } else if (!alreadyThis) {
+    await grantLifetimeTo(uid);
+    await ref.update({ lifetimeSessionId: session.id });
+  }
   if (firstClaim) {
     // The confirmation, with a link to choose a password for a new account (its only way back in on another device).
     let passwordUrl: string | undefined;
@@ -137,16 +157,18 @@ export async function claimGuestSession(
       passwordUrl = await adminAuth
         .generatePasswordResetLink(email, { url: `${baseUrl}${localePath(locale, "/auth/login")}` })
         .catch((err) => {
-          console.error("guest trial: password link failed", err);
+          console.error("guest purchase: password link failed", err);
           return undefined;
         });
     }
-    if (trialEndsAt) {
-      const name = session.customer_details?.name ?? null;
-      await sendTrialEmail(email, name, trialEndsAt, baseUrl, locale, passwordUrl).catch((err) =>
-        console.error("trial email failed", err),
-      );
-    }
+    const name = session.customer_details?.name ?? null;
+    const sent =
+      offer === "trial"
+        ? trialEndsAt
+          ? sendTrialEmail(email, name, trialEndsAt, baseUrl, locale, passwordUrl)
+          : Promise.resolve(false)
+        : sendPurchaseEmail(email, name, offer, baseUrl, locale, passwordUrl);
+    await sent.catch((err) => console.error("purchase email failed", err));
   }
   return created ? { status: "created", uid } : { status: "existing", email };
 }

@@ -1,18 +1,22 @@
-export type Plan = "none" | "monthly" | "lifetime";
-/**
- * What can be bought: a plan, or the paid trial — 0,99 € today and the card saved, TRIAL_DAYS days with TRIAL_CREDITS
- * analyses, then the monthly subscription starts by itself unless cancelled first. Once per account.
- */
-export type Offer = Exclude<Plan, "none"> | "trial";
+export type Plan = "none" | "starter" | "monthly" | "lifetime";
+/** What can be bought: Starter and Pro (stored as "monthly") are monthly subscriptions, À vie a one-off payment. */
+export type Offer = Exclude<Plan, "none">;
 
+/**
+ * The paid trial (0,99 € for 3 days) is no longer sold since 2026-10-30. Kept for subscriptions started before:
+ * their first invoice opened TRIAL_CREDITS analyses.
+ */
 export const TRIAL_DAYS = 3;
 export const TRIAL_CREDITS = 1;
 
 /**
- * Hard ceiling on what one customer can cost in AI calls per calendar month, in euros.
+ * Hard ceiling on what one customer can cost in AI calls per calendar month, in euros, by plan.
  * Every call is priced from its real token usage and recorded on the user; once the ceiling is near, analyses stop until next month.
  */
-export const MONTHLY_BUDGET_EUR = 7;
+const BUDGET_EUR: Record<Plan, number> = { none: 7, starter: 5, monthly: 11, lifetime: 11 };
+export const budgetFor = (plan: Plan | undefined) => BUDGET_EUR[plan ?? "none"] ?? BUDGET_EUR.none;
+/** The highest of the ceilings, for the admin's spend warnings. */
+export const MONTHLY_BUDGET_EUR = Math.max(...Object.values(BUDGET_EUR));
 
 /** Typical cost of one analysis, in euros (measured on real reports; keep it pessimistic). */
 export const ANALYSIS_COST_EUR = 0.2;
@@ -24,34 +28,39 @@ export const ANALYSIS_COST_EUR = 0.2;
  */
 export const MAX_CALL_COST_EUR = 0.7;
 
-/** Fair-use quota per month, for both offers: one credit per analysis, sized to fit the budget (rounded down to 5). */
-export const MONTHLY_CREDITS = Math.floor((MONTHLY_BUDGET_EUR - MAX_CALL_COST_EUR) / ANALYSIS_COST_EUR / 5) * 5;
+/** Pro and À vie: analyses per calendar month. */
+export const MONTHLY_CREDITS = 30;
+/** Starter: analyses per day. */
+export const STARTER_DAILY_CREDITS = 1;
 
-// Display only: keep prices in sync with the Stripe prices set in STRIPE_PRICE_MONTHLY / STRIPE_PRICE_LIFETIME.
-export const OFFERS: Record<Offer, { name: string; price: string; period: string }> = {
-  monthly: { name: "Mensuel", price: "19,99 €", period: "/ mois" },
-  lifetime: { name: "À vie", price: "180 €", period: "paiement unique" },
-  trial: { name: "Essai", price: "0,99 €", period: "3 jours, puis 19,99 € / mois" },
-};
+/** Starter reports are read by a lighter model and come without the news side, which keeps the pack at 10 €. */
+export const STARTER_MODEL = "claude-sonnet-5-5";
 
-/** Prices in euros (display; keep in sync with Stripe). Format with formatEur() for the visitor's language. */
-// The trial fee has no Stripe price to create: the checkout route sends its amount inline (TRIAL_PRICE_CENTS).
-export const OFFER_PRICE_EUR: Record<Offer, number> = { monthly: 19.99, lifetime: 180, trial: 0.99 };
-/** The monthly price as Stripe bills it, in cents (the checkout sets it inline, see api/billing/checkout). */
-export const MONTHLY_PRICE_CENTS = 1999;
-export const TRIAL_PRICE_CENTS = 99;
+/** Which offers get the news side (events and news that can move the asset) with every analysis. */
+export const hasNewsSide = (plan: Plan | undefined) => plan === "monthly" || plan === "lifetime";
 
-export const PLAN_LABELS: Record<Plan, string> = { none: "Aucune offre", monthly: "Mensuel", lifetime: "À vie" };
+/** Prices in euros (display; the checkout sends the same amounts to Stripe). Format with formatEur() for the visitor's language. */
+export const OFFER_PRICE_EUR: Record<Offer, number> = { starter: 10, monthly: 19, lifetime: 99 };
+/** The same prices as Stripe bills them, in cents (the checkout sets them inline, see api/billing/checkout). */
+export const OFFER_PRICE_CENTS: Record<Offer, number> = { starter: 1000, monthly: 1900, lifetime: 9900 };
+
+export const PLAN_LABELS: Record<Plan, string> = { none: "Aucune offre", starter: "Starter", monthly: "Pro", lifetime: "À vie" };
 
 /** Month key ("2026-10") used to refill lifetime credits once per calendar month. */
 export function creditPeriod(date = new Date()) {
   return date.toISOString().slice(0, 7);
 }
 
+/** The period a plan's credits refill on: each day for Starter, each month otherwise. */
+export function periodFor(plan: Plan | undefined, date = new Date()) {
+  return plan === "starter" ? date.toISOString().slice(0, 10) : creditPeriod(date);
+}
+
 type CreditState = { plan?: Plan; credits?: number; creditsPeriod?: string };
 
-/** Credits actually available: lifetime accounts get a fresh monthly quota when the month changes. */
+/** Credits actually available: À vie gets a fresh monthly quota when the month changes, Starter a fresh one each day. */
 export function availableCredits({ plan, credits = 0, creditsPeriod }: CreditState) {
   if (plan === "lifetime" && creditsPeriod !== creditPeriod()) return MONTHLY_CREDITS;
+  if (plan === "starter" && creditsPeriod !== periodFor("starter")) return STARTER_DAILY_CREDITS;
   return credits;
 }

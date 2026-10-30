@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { ArticleBody } from "@/components/blog/article-body";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { TrialButton } from "@/components/trial-button";
 import { ARTICLES, articlesFor, findArticle, readingMinutes, translationsOf } from "@/content/blog";
 import { INTL_LOCALE, localePath } from "@/i18n/config";
 import { formatEur } from "@/i18n/format";
@@ -91,12 +90,14 @@ export default async function ArticlePage({ params }: Props) {
 
         <aside className="theme-dark mt-12 rounded-[1.75rem] bg-background p-7 text-foreground sm:p-9">
           <p className="display text-2xl sm:text-3xl">{t.blog.ctaTitle}</p>
-          <p className="mt-3 max-w-xl text-muted">{t.blog.ctaText(formatEur(locale, OFFER_PRICE_EUR.trial), formatEur(locale, OFFER_PRICE_EUR.monthly))}</p>
+          <p className="mt-3 max-w-xl text-muted">{t.blog.ctaText(formatEur(locale, OFFER_PRICE_EUR.starter))}</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href={href("/")} className="btn-primary">
               {t.blog.ctaButton}
             </Link>
-            <TrialButton className="btn-secondary" />
+            <Link href={href("/#tarifs")} className="btn-secondary">
+              {t.blog.ctaPacks}
+            </Link>
           </div>
         </aside>
 

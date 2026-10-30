@@ -7,7 +7,7 @@ import { openOffers } from "@/lib/offers-client";
 import { useState } from "react";
 import { isAdminUser } from "@/lib/admin";
 import { auth } from "@/lib/firebase";
-import { availableCredits, MONTHLY_CREDITS } from "@/lib/plans";
+import { availableCredits, MONTHLY_CREDITS, STARTER_DAILY_CREDITS } from "@/lib/plans";
 import type { UserProfile } from "@/lib/users";
 import { INTL_LOCALE } from "@/i18n/config";
 import { useI18n } from "@/i18n/client";
@@ -61,28 +61,30 @@ function PlanCard({ profile }: { profile: UserProfile | null }) {
   }
   return (
     <div className="rounded-xl border border-border bg-card/70 p-3">
-      <p className="text-sm font-medium">{profile.plan === "monthly" ? t.account.monthlyPlan : t.account.lifetimePlan}</p>
+      <p className="text-sm font-medium">{t.account.planNames[profile.plan] ?? t.plans[profile.plan]}</p>
       <p className="mt-0.5 text-xs text-muted">
         {/* Cleared by the webhook once the first monthly payment goes through. */}
         {profile.trialEndsAt
           ? t.account.trialUntil(new Date(profile.trialEndsAt).toLocaleDateString(INTL_LOCALE[locale], { day: "numeric", month: "long" }))
-          : t.account.perMonth(MONTHLY_CREDITS)}
+          : profile.plan === "starter"
+            ? t.account.perDay(STARTER_DAILY_CREDITS)
+            : t.account.perMonth(MONTHLY_CREDITS)}
       </p>
       {profile.trialEndsAt && <UpgradeNow trialEndsAt={profile.trialEndsAt} compact />}
     </div>
   );
 }
 
-function CreditsGauge({ credits }: { credits: number | null }) {
+function CreditsGauge({ credits, quota }: { credits: number | null; quota: number }) {
   const { t } = useI18n();
   const value = credits ?? 0;
-  const filled = Math.round((Math.min(value, MONTHLY_CREDITS) / MONTHLY_CREDITS) * 10);
+  const filled = Math.round((Math.min(value, quota) / quota) * 10);
   return (
     <div className="px-1">
       <p className="flex items-center justify-between text-xs">
         <span className="text-muted">{t.account.credits}</span>
         <span className="font-mono text-foreground">
-          {credits ?? "–"} <span className="text-muted">/ {MONTHLY_CREDITS}</span>
+          {credits ?? "–"} <span className="text-muted">/ {quota}</span>
         </span>
       </p>
       <div className="mt-2 flex gap-1" aria-hidden>
@@ -118,7 +120,7 @@ export function Sidebar({ user, profile, credits, history, activeId, onNew, onSe
 
       <div className="space-y-4 border-t border-border/70 p-3">
         <PlanCard profile={profile} />
-        <CreditsGauge credits={credits} />
+        <CreditsGauge credits={credits} quota={profile?.plan === "starter" ? STARTER_DAILY_CREDITS : MONTHLY_CREDITS} />
 
         <div className="relative">
           {menuOpen && (

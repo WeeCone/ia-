@@ -49,9 +49,15 @@ export class AnalysisRefusedError extends Error {
 /** Output ceiling of one call; with the input, bounds what a single analysis can cost (see MAX_CALL_COST_EUR). */
 export const MAX_OUTPUT_TOKENS = 16000;
 
-export async function analyzeChart(imageBase64: string, mediaType: AllowedImageType, note: string | undefined, locale: Locale) {
+export async function analyzeChart(
+  imageBase64: string,
+  mediaType: AllowedImageType,
+  note: string | undefined,
+  locale: Locale,
+  model = "claude-opus-5-5",
+) {
   const response = await client.beta.messages.parse({
-    model: "claude-opus-5-5",
+    model,
     max_tokens: MAX_OUTPUT_TOKENS,
     betas: ["server-side-fallback-2026-07-01"],
     fallbacks: "default",

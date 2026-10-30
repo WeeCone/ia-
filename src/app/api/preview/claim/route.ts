@@ -3,7 +3,7 @@ import type { AllowedImageType, ChartAnalysis } from "@/lib/analysis";
 import { recordActivity } from "@/lib/activity";
 import { adminBucket, adminDb } from "@/lib/firebase-admin";
 import { macroContext } from "@/lib/macro";
-import { availableCredits, creditPeriod } from "@/lib/plans";
+import { availableCredits, creditPeriod, hasNewsSide, periodFor } from "@/lib/plans";
 import { PREVIEW_TTL_MS } from "@/lib/preview";
 import { getRequestUid } from "@/lib/server-auth";
 import { monthSpend } from "@/lib/usage-cost";
@@ -15,8 +15,8 @@ export const maxDuration = 120;
 const error = (message: string, status: number) => Response.json({ error: message }, { status });
 
 /**
- * After payment: the analysis the visitor previewed becomes theirs, for one credit, like any analysis. The trial's
- * news side is gathered now (the preview had none). 404 / 410 tell the dashboard to run the chart afresh instead.
+ * After payment: the analysis the visitor previewed becomes theirs, for one credit, like any analysis. For Pro and
+ * À vie the news side is gathered now (the preview had none). 404 / 410 tell the dashboard to run the chart afresh.
  */
 export async function POST(request: Request) {
   const locale = requestLocale(request);
@@ -42,10 +42,9 @@ export async function POST(request: Request) {
   const imagePath: string = preview.get("imagePath");
   const imageType = preview.get("imageType") as AllowedImageType;
 
-  // The news side comes with the trial's analysis, as for one run from the dashboard.
-  const inTrial = typeof userData.trialEndsAt === "number" && userData.trialEndsAt > Date.now();
+  // The news side comes with Pro and À vie analyses, as for one run from the dashboard.
   let macro = { report: null as ChartAnalysis["macro"], costEur: 0 };
-  if (inTrial) {
+  if (hasNewsSide(userData.plan)) {
     try {
       const [bytes] = await adminBucket().file(imagePath).download();
       macro = await macroContext(bytes.toString("base64"), imageType, locale);
@@ -65,7 +64,7 @@ export async function POST(request: Request) {
       if (credits < 1) throw new Error("NO_CREDITS");
       // The preview's AI cost counts for this customer, like the analysis it becomes.
       const spent = monthSpend(data) + (preview.get("costEur") ?? 0) + macro.costEur;
-      tx.update(userRef, { credits: credits - 1, creditsPeriod: creditPeriod(), spendEur: spent, spendPeriod: creditPeriod() });
+      tx.update(userRef, { credits: credits - 1, creditsPeriod: periodFor(data.plan), spendEur: spent, spendPeriod: creditPeriod() });
       tx.set(analysisRef, { ...analysis, note: null, model: preview.get("model") ?? null, createdAt: FieldValue.serverTimestamp() });
       tx.update(previewRef, { claimedBy: uid, analysisId: analysisRef.id });
     });

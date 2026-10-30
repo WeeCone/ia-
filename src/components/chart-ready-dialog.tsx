@@ -4,21 +4,21 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/i18n/client";
 import { formatEur } from "@/i18n/format";
-import { redirectToBilling } from "@/lib/billing-client";
-import { EMBEDDED_CHECKOUT, onOpenChartReady, openCheckout, requestAutoAnalyze, savePreview } from "@/lib/offers-client";
+import { onOpenChartReady, onOpenCheckout, requestAutoAnalyze, savePreview } from "@/lib/offers-client";
 import { pendingChartUrl, readPendingChart } from "@/lib/pending-chart";
 import { OFFER_PRICE_EUR } from "@/lib/plans";
 import type { PreviewTeaser } from "@/lib/preview-types";
 import { AnalysisTeaser } from "./analysis-teaser";
+import { PricingPlans } from "./pricing-plans";
 import { preloadStripe } from "./checkout-dialog";
 
-type Stage = { name: "ready" } | { name: "reading" } | { name: "teaser"; id: string | null; teaser: PreviewTeaser };
+type Stage = { name: "ready" } | { name: "reading" } | { name: "teaser"; id: string | null; teaser: PreviewTeaser } | { name: "packs" };
 
 /**
  * A visitor without an account dropped a chart on the landing page: it is shown back, ready, with the button that
- * starts the analysis. The AI reads it for free first (trend, structure, patterns); the plan stays locked behind the
- * trial payment, and once paid the dashboard unlocks that same analysis. When the free reading is unavailable (daily
- * limits, an error), the button goes straight to payment and the dashboard runs the analysis after it, as before.
+ * starts the analysis. The AI reads it for free first (trend, structure, patterns); the plan stays locked until a pack
+ * is bought, and once paid the dashboard unlocks that same analysis. When the free reading is unavailable (daily
+ * limits, an error), the button goes straight to the packs and the dashboard runs the analysis after payment.
  */
 export function ChartReadyDialog() {
   const ref = useRef<HTMLDialogElement>(null);
@@ -55,16 +55,14 @@ export function ChartReadyDialog() {
     };
   }, [stage.name]);
 
+  // Paying happens in its own dialog: this one steps aside.
+  useEffect(() => onOpenCheckout(() => ref.current?.close()), []);
+
   function pay(previewId: string | null) {
     // Unlocks the previewed analysis after payment; without one, the dashboard runs the waiting chart.
     if (previewId) savePreview(previewId);
     else requestAutoAnalyze();
-    if (EMBEDDED_CHECKOUT) {
-      close();
-      openCheckout("trial");
-    } else {
-      redirectToBilling("checkout", "trial", locale).catch((err) => setError(err instanceof Error ? err.message : t.checkout.unavailable));
-    }
+    setStage({ name: "packs" });
   }
 
   async function read() {
@@ -94,7 +92,7 @@ export function ChartReadyDialog() {
     <dialog
       ref={ref}
       aria-label={c.title}
-      className={`theme-dark m-auto max-h-[calc(100dvh-1.5rem)] w-[min(${stage.name === "teaser" ? "40rem" : "34rem"},calc(100%-1.5rem))] overflow-y-auto rounded-[1.75rem] border border-border bg-background p-0 text-foreground shadow-[0_40px_120px_-30px_rgb(0_0_0/0.8)] backdrop:bg-[rgb(11_14_20/0.6)] backdrop:backdrop-blur-sm open:animate-[rise-in_0.35s_cubic-bezier(0.16,1,0.3,1)]`}
+      className={`theme-dark m-auto max-h-[calc(100dvh-1.5rem)] ${stage.name === "packs" ? "w-[min(64rem,calc(100%-1.5rem))]" : stage.name === "teaser" ? "w-[min(40rem,calc(100%-1.5rem))]" : "w-[min(34rem,calc(100%-1.5rem))]"} overflow-y-auto rounded-[1.75rem] border border-border bg-background p-0 text-foreground shadow-[0_40px_120px_-30px_rgb(0_0_0/0.8)] backdrop:bg-[rgb(11_14_20/0.6)] backdrop:backdrop-blur-sm open:animate-[rise-in_0.35s_cubic-bezier(0.16,1,0.3,1)]`}
     >
       <div className="p-5 sm:p-7">
         <div className="flex items-center justify-between gap-4">
@@ -104,15 +102,23 @@ export function ChartReadyDialog() {
           </button>
         </div>
 
-        {stage.name === "teaser" ? (
+        {stage.name === "packs" ? (
+          <div className="mt-3">
+            <h2 className="display text-3xl">{c.packsTitle}</h2>
+            <p className="mt-2 leading-relaxed text-muted">{c.packsText}</p>
+            <div className="mt-6">
+              <PricingPlans compact />
+            </div>
+          </div>
+        ) : stage.name === "teaser" ? (
           stage.teaser.is_chart ? (
             <div className="mt-3">
               <AnalysisTeaser
                 teaser={stage.teaser}
                 imageUrl={chartUrl}
                 onUnlock={() => pay(stage.id)}
-                unlockLabel={c.unlock(formatEur(locale, OFFER_PRICE_EUR.trial))}
-                terms={c.unlockTerms(formatEur(locale, OFFER_PRICE_EUR.trial), formatEur(locale, OFFER_PRICE_EUR.monthly))}
+                unlockLabel={c.unlock}
+                terms={c.unlockTerms(formatEur(locale, OFFER_PRICE_EUR.starter))}
               />
             </div>
           ) : (
@@ -168,7 +174,7 @@ export function ChartReadyDialog() {
                   {c.previewCta}
                 </button>
                 <p className="mt-3 text-center text-sm text-muted">
-                  {c.previewTerms(formatEur(locale, OFFER_PRICE_EUR.trial), formatEur(locale, OFFER_PRICE_EUR.monthly))}
+                  {c.previewTerms(formatEur(locale, OFFER_PRICE_EUR.starter))}
                 </p>
               </>
             )}

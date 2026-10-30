@@ -1,5 +1,5 @@
 import type Stripe from "stripe";
-import { creditPaidInvoice } from "@/lib/billing-grants";
+import { creditPaidInvoice, grantLifetimeTo } from "@/lib/billing-grants";
 import { adminDb } from "@/lib/firebase-admin";
 import { getRequestUid } from "@/lib/server-auth";
 import { getStripe, withBillingErrors } from "@/lib/stripe";
@@ -24,18 +24,28 @@ async function handler(request: Request) {
   if (session.metadata?.uid !== uid) return Response.json({ error: text.sessionExpired }, { status: 403 });
   if (session.status !== "complete") return Response.json({ ok: false, pending: true });
 
-  const subscription = session.subscription as Stripe.Subscription | null;
-  const invoice = subscription?.latest_invoice as Stripe.Invoice | null;
-  if (!subscription || !invoice || invoice.status !== "paid") return Response.json({ ok: false, pending: true });
-
-  const trial = session.metadata?.offer === "trial";
-  await creditPaidInvoice(uid, { id: invoice.id!, trialStart: trial && invoice.billing_reason === "subscription_create" }, subscription.id);
-  if (trial) {
-    // Marks the trial as taken and records its end; the webhook adds the confirmation email.
+  // À vie: a one-off payment, no subscription.
+  if (session.mode === "payment") {
+    if (session.payment_status !== "paid") return Response.json({ ok: false, pending: true });
     const ref = adminDb.collection("users").doc(uid);
-    const user = await ref.get();
-    if (!user.get("trialSessionId")) {
-      await ref.update({ trialSessionId: session.id, trialEndsAt: subscription.trial_end ? subscription.trial_end * 1000 : null });
+    if ((await ref.get()).get("lifetimeSessionId") !== session.id) {
+      await grantLifetimeTo(uid);
+      await ref.update({ lifetimeSessionId: session.id });
+    }
+  } else {
+    const subscription = session.subscription as Stripe.Subscription | null;
+    const invoice = subscription?.latest_invoice as Stripe.Invoice | null;
+    if (!subscription || !invoice || invoice.status !== "paid") return Response.json({ ok: false, pending: true });
+    const offer = session.metadata?.offer;
+    const trial = offer === "trial";
+    await creditPaidInvoice(uid, { id: invoice.id!, trialStart: trial && invoice.billing_reason === "subscription_create" }, subscription.id, offer);
+    if (trial) {
+      // Marks the trial as taken and records its end; the webhook adds the confirmation email.
+      const ref = adminDb.collection("users").doc(uid);
+      const user = await ref.get();
+      if (!user.get("trialSessionId")) {
+        await ref.update({ trialSessionId: session.id, trialEndsAt: subscription.trial_end ? subscription.trial_end * 1000 : null });
+      }
     }
   }
   // What was paid, for the ad pixel's purchase event (the session id lets Meta drop duplicates).

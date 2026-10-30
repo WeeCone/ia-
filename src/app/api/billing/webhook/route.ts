@@ -1,8 +1,7 @@
 import type Stripe from "stripe";
 import { adminDb } from "@/lib/firebase-admin";
-import { creditPeriod, MONTHLY_CREDITS } from "@/lib/plans";
 import { attribution, recordPurchase } from "@/lib/stats";
-import { creditPaidInvoice } from "@/lib/billing-grants";
+import { creditPaidInvoice, grantLifetimeTo, subscriptionPlan } from "@/lib/billing-grants";
 import { appUrl, getStripe } from "@/lib/stripe";
 import { sendTrialEmail } from "@/lib/email";
 import { claimGuestSession } from "@/lib/guest-checkout";
@@ -18,25 +17,14 @@ async function updateUser(uid: string, data: Record<string, unknown>) {
   if ((await ref.get()).exists) await ref.update(data);
 }
 
-// Credits are always set to an absolute value, so Stripe retrying an event never double-credits.
 async function grantLifetime(session: Stripe.Checkout.Session) {
   const uid = session.metadata?.uid;
   if (!uid || session.metadata?.offer !== "lifetime" || session.payment_status !== "paid") return;
   const ref = userRef(uid);
-  const user = await ref.get();
-  if (!user.exists) return;
-  await ref.update({ plan: "lifetime", credits: MONTHLY_CREDITS, creditsPeriod: creditPeriod() });
-
-  // Upgrading from monthly: no more renewals. Its later subscription events are ignored for lifetime accounts.
-  const subscriptionId: string | undefined = user.get("stripeSubscriptionId");
-  if (subscriptionId) {
-    try {
-      await getStripe().subscriptions.update(subscriptionId, { cancel_at_period_end: true });
-    } catch (err) {
-      // Already cancelled or deleted: nothing left to stop.
-      console.error("Lifetime upgrade: could not stop subscription", subscriptionId, err);
-    }
-  }
+  // Once per payment: the return page may have opened it already.
+  if ((await ref.get()).get("lifetimeSessionId") === session.id) return;
+  await grantLifetimeTo(uid);
+  await ref.update({ lifetimeSessionId: session.id });
 }
 
 /** Audience stats: one purchase for the source that brought the buyer. Never blocks the webhook. */
@@ -87,27 +75,28 @@ export async function POST(request: Request) {
   }
 
   switch (event.type) {
-    // One-off lifetime purchase (async methods such as SEPA confirm later).
+    // One-off À vie purchase (async methods such as SEPA confirm later).
     case "checkout.session.completed":
     case "checkout.session.async_payment_succeeded":
       await grantLifetime(event.data.object);
       await markTrial(event.data.object, appUrl(request));
-      // Trial bought without an account: the account is made here if the buyer closed the page before it could.
+      // Bought without an account: the account is made here if the buyer closed the page before it could.
       if (event.data.object.metadata?.guest === "1") await claimGuestSession(event.data.object, appUrl(request));
       await countPurchase(event.data.object);
       break;
 
-    // Each paid monthly invoice (first payment and every renewal) resets the monthly credits. A trial's first invoice
-    // (the 0,99 € fee) opens the trial's credits only; the full quota comes with the first monthly payment.
+    // Each paid subscription invoice (first payment and every renewal) resets the plan's credits. A former trial's first
+    // invoice (the 0,99 € fee) opened the trial's credits only.
     case "invoice.paid": {
       const invoice = event.data.object;
       const details = invoice.parent?.subscription_details;
-      // No uid yet on a guest trial's first invoice: claimGuestSession credits it once the account exists.
+      // No uid yet on a guest purchase's first invoice: claimGuestSession credits it once the account exists.
       const uid = details?.metadata?.uid;
       if (!uid) break;
       const subscription = details.subscription;
-      const trialStart = details.metadata?.offer === "trial" && invoice.billing_reason === "subscription_create";
-      await creditPaidInvoice(uid, { id: invoice.id!, trialStart }, typeof subscription === "string" ? subscription : subscription.id);
+      const offer = details.metadata?.offer;
+      const trialStart = offer === "trial" && invoice.billing_reason === "subscription_create";
+      await creditPaidInvoice(uid, { id: invoice.id!, trialStart }, typeof subscription === "string" ? subscription : subscription.id, offer);
       break;
     }
 
@@ -116,12 +105,19 @@ export async function POST(request: Request) {
       const subscription = event.data.object;
       const uid = subscription.metadata.uid;
       if (!uid) break;
-      // Never let a subscription event touch an account that has since bought lifetime access.
-      if ((await userRef(uid).get()).get("plan") === "lifetime") break;
+      const user = await userRef(uid).get();
+      // Never let a subscription event touch an account that has since bought lifetime access, nor one that has moved
+      // to another subscription (Starter to Pro: the old one's cancellation must not close the new one).
+      if (user.get("plan") === "lifetime") break;
+      const current: string | undefined = user.get("stripeSubscriptionId");
+      if (current && current !== subscription.id) break;
       const active = event.type === "customer.subscription.updated" && ACTIVE_STATUSES.includes(subscription.status);
       // Losing the subscription keeps any credits left; they simply stop being refilled.
       const trialing = active && subscription.status === "trialing" && subscription.trial_end;
-      await updateUser(uid, { plan: active ? "monthly" : "none", trialEndsAt: trialing ? subscription.trial_end! * 1000 : null });
+      await updateUser(uid, {
+        plan: active ? subscriptionPlan(subscription.metadata.offer) : "none",
+        trialEndsAt: trialing ? subscription.trial_end! * 1000 : null,
+      });
       break;
     }
   }

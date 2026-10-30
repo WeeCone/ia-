@@ -1,142 +1,90 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { savePendingOffer } from "@/lib/offers-client";
 import { useI18n } from "@/i18n/client";
 import { formatEur } from "@/i18n/format";
-import { OFFER_PRICE_EUR, type Plan } from "@/lib/plans";
-import { useAuth } from "./auth-provider";
+import { OFFER_PRICE_EUR, type Offer, type Plan } from "@/lib/plans";
 import { BillingButton } from "./billing-button";
 
-type SoldOffer = "monthly" | "trial";
+const OFFERS: Offer[] = ["starter", "monthly", "lifetime"];
 
-/** What the trial costs and when, in order: today's fee, the subscription in 3 days if kept, cancelling any time. */
-export function TrialTimeline() {
-  const { t, locale } = useI18n();
-  const s = t.pricing.trialSteps;
-  const steps = [
-    { title: s.today(formatEur(locale, OFFER_PRICE_EUR.trial)), hint: s.todayHint, strong: true },
-    { title: s.later(formatEur(locale, OFFER_PRICE_EUR.monthly)), hint: s.laterHint, strong: false },
-    { title: s.anytime, hint: s.anytimeHint, strong: false },
-  ];
+/** Which packs an account can still buy: nothing on top of À vie, only À vie on top of Pro, an upgrade from Starter. */
+export function buyableOffers(plan: Plan | null | undefined): Offer[] {
+  if (plan === "lifetime") return [];
+  if (plan === "monthly") return ["lifetime"];
+  if (plan === "starter") return ["monthly", "lifetime"];
+  return OFFERS;
+}
+
+function Check() {
   return (
-    <div className="mt-5">
-      <ol className="relative space-y-4 before:absolute before:bottom-2 before:left-[5px] before:top-2 before:w-px before:bg-border">
-        {steps.map((step) => (
-          <li key={step.title} className="relative pl-6">
-            <span
-              className={`absolute left-0 top-1.5 size-[11px] rounded-full border-2 ${step.strong ? "border-accent bg-accent" : "border-border bg-card"}`}
-              aria-hidden
-            />
-            <p className="text-sm font-semibold leading-tight">{step.title}</p>
-            <p className="text-sm text-muted">{step.hint}</p>
-          </li>
-        ))}
-      </ol>
-      <p className="mt-4 text-xs text-muted">{s.email}</p>
-    </div>
+    <svg viewBox="0 0 16 16" className="mt-0.5 size-4 shrink-0 text-accent" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M3.5 8.5l3 3 6-7" />
+    </svg>
   );
 }
 
-/**
- * One offer on sale: the monthly subscription (the main offer) or the paid trial that turns into it.
- * Lifetime access is no longer sold; existing owners keep it.
- */
-function OfferCard({ offer, compact }: { offer: SoldOffer; compact: boolean }) {
-  const { user } = useAuth();
-  const router = useRouter();
-  const { t, locale, href } = useI18n();
+/** One pack: its price, what it holds, and the button that opens Stripe's payment (signed in or not). */
+export function PackCard({ offer, compact = false, current = false }: { offer: Offer; compact?: boolean; current?: boolean }) {
+  const { t, locale } = useI18n();
   const p = t.pricing;
-  const main = offer === "monthly";
-  const price = formatEur(locale, OFFER_PRICE_EUR[offer]);
-  const { name, unit, pitch, cta } = main
-    ? { name: t.common.monthly, unit: p.ttcMonthly, pitch: p.monthlyPitch, cta: p.monthlyCta }
-    : { name: t.common.trial, unit: p.ttcTrial, pitch: p.trialPitch, cta: p.trialCta(price) };
-  const button = `${main ? "btn-primary" : "btn-secondary"} w-full ${compact ? "mt-6" : "mt-8"}`;
+  const pack = p.packs[offer];
+  const name = t.common[offer];
+  const pro = offer === "monthly";
+  const lifetime = offer === "lifetime";
 
   return (
-    <div className={`panel relative flex flex-col ${main ? "border-brand/50 ring-1 ring-brand/30" : ""} ${compact ? "p-6" : "p-8"}`}>
-      <h3 className="display text-2xl">{name}</h3>
-      <p className={`flex flex-wrap items-baseline gap-x-2 ${compact ? "mt-4" : "mt-6"}`}>
-        <span className={`display ${compact ? "text-5xl" : "text-6xl"} ${main ? "" : "text-accent"}`}>{price}</span>
-        <span className="whitespace-nowrap text-sm text-muted">{unit}</span>
+    <div
+      className={`panel relative flex flex-col ${pro ? "border-brand/60 ring-1 ring-brand/40" : lifetime ? "border-amber-400/40" : ""} ${compact ? "p-5" : "p-7"}`}
+    >
+      {pro && (
+        <span className="label absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-brand px-3 py-1 text-background">
+          {p.recommended}
+        </span>
+      )}
+      <h3 className={`display ${compact ? "text-xl" : "text-2xl"}`}>{name}</h3>
+      <p className={`flex flex-wrap items-baseline gap-x-2 ${compact ? "mt-3" : "mt-5"}`}>
+        <span className={`display ${compact ? "text-4xl" : "text-5xl"} ${lifetime ? "text-warn" : ""}`}>{formatEur(locale, OFFER_PRICE_EUR[offer])}</span>
+        <span className="whitespace-nowrap text-sm text-muted">{lifetime ? p.oneOff : p.perMonth}</span>
       </p>
-      <p className="mt-3 font-medium leading-snug">{pitch}</p>
-      {main ? <p className="mt-1 text-sm text-muted">{p.monthlyNote}</p> : <TrialTimeline />}
-      <div className="mt-auto">
-        {/* The trial is paid straight away, signed in or not; the subscription asks for an account first. */}
-        {user || offer === "trial" ? (
-          <BillingButton route="checkout" offer={offer} block className={button}>
-            {cta}
-          </BillingButton>
+      <p className="mt-3 font-medium leading-snug">{pack.pitch}</p>
+      <ul className={`grid gap-2.5 ${compact ? "mt-4" : "mt-5"}`}>
+        {pack.features.map((feature) => (
+          <li key={feature} className="flex gap-2.5 text-sm text-foreground/85">
+            <Check />
+            {feature}
+          </li>
+        ))}
+      </ul>
+      <div className={`mt-auto ${compact ? "pt-5" : "pt-7"}`}>
+        {current ? (
+          <p className="rounded-xl border border-border py-3 text-center text-sm text-muted">{p.current}</p>
         ) : (
-          <button
-            type="button"
-            onClick={() => {
-              savePendingOffer(offer);
-              router.push(href("/auth/signup"));
-            }}
-            className={button}
-          >
-            {cta}
-          </button>
+          <BillingButton route="checkout" offer={offer} block className={`${pro ? "btn-primary" : "btn-secondary"} w-full`}>
+            {p.cta(name)}
+          </BillingButton>
         )}
+        <p className="mt-2 text-center text-xs text-muted">{pack.note}</p>
       </div>
     </div>
   );
 }
 
 /**
- * The offers and what they include. `compact` is the dashboard picker; an account that already pays sees nothing to buy,
- * and one that used its trial sees the subscription only. Logged out, the choice is remembered and checkout opens right
- * after sign-up.
+ * The three packs. `compact` is the dashboard picker: an account sees the packs it can still buy (an upgrade from
+ * Starter, À vie from Pro, nothing on top of À vie). Any pack can be bought signed out: Stripe asks for the email.
  */
-export function PricingPlans({
-  compact = false,
-  currentPlan = null,
-  trialUsed = false,
-  lead = "monthly",
-}: {
-  compact?: boolean;
-  currentPlan?: Plan | null;
-  trialUsed?: boolean;
-  /** Which offer comes first: the trial when the visitor has a chart waiting to be analysed. */
-  lead?: SoldOffer;
-}) {
+export function PricingPlans({ compact = false, currentPlan = null }: { compact?: boolean; currentPlan?: Plan | null }) {
   const { t } = useI18n();
-  if (currentPlan === "monthly" || currentPlan === "lifetime") return null;
-  const offers: SoldOffer[] = trialUsed ? ["monthly"] : lead === "trial" ? ["trial", "monthly"] : ["monthly", "trial"];
+  const offers = compact ? buyableOffers(currentPlan) : OFFERS;
+  if (!offers.length) return null;
   return (
     <div>
-      {compact ? (
-        <div className={offers.length > 1 ? "" : "mx-auto max-w-md"}>
-          <div className={`grid gap-4 ${offers.length > 1 ? "md:grid-cols-2" : ""}`}>
-            {offers.map((offer) => (
-              <OfferCard key={offer} offer={offer} compact />
-            ))}
-          </div>
-          <p className="mt-4 text-center text-sm text-muted">{t.pricing.compactNote}</p>
-        </div>
-      ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {offers.map((offer) => (
-            <OfferCard key={offer} offer={offer} compact={false} />
-          ))}
-          <div className="panel p-6 sm:p-8 md:col-span-2 lg:col-span-1">
-            <h3 className="display text-lg">{t.pricing.includedTitle}</h3>
-            <ul className="mt-4 grid gap-3">
-              {t.pricing.included.map((feature) => (
-                <li key={feature} className="flex gap-3 text-sm text-muted">
-                  <svg viewBox="0 0 16 16" className="mt-0.5 size-4 shrink-0 text-accent" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                    <path d="M3.5 8.5l3 3 6-7" />
-                  </svg>
-                  {feature}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
+      <div className={`grid gap-5 ${compact ? "pt-3" : "gap-6 pt-3"} ${offers.length === 3 ? "md:grid-cols-3" : offers.length === 2 ? "md:grid-cols-2" : "mx-auto max-w-md"}`}>
+        {offers.map((offer) => (
+          <PackCard key={offer} offer={offer} compact={compact} current={!compact && offer === currentPlan} />
+        ))}
+      </div>
+      <p className="mt-4 text-center text-sm text-muted">{t.pricing.compactNote}</p>
     </div>
   );
 }
