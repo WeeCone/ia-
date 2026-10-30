@@ -5,7 +5,7 @@ import type { ChartAnalysis } from "@/lib/analysis";
 import { auth } from "@/lib/firebase";
 import { checkCapture } from "@/lib/capture-check";
 import { prepareImage } from "@/lib/image";
-import { openOffers, takeAutoAnalyze } from "@/lib/offers-client";
+import { openOffers, takeAutoAnalyze, takePreview } from "@/lib/offers-client";
 import { clearPendingChart, readPendingChart, savePendingChart } from "@/lib/pending-chart";
 import { OFFER_PRICE_EUR } from "@/lib/plans";
 import { useI18n } from "@/i18n/client";
@@ -71,6 +71,8 @@ export function ChartUploader({
   const handedOff = useRef(false);
   // "Analyse" was clicked on the landing page before paying: run the waiting chart once, as soon as it can.
   const autoRun = useRef(false);
+  // The analysis previewed on the landing page, to unlock rather than run again.
+  const previewId = useRef<string | null>(null);
   const { t, locale } = useI18n();
   const u = t.uploader;
 
@@ -104,9 +106,10 @@ export function ChartUploader({
   // A chart dropped on the landing page before signing in.
   useEffect(() => {
     const requested = takeAutoAnalyze();
+    previewId.current = takePreview();
     readPendingChart().then((pending) => {
       if (!pending) return;
-      autoRun.current = requested;
+      autoRun.current = requested || previewId.current !== null;
       pick(pending);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on mount
@@ -151,11 +154,14 @@ export function ChartUploader({
       if (testMode) body.set("test", "1");
       // The report is written in the visitor's language.
       body.set("locale", locale);
-      const response = await fetch("/api/analyze", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${await user.getIdToken()}`, "X-Locale": locale },
-        body,
-      });
+      const headers = { Authorization: `Bearer ${await user.getIdToken()}`, "X-Locale": locale };
+      // The previewed analysis is unlocked as it is; if it can't be (expired, already used), the chart runs afresh.
+      const claimId = previewId.current;
+      previewId.current = null;
+      let response = claimId
+        ? await fetch("/api/preview/claim", { method: "POST", headers: { ...headers, "Content-Type": "application/json" }, body: JSON.stringify({ id: claimId }) })
+        : null;
+      if (!response || response.status === 404 || response.status === 410) response = await fetch("/api/analyze", { method: "POST", headers, body });
       const data = await response.json().catch(() => ({}));
       // No JSON back usually means the hosting cut the request (time limit): keep the status so it can be traced.
       if (!response.ok) throw new Error(data.error ?? `${u.failed} (HTTP ${response.status})`);

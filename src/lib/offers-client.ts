@@ -84,3 +84,22 @@ export function takeAutoAnalyze() {
     return false;
   }
 }
+
+// A chart previewed on the landing page: once the trial is paid, the dashboard unlocks that same analysis.
+const PREVIEW_KEY = "scanzivo:preview";
+
+export function savePreview(id: string) {
+  try {
+    sessionStorage.setItem(PREVIEW_KEY, id);
+  } catch {}
+}
+
+export function takePreview() {
+  try {
+    const id = sessionStorage.getItem(PREVIEW_KEY);
+    sessionStorage.removeItem(PREVIEW_KEY);
+    return id;
+  } catch {
+    return null;
+  }
+}
