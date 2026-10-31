@@ -328,6 +328,13 @@ export const es: Dict = {
     shown: (percent: number) => `Estás viendo alrededor del ${percent} % de tu análisis`,
     shownHint: "El resto está listo: se desbloquea con un pack.",
     continues: "Resto del informe",
+    seePacks: "Ver los packs",
+    unavailableTitle: { limit: "Lecturas gratuitas de hoy usadas", budget: "No quedan lecturas gratuitas hoy", error: "La lectura gratuita no se ha podido hacer" },
+    unavailableText: {
+      limit: "Ya has tenido tus 2 lecturas gratuitas de hoy. Vuelven mañana; con un pack, analizas este gráfico ahora mismo.",
+      budget: "Las lecturas gratuitas de hoy se han agotado. Vuelven mañana; con un pack, analizas este gráfico ahora mismo.",
+      error: "Un problema técnico por nuestra parte. Vuelve a intentarlo en un momento o analiza este gráfico con un pack.",
+    },
   },
   offerDialog: {
     title: "Elige tu pack",

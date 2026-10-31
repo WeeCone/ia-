@@ -13,7 +13,12 @@ import { useAuth } from "./auth-provider";
 import { PricingPlans } from "./pricing-plans";
 import { preloadStripe } from "./checkout-dialog";
 
-type Stage = { name: "ready" } | { name: "reading" } | { name: "teaser"; id: string | null; teaser: PreviewTeaser } | { name: "packs" };
+type Stage =
+  | { name: "ready" }
+  | { name: "reading" }
+  | { name: "teaser"; id: string | null; teaser: PreviewTeaser }
+  | { name: "unavailable"; reason: "limit" | "budget" | "error" }
+  | { name: "packs" };
 
 /**
  * A visitor without an account dropped a chart on the landing page: it is shown back, ready, with the button that
@@ -75,18 +80,18 @@ export function ChartReadyDialog() {
     try {
       const body = new FormData();
       body.set("image", image);
-      const response = await fetch("/api/preview", { method: "POST", headers: { "X-Locale": locale }, body });
+      // Signed in, the request says who: the admin tests without the daily limit.
+      const headers: Record<string, string> = { "X-Locale": locale };
+      if (user) headers.Authorization = `Bearer ${await user.getIdToken()}`;
+      const response = await fetch("/api/preview", { method: "POST", headers, body });
       const data = await response.json().catch(() => ({}));
       if (response.ok && data.teaser) return setStage({ name: "teaser", id: data.id ?? null, teaser: data.teaser });
-      // Limits reached or the reading failed: the paid path still works.
-      if (data.fallback || !response.ok) {
-        setStage({ name: "ready" });
-        if (data.fallback) return pay(null);
-        setError(data.error ?? t.uploader.failed);
-      }
-    } catch {
+      // No free reading this time: say why, with the packs and (after an error) another try a click away.
+      if (data.fallback) return setStage({ name: "unavailable", reason: data.reason === "limit" || data.reason === "budget" ? data.reason : "error" });
       setStage({ name: "ready" });
-      pay(null);
+      setError(data.error ?? t.uploader.failed);
+    } catch {
+      setStage({ name: "unavailable", reason: "error" });
     }
   }
 
@@ -104,7 +109,24 @@ export function ChartReadyDialog() {
           </button>
         </div>
 
-        {stage.name === "packs" ? (
+        {stage.name === "unavailable" ? (
+          <div className="mt-3">
+            {chartUrl && (
+              // eslint-disable-next-line @next/next/no-img-element -- a local data URL, nothing to optimise
+              <img src={chartUrl} alt={c.alt} className="max-h-[30dvh] w-full rounded-2xl border border-border bg-card object-contain" />
+            )}
+            <h2 className="display mt-6 text-3xl">{c.unavailableTitle[stage.reason]}</h2>
+            <p className="mt-2 leading-relaxed text-muted">{c.unavailableText[stage.reason]}</p>
+            <button type="button" onClick={() => pay(null)} className="btn-primary mt-6 w-full py-3.5 text-base">
+              {c.seePacks}
+            </button>
+            {stage.reason === "error" && (
+              <button type="button" onClick={read} className="btn-secondary mt-3 w-full">
+                {t.uploader.retry}
+              </button>
+            )}
+          </div>
+        ) : stage.name === "packs" ? (
           <div className="mt-3">
             <h2 className="display text-3xl">{c.packsTitle}</h2>
             <p className="mt-2 leading-relaxed text-muted">{c.packsText}</p>

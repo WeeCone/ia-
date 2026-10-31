@@ -54,19 +54,30 @@ function visitorKey(request: Request) {
   return createHash("sha256").update(`${today()}:${ip}`).digest("hex").slice(0, 32);
 }
 
-/** Reserves one preview for this visitor today, within the day's budget. False when either limit is reached. */
-export async function reservePreview(request: Request) {
+/**
+ * Reserves one preview for this visitor today, within the day's budget: "limit" when the visitor has used theirs,
+ * "budget" when the day's spend is reached.
+ */
+export async function reservePreview(request: Request): Promise<"ok" | "limit" | "budget"> {
   const visitor = adminDb.collection("previewLimits").doc(visitorKey(request));
   const day = adminDb.collection("previewBudget").doc(today());
   return adminDb.runTransaction(async (tx) => {
     const [visitorSnap, daySnap] = await Promise.all([tx.get(visitor), tx.get(day)]);
-    if ((visitorSnap.get("count") ?? 0) >= PER_VISITOR_PER_DAY) return false;
+    if ((visitorSnap.get("count") ?? 0) >= PER_VISITOR_PER_DAY) return "limit";
     // Counts the worst case of the call about to run; the real cost replaces it once known.
-    if ((daySnap.get("spendEur") ?? 0) + PREVIEW_MAX_COST_EUR > DAILY_BUDGET_EUR) return false;
+    if ((daySnap.get("spendEur") ?? 0) + PREVIEW_MAX_COST_EUR > DAILY_BUDGET_EUR) return "budget";
     tx.set(visitor, { count: FieldValue.increment(1), day: today() }, { merge: true });
     tx.set(day, { count: FieldValue.increment(1) }, { merge: true });
-    return true;
+    return "ok";
   });
+}
+
+/** A free reading that failed, kept for the admin "Analyses" tab with the other failures (no visitor identity). */
+export function recordPreviewError(detail: string) {
+  return adminDb
+    .collection("analysisErrors")
+    .add({ uid: "lecture-gratuite", seconds: 0, detail: detail.slice(0, 500), createdAt: FieldValue.serverTimestamp() })
+    .catch(() => {});
 }
 
 export function recordPreviewSpend(costEur: number) {

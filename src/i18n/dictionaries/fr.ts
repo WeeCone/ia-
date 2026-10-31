@@ -327,6 +327,13 @@ export const fr = {
     shown: (percent: number) => `Vous voyez environ ${percent} % de votre analyse`,
     shownHint: "La suite est prête : elle se débloque avec un pack.",
     continues: "Suite du rapport",
+    seePacks: "Voir les packs",
+    unavailableTitle: { limit: "Lectures gratuites du jour utilisées", budget: "Plus de lecture gratuite aujourd'hui", error: "La lecture gratuite n'a pas pu se faire" },
+    unavailableText: {
+      limit: "Vous avez déjà eu vos 2 lectures gratuites aujourd'hui. Elles reviennent demain ; avec un pack, vous analysez ce graphique tout de suite.",
+      budget: "Les lectures gratuites du jour sont toutes parties. Elles reviennent demain ; avec un pack, vous analysez ce graphique tout de suite.",
+      error: "Un souci technique de notre côté. Réessayez dans un instant, ou analysez ce graphique avec un pack.",
+    },
   },
   offerDialog: {
     title: "Choisissez votre pack",
