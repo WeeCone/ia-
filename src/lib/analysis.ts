@@ -37,12 +37,12 @@ export const ChartPreview = z.object({
   is_chart: z.boolean().describe("false si l'image n'est pas un graphique de prix exploitable."),
   asset: z.string().describe("Actif identifié (ex. BTC/USDT), ou « Inconnu »."),
   timeframe: z.string().describe("Unité de temps (ex. 4H), ou « Inconnue »."),
-  trend: z.enum(["haussière", "baissière", "neutre"]),
-  confidence: z.object({
-    level: z.enum(["faible", "moyenne", "élevée"]),
-    reason: z.string().describe("Pourquoi ce niveau de confiance, en une phrase."),
-  }),
-  summary: z.string().describe("Synthèse de la structure du marché en 2-3 phrases, sans plan de trade ni recommandation."),
+  confidence: z.enum(["faible", "moyenne", "élevée"]).describe("Confiance dans la lecture de ce graphique."),
+  hook: z
+    .string()
+    .describe(
+      "2 ou 3 phrases sur ce que tu as repéré sur ce graphique et la question qu'il pose, SANS révéler la tendance, la direction probable, aucun prix ni niveau chiffré, aucun verdict.",
+    ),
   patterns_count: z.number().describe("Nombre de figures chartistes ou signaux d'indicateurs visibles."),
   level_marks: z
     .array(z.object({ kind: z.enum(["support", "resistance"]), y: z.number().describe("Position verticale : 0 = bord haut de l'image, 1 = bord bas.") }))

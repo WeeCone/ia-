@@ -303,7 +303,10 @@ export const es: Dict = {
     analysing: "La IA está leyendo tu gráfico…",
     keepOpen: "Tarda entre 30 y 60 segundos. Mantén esta ventana abierta.",
     freeLabel: "Lectura gratuita",
-    seen: "Lo que ve la IA",
+    seen: "Lo que ha detectado la IA",
+    statLevels: "niveles clave detectados",
+    statSignals: "figuras y señales",
+    statScenario: "escenario preferente",
     levelsHidden: (count: number) => `${count} nivel${count > 1 ? "es" : ""} detectado${count > 1 ? "s" : ""} en tu captura. Sus precios forman parte del plan.`,
     lockedTitle: "El plan está listo. Solo falta desbloquearlo.",
     lockedItems: (locked: { levels: number; patterns: number; macro: boolean }) =>

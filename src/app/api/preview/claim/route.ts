@@ -16,11 +16,6 @@ export const maxDuration = 120;
 
 const error = (message: string, status: number) => Response.json({ error: message }, { status });
 
-/** The first reading the visitor saw, handed to the full analysis so the report stays consistent with it. */
-const continuity = (preview: ChartPreview) =>
-  `Une première lecture de ce graphique a déjà été montrée au client : tendance ${preview.trend}, « ${preview.summary} ». ` +
-  "Reste cohérent avec elle, sauf si le graphique montre clairement autre chose ; dans ce cas, dis pourquoi dans la synthèse.";
-
 /**
  * After payment: the full report is made from the screenshot the visitor previewed, for one credit like any analysis
  * (on the plan's model, with the news side for Pro and À vie). 404 / 410 tell the dashboard to run the chart afresh.
@@ -57,7 +52,7 @@ export async function POST(request: Request) {
   const macroPromise = hasNewsSide(userData.plan) ? macroContext(image, imageType, locale) : Promise.resolve({ report: null, costEur: 0 });
   let result: Awaited<ReturnType<typeof analyzeChart>>;
   try {
-    result = await analyzeChart(image, imageType, continuity(preview), locale, userData.plan === "starter" ? STARTER_MODEL : undefined);
+    result = await analyzeChart(image, imageType, undefined, locale, userData.plan === "starter" ? STARTER_MODEL : undefined);
   } catch (err) {
     const macro = await macroPromise;
     const spent = macro.costEur + (err instanceof AnalysisRefusedError ? err.costEur : 0);

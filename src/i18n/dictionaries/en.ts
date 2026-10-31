@@ -303,7 +303,10 @@ export const en: Dict = {
     analysing: "The AI is reading your chart…",
     keepOpen: "It takes 30 to 60 seconds. Keep this window open.",
     freeLabel: "Free reading",
-    seen: "What the AI sees",
+    seen: "What the AI spotted",
+    statLevels: "key levels spotted",
+    statSignals: "patterns and signals",
+    statScenario: "preferred scenario",
     levelsHidden: (count: number) => `${count} level${count > 1 ? "s" : ""} spotted on your screenshot. Their prices are part of the plan.`,
     lockedTitle: "The plan is ready. It just needs unlocking.",
     lockedItems: (locked: { levels: number; patterns: number; macro: boolean }) =>

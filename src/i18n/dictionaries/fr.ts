@@ -302,7 +302,10 @@ export const fr = {
     analysing: "L'IA lit votre graphique…",
     keepOpen: "Comptez 30 à 60 secondes. Gardez cette fenêtre ouverte.",
     freeLabel: "Lecture gratuite",
-    seen: "Ce que l'IA voit",
+    seen: "Ce que l'IA a repéré",
+    statLevels: "niveaux clés repérés",
+    statSignals: "figures et signaux",
+    statScenario: "scénario privilégié",
     levelsHidden: (count: number) => `${count} niveau${count > 1 ? "x" : ""} repéré${count > 1 ? "s" : ""} sur votre capture. Leurs prix font partie du plan.`,
     lockedTitle: "Le plan est prêt. Il reste à le débloquer.",
     lockedItems: (locked: { levels: number; patterns: number; macro: boolean }) =>

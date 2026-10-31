@@ -3,12 +3,6 @@
 import { useI18n } from "@/i18n/client";
 import type { PreviewTeaser } from "@/lib/preview-types";
 
-const trendStyle = {
-  haussière: "border-bull/40 bg-bull/10 text-bull",
-  baissière: "border-bear/40 bg-bear/10 text-bear",
-  neutre: "border-border text-muted",
-} as const;
-
 const confidenceStyle = {
   faible: "border-bear/40 bg-bear/10 text-bear",
   moyenne: "border-brand/40 bg-brand/10 text-brand",
@@ -25,7 +19,7 @@ function LockIcon({ className = "size-4" }: { className?: string }) {
 }
 
 /** A section of the report still to come: its real title, then empty lines under a blur. */
-function LockedSection({ title, rows, tone }: { title: string; rows: number; tone?: "bull" | "bear" }) {
+function LockedSection({ title, rows }: { title: string; rows: number }) {
   return (
     <section className="border-t border-border px-5 py-4">
       <h3 className="label flex items-center gap-2 text-muted">
@@ -33,7 +27,6 @@ function LockedSection({ title, rows, tone }: { title: string; rows: number; ton
         {title}
       </h3>
       <div aria-hidden className="mt-3 select-none space-y-2 blur-[5px]">
-        {tone && <span className={`block h-6 w-32 rounded-md ${tone === "bull" ? "bg-bull/60" : "bg-bear/60"}`} />}
         {Array.from({ length: rows }, (_, index) => (
           <span key={index} className="block h-4 rounded bg-foreground/20" style={{ width: `${92 - ((index * 17) % 40)}%` }} />
         ))}
@@ -43,9 +36,9 @@ function LockedSection({ title, rows, tone }: { title: string; rows: number; ton
 }
 
 /**
- * The beginning of a previewed report, laid out like the report itself: the market, its trend, the AI's confidence and
- * its reading of the structure, then the sections still to come under a blur. Those are empty shapes: the plan never
- * reached the browser. The share shown is measured on the report, not set by hand.
+ * The beginning of a previewed report, laid out like the report itself: the market, the AI's confidence and what it
+ * spotted on the chart, never the result. The trend, the plan and the levels' prices come with a pack; the sections
+ * below are empty shapes under a blur, as none of it exists before payment.
  */
 export function AnalysisTeaser({
   teaser,
@@ -74,14 +67,13 @@ export function AnalysisTeaser({
             {r.title} · {teaser.asset} · {teaser.timeframe}
           </span>
           <span className="flex flex-wrap gap-2">
-            <span className={`chip ${trendStyle[teaser.trend]}`}>
-              {r.trend} {t.enums.trend[teaser.trend]}
+            {/* The trend is the result: it stays locked like the rest. */}
+            <span className="chip flex items-center gap-1.5 border-border text-muted">
+              {r.trend} <LockIcon className="size-3" />
             </span>
-            {teaser.confidence && (
-              <span className={`chip ${confidenceStyle[teaser.confidence.level]}`}>
-                {r.confidence} {t.enums.confidence[teaser.confidence.level]}
-              </span>
-            )}
+            <span className={`chip ${confidenceStyle[teaser.confidence]}`}>
+              {r.confidence} {t.enums.confidence[teaser.confidence]}
+            </span>
           </span>
         </header>
 
@@ -111,8 +103,24 @@ export function AnalysisTeaser({
 
         <section className="px-5 py-4">
           <h2 className="display text-3xl">{teaser.asset}</h2>
-          <p className="mt-3 text-lg leading-relaxed">{teaser.summary}</p>
-          {teaser.confidence?.reason && <p className="mt-2 text-sm text-muted">{teaser.confidence.reason}</p>}
+          <h3 className="label mt-4 text-muted">{c.seen}</h3>
+          <p className="mt-2 text-lg leading-relaxed">{teaser.hook}</p>
+          {/* What the full report holds for this chart, counted, never shown. */}
+          <dl className="mt-4 grid grid-cols-3 gap-2 text-center">
+            {[
+              [teaser.locked.levels, c.statLevels],
+              [teaser.locked.patterns, c.statSignals],
+              [1, c.statScenario],
+            ].map(([count, label]) => (
+              <div key={String(label)} className="flex flex-col-reverse rounded-xl border border-border bg-background/60 px-2 py-3">
+                <dt className="mt-1 text-xs leading-tight text-muted">{label}</dt>
+                <dd className="display flex items-center justify-center gap-1.5 text-2xl">
+                  {count}
+                  <LockIcon className="size-3.5 text-muted" />
+                </dd>
+              </div>
+            ))}
+          </dl>
         </section>
 
         {/* Where the free part ends: how much of the report it was, measured. */}
@@ -134,7 +142,7 @@ export function AnalysisTeaser({
         </div>
 
         <div aria-label={c.lockedAria} className="relative">
-          <LockedSection title={r.plan} rows={3} tone={teaser.trend === "baissière" ? "bear" : "bull"} />
+          <LockedSection title={r.plan} rows={3} />
           <LockedSection title={`${r.resistances} · ${r.supports}`} rows={2} />
           <LockedSection title={r.alternative} rows={2} />
           <LockedSection title={r.macro.title} rows={2} />

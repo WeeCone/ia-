@@ -30,17 +30,16 @@ const countWords = (text: string) => text.split(/\s+/).filter(Boolean).length;
  */
 const TYPICAL_LOCKED_WORDS = 260;
 
-/** The beginning of the report, as a visitor sees it for free: the market, its trend, the AI's confidence and its reading. */
+/** The beginning of the report, as a visitor sees it for free: the market, the AI's confidence and what it spotted. */
 export function teaserOf(preview: ChartPreview): PreviewTeaser {
-  const shown = [preview.asset, preview.timeframe, preview.trend, preview.confidence.level, preview.summary].map(countWords).reduce((a, b) => a + b, 0);
+  const shown = [preview.asset, preview.timeframe, preview.confidence, preview.hook].map(countWords).reduce((a, b) => a + b, 0);
   const marks = preview.level_marks.filter((mark) => Number.isFinite(mark.y) && mark.y >= 0 && mark.y <= 1);
   return {
     is_chart: preview.is_chart,
     asset: preview.asset,
     timeframe: preview.timeframe,
-    trend: preview.trend,
     confidence: preview.confidence,
-    summary: preview.summary,
+    hook: preview.hook,
     marks,
     locked: { levels: marks.length, patterns: Math.max(0, Math.round(preview.patterns_count)), macro: preview.is_chart },
     shownPercent: Math.max(1, Math.round((shown / (shown + TYPICAL_LOCKED_WORDS)) * 100)),

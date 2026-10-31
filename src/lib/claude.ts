@@ -83,9 +83,10 @@ export async function analyzeChart(
 /** The free reading's model: light, and asked for the visible part only (see ChartPreview). */
 const PREVIEW_MODEL = "claude-sonnet-5-5";
 
-const PREVIEW_PROMPT = `Tu es un analyste technique. On te fournit la capture d'écran d'un graphique de prix.
-Donne seulement une première lecture : l'actif, l'unité de temps, la tendance, ta confiance et une synthèse de la structure du marché en 2 ou 3 phrases, à partir de ce qui est visible. Ne donne aucun plan de trade, aucune entrée, aucun stop, aucun objectif, aucune recommandation.
-Compte les figures chartistes ou signaux d'indicateurs visibles, et place les principaux supports et résistances sur l'image (y de 0 en haut à 1 en bas de l'image entière), en t'appuyant sur les graduations de l'axe des prix.
+const PREVIEW_PROMPT = `Tu es un analyste technique. On te fournit la capture d'écran d'un graphique de prix. Le trader verra gratuitement ta première lecture ; le résultat complet (tendance, scénarios, verdict, plan chiffré) lui sera donné ensuite.
+Écris l'accroche (hook) : en 2 ou 3 phrases, dis concrètement ce que tu as repéré sur CE graphique (zones testées plusieurs fois, figure en formation, signal d'un indicateur affiché, volume, compression du prix…) et la question que cela pose pour la suite.
+Interdit dans l'accroche : la tendance ou la direction probable (haussier, baissier, acheteur, vendeur, hausse, baisse, rebond, cassure à la hausse ou à la baisse…), tout prix ou niveau chiffré, tout verdict ou conseil, toute promesse. Reste factuel et précis : pas de superlatifs, pas d'urgence, pas de formule publicitaire.
+Indique l'actif, l'unité de temps, ta confiance dans la lecture, le nombre de figures ou signaux visibles, et place les principaux supports et résistances sur l'image (y de 0 en haut à 1 en bas de l'image entière) en t'appuyant sur les graduations de l'axe des prix.
 Si l'image n'est pas un graphique de prix, mets is_chart à false et remplis le reste de façon minimale.`;
 
 export async function previewChart(imageBase64: string, mediaType: AllowedImageType, locale: Locale) {
