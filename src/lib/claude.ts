@@ -84,7 +84,7 @@ export async function analyzeChart(
 const PREVIEW_MODEL = "claude-haiku-5-5";
 
 const PREVIEW_PROMPT = `Tu es un analyste technique. On te fournit la capture d'écran d'un graphique de prix. Le trader verra gratuitement cette première lecture ; le résultat (tendance, scénarios, probabilités, verdict, plan chiffré) lui sera donné ensuite.
-Écris un résumé (summary) de 2 phrases sur le contexte visible, puis un texte (stakes) de 4 à 5 phrases sur ce qui se joue sur CE graphique : zones testées, figure en formation, signaux des indicateurs affichés, volume, compression du prix… et la question que cela pose pour la suite. Sois concret et précis sur ce graphique-là.
+Écris un résumé (summary) de 1 ou 2 phrases courtes sur le contexte visible, puis un texte (stakes) de 2 ou 3 phrases courtes sur ce qui se joue sur CE graphique : le point clé repéré (zone testée, figure en formation, signal d'un indicateur affiché, volume…) et la question que cela pose pour la suite. Sois concret et bref : c'est un avant-goût, l'analyse complète vient ensuite.
 Interdit dans ces deux textes : la tendance ou la direction probable (haussier, baissier, acheteur, vendeur, hausse, baisse, rebond, cassure à la hausse ou à la baisse…), tout prix ou niveau chiffré, tout verdict ou conseil, toute promesse. Pas de superlatifs, pas d'urgence, pas de formule publicitaire.
 Indique l'actif, l'unité de temps, ta confiance dans la lecture, le nombre de figures ou signaux visibles, et place les principaux supports et résistances sur l'image (y de 0 en haut à 1 en bas de l'image entière) en t'appuyant sur les graduations de l'axe des prix.
 Si l'image n'est pas un graphique de prix, mets is_chart à false et remplis le reste de façon minimale.`;

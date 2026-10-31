@@ -277,7 +277,7 @@ export function ChartUploader({
             {u.change}
           </button>
         </div>
-        <div className="theme-dark bg-background p-5 text-foreground sm:p-7">
+        <div className="mx-auto max-w-3xl p-5 sm:p-8">
           {reading.kind === "teaser" ? (
             reading.teaser.is_chart ? (
               <AnalysisTeaser
@@ -324,7 +324,8 @@ export function ChartUploader({
           <span className="whitespace-nowrap font-mono text-[11px] text-muted">{u.cost}</span>
         </div>
 
-        <div className="grid gap-5 p-5 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+        {/* No pack yet: one centred column, the chart in the middle and the free reading below it. */}
+        <div className={offerFirst ? "mx-auto grid max-w-3xl gap-5 p-5 sm:p-8" : "grid gap-5 p-5 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]"}>
           {/* Drop zone / preview */}
           <div
             onDragOver={(event) => {
@@ -337,7 +338,7 @@ export function ChartUploader({
               setDragging(false);
               pick(event.dataTransfer.files[0]);
             }}
-            className={`relative grid min-h-64 place-items-center overflow-hidden rounded-xl border-2 transition-all ${preview ? "" : "border-dashed"} ${
+            className={`relative grid ${offerFirst ? "min-h-80" : "min-h-64"} place-items-center overflow-hidden rounded-xl border-2 transition-all ${preview ? "" : "border-dashed"} ${
               dragging
                 ? "border-accent bg-accent/10"
                 : highlight === "zone"
@@ -374,7 +375,9 @@ export function ChartUploader({
           </div>
 
           {/* Context + action */}
-          <div className="flex flex-col gap-4">
+          <div className={`flex flex-col gap-4 ${offerFirst ? "text-center" : ""}`}>
+            {!offerFirst && (
+              <>
             <label className="field">
               <span>{u.context}</span>
               <input
@@ -414,6 +417,8 @@ export function ChartUploader({
                 {u.takePhoto}
               </button>
             </div>
+              </>
+            )}
             {file && advice && advice.length > 0 && (
               <div className="rounded-xl border border-amber-400/30 bg-amber-400/5 p-3 text-xs leading-relaxed">
                 <p className="font-semibold text-warn">{u.checkTitle}</p>

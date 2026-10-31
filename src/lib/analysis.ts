@@ -40,11 +40,11 @@ export const ChartPreview = z.object({
   confidence: z.enum(["faible", "moyenne", "élevée"]).describe("Confiance dans la lecture de ce graphique."),
   summary: z
     .string()
-    .describe("Résumé en 2 phrases : l'actif, l'unité de temps et le contexte visible (où se trouve le prix, ce qui s'est passé récemment), SANS tendance ni direction, sans prix chiffré, sans verdict."),
+    .describe("Résumé en 1 ou 2 phrases courtes : le contexte visible (où se trouve le prix, ce qui s'est passé récemment), SANS tendance ni direction, sans prix chiffré, sans verdict."),
   stakes: z
     .string()
     .describe(
-      "4 à 5 phrases sur ce qui se joue sur ce graphique : les zones et signaux repérés, ce qui est en train de se former, et la question que cela pose pour la suite, SANS révéler la direction probable, aucun prix ni niveau chiffré, aucun verdict.",
+      "2 ou 3 phrases courtes sur ce qui se joue sur ce graphique : le point clé repéré et la question qu'il pose pour la suite, SANS révéler la direction probable, aucun prix ni niveau chiffré, aucun verdict.",
     ),
   patterns_count: z.number().describe("Nombre de figures chartistes ou signaux d'indicateurs visibles."),
   level_marks: z
