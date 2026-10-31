@@ -103,3 +103,13 @@ export function takePreview() {
     return null;
   }
 }
+
+/**
+ * Everything a visitor left waiting in this tab (a chart, its free reading, a chosen pack): dropped when the account
+ * changes or signs out, so the next person on the same browser never inherits it.
+ */
+export function clearPendingWork() {
+  try {
+    for (const key of [PENDING_OFFER_KEY, AUTO_ANALYZE_KEY, PREVIEW_KEY, "scanzivo:pending-chart"]) sessionStorage.removeItem(key);
+  } catch {}
+}

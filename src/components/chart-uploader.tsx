@@ -5,7 +5,7 @@ import type { ChartAnalysis } from "@/lib/analysis";
 import { auth } from "@/lib/firebase";
 import { checkCapture } from "@/lib/capture-check";
 import { prepareImage } from "@/lib/image";
-import { openOffers, takeAutoAnalyze, takePreview } from "@/lib/offers-client";
+import { openChartReady, openOffers, takeAutoAnalyze, takePreview } from "@/lib/offers-client";
 import { clearPendingChart, readPendingChart, savePendingChart } from "@/lib/pending-chart";
 import { OFFER_PRICE_EUR } from "@/lib/plans";
 import { useI18n } from "@/i18n/client";
@@ -353,9 +353,28 @@ export function ChartUploader({
                   </span>
                   .{file ? u.offerKept : ""}
                 </p>
-                <button type="button" onClick={openOffers} className="btn-primary w-full">
-                  {u.offerCta} <ArrowIcon />
-                </button>
+                {/* A chart is ready: its free reading first, the packs next (as on the home page). */}
+                {file ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        await savePendingChart(file);
+                        openChartReady();
+                      }}
+                      className="btn-primary w-full"
+                    >
+                      {t.chartReady.previewCta} <ArrowIcon />
+                    </button>
+                    <button type="button" onClick={openOffers} className="btn-secondary w-full">
+                      {u.offerCta}
+                    </button>
+                  </>
+                ) : (
+                  <button type="button" onClick={openOffers} className="btn-primary w-full">
+                    {u.offerCta} <ArrowIcon />
+                  </button>
+                )}
               </div>
             ) : (
               <button

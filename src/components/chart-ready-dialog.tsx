@@ -9,6 +9,7 @@ import { pendingChartUrl, readPendingChart } from "@/lib/pending-chart";
 import { OFFER_PRICE_EUR } from "@/lib/plans";
 import type { PreviewTeaser } from "@/lib/preview-types";
 import { AnalysisTeaser } from "./analysis-teaser";
+import { useAuth } from "./auth-provider";
 import { PricingPlans } from "./pricing-plans";
 import { preloadStripe } from "./checkout-dialog";
 
@@ -27,6 +28,7 @@ export function ChartReadyDialog() {
   const [stage, setStage] = useState<Stage>({ name: "ready" });
   const [elapsed, setElapsed] = useState(0);
   const { t, locale, href } = useI18n();
+  const { user } = useAuth();
   const c = t.chartReady;
 
   useEffect(
@@ -190,9 +192,11 @@ export function ChartReadyDialog() {
           <button type="button" onClick={close} className="text-muted hover:text-foreground">
             {c.change}
           </button>
-          <Link href={href("/auth/login")} onClick={close} className="font-medium text-muted underline underline-offset-2 hover:text-foreground">
-            {c.haveAccount}
-          </Link>
+          {!user && (
+            <Link href={href("/auth/login")} onClick={close} className="font-medium text-muted underline underline-offset-2 hover:text-foreground">
+              {c.haveAccount}
+            </Link>
+          )}
         </div>
       </div>
     </dialog>
