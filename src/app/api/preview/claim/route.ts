@@ -1,9 +1,11 @@
+import Anthropic from "@anthropic-ai/sdk";
 import { FieldValue } from "firebase-admin/firestore";
-import type { AllowedImageType, ChartAnalysis } from "@/lib/analysis";
+import type { AllowedImageType, ChartAnalysis, ChartPreview } from "@/lib/analysis";
 import { recordActivity } from "@/lib/activity";
+import { analyzeChart, AnalysisRefusedError } from "@/lib/claude";
 import { adminBucket, adminDb } from "@/lib/firebase-admin";
 import { macroContext } from "@/lib/macro";
-import { availableCredits, creditPeriod, hasNewsSide, periodFor } from "@/lib/plans";
+import { availableCredits, budgetFor, creditPeriod, hasNewsSide, MAX_CALL_COST_EUR, periodFor, STARTER_MODEL } from "@/lib/plans";
 import { PREVIEW_TTL_MS } from "@/lib/preview";
 import { getRequestUid } from "@/lib/server-auth";
 import { monthSpend } from "@/lib/usage-cost";
@@ -14,9 +16,14 @@ export const maxDuration = 120;
 
 const error = (message: string, status: number) => Response.json({ error: message }, { status });
 
+/** The first reading the visitor saw, handed to the full analysis so the report stays consistent with it. */
+const continuity = (preview: ChartPreview) =>
+  `Une première lecture de ce graphique a déjà été montrée au client : tendance ${preview.trend}, « ${preview.summary} ». ` +
+  "Reste cohérent avec elle, sauf si le graphique montre clairement autre chose ; dans ce cas, dis pourquoi dans la synthèse.";
+
 /**
- * After payment: the analysis the visitor previewed becomes theirs, for one credit, like any analysis. For Pro and
- * À vie the news side is gathered now (the preview had none). 404 / 410 tell the dashboard to run the chart afresh.
+ * After payment: the full report is made from the screenshot the visitor previewed, for one credit like any analysis
+ * (on the plan's model, with the news side for Pro and À vie). 404 / 410 tell the dashboard to run the chart afresh.
  */
 export async function POST(request: Request) {
   const locale = requestLocale(request);
@@ -28,31 +35,40 @@ export async function POST(request: Request) {
   if (typeof id !== "string" || !/^[A-Za-z0-9]{10,40}$/.test(id)) return error(text.failed, 404);
 
   const previewRef = adminDb.collection("previews").doc(id);
-  const preview = await previewRef.get();
-  if (!preview.exists) return error(text.failed, 404);
-  const createdAt: number = preview.get("createdAt")?.toMillis?.() ?? 0;
-  const claimedBy: string | null = preview.get("claimedBy") ?? null;
+  const snapshot = await previewRef.get();
+  // Previews made before the free reading went light hold no first reading: those run afresh.
+  const preview = snapshot.get("preview") as ChartPreview | undefined;
+  if (!snapshot.exists || !preview) return error(text.failed, 404);
+  const createdAt: number = snapshot.get("createdAt")?.toMillis?.() ?? 0;
+  const claimedBy: string | null = snapshot.get("claimedBy") ?? null;
   if ((claimedBy && claimedBy !== uid) || Date.now() - createdAt > PREVIEW_TTL_MS) return error(text.failed, 410);
 
   const userRef = adminDb.collection("users").doc(uid);
   const userData = (await userRef.get()).data() ?? {};
   if (availableCredits(userData) < 1) return error(text.noCredits, 402);
+  if (monthSpend(userData) + MAX_CALL_COST_EUR > budgetFor(userData.plan)) return error(text.budget, 402);
 
-  const stored = preview.get("analysis") as ChartAnalysis;
-  const imagePath: string = preview.get("imagePath");
-  const imageType = preview.get("imageType") as AllowedImageType;
+  const imagePath: string = snapshot.get("imagePath");
+  const imageType = snapshot.get("imageType") as AllowedImageType;
+  const [bytes] = await adminBucket().file(imagePath).download();
+  const image = bytes.toString("base64");
 
-  // The news side comes with Pro and À vie analyses, as for one run from the dashboard.
-  let macro = { report: null as ChartAnalysis["macro"], costEur: 0 };
-  if (hasNewsSide(userData.plan)) {
-    try {
-      const [bytes] = await adminBucket().file(imagePath).download();
-      macro = await macroContext(bytes.toString("base64"), imageType, locale);
-    } catch (err) {
-      console.error("preview: news side skipped", err);
-    }
+  // The news side runs alongside (Pro and À vie); it never throws and its cost counts in every case.
+  const macroPromise = hasNewsSide(userData.plan) ? macroContext(image, imageType, locale) : Promise.resolve({ report: null, costEur: 0 });
+  let result: Awaited<ReturnType<typeof analyzeChart>>;
+  try {
+    result = await analyzeChart(image, imageType, continuity(preview), locale, userData.plan === "starter" ? STARTER_MODEL : undefined);
+  } catch (err) {
+    const macro = await macroPromise;
+    const spent = macro.costEur + (err instanceof AnalysisRefusedError ? err.costEur : 0);
+    await userRef.set({ spendEur: monthSpend(userData) + spent, spendPeriod: creditPeriod() }, { merge: true }).catch(() => {});
+    if (err instanceof AnalysisRefusedError) return error(text.refused, 422);
+    if (err instanceof Anthropic.RateLimitError) return error(text.busy, 503);
+    console.error("preview claim: analysis failed", err);
+    return error(text.failed, 502);
   }
-  const analysis: ChartAnalysis = { ...stored, macro: macro.report };
+  const macro = await macroPromise;
+  const analysis: ChartAnalysis = { ...result.analysis, macro: result.analysis.is_chart ? macro.report : null };
 
   const analysisRef = userRef.collection("analyses").doc();
   try {
@@ -62,10 +78,15 @@ export async function POST(request: Request) {
       const data = user.data() ?? {};
       const credits = availableCredits(data);
       if (credits < 1) throw new Error("NO_CREDITS");
-      // The preview's AI cost counts for this customer, like the analysis it becomes.
-      const spent = monthSpend(data) + (preview.get("costEur") ?? 0) + macro.costEur;
-      tx.update(userRef, { credits: credits - 1, creditsPeriod: periodFor(data.plan), spendEur: spent, spendPeriod: creditPeriod() });
-      tx.set(analysisRef, { ...analysis, note: null, model: preview.get("model") ?? null, createdAt: FieldValue.serverTimestamp() });
+      // The free reading's cost counts for this customer too, with the report it led to.
+      const spent = monthSpend(data) + (snapshot.get("costEur") ?? 0) + result.costEur + macro.costEur;
+      const charged = analysis.is_chart;
+      tx.update(userRef, {
+        ...(charged ? { credits: credits - 1, creditsPeriod: periodFor(data.plan) } : {}),
+        spendEur: spent,
+        spendPeriod: creditPeriod(),
+      });
+      tx.set(analysisRef, { ...analysis, note: null, model: result.model, createdAt: FieldValue.serverTimestamp() });
       tx.update(previewRef, { claimedBy: uid, analysisId: analysisRef.id });
     });
   } catch (err) {
@@ -74,7 +95,7 @@ export async function POST(request: Request) {
     throw err;
   }
 
-  recordActivity(analysis);
+  if (analysis.is_chart) recordActivity(analysis);
 
   // The screenshot moves with it, so the history shows it annotated. Best effort: the analysis is already saved.
   const ownPath = `users/${uid}/analyses/${analysisRef.id}.${imageType.split("/")[1]}`;
@@ -85,5 +106,5 @@ export async function POST(request: Request) {
     console.error("preview screenshot copy failed", err);
   }
 
-  return Response.json({ id: analysisRef.id, analysis, charged: true });
+  return Response.json({ id: analysisRef.id, analysis, charged: analysis.is_chart });
 }

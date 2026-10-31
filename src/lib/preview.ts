@@ -1,61 +1,49 @@
 import "server-only";
 import { createHash } from "node:crypto";
 import { FieldValue } from "firebase-admin/firestore";
-import type { ChartAnalysis } from "./analysis";
+import type { ChartPreview } from "./analysis";
 import type { PreviewTeaser } from "./preview-types";
 import { adminDb } from "./firebase-admin";
-import { MAX_CALL_COST_EUR } from "./plans";
 
 export type { PreviewTeaser };
 
 /**
- * The free preview: a visitor without an account sees the general reading of their chart before paying, and the
- * plan stays locked. The full report is kept server-side and handed to the account once the trial is paid, so the
- * visitor gets the very analysis they previewed, at no second AI cost. Nothing locked ever leaves the server.
+ * The free preview: a visitor without an account sees a first reading of their chart before paying (a light model,
+ * about 0,02 €). The screenshot and that reading are kept server-side; once a pack is bought, the full report is made
+ * from them, consistent with what the visitor saw. No plan exists before payment, so none can leak.
  */
 
 /** Previews any one visitor (by IP) may run per day. */
 const PER_VISITOR_PER_DAY = 2;
-/** AI spend allowed on previews per day, across all visitors. Past it, "Analyse" goes straight to payment as before. */
-const DAILY_BUDGET_EUR = 6;
+/** AI spend allowed on previews per day, across all visitors (about 150 readings). Past it, "Analyse" goes straight to the packs. */
+const DAILY_BUDGET_EUR = 3;
+/** Worst case of one free reading: the image, a short prompt and at most 1 500 output tokens on the light model. */
+const PREVIEW_MAX_COST_EUR = 0.05;
 /** A preview can be unlocked for this long after it ran. */
 export const PREVIEW_TTL_MS = 48 * 60 * 60 * 1000;
 
-/** Words of text in a report value: what "share of the analysis" is measured in. Positions on the image don't count. */
-function words(value: unknown): number {
-  if (typeof value === "string") return value.split(/\s+/).filter(Boolean).length;
-  if (typeof value === "number") return 1;
-  if (Array.isArray(value)) return value.reduce((sum: number, item) => sum + words(item), 0);
-  if (value && typeof value === "object")
-    return Object.entries(value).reduce((sum, [key, item]) => (key === "level_marks" ? sum : sum + words(item)), 0);
-  return 0;
-}
+const countWords = (text: string) => text.split(/\s+/).filter(Boolean).length;
 
 /**
- * The beginning of the report, as a visitor sees it for free: the market, its trend, the AI's confidence and its reading
- * of the structure. Everything after (plan, levels' prices, scenarios, patterns, risk) stays on the server.
+ * Words in a typical full report besides the reading shown for free (plan, scenarios, levels, patterns, risk notes),
+ * measured on real reports; the news side, when the pack includes it, comes on top.
  */
-export function teaserOf(analysis: ChartAnalysis): PreviewTeaser {
-  const shown = [analysis.asset, analysis.timeframe, analysis.trend, analysis.confidence?.level, analysis.summary];
+const TYPICAL_LOCKED_WORDS = 260;
+
+/** The beginning of the report, as a visitor sees it for free: the market, its trend, the AI's confidence and its reading. */
+export function teaserOf(preview: ChartPreview): PreviewTeaser {
+  const shown = [preview.asset, preview.timeframe, preview.trend, preview.confidence.level, preview.summary].map(countWords).reduce((a, b) => a + b, 0);
+  const marks = preview.level_marks.filter((mark) => Number.isFinite(mark.y) && mark.y >= 0 && mark.y <= 1);
   return {
-    is_chart: analysis.is_chart,
-    asset: analysis.asset,
-    timeframe: analysis.timeframe,
-    trend: analysis.trend,
-    confidence: analysis.confidence,
-    capture_quality: analysis.capture_quality,
-    summary: analysis.summary,
-    marks: analysis.level_marks.map(({ kind, y }) => ({ kind, y })),
-    locked: {
-      supports: analysis.supports.length,
-      resistances: analysis.resistances.length,
-      targets: Math.max(analysis.bullish.targets.length, analysis.bearish.targets.length),
-      patterns: analysis.patterns.length,
-      // The news side is gathered when a pack that includes it is unlocked.
-      macro: analysis.is_chart,
-    },
-    // Measured on the report as stored; the news side, added at unlock, would make the share smaller still.
-    shownPercent: Math.max(1, Math.round((words(shown) / Math.max(1, words(analysis))) * 100)),
+    is_chart: preview.is_chart,
+    asset: preview.asset,
+    timeframe: preview.timeframe,
+    trend: preview.trend,
+    confidence: preview.confidence,
+    summary: preview.summary,
+    marks,
+    locked: { levels: marks.length, patterns: Math.max(0, Math.round(preview.patterns_count)), macro: preview.is_chart },
+    shownPercent: Math.max(1, Math.round((shown / (shown + TYPICAL_LOCKED_WORDS)) * 100)),
   };
 }
 
@@ -75,7 +63,7 @@ export async function reservePreview(request: Request) {
     const [visitorSnap, daySnap] = await Promise.all([tx.get(visitor), tx.get(day)]);
     if ((visitorSnap.get("count") ?? 0) >= PER_VISITOR_PER_DAY) return false;
     // Counts the worst case of the call about to run; the real cost replaces it once known.
-    if ((daySnap.get("spendEur") ?? 0) + MAX_CALL_COST_EUR > DAILY_BUDGET_EUR) return false;
+    if ((daySnap.get("spendEur") ?? 0) + PREVIEW_MAX_COST_EUR > DAILY_BUDGET_EUR) return false;
     tx.set(visitor, { count: FieldValue.increment(1), day: today() }, { merge: true });
     tx.set(day, { count: FieldValue.increment(1) }, { merge: true });
     return true;

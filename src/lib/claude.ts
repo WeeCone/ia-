@@ -2,7 +2,7 @@ import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import type { Locale } from "@/i18n/config";
-import { ChartAnalysis, type AllowedImageType } from "./analysis";
+import { ChartAnalysis, ChartPreview, type AllowedImageType } from "./analysis";
 import { callCostEur } from "./usage-cost";
 
 // Trimmed: a secret pasted with a trailing newline is otherwise sent as is and rejected as an invalid key.
@@ -78,4 +78,36 @@ export async function analyzeChart(
     throw new AnalysisRefusedError(`Analyse impossible (stop_reason: ${response.stop_reason})`, callCostEur(response.model, response.usage));
   }
   return { analysis: response.parsed_output, model: response.model, costEur: callCostEur(response.model, response.usage) };
+}
+
+/** The free reading's model: light, and asked for the visible part only (see ChartPreview). */
+const PREVIEW_MODEL = "claude-sonnet-5-5";
+
+const PREVIEW_PROMPT = `Tu es un analyste technique. On te fournit la capture d'écran d'un graphique de prix.
+Donne seulement une première lecture : l'actif, l'unité de temps, la tendance, ta confiance et une synthèse de la structure du marché en 2 ou 3 phrases, à partir de ce qui est visible. Ne donne aucun plan de trade, aucune entrée, aucun stop, aucun objectif, aucune recommandation.
+Compte les figures chartistes ou signaux d'indicateurs visibles, et place les principaux supports et résistances sur l'image (y de 0 en haut à 1 en bas de l'image entière), en t'appuyant sur les graduations de l'axe des prix.
+Si l'image n'est pas un graphique de prix, mets is_chart à false et remplis le reste de façon minimale.`;
+
+export async function previewChart(imageBase64: string, mediaType: AllowedImageType, locale: Locale) {
+  const response = await client.beta.messages.parse({
+    model: PREVIEW_MODEL,
+    max_tokens: 1500,
+    betas: ["server-side-fallback-2026-07-01"],
+    fallbacks: "default",
+    output_config: { effort: "low", format: betaZodOutputFormat(ChartPreview) },
+    system: `${PREVIEW_PROMPT}\n${LANGUAGE_RULE[locale]}`,
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "image", source: { type: "base64", media_type: mediaType, data: imageBase64 } },
+          { type: "text", text: "Première lecture de ce graphique." },
+        ],
+      },
+    ],
+  });
+  if (response.stop_reason === "refusal" || !response.parsed_output) {
+    throw new AnalysisRefusedError(`Lecture impossible (stop_reason: ${response.stop_reason})`, callCostEur(response.model, response.usage));
+  }
+  return { preview: response.parsed_output, costEur: callCostEur(response.model, response.usage) };
 }

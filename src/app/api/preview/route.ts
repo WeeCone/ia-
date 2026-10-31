@@ -1,7 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { FieldValue } from "firebase-admin/firestore";
 import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_BYTES, type AllowedImageType } from "@/lib/analysis";
-import { analyzeChart, AnalysisRefusedError } from "@/lib/claude";
+import { AnalysisRefusedError, previewChart } from "@/lib/claude";
 import { adminBucket, adminDb } from "@/lib/firebase-admin";
 import { recordPreviewSpend, reservePreview, teaserOf } from "@/lib/preview";
 import { DICTIONARIES } from "@/i18n/dictionaries";
@@ -12,8 +12,9 @@ export const maxDuration = 120;
 const error = (message: string, status: number, extra?: object) => Response.json({ error: message, ...extra }, { status });
 
 /**
- * A visitor without an account runs their chart: the full analysis is made and kept here, and only its free part
- * (the reading, no plan, no prices) goes back. `fallback` tells the page to go straight to payment instead.
+ * A visitor without an account runs their chart: a first reading (light model, about 0,02 €) goes back, and the
+ * screenshot is kept so the full report can be made from it once a pack is bought. `fallback` tells the page to go
+ * straight to the packs instead.
  */
 export async function POST(request: Request) {
   const locale = requestLocale(request);
@@ -28,9 +29,9 @@ export async function POST(request: Request) {
   if (!(await reservePreview(request).catch(() => false))) return error(text.failed, 429, { fallback: true });
 
   const bytes = Buffer.from(await image.arrayBuffer());
-  let result: Awaited<ReturnType<typeof analyzeChart>>;
+  let result: Awaited<ReturnType<typeof previewChart>>;
   try {
-    result = await analyzeChart(bytes.toString("base64"), image.type as AllowedImageType, undefined, locale);
+    result = await previewChart(bytes.toString("base64"), image.type as AllowedImageType, locale);
   } catch (err) {
     if (err instanceof AnalysisRefusedError) {
       await recordPreviewSpend(err.costEur);
@@ -43,15 +44,14 @@ export async function POST(request: Request) {
   await recordPreviewSpend(result.costEur);
 
   // Not a chart: nothing to unlock, the visitor is asked for another image.
-  if (!result.analysis.is_chart) return Response.json({ id: null, teaser: teaserOf(result.analysis) });
+  if (!result.preview.is_chart) return Response.json({ id: null, teaser: teaserOf(result.preview) });
 
   const previewRef = adminDb.collection("previews").doc();
   const imagePath = `previews/${previewRef.id}.${image.type.split("/")[1]}`;
   try {
     await adminBucket().file(imagePath).save(bytes, { contentType: image.type, resumable: false });
     await previewRef.set({
-      analysis: result.analysis,
-      model: result.model,
+      preview: result.preview,
       costEur: result.costEur,
       imagePath,
       imageType: image.type,
@@ -60,10 +60,10 @@ export async function POST(request: Request) {
       claimedBy: null,
     });
   } catch (err) {
-    // Without the stored report there is nothing to unlock later: payment then runs the analysis as before.
+    // Without the stored screenshot there is nothing to unlock later: payment then runs the waiting chart as before.
     console.error("preview storage failed", err);
     return error(text.failed, 502, { fallback: true });
   }
 
-  return Response.json({ id: previewRef.id, teaser: teaserOf(result.analysis) });
+  return Response.json({ id: previewRef.id, teaser: teaserOf(result.preview) });
 }

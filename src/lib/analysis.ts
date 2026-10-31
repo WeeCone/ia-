@@ -29,6 +29,27 @@ export const MacroReport = z.object({
 });
 export type MacroReport = z.infer<typeof MacroReport>;
 
+/**
+ * The free reading's own output: only what the visitor sees, from a lighter model and a short answer, which keeps it at
+ * about 0,02 €. The full report is made once a pack is bought.
+ */
+export const ChartPreview = z.object({
+  is_chart: z.boolean().describe("false si l'image n'est pas un graphique de prix exploitable."),
+  asset: z.string().describe("Actif identifié (ex. BTC/USDT), ou « Inconnu »."),
+  timeframe: z.string().describe("Unité de temps (ex. 4H), ou « Inconnue »."),
+  trend: z.enum(["haussière", "baissière", "neutre"]),
+  confidence: z.object({
+    level: z.enum(["faible", "moyenne", "élevée"]),
+    reason: z.string().describe("Pourquoi ce niveau de confiance, en une phrase."),
+  }),
+  summary: z.string().describe("Synthèse de la structure du marché en 2-3 phrases, sans plan de trade ni recommandation."),
+  patterns_count: z.number().describe("Nombre de figures chartistes ou signaux d'indicateurs visibles."),
+  level_marks: z
+    .array(z.object({ kind: z.enum(["support", "resistance"]), y: z.number().describe("Position verticale : 0 = bord haut de l'image, 1 = bord bas.") }))
+    .describe("Les principaux supports et résistances (2 à 5), placés sur l'image."),
+});
+export type ChartPreview = z.infer<typeof ChartPreview>;
+
 export const ChartAnalysis = z.object({
   is_chart: z.boolean().describe("false si l'image n'est pas un graphique de prix exploitable."),
   asset: z.string().describe("Actif identifié (ex. BTC/USDT), ou « Inconnu »."),

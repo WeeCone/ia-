@@ -305,11 +305,11 @@ export const fr = {
     seen: "Ce que l'IA voit",
     levelsHidden: (count: number) => `${count} niveau${count > 1 ? "x" : ""} repéré${count > 1 ? "s" : ""} sur votre capture. Leurs prix font partie du plan.`,
     lockedTitle: "Le plan est prêt. Il reste à le débloquer.",
-    lockedItems: (locked: { supports: number; resistances: number; targets: number; patterns: number; macro: boolean }) =>
+    lockedItems: (locked: { levels: number; patterns: number; macro: boolean }) =>
       [
         "Le verdict : acheter, vendre, attendre ou ne pas trader",
-        `L'entrée, le stop et ${locked.targets > 1 ? `${locked.targets} objectifs` : "l'objectif"}, avec le ratio gain/risque`,
-        `Les ${locked.supports + locked.resistances} niveaux chiffrés, tracés sur votre capture`,
+        "L'entrée, le stop et les objectifs, avec le ratio gain/risque",
+        `Les ${locked.levels} niveaux chiffrés, tracés sur votre capture`,
         "Les deux scénarios et leur probabilité",
         ...(locked.patterns ? [`${locked.patterns > 1 ? `Les ${locked.patterns} figures et signaux repérés` : "La figure ou le signal repéré"} sur le graphique`] : []),
         ...(locked.macro ? ["L'actualité des 7 prochains jours sur cet actif (packs Pro et À vie)"] : []),
@@ -321,7 +321,7 @@ export const fr = {
     unlockTerms: (starter: string) => `Packs dès ${starter}/mois, sans engagement. Vous retrouvez cette analyse complète juste après le paiement.`,
     notChart: "Cette image ne ressemble pas à un graphique de prix. Essayez avec une capture de votre plateforme (TradingView, Binance, MetaTrader…).",
     lockedAria: "Partie verrouillée de l'analyse",
-    shown: (percent: number) => `Vous voyez ${percent} % de votre analyse`,
+    shown: (percent: number) => `Vous voyez environ ${percent} % de votre analyse`,
     shownHint: "La suite est prête : elle se débloque avec un pack.",
     continues: "Suite du rapport",
   },
