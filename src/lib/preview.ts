@@ -9,7 +9,7 @@ export type { PreviewTeaser };
 
 /**
  * The free preview: a visitor without an account sees a first reading of their chart before paying (a light model,
- * about 0,02 €). The screenshot and that reading are kept server-side; once a pack is bought, the full report is made
+ * a fraction of a cent). The screenshot and that reading are kept server-side; once a pack is bought, the full report is made
  * from them, consistent with what the visitor saw. No plan exists before payment, so none can leak.
  */
 

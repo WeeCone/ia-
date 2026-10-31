@@ -13,7 +13,7 @@ export const maxDuration = 120;
 const error = (message: string, status: number, extra?: object) => Response.json({ error: message, ...extra }, { status });
 
 /**
- * A visitor without an account runs their chart: a first reading (light model, about 0,02 €) goes back, and the
+ * A visitor without an account runs their chart: a first reading (smallest model, a fraction of a cent) goes back, and the
  * screenshot is kept so the full report can be made from it once a pack is bought. When no reading can be made,
  * `reason` says why ("limit": the visitor's free readings for today are used; "budget": the day's are; "error"), so the
  * page can say it rather than jump to the packs. The admin has no limit, to test.

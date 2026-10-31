@@ -80,8 +80,8 @@ export async function analyzeChart(
   return { analysis: response.parsed_output, model: response.model, costEur: callCostEur(response.model, response.usage) };
 }
 
-/** The free reading's model: light, and asked for the visible part only (see ChartPreview). */
-const PREVIEW_MODEL = "claude-sonnet-5-5";
+/** The free reading's model: the smallest, asked for the visible part only (see ChartPreview), a fraction of a cent. */
+const PREVIEW_MODEL = "claude-haiku-5-5";
 
 const PREVIEW_PROMPT = `Tu es un analyste technique. On te fournit la capture d'écran d'un graphique de prix. Le trader verra gratuitement cette première lecture ; le résultat (tendance, scénarios, probabilités, verdict, plan chiffré) lui sera donné ensuite.
 Écris un résumé (summary) de 2 phrases sur le contexte visible, puis un texte (stakes) de 4 à 5 phrases sur ce qui se joue sur CE graphique : zones testées, figure en formation, signaux des indicateurs affichés, volume, compression du prix… et la question que cela pose pour la suite. Sois concret et précis sur ce graphique-là.
@@ -95,7 +95,7 @@ export async function previewChart(imageBase64: string, mediaType: AllowedImageT
     max_tokens: 2000,
     betas: ["server-side-fallback-2026-07-01"],
     fallbacks: "default",
-    output_config: { effort: "low", format: betaZodOutputFormat(ChartPreview) },
+    output_config: { format: betaZodOutputFormat(ChartPreview) },
     system: `${PREVIEW_PROMPT}\n${LANGUAGE_RULE[locale]}`,
     messages: [
       {

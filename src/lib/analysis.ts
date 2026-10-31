@@ -31,7 +31,7 @@ export type MacroReport = z.infer<typeof MacroReport>;
 
 /**
  * The free reading's own output: only what the visitor sees, from a lighter model and a short answer, which keeps it at
- * about 0,02 €. The full report is made once a pack is bought.
+ * a fraction of a cent. The full report is made once a pack is bought.
  */
 export const ChartPreview = z.object({
   is_chart: z.boolean().describe("false si l'image n'est pas un graphique de prix exploitable."),
