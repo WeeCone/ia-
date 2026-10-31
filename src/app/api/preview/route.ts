@@ -4,7 +4,7 @@ import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_BYTES, type AllowedImageType } from "@/l
 import { AnalysisRefusedError, previewChart } from "@/lib/claude";
 import { adminBucket, adminDb } from "@/lib/firebase-admin";
 import { isAdminRequest } from "@/lib/admin-auth";
-import { recordPreviewError, recordPreviewSpend, reservePreview, teaserOf } from "@/lib/preview";
+import { recordPreviewError, recordPreviewSpend, releasePreview, reservePreview, teaserOf } from "@/lib/preview";
 import { DICTIONARIES } from "@/i18n/dictionaries";
 import { requestLocale } from "@/i18n/server";
 
@@ -28,7 +28,8 @@ export async function POST(request: Request) {
   if (!ALLOWED_IMAGE_TYPES.includes(image.type as AllowedImageType)) return error(text.badFormat, 400);
   if (image.size > MAX_IMAGE_BYTES) return error(text.tooLarge, 400);
 
-  if (!(await isAdminRequest(request).catch(() => false))) {
+  const admin = await isAdminRequest(request).catch(() => false);
+  if (!admin) {
     const reserved = await reservePreview(request).catch(async (err) => {
       console.error("preview: reservation failed", err);
       await recordPreviewError(`réservation : ${err instanceof Error ? err.message : String(err)}`);
@@ -42,6 +43,8 @@ export async function POST(request: Request) {
   try {
     result = await previewChart(bytes.toString("base64"), image.type as AllowedImageType, locale);
   } catch (err) {
+    // Nothing to show: the reading isn't counted against the visitor.
+    if (!admin) await releasePreview(request);
     if (err instanceof AnalysisRefusedError) {
       await recordPreviewSpend(err.costEur);
       return error(text.refused, 422);

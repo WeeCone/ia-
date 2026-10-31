@@ -72,6 +72,15 @@ export async function reservePreview(request: Request): Promise<"ok" | "limit" |
   });
 }
 
+/** Gives a reserved reading back when it failed: a failure never uses up a visitor's free readings. */
+export function releasePreview(request: Request) {
+  return adminDb
+    .collection("previewLimits")
+    .doc(visitorKey(request))
+    .set({ count: FieldValue.increment(-1) }, { merge: true })
+    .catch((err) => console.error("preview: release failed", err));
+}
+
 /** A free reading that failed, kept for the admin "Analyses" tab with the other failures (no visitor identity). */
 export function recordPreviewError(detail: string) {
   return adminDb
