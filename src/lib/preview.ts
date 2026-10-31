@@ -25,21 +25,22 @@ export const PREVIEW_TTL_MS = 48 * 60 * 60 * 1000;
 const countWords = (text: string) => text.split(/\s+/).filter(Boolean).length;
 
 /**
- * Words in a typical full report besides the reading shown for free (plan, scenarios, levels, patterns, risk notes),
- * measured on real reports; the news side, when the pack includes it, comes on top.
+ * Words in a typical full report besides the reading shown for free: plan, both scenarios, levels, patterns, risk
+ * notes and the news side of Pro and À vie (an estimate from the report's structure, to be checked on real reports).
  */
-const TYPICAL_LOCKED_WORDS = 260;
+const TYPICAL_LOCKED_WORDS = 500;
 
 /** The beginning of the report, as a visitor sees it for free: the market, the AI's confidence and what it spotted. */
 export function teaserOf(preview: ChartPreview): PreviewTeaser {
-  const shown = [preview.asset, preview.timeframe, preview.confidence, preview.hook].map(countWords).reduce((a, b) => a + b, 0);
+  const shown = [preview.asset, preview.timeframe, preview.confidence, preview.summary, preview.stakes].map(countWords).reduce((a, b) => a + b, 0);
   const marks = preview.level_marks.filter((mark) => Number.isFinite(mark.y) && mark.y >= 0 && mark.y <= 1);
   return {
     is_chart: preview.is_chart,
     asset: preview.asset,
     timeframe: preview.timeframe,
     confidence: preview.confidence,
-    hook: preview.hook,
+    summary: preview.summary,
+    stakes: preview.stakes,
     marks,
     locked: { levels: marks.length, patterns: Math.max(0, Math.round(preview.patterns_count)), macro: preview.is_chart },
     shownPercent: Math.max(1, Math.round((shown / (shown + TYPICAL_LOCKED_WORDS)) * 100)),

@@ -83,16 +83,16 @@ export async function analyzeChart(
 /** The free reading's model: light, and asked for the visible part only (see ChartPreview). */
 const PREVIEW_MODEL = "claude-sonnet-5-5";
 
-const PREVIEW_PROMPT = `Tu es un analyste technique. On te fournit la capture d'écran d'un graphique de prix. Le trader verra gratuitement ta première lecture ; le résultat complet (tendance, scénarios, verdict, plan chiffré) lui sera donné ensuite.
-Écris l'accroche (hook) : en 2 ou 3 phrases, dis concrètement ce que tu as repéré sur CE graphique (zones testées plusieurs fois, figure en formation, signal d'un indicateur affiché, volume, compression du prix…) et la question que cela pose pour la suite.
-Interdit dans l'accroche : la tendance ou la direction probable (haussier, baissier, acheteur, vendeur, hausse, baisse, rebond, cassure à la hausse ou à la baisse…), tout prix ou niveau chiffré, tout verdict ou conseil, toute promesse. Reste factuel et précis : pas de superlatifs, pas d'urgence, pas de formule publicitaire.
+const PREVIEW_PROMPT = `Tu es un analyste technique. On te fournit la capture d'écran d'un graphique de prix. Le trader verra gratuitement cette première lecture ; le résultat (tendance, scénarios, probabilités, verdict, plan chiffré) lui sera donné ensuite.
+Écris un résumé (summary) de 2 phrases sur le contexte visible, puis un texte (stakes) de 4 à 5 phrases sur ce qui se joue sur CE graphique : zones testées, figure en formation, signaux des indicateurs affichés, volume, compression du prix… et la question que cela pose pour la suite. Sois concret et précis sur ce graphique-là.
+Interdit dans ces deux textes : la tendance ou la direction probable (haussier, baissier, acheteur, vendeur, hausse, baisse, rebond, cassure à la hausse ou à la baisse…), tout prix ou niveau chiffré, tout verdict ou conseil, toute promesse. Pas de superlatifs, pas d'urgence, pas de formule publicitaire.
 Indique l'actif, l'unité de temps, ta confiance dans la lecture, le nombre de figures ou signaux visibles, et place les principaux supports et résistances sur l'image (y de 0 en haut à 1 en bas de l'image entière) en t'appuyant sur les graduations de l'axe des prix.
 Si l'image n'est pas un graphique de prix, mets is_chart à false et remplis le reste de façon minimale.`;
 
 export async function previewChart(imageBase64: string, mediaType: AllowedImageType, locale: Locale) {
   const response = await client.beta.messages.parse({
     model: PREVIEW_MODEL,
-    max_tokens: 1500,
+    max_tokens: 2000,
     betas: ["server-side-fallback-2026-07-01"],
     fallbacks: "default",
     output_config: { effort: "low", format: betaZodOutputFormat(ChartPreview) },

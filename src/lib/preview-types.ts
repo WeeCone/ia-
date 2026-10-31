@@ -6,8 +6,9 @@ export type PreviewTeaser = {
   asset: string;
   timeframe: string;
   confidence: ChartAnalysis["confidence"]["level"];
-  /** What the AI spotted and the question it raises, with no direction, price or verdict. */
-  hook: string;
+  /** The context, then what is at stake on the chart: never the direction, a price or a verdict. */
+  summary: string;
+  stakes: string;
   /** Where the levels sit on the capture (lines only, their prices stay locked). */
   marks: { kind: "support" | "resistance"; y: number }[];
   /** How much the locked part holds, to say it plainly. */

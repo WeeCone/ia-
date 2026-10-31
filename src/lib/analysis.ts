@@ -38,10 +38,13 @@ export const ChartPreview = z.object({
   asset: z.string().describe("Actif identifié (ex. BTC/USDT), ou « Inconnu »."),
   timeframe: z.string().describe("Unité de temps (ex. 4H), ou « Inconnue »."),
   confidence: z.enum(["faible", "moyenne", "élevée"]).describe("Confiance dans la lecture de ce graphique."),
-  hook: z
+  summary: z
+    .string()
+    .describe("Résumé en 2 phrases : l'actif, l'unité de temps et le contexte visible (où se trouve le prix, ce qui s'est passé récemment), SANS tendance ni direction, sans prix chiffré, sans verdict."),
+  stakes: z
     .string()
     .describe(
-      "2 ou 3 phrases sur ce que tu as repéré sur ce graphique et la question qu'il pose, SANS révéler la tendance, la direction probable, aucun prix ni niveau chiffré, aucun verdict.",
+      "4 à 5 phrases sur ce qui se joue sur ce graphique : les zones et signaux repérés, ce qui est en train de se former, et la question que cela pose pour la suite, SANS révéler la direction probable, aucun prix ni niveau chiffré, aucun verdict.",
     ),
   patterns_count: z.number().describe("Nombre de figures chartistes ou signaux d'indicateurs visibles."),
   level_marks: z
