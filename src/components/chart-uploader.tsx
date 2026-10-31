@@ -345,7 +345,7 @@ export function ChartUploader({
             {offerFirst ? (
               <div className="mt-auto space-y-3">
                 <p className="text-sm leading-relaxed text-muted">
-                  {file ? u.offerReady : ""}
+                  {file ? u.offerReady : u.freeFirst}
                   {u.offerChoose}
                   <span className="whitespace-nowrap font-medium text-foreground">
                     {formatEur(locale, OFFER_PRICE_EUR.starter)}
@@ -371,8 +371,9 @@ export function ChartUploader({
                     </button>
                   </>
                 ) : (
-                  <button type="button" onClick={openOffers} className="btn-primary w-full">
-                    {u.offerCta} <ArrowIcon />
+                  // Nothing to read yet: the drop zone is the next step, the packs stay one click away.
+                  <button type="button" onClick={openOffers} className="w-full text-center text-sm font-medium text-muted underline underline-offset-2 hover:text-foreground">
+                    {u.offerCta}
                   </button>
                 )}
               </div>

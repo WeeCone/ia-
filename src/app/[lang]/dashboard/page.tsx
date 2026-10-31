@@ -35,7 +35,6 @@ import { subscribeUserProfile, type UserProfile } from "@/lib/users";
 const TOUR_KEY = "scanzivo-tour-done";
 const TEST_MODE_KEY = "scanzivo-test-mode";
 // The offer picker opens by itself once per browser session for an account without an offer.
-const OFFERS_SHOWN_KEY = "scanzivo:offers-shown";
 
 type Current = {
   analysis: ChartAnalysis;
@@ -131,7 +130,7 @@ export default function DashboardPage() {
   // Paying happens in its own dialog: the offer picker steps aside.
   useEffect(() => onOpenCheckout(() => setOffersOpen(false)), []);
 
-  // An offer picked before signing up goes straight to checkout; otherwise an account without an offer sees the offers once.
+  // An offer picked before signing up goes straight to checkout.
   const plan = profile?.plan;
   // A paid trial leaves the plan at "none" with a credit to spend: such an account can analyse.
   const hasCredits = profile ? availableCredits(profile) > 0 : false;
@@ -150,16 +149,8 @@ export default function DashboardPage() {
       });
       return;
     }
-    if (plan !== "none" || hasCredits) return;
-    let shown = true;
-    try {
-      shown = sessionStorage.getItem(OFFERS_SHOWN_KEY) === "1";
-      sessionStorage.setItem(OFFERS_SHOWN_KEY, "1");
-    } catch {}
-    if (shown) return;
-    const timer = setTimeout(() => setOffersOpen(true), 400);
-    return () => clearTimeout(timer);
-  }, [plan, hasCredits, checkoutDone]);
+    // No offer opens by itself: an account without a pack starts with its chart's free reading, the packs come after.
+  }, [plan, checkoutDone, locale]);
 
   // First visit with an offer: a short two-step tour of the composer (pointless before one can analyse).
   useEffect(() => {
