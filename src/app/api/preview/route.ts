@@ -72,9 +72,11 @@ export async function POST(request: Request) {
     });
   } catch (err) {
     // Without the stored screenshot there is nothing to unlock later: payment then runs the waiting chart as before.
+    // The reading is made and paid for: show it anyway. Without a stored screenshot the unlock can't use it, so after
+    // payment the dashboard runs the chart still waiting in the browser, as it did before free readings.
     console.error("preview storage failed", err);
     await recordPreviewError(`stockage : ${err instanceof Error ? err.message : String(err)}`);
-    return error(text.failed, 502, { fallback: true, reason: "error" });
+    return Response.json({ id: null, teaser: teaserOf(result.preview) });
   }
 
   return Response.json({ id: previewRef.id, teaser: teaserOf(result.preview) });
