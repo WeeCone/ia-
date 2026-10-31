@@ -5,12 +5,14 @@ import type { ChartAnalysis } from "@/lib/analysis";
 import { auth } from "@/lib/firebase";
 import { checkCapture } from "@/lib/capture-check";
 import { prepareImage } from "@/lib/image";
-import { openChartReady, openOffers, takeAutoAnalyze, takePreview } from "@/lib/offers-client";
+import { openOffers, requestAutoAnalyze, savePreview, takeAutoAnalyze, takePreview } from "@/lib/offers-client";
 import { clearPendingChart, readPendingChart, savePendingChart } from "@/lib/pending-chart";
 import { OFFER_PRICE_EUR } from "@/lib/plans";
 import { useI18n } from "@/i18n/client";
 import { formatEur } from "@/i18n/format";
 import { trackEvent } from "@/lib/track";
+import type { PreviewTeaser } from "@/lib/preview-types";
+import { AnalysisTeaser } from "./analysis-teaser";
 import { FormError } from "./auth-card";
 import { LogoMark } from "./logo";
 
@@ -61,6 +63,10 @@ export function ChartUploader({
   const [error, setError] = useState<string | null>(null);
   const [preparing, setPreparing] = useState(false);
   const [pending, setPending] = useState(false);
+  // An account without a pack: its chart's free reading, shown here like an analysis, before the packs.
+  const [reading, setReading] = useState<
+    { kind: "teaser"; id: string | null; teaser: PreviewTeaser } | { kind: "unavailable"; reason: "limit" | "budget" | "error" } | null
+  >(null);
   const [elapsed, setElapsed] = useState(0);
   const [dragging, setDragging] = useState(false);
   // Instant capture advice: null until checked, [] when nothing to flag.
@@ -172,7 +178,41 @@ export function ChartUploader({
     }
   }
 
+  async function runFreeReading() {
+    const user = auth.currentUser;
+    if (!file || !preview || !user) return;
+    setPending(true);
+    setError(null);
+    try {
+      await savePendingChart(file);
+      const body = new FormData();
+      body.set("image", file);
+      const response = await fetch("/api/preview", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${await user.getIdToken()}`, "X-Locale": locale },
+        body,
+      });
+      const data = await response.json().catch(() => ({}));
+      if (response.ok && data.teaser) setReading({ kind: "teaser", id: data.id ?? null, teaser: data.teaser });
+      else if (data.fallback)
+        setReading({ kind: "unavailable", reason: data.reason === "limit" || data.reason === "budget" ? data.reason : "error" });
+      else setError(data.error ?? u.failed);
+    } catch {
+      setReading({ kind: "unavailable", reason: "error" });
+    } finally {
+      setPending(false);
+    }
+  }
+
+  /** The packs, with the chart kept: once paid, the previewed reading is unlocked, or the chart runs afresh. */
+  function unlock(id: string | null) {
+    if (id) savePreview(id);
+    else requestAutoAnalyze();
+    openOffers();
+  }
+
   function clear() {
+    setReading(null);
     clearPendingChart();
     setFile(null);
     setPreview(null);
@@ -222,6 +262,50 @@ export function ChartUploader({
             </ol>
             <p className="mt-5 text-xs text-muted">{u.keepOpen}</p>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (reading && preview) {
+    const c = t.chartReady;
+    return (
+      <div className="panel overflow-hidden">
+        <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-3">
+          <span className="label text-muted">{c.freeLabel}</span>
+          <button type="button" onClick={clear} className="label rounded-lg border border-border px-2 py-1 hover:border-brand">
+            {u.change}
+          </button>
+        </div>
+        <div className="theme-dark bg-background p-5 text-foreground sm:p-7">
+          {reading.kind === "teaser" ? (
+            reading.teaser.is_chart ? (
+              <AnalysisTeaser
+                teaser={reading.teaser}
+                imageUrl={preview}
+                onUnlock={() => unlock(reading.id)}
+                unlockLabel={c.unlock}
+                terms={c.unlockTerms(formatEur(locale, OFFER_PRICE_EUR.starter))}
+              />
+            ) : (
+              <p role="alert" className="rounded-xl border border-amber-400/30 bg-amber-400/5 p-4 leading-relaxed">
+                {c.notChart}
+              </p>
+            )
+          ) : (
+            <div>
+              <h2 className="display text-3xl">{c.unavailableTitle[reading.reason]}</h2>
+              <p className="mt-2 leading-relaxed text-muted">{c.unavailableText[reading.reason]}</p>
+              <button type="button" onClick={() => unlock(null)} className="btn-primary mt-6 w-full py-3.5 text-base">
+                {c.seePacks}
+              </button>
+              {reading.reason === "error" && (
+                <button type="button" onClick={runFreeReading} className="btn-secondary mt-3 w-full">
+                  {u.retry}
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -351,22 +435,15 @@ export function ChartUploader({
                     {formatEur(locale, OFFER_PRICE_EUR.starter)}
                     {t.common.perMonth}
                   </span>
-                  .{file ? u.offerKept : ""}
+                  .
                 </p>
-                {/* A chart is ready: its free reading first, the packs next (as on the home page). */}
+                {/* A chart is ready: its free reading runs here, the packs come after it. */}
                 {file ? (
                   <>
-                    <button
-                      type="button"
-                      onClick={async () => {
-                        await savePendingChart(file);
-                        openChartReady();
-                      }}
-                      className="btn-primary w-full"
-                    >
-                      {t.chartReady.previewCta} <ArrowIcon />
+                    <button type="button" onClick={runFreeReading} disabled={preparing} className="btn-primary w-full">
+                      {u.runFree} <ArrowIcon />
                     </button>
-                    <button type="button" onClick={openOffers} className="btn-secondary w-full">
+                    <button type="button" onClick={openOffers} className="w-full text-center text-sm font-medium text-muted underline underline-offset-2 hover:text-foreground">
                       {u.offerCta}
                     </button>
                   </>

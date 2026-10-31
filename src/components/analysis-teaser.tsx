@@ -50,44 +50,44 @@ export function AnalysisTeaser({
 
   return (
     <div className="space-y-5">
-      {/* The market and the chart, side by side on wide screens. */}
-      <div className="grid gap-3 sm:grid-cols-[1fr_1.4fr]">
-        <div className="rounded-2xl border border-border bg-card p-4">
-          <p className="display text-2xl">{teaser.asset}</p>
-          <p className="mt-1 text-sm text-muted">{teaser.timeframe}</p>
-          <dl className="mt-4 space-y-1.5 text-sm">
-            <div className="flex items-center justify-between gap-2">
-              <dt className="text-muted">{r.trend}</dt>
-              <dd className="flex items-center gap-1.5 text-muted">
-                <LockIcon className="size-3.5" />
-              </dd>
-            </div>
-            <div className="flex items-center justify-between gap-2">
-              <dt className="text-muted">{c.statLevels}</dt>
-              <dd className="font-semibold">{teaser.locked.levels}</dd>
-            </div>
-            <div className="flex items-center justify-between gap-2">
-              <dt className="text-muted">{c.statSignals}</dt>
-              <dd className="font-semibold">{teaser.locked.patterns}</dd>
-            </div>
-          </dl>
-        </div>
-        {imageUrl && (
-          <figure className="overflow-hidden rounded-2xl border border-border bg-background/60 p-2">
-            <div className="relative mx-auto w-fit">
-              {/* eslint-disable-next-line @next/next/no-img-element -- a local data URL, nothing to optimise */}
-              <img src={imageUrl} alt={r.chartAlt} className="block max-h-44 w-auto max-w-full" />
-              {marks.map((mark, index) => (
+      {/* The chart first, large and centred; the reading follows below it. */}
+      {imageUrl && (
+        <figure className="overflow-hidden rounded-2xl border border-border bg-background/60 p-2 sm:p-3">
+          <div className="relative mx-auto w-fit">
+            {/* eslint-disable-next-line @next/next/no-img-element -- a local data URL, nothing to optimise */}
+            <img src={imageUrl} alt={r.chartAlt} className="block max-h-[50dvh] w-auto max-w-full" />
+            {marks.map((mark, index) => (
+              <span
+                key={index}
+                className="pointer-events-none absolute inset-x-0 h-0 border-t border-dashed"
+                style={{ top: `${mark.y * 100}%`, borderColor: mark.kind === "support" ? "var(--bull)" : "var(--bear)" }}
+              >
                 <span
-                  key={index}
-                  className="pointer-events-none absolute inset-x-0 h-0 border-t border-dashed"
-                  style={{ top: `${mark.y * 100}%`, borderColor: mark.kind === "support" ? "var(--bull)" : "var(--bear)" }}
-                />
-              ))}
-            </div>
-          </figure>
-        )}
-      </div>
+                  className="absolute left-0 top-0 flex -translate-y-1/2 items-center rounded px-1 py-0.5 text-background"
+                  style={{ background: mark.kind === "support" ? "var(--bull)" : "var(--bear)" }}
+                >
+                  <LockIcon className="size-3" />
+                </span>
+              </span>
+            ))}
+          </div>
+        </figure>
+      )}
+
+      {/* The market at a glance: what the full report holds is counted, the trend stays locked. */}
+      <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        {[
+          [teaser.timeframe, teaser.asset],
+          [<LockIcon key="lock" className="size-5" />, r.trend],
+          [teaser.locked.levels, c.statLevels],
+          [teaser.locked.patterns, c.statSignals],
+        ].map(([value, label], index) => (
+          <div key={index} className="flex flex-col-reverse items-center rounded-xl border border-border bg-card px-2 py-3 text-center">
+            <dt className="mt-1 text-xs leading-tight text-muted">{label}</dt>
+            <dd className="display flex h-7 items-center text-xl">{value}</dd>
+          </div>
+        ))}
+      </dl>
 
       <section>
         <Heading>{c.summaryTitle}</Heading>
