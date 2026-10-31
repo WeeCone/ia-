@@ -306,13 +306,14 @@ export const es: Dict = {
     seen: "Lo que ve la IA",
     levelsHidden: (count: number) => `${count} nivel${count > 1 ? "es" : ""} detectado${count > 1 ? "s" : ""} en tu captura. Sus precios forman parte del plan.`,
     lockedTitle: "El plan está listo. Solo falta desbloquearlo.",
-    lockedItems: (locked: { supports: number; resistances: number; targets: number; macro: boolean }) =>
+    lockedItems: (locked: { supports: number; resistances: number; targets: number; patterns: number; macro: boolean }) =>
       [
         "El veredicto: comprar, vender, esperar o no operar",
         `La entrada, el stop y ${locked.targets > 1 ? `${locked.targets} objetivos` : "el objetivo"}, con el ratio beneficio/riesgo`,
         `Los ${locked.supports + locked.resistances} niveles con su precio, trazados en tu captura`,
         "Los dos escenarios y su probabilidad",
-        ...(locked.macro ? ["Las noticias de los próximos 7 días que pueden mover este activo"] : []),
+        ...(locked.patterns ? [`${locked.patterns > 1 ? `Las ${locked.patterns} figuras y señales detectadas` : "La figura o señal detectada"} en el gráfico`] : []),
+        ...(locked.macro ? ["Las noticias de los próximos 7 días sobre este activo (packs Pro y De por vida)"] : []),
         "Los puntos a vigilar para gestionar el riesgo",
       ],
     unlock: "Desbloquear el análisis completo",
@@ -321,6 +322,9 @@ export const es: Dict = {
     unlockTerms: (starter: string) => `Packs desde ${starter}/mes, sin permanencia. Recibes este análisis completo justo después del pago.`,
     notChart: "Esta imagen no parece un gráfico de precios. Prueba con una captura de tu plataforma (TradingView, Binance, MetaTrader…).",
     lockedAria: "Parte bloqueada del análisis",
+    shown: (percent: number) => `Estás viendo el ${percent} % de tu análisis`,
+    shownHint: "El resto está listo: se desbloquea con un pack.",
+    continues: "Resto del informe",
   },
   offerDialog: {
     title: "Elige tu pack",

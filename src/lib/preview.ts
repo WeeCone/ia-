@@ -21,7 +21,22 @@ const DAILY_BUDGET_EUR = 6;
 /** A preview can be unlocked for this long after it ran. */
 export const PREVIEW_TTL_MS = 48 * 60 * 60 * 1000;
 
+/** Words of text in a report value: what "share of the analysis" is measured in. Positions on the image don't count. */
+function words(value: unknown): number {
+  if (typeof value === "string") return value.split(/\s+/).filter(Boolean).length;
+  if (typeof value === "number") return 1;
+  if (Array.isArray(value)) return value.reduce((sum: number, item) => sum + words(item), 0);
+  if (value && typeof value === "object")
+    return Object.entries(value).reduce((sum, [key, item]) => (key === "level_marks" ? sum : sum + words(item)), 0);
+  return 0;
+}
+
+/**
+ * The beginning of the report, as a visitor sees it for free: the market, its trend, the AI's confidence and its reading
+ * of the structure. Everything after (plan, levels' prices, scenarios, patterns, risk) stays on the server.
+ */
 export function teaserOf(analysis: ChartAnalysis): PreviewTeaser {
+  const shown = [analysis.asset, analysis.timeframe, analysis.trend, analysis.confidence?.level, analysis.summary];
   return {
     is_chart: analysis.is_chart,
     asset: analysis.asset,
@@ -30,15 +45,17 @@ export function teaserOf(analysis: ChartAnalysis): PreviewTeaser {
     confidence: analysis.confidence,
     capture_quality: analysis.capture_quality,
     summary: analysis.summary,
-    patterns: analysis.patterns,
     marks: analysis.level_marks.map(({ kind, y }) => ({ kind, y })),
     locked: {
       supports: analysis.supports.length,
       resistances: analysis.resistances.length,
       targets: Math.max(analysis.bullish.targets.length, analysis.bearish.targets.length),
-      // The news side is gathered when the trial is unlocked.
+      patterns: analysis.patterns.length,
+      // The news side is gathered when a pack that includes it is unlocked.
       macro: analysis.is_chart,
     },
+    // Measured on the report as stored; the news side, added at unlock, would make the share smaller still.
+    shownPercent: Math.max(1, Math.round((words(shown) / Math.max(1, words(analysis))) * 100)),
   };
 }
 

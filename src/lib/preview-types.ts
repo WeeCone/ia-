@@ -9,9 +9,10 @@ export type PreviewTeaser = {
   confidence: ChartAnalysis["confidence"];
   capture_quality: ChartAnalysis["capture_quality"];
   summary: string;
-  patterns: string[];
   /** Where the levels sit on the capture (lines only, their prices stay locked). */
   marks: { kind: "support" | "resistance"; y: number }[];
   /** How much the locked part holds, to say it plainly. */
-  locked: { supports: number; resistances: number; targets: number; macro: boolean };
+  locked: { supports: number; resistances: number; targets: number; patterns: number; macro: boolean };
+  /** Share of the report's content shown for free, in percent (words shown over words in the whole report). */
+  shownPercent: number;
 };

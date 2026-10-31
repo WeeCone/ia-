@@ -306,13 +306,14 @@ export const en: Dict = {
     seen: "What the AI sees",
     levelsHidden: (count: number) => `${count} level${count > 1 ? "s" : ""} spotted on your screenshot. Their prices are part of the plan.`,
     lockedTitle: "The plan is ready. It just needs unlocking.",
-    lockedItems: (locked: { supports: number; resistances: number; targets: number; macro: boolean }) =>
+    lockedItems: (locked: { supports: number; resistances: number; targets: number; patterns: number; macro: boolean }) =>
       [
         "The verdict: buy, sell, wait or stay out",
         `The entry, the stop and ${locked.targets > 1 ? `${locked.targets} targets` : "the target"}, with the risk/reward ratio`,
         `The ${locked.supports + locked.resistances} levels with their prices, drawn on your screenshot`,
         "Both scenarios and their probability",
-        ...(locked.macro ? ["The news over the next 7 days that could move this asset"] : []),
+        ...(locked.patterns ? [`${locked.patterns > 1 ? `The ${locked.patterns} patterns and signals spotted` : "The pattern or signal spotted"} on the chart`] : []),
+        ...(locked.macro ? ["The news over the next 7 days on this asset (Pro and Lifetime packs)"] : []),
         "What to watch to manage the risk",
       ],
     unlock: "Unlock the full analysis",
@@ -321,6 +322,9 @@ export const en: Dict = {
     unlockTerms: (starter: string) => `Packs from ${starter}/month, no commitment. You get this full analysis right after payment.`,
     notChart: "This image doesn't look like a price chart. Try a screenshot from your platform (TradingView, Binance, MetaTrader…).",
     lockedAria: "Locked part of the analysis",
+    shown: (percent: number) => `You are seeing ${percent}% of your analysis`,
+    shownHint: "The rest is ready: it unlocks with a pack.",
+    continues: "Rest of the report",
   },
   offerDialog: {
     title: "Choose your pack",
