@@ -16,9 +16,7 @@ import { TourPopover } from "@/components/dashboard/tour";
 import { Logo } from "@/components/logo";
 import { ReviewPrompt } from "@/components/review-prompt";
 import type { ChartAnalysis } from "@/lib/analysis";
-import { getDownloadURL, ref } from "firebase/storage";
 import { isAdminUser } from "@/lib/admin";
-import { storage } from "@/lib/firebase";
 import { preloadStripe } from "@/components/checkout-dialog";
 import { OfferDialog } from "@/components/dashboard/offer-dialog";
 import { buyableOffers } from "@/components/pricing-plans";
@@ -203,8 +201,15 @@ export default function DashboardPage() {
   function openStored(item: StoredAnalysis) {
     show({ analysis: item, imageUrl: null, id: item.id });
     if (!item.imagePath) return;
-    getDownloadURL(ref(storage, item.imagePath))
-      .then((url) => setCurrent((current) => (current?.id === item.id ? { ...current, imageUrl: url } : current)))
+    // Through the server, which reads the customer's own file: no Storage rules to keep in step.
+    user
+      ?.getIdToken()
+      .then((token) => fetch(`/api/analyses/${item.id}/image`, { headers: { Authorization: `Bearer ${token}` } }))
+      .then((response) => (response.ok ? response.blob() : Promise.reject()))
+      .then((blob) => {
+        const url = URL.createObjectURL(blob);
+        setCurrent((current) => (current?.id === item.id ? { ...current, imageUrl: url } : current));
+      })
       .catch(() => {});
   }
 
