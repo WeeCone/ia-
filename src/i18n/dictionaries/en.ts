@@ -338,7 +338,7 @@ export const en: Dict = {
     seePacks: "See the packs",
     unavailableTitle: { limit: "Today's free readings are used", budget: "No more free readings today", error: "The free reading couldn't run" },
     unavailableText: {
-      limit: "You've already had your 2 free readings today. They come back tomorrow; with a pack, you can analyse this chart right now.",
+      limit: "A lot of free readings came from this connection today. They come back tomorrow; with a pack, you can analyse this chart right now.",
       budget: "Today's free readings have all gone. They come back tomorrow; with a pack, you can analyse this chart right now.",
       error: "A technical issue on our side. Try again in a moment, or analyse this chart with a pack.",
     },

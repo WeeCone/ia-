@@ -338,7 +338,7 @@ export const es: Dict = {
     seePacks: "Ver los packs",
     unavailableTitle: { limit: "Lecturas gratuitas de hoy usadas", budget: "No quedan lecturas gratuitas hoy", error: "La lectura gratuita no se ha podido hacer" },
     unavailableText: {
-      limit: "Ya has tenido tus 2 lecturas gratuitas de hoy. Vuelven mañana; con un pack, analizas este gráfico ahora mismo.",
+      limit: "Hoy han salido muchas lecturas gratuitas desde esta conexión. Vuelven mañana; con un pack, analizas este gráfico ahora mismo.",
       budget: "Las lecturas gratuitas de hoy se han agotado. Vuelven mañana; con un pack, analizas este gráfico ahora mismo.",
       error: "Un problema técnico por nuestra parte. Vuelve a intentarlo en un momento o analiza este gráfico con un pack.",
     },

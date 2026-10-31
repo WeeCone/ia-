@@ -13,10 +13,10 @@ export type { PreviewTeaser };
  * from them, consistent with what the visitor saw. No plan exists before payment, so none can leak.
  */
 
-/** Previews any one visitor (by IP) may run per day. */
-const PER_VISITOR_PER_DAY = 2;
-/** AI spend allowed on previews per day, across all visitors (about 150 readings). Past it, "Analyse" goes straight to the packs. */
-const DAILY_BUDGET_EUR = 3;
+/** Free readings per connection (IP) per day: high enough that a person never meets it, a bound on scripted abuse. */
+const PER_VISITOR_PER_DAY = 30;
+/** AI spend allowed on free readings per day, across all visitors (about 600 readings): a safety net, not a quota. */
+const DAILY_BUDGET_EUR = 15;
 /** Worst case of one free reading: the image, a short prompt and at most 1 500 output tokens on the light model. */
 const PREVIEW_MAX_COST_EUR = 0.05;
 /** A preview can be unlocked for this long after it ran. */
