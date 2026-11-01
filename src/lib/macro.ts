@@ -1,14 +1,22 @@
 import "server-only";
+import { createHash } from "node:crypto";
 import Anthropic from "@anthropic-ai/sdk";
+import { FieldValue } from "firebase-admin/firestore";
 import type { Locale } from "@/i18n/config";
-import { MacroReport, type AllowedImageType } from "./analysis";
+import { MacroReport } from "./analysis";
+import { adminDb } from "./firebase-admin";
 import { callCostEur } from "./usage-cost";
 
 /**
  * The news side of a report: the scheduled events and recent news that can move the asset over the next days, found
- * with web search at the time of the analysis. Runs alongside the chart reading, so it adds no waiting time; a failure
- * here never blocks the chart report (it simply comes without this section).
+ * with web search at the time of the analysis. It works from the asset's name (read beforehand from the capture by the
+ * light model), not from the image, on a mid-size model; and it is shared: once found for an asset, in a language, on
+ * a given day, it is reused for every analysis of that asset that day. Runs alongside the chart reading, so it adds no
+ * waiting time; a failure here never blocks the chart report (it simply comes without this section).
  */
+
+/** Searching and summarising announcements needs no top model. */
+const MACRO_MODEL = "claude-sonnet-5-5";
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY?.trim() });
 
@@ -35,11 +43,11 @@ function systemPrompt(locale: Locale) {
     timeZone: "Europe/Paris",
   });
   return `Tu prépares le volet macro-économique et actualité d'une analyse technique. Nous sommes le ${today} (heure de Paris).
-Lis sur la capture l'actif analysé et l'unité de temps, puis cherche sur le web :
+L'actif et l'unité de temps te sont donnés. Cherche sur le web :
 - les événements programmés dans les 7 prochains jours qui peuvent faire bouger cet actif : banques centrales concernées (décisions de taux, discours), inflation, emploi, PIB, résultats d'entreprise pour une action, échéances propres à la crypto (régulation, ETF, déblocages de jetons) ;
 - l'actualité des 48 dernières heures qui pèse sur cet actif.
 Donne les dates et heures en heure de Paris. N'écris que ce que tes recherches confirment : aucun événement ni chiffre inventé, et une liste vide vaut mieux qu'un événement douteux. Garde les 3 à 6 événements les plus importants.
-Reste factuel : ne donne pas de signal d'achat ou de vente tiré de l'actualité. Dans plan_impact, dis en une ou deux phrases comment en tenir compte dans un trade sur l'horizon de cette unité de temps (par exemple éviter d'entrer juste avant une annonce, réduire la taille, attendre la réaction du marché), ou qu'aucun événement majeur n'est attendu.
+Reste factuel : ne donne pas de signal d'achat ou de vente tiré de l'actualité. Dans plan_impact, dis en une ou deux phrases comment en tenir compte dans un trade sur les prochains jours (par exemple éviter d'entrer juste avant une annonce, réduire la taille, attendre la réaction du marché), ou qu'aucun événement majeur n'est attendu.
 ${LANGUAGE[locale]}
 Termine ta réponse par un unique objet JSON, sans texte après, de la forme :
 {"asset": "BTC/USDT", "context": "2 ou 3 phrases sur le contexte actuel", "events": [{"date": "jeu. 23 oct. 14h30", "title": "Inflation américaine (CPI)", "impact": "fort", "why": "une phrase"}], "plan_impact": "1 ou 2 phrases", "sources": [{"title": "titre de la page", "url": "https://..."}]}
@@ -75,14 +83,33 @@ function searchedUrls(blocks: Block[]) {
   return urls;
 }
 
-export async function macroContext(imageBase64: string, mediaType: AllowedImageType, locale: Locale) {
+/** Today in Paris, the day a shared news side is valid for. */
+const parisDay = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Paris" });
+
+/** One cache entry per asset, language and day ("BTC/USDT" and "btcusdt" share it). */
+function cacheRef(asset: string, locale: Locale) {
+  const normalized = asset.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const id = createHash("sha256").update(`${parisDay()}|${locale}|${normalized}`).digest("hex").slice(0, 32);
+  return adminDb.collection("macroCache").doc(id);
+}
+
+const UNKNOWN = /^(inconnu|inconnue|unknown|desconocido|n\/a|-)?$/i;
+
+export async function macroContext(target: { asset: string; timeframe: string }, locale: Locale) {
+  // Nothing to search for without a named asset.
+  if (UNKNOWN.test(target.asset.trim())) return { report: null, costEur: 0 };
+
+  const ref = cacheRef(target.asset, locale);
+  const cached = await ref.get().catch(() => null);
+  if (cached?.exists) {
+    const parsed = MacroReport.safeParse(cached.get("report"));
+    if (parsed.success) return { report: parsed.data, costEur: 0 };
+  }
+
   const messages: Anthropic.Beta.Messages.BetaMessageParam[] = [
     {
       role: "user",
-      content: [
-        { type: "image", source: { type: "base64", media_type: mediaType, data: imageBase64 } },
-        { type: "text", text: "Prépare le volet macro et actualité pour l'actif de ce graphique." },
-      ],
+      content: `Prépare le volet macro et actualité pour l'actif ${target.asset} (unité de temps du graphique : ${target.timeframe}).`,
     },
   ];
   const blocks: Block[] = [];
@@ -92,7 +119,7 @@ export async function macroContext(imageBase64: string, mediaType: AllowedImageT
     for (let turn = 0; turn <= MAX_CONTINUATIONS; turn++) {
       const response = await client.beta.messages.create(
         {
-          model: "claude-opus-5-5",
+          model: MACRO_MODEL,
           max_tokens: 6000,
           betas: ["server-side-fallback-2026-07-01"],
           fallbacks: "default",
@@ -123,18 +150,18 @@ export async function macroContext(imageBase64: string, mediaType: AllowedImageT
     return { report: null, costEur };
   }
 
-  const report = parseReport(blocks);
-  if (!report) {
+  const parsed = parseReport(blocks);
+  if (!parsed) {
     console.error("macro context: no usable report");
     return { report: null, costEur };
   }
   const searched = searchedUrls(blocks);
-  return {
-    report: {
-      ...report,
-      events: report.events.slice(0, 6),
-      sources: report.sources.filter((source) => searched.has(source.url)).slice(0, 5),
-    },
-    costEur,
+  const report = {
+    ...parsed,
+    events: parsed.events.slice(0, 6),
+    sources: parsed.sources.filter((source) => searched.has(source.url)).slice(0, 5),
   };
+  // Shared for the rest of the day; best effort.
+  await ref.set({ report, asset: target.asset, locale, day: parisDay(), createdAt: FieldValue.serverTimestamp() }).catch(() => {});
+  return { report, costEur };
 }

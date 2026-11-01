@@ -53,6 +53,13 @@ export const ChartPreview = z.object({
 });
 export type ChartPreview = z.infer<typeof ChartPreview>;
 
+/** The light model's first look before a paid analysis: is it a chart, and of what (names the news side's search). */
+export const ChartCheck = z.object({
+  is_chart: z.boolean().describe("false si l'image n'est pas un graphique de prix exploitable."),
+  asset: z.string().describe("Actif identifié (ex. BTC/USDT), ou « Inconnu »."),
+  timeframe: z.string().describe("Unité de temps (ex. 4H), ou « Inconnue »."),
+});
+
 export const ChartAnalysis = z.object({
   is_chart: z.boolean().describe("false si l'image n'est pas un graphique de prix exploitable."),
   asset: z.string().describe("Actif identifié (ex. BTC/USDT), ou « Inconnu »."),

@@ -23,7 +23,7 @@ export async function GET(request: Request) {
         .collection("analyses")
         .orderBy("createdAt", "desc")
         .limit(PER_USER)
-        .select("is_chart", "asset", "timeframe", "trend", "verdict", "note", "imagePath", "createdAt")
+        .select("is_chart", "asset", "timeframe", "trend", "verdict", "note", "imagePath", "createdAt", "usage")
         .get();
       return snap.docs.map((doc): AdminAnalysis => {
         const data = doc.data();
@@ -41,6 +41,8 @@ export async function GET(request: Request) {
           headline: data.verdict?.headline ?? null,
           note: data.note ?? null,
           hasImage: Boolean(data.imagePath),
+          costEur: typeof data.usage?.costEur === "number" ? data.usage.costEur : null,
+          outputTokens: typeof data.usage?.outputTokens === "number" ? data.usage.outputTokens : null,
         };
       });
     }),

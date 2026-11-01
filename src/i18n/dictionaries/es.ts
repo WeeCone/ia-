@@ -668,6 +668,7 @@ export const es: Dict = {
     tooLarge: "Imagen demasiado pesada (5 MB como máximo).",
     testOnly: "El modo de prueba está reservado al administrador.",
     refused: "La IA no ha podido analizar esta imagen.",
+    notChart: "Esta imagen no parece un gráfico de precios. No se ha descontado ningún crédito.",
     busy: "Servicio saturado, vuelve a intentarlo en un momento.",
     failed: "El análisis ha fallado. No se ha descontado ningún crédito.",
     paymentStripe: (detail: string) => `Pago no disponible (Stripe): ${detail}`,

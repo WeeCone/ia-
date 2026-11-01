@@ -15,8 +15,8 @@ export type { PreviewTeaser };
 
 /** Free readings per connection (IP) per day: high enough that a person never meets it, a bound on scripted abuse. */
 const PER_VISITOR_PER_DAY = 30;
-/** AI spend allowed on free readings per day, across all visitors (about 600 readings): a safety net, not a quota. */
-const DAILY_BUDGET_EUR = 15;
+/** AI spend allowed on free readings per day, across all visitors (about a thousand readings): a safety net against scripted abuse. */
+const DAILY_BUDGET_EUR = 3;
 /** Worst case of one free reading: the image, a short prompt and at most 1 500 output tokens on the light model. */
 const PREVIEW_MAX_COST_EUR = 0.05;
 /** A preview can be unlocked for this long after it ran. */

@@ -2,7 +2,7 @@ import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import type { Locale } from "@/i18n/config";
-import { ChartAnalysis, ChartPreview, type AllowedImageType } from "./analysis";
+import { ChartAnalysis, ChartCheck, ChartPreview, type AllowedImageType } from "./analysis";
 import { callCostEur } from "./usage-cost";
 
 // Trimmed: a secret pasted with a trailing newline is otherwise sent as is and rejected as an invalid key.
@@ -77,7 +77,12 @@ export async function analyzeChart(
   if (response.stop_reason === "refusal" || !response.parsed_output) {
     throw new AnalysisRefusedError(`Analyse impossible (stop_reason: ${response.stop_reason})`, callCostEur(response.model, response.usage));
   }
-  return { analysis: response.parsed_output, model: response.model, costEur: callCostEur(response.model, response.usage) };
+  return {
+    analysis: response.parsed_output,
+    model: response.model,
+    costEur: callCostEur(response.model, response.usage),
+    outputTokens: response.usage.output_tokens,
+  };
 }
 
 /** The free reading's model: the smallest, asked for the visible part only (see ChartPreview), a fraction of a cent. */
@@ -111,4 +116,27 @@ export async function previewChart(imageBase64: string, mediaType: AllowedImageT
     throw new AnalysisRefusedError(`Lecture impossible (stop_reason: ${response.stop_reason})`, callCostEur(response.model, response.usage));
   }
   return { preview: response.parsed_output, costEur: callCostEur(response.model, response.usage) };
+}
+
+/**
+ * Before a paid analysis: a fraction-of-a-cent look by the light model. An image that is not a chart stops here
+ * instead of running the full analysis; a chart gives the asset the news side searches for.
+ */
+export async function checkChart(imageBase64: string, mediaType: AllowedImageType) {
+  const response = await client.beta.messages.parse({
+    model: PREVIEW_MODEL,
+    max_tokens: 1000,
+    output_config: { format: betaZodOutputFormat(ChartCheck) },
+    system: "On te fournit une image. Dis si c'est un graphique de prix exploitable (bougies, courbe de cotation avec un axe des prix), et si oui, l'actif et l'unité de temps lisibles.",
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "image", source: { type: "base64", media_type: mediaType, data: imageBase64 } },
+          { type: "text", text: "Est-ce un graphique de prix ?" },
+        ],
+      },
+    ],
+  });
+  return { check: response.parsed_output, costEur: callCostEur(response.model, response.usage) };
 }

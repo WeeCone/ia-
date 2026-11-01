@@ -133,6 +133,13 @@ export function AnalysesTab({ query, onQuery, reloadKey }: { query: string; onQu
     return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 6);
   }, [rows]);
 
+  const usage = useMemo(() => {
+    const measured = (rows ?? []).filter((row) => row.costEur !== null);
+    if (!measured.length) return null;
+    const sum = (pick: (row: AdminAnalysis) => number) => measured.reduce((total, row) => total + pick(row), 0);
+    return { count: measured.length, cost: sum((row) => row.costEur ?? 0) / measured.length, tokens: sum((row) => row.outputTokens ?? 0) / measured.length };
+  }, [rows]);
+
   const onClose = useCallback(() => setOpen(null), []);
 
   return (
@@ -161,6 +168,12 @@ export function AnalysesTab({ query, onQuery, reloadKey }: { query: string; onQu
             </button>
           ))}
         </div>
+      )}
+      {usage && (
+        <p className="mb-4 text-sm text-muted">
+          Coût réel moyen : <span className="font-medium text-foreground">{usage.cost.toFixed(3).replace(".", ",")} €</span> par analyse ·
+          réponse moyenne de {Math.round(usage.tokens)} tokens · mesuré sur {usage.count} analyse{usage.count > 1 ? "s" : ""}
+        </p>
       )}
       <div className="flex flex-wrap gap-3">
         <input
@@ -198,6 +211,7 @@ export function AnalysesTab({ query, onQuery, reloadKey }: { query: string; onQu
               <th className="px-4 py-3 font-medium">Actif</th>
               <th className="px-4 py-3 font-medium">UT</th>
               <th className="px-4 py-3 font-medium">Verdict</th>
+              <th className="px-4 py-3 text-right font-medium">Coût</th>
               <th className="px-4 py-3" />
             </tr>
           </thead>
@@ -232,6 +246,9 @@ export function AnalysesTab({ query, onQuery, reloadKey }: { query: string; onQu
                   ) : (
                     <span className="text-xs text-muted">—</span>
                   )}
+                </td>
+                <td className="whitespace-nowrap px-4 py-3 text-right font-mono text-xs" title={row.outputTokens !== null ? `${row.outputTokens} tokens en sortie` : undefined}>
+                  {row.costEur !== null ? `${row.costEur.toFixed(3).replace(".", ",")} €` : "—"}
                 </td>
                 <td className="px-4 py-3 text-right">
                   <span className="btn-ghost px-2 py-1 text-xs">Voir</span>

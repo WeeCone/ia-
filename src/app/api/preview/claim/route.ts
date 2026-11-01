@@ -49,7 +49,9 @@ export async function POST(request: Request) {
   const image = bytes.toString("base64");
 
   // The news side runs alongside (Pro and À vie); it never throws and its cost counts in every case.
-  const macroPromise = hasNewsSide(userData.plan) ? macroContext(image, imageType, locale) : Promise.resolve({ report: null, costEur: 0 });
+  const macroPromise = hasNewsSide(userData.plan)
+    ? macroContext({ asset: preview.asset, timeframe: preview.timeframe }, locale)
+    : Promise.resolve({ report: null, costEur: 0 });
   let result: Awaited<ReturnType<typeof analyzeChart>>;
   try {
     result = await analyzeChart(image, imageType, undefined, locale, userData.plan === "starter" ? STARTER_MODEL : undefined);
@@ -81,7 +83,13 @@ export async function POST(request: Request) {
         spendEur: spent,
         spendPeriod: creditPeriod(),
       });
-      tx.set(analysisRef, { ...analysis, note: null, model: result.model, createdAt: FieldValue.serverTimestamp() });
+      tx.set(analysisRef, {
+        ...analysis,
+        note: null,
+        model: result.model,
+        usage: { outputTokens: result.outputTokens, costEur: result.costEur + macro.costEur + (snapshot.get("costEur") ?? 0) },
+        createdAt: FieldValue.serverTimestamp(),
+      });
       tx.update(previewRef, { claimedBy: uid, analysisId: analysisRef.id });
     });
   } catch (err) {

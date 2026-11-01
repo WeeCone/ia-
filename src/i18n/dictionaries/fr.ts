@@ -670,6 +670,7 @@ export const fr = {
     tooLarge: "Image trop lourde (5 Mo maximum).",
     testOnly: "Mode test réservé à l'administrateur.",
     refused: "L'IA n'a pas pu analyser cette image.",
+    notChart: "Cette image ne semble pas être un graphique de prix. Aucun crédit n'a été débité.",
     busy: "Service saturé, réessayez dans un instant.",
     failed: "L'analyse a échoué. Aucun crédit n'a été débité.",
     paymentStripe: (detail: string) => `Paiement indisponible (Stripe) : ${detail}`,

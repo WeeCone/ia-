@@ -2,7 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { FieldValue } from "firebase-admin/firestore";
 import { isAdminRequest } from "@/lib/admin-auth";
 import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_BYTES, type AllowedImageType } from "@/lib/analysis";
-import { analyzeChart, AnalysisRefusedError } from "@/lib/claude";
+import { analyzeChart, AnalysisRefusedError, checkChart } from "@/lib/claude";
 import { macroContext } from "@/lib/macro";
 import { availableCredits, budgetFor, creditPeriod, hasNewsSide, MAX_CALL_COST_EUR, periodFor, STARTER_MODEL } from "@/lib/plans";
 import { adminBucket, adminDb } from "@/lib/firebase-admin";
@@ -55,14 +55,25 @@ export async function POST(request: Request) {
   let result: Awaited<ReturnType<typeof analyzeChart>>;
   const bytes = Buffer.from(await image.arrayBuffer());
   const startedAt = Date.now();
+
+  // A first look by the light model (a fraction of a cent): an image that is not a chart stops here, not charged,
+  // and a chart names the asset the news side searches for. If the look itself fails, the analysis goes ahead.
+  const look = await checkChart(bytes.toString("base64"), image.type as AllowedImageType).catch((err) => {
+    console.error("chart check failed", err);
+    return null;
+  });
+  if (look) await recordSpend(userRef, look.costEur);
+  if (look?.check && !look.check.is_chart) return error(text.notChart, 422);
+
   // The news side comes with every Pro and À vie analysis (and a trial's, for subscriptions started before the trial
-  // was withdrawn; and for the admin). It runs alongside the chart reading (no extra wait) and never throws; its cost
-  // counts in every case.
+  // was withdrawn; and for the admin). It runs alongside the chart reading (no extra wait), from the asset's name and
+  // shared per asset and day, and never throws; its cost counts in every case.
   const inTrial = typeof userData.trialEndsAt === "number" && userData.trialEndsAt > Date.now();
   const withMacro = hasNewsSide(userData.plan) || inTrial || (await isAdminRequest(request).catch(() => false));
-  const macroPromise = withMacro
-    ? macroContext(bytes.toString("base64"), image.type as AllowedImageType, locale)
-    : Promise.resolve({ report: null, costEur: 0 });
+  const macroPromise =
+    withMacro && look?.check
+      ? macroContext({ asset: look.check.asset, timeframe: look.check.timeframe }, locale)
+      : Promise.resolve({ report: null, costEur: 0 });
   try {
     const model = userData.plan === "starter" ? STARTER_MODEL : undefined;
     result = await analyzeChart(bytes.toString("base64"), image.type as AllowedImageType, note || undefined, locale, model);
@@ -109,6 +120,8 @@ export async function POST(request: Request) {
         ...analysis,
         note: note || null,
         model: result.model,
+        // What this report really cost, to follow the real figures from the admin.
+        usage: { outputTokens: result.outputTokens, costEur: result.costEur + macro.costEur + (look?.costEur ?? 0) },
         createdAt: FieldValue.serverTimestamp(),
       });
     });

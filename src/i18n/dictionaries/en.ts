@@ -668,6 +668,7 @@ export const en: Dict = {
     tooLarge: "Image too large (5 MB maximum).",
     testOnly: "Test mode is for the administrator only.",
     refused: "The AI could not analyse this image.",
+    notChart: "This image doesn't look like a price chart. No credit was used.",
     busy: "Service busy, try again in a moment.",
     failed: "The analysis failed. No credit was used.",
     paymentStripe: (detail: string) => `Payment unavailable (Stripe): ${detail}`,

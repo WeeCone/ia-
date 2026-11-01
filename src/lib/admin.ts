@@ -71,6 +71,9 @@ export type AdminAnalysis = {
   headline: string | null;
   note: string | null;
   hasImage: boolean;
+  /** Real API cost (€) and answer length (output tokens), recorded since the cost pass; null on older analyses. */
+  costEur: number | null;
+  outputTokens: number | null;
 };
 
 export type FunnelCounts = { visits: number; signup: number; analysis: number; checkout: number; purchase: number; revenue: number };

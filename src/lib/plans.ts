@@ -22,11 +22,12 @@ export const MONTHLY_BUDGET_EUR = Math.max(...Object.values(BUDGET_EUR));
 export const ANALYSIS_COST_EUR = 0.2;
 
 /**
- * Worst case for a single analysis: the chart reading (16 000 output tokens at Opus prices, plus the image and prompt)
- * and its news side (up to 4 web searches, their results read as input, 6 000 output tokens).
- * An analysis only starts if this much budget is left, so the ceiling is never crossed.
+ * Worst case for a single analysis: the chart reading (16 000 output tokens at Opus prices, plus the image and prompt,
+ * about 0,34 €), its news side on the mid-size model (up to 4 web searches and their results read as input, 6 000 output
+ * tokens, about 0,15 €) and the light model's first look. An analysis only starts if this much budget is left, so the
+ * ceiling is never crossed.
  */
-export const MAX_CALL_COST_EUR = 0.7;
+export const MAX_CALL_COST_EUR = 0.5;
 
 /** Pro and À vie: analyses per calendar month. */
 export const MONTHLY_CREDITS = 30;
