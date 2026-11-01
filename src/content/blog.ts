@@ -1,6 +1,8 @@
 import type { Locale } from "@/i18n/config";
 import { ARTICLES_EN } from "./blog-en";
+import { ARTICLES_EN_2 } from "./blog-en-2";
 import { ARTICLES_ES } from "./blog-es";
+import { ARTICLES_ES_2 } from "./blog-es-2";
 import { ARTICLES_FR_2 } from "./blog-fr-2";
 
 /**
@@ -478,8 +480,8 @@ const ARTICLES_FR: Omit<Article, "locale" | "key">[] = [
 export const ARTICLES: Article[] = [
   // Newest first: the blog index lists them in this order.
   ...[...ARTICLES_FR_2, ...ARTICLES_FR].map((article) => ({ ...article, key: article.slug, locale: "fr" as const })),
-  ...ARTICLES_EN.map((article) => ({ ...article, locale: "en" as const })),
-  ...ARTICLES_ES.map((article) => ({ ...article, locale: "es" as const })),
+  ...[...ARTICLES_EN_2, ...ARTICLES_EN].map((article) => ({ ...article, locale: "en" as const })),
+  ...[...ARTICLES_ES_2, ...ARTICLES_ES].map((article) => ({ ...article, locale: "es" as const })),
 ];
 
 /** The same article in the other languages that have it, for hreflang links. */
