@@ -10,18 +10,12 @@ import { ScanCta } from "./scan-cta";
 
 export async function SiteHeader() {
   const { t, locale, href } = await getI18n();
-  // The entry price, picked out in the brand green.
-  const from = (
-    <>
-      {t.header.from} <strong className="font-bold text-accent">{formatEur(locale, OFFER_PRICE_EUR.starter)}</strong>
-    </>
-  );
   const NAV = [
     { href: href("/#fonctionnalites"), label: t.header.nav.features },
     { href: href("/#video"), label: t.header.nav.demo },
     { href: href("/#methode"), label: t.header.nav.method },
-    { href: href("/#tarifs"), label: t.header.nav.pricing },
     { href: href("/#faq"), label: t.header.nav.faq },
+    { href: href("/blog"), label: t.footer.blog },
   ];
   return (
     <header className="sticky top-3 z-40 px-3 sm:top-4">
@@ -38,10 +32,6 @@ export async function SiteHeader() {
         <div className="flex items-center gap-1">
           <LanguageMenu className="hidden xl:block" />
           <HeaderAccountLink className="btn-ghost hidden sm:inline-flex" />
-          {/* The packs, next to the main button: the entry price and a way to the comparison. */}
-          <Link href={href("/#tarifs")} className="btn-secondary ml-1 hidden whitespace-nowrap rounded-full px-4 py-2.5 lg:inline-flex">
-            {from}
-          </Link>
           <ScanCta className="btn-primary ml-1 whitespace-nowrap rounded-full px-4 py-2.5 sm:px-5">
             <span>
               {t.header.scan}

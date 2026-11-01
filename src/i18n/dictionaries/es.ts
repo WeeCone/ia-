@@ -2,9 +2,10 @@ import type { Dict } from "./fr";
 
 export const es: Dict = {
   meta: {
-    title: "Scanzivo — Análisis de gráficos con IA",
-    description: "Sube una captura de un gráfico y obtén un análisis técnico y escenarios de trading generados por IA.",
+    title: "Scanzivo — Análisis de gráficos de trading con IA en segundos",
+    description: "Envía una captura de tu gráfico (TradingView, Binance, MetaTrader): la IA lee la tendencia, traza soportes y resistencias y pone cifras a un plan. Primera lectura gratis.",
     pricingTitle: "Precios — Scanzivo",
+    pricingDescription: "Packs y precios: Starter, Pro y De por vida, sin permanencia. Empieza con una lectura gratis de tu gráfico.",
     skipLink: "Ir al contenido",
   },
   common: {
@@ -59,8 +60,7 @@ export const es: Dict = {
     related: "Para seguir leyendo",
     disclaimer: "Este artículo es pedagógico. No constituye un asesoramiento de inversión. El trading conlleva un riesgo de pérdida de capital.",
     ctaTitle: "Haz leer tu gráfico",
-    ctaText: (starter: string) => `Envía una captura: la IA te muestra gratis su lectura y el plan con cifras se desbloquea con un pack, desde ${starter}/mes.`,
-    ctaPacks: "Ver los packs",
+    ctaText: "Envía una captura de tu gráfico: la IA te muestra gratis su lectura, sin tarjeta ni registro.",
     ctaButton: "Analizar un gráfico",
   },
   legalLinks: { mentions: "Aviso legal", terms: "Condiciones de venta y uso", privacy: "Privacidad" },
@@ -69,11 +69,7 @@ export const es: Dict = {
     titleLine2: "de tus activos favoritos:",
     words: ["las criptos", "el forex", "el oro", "los índices", "las acciones"],
     subtitle: "Envía una captura de tu gráfico. En menos de un minuto sabes dónde entrar, dónde poner el stop y a qué apuntar.",
-    priceLine: (starter: string) => ({
-      before: "Lectura gratuita, sin tarjeta ni registro. ",
-      offer: `Packs desde ${starter}/mes`,
-      after: ", sin permanencia.",
-    }),
+    freeLine: "Lectura gratis de tu gráfico, sin tarjeta ni registro.",
     platforms: "Funciona con las capturas de tus plataformas",
     platformsLabel: "Plataformas compatibles",
   },
@@ -248,7 +244,7 @@ export const es: Dict = {
       },
       {
         q: "¿En qué se basan los análisis?",
-        a: "La lectura técnica se basa solo en lo que se ve en tu captura: una captura nítida, con el eje de precios legible, da un mejor análisis. Con los packs Pro y De por vida, el análisis incluye además las noticias recientes y los eventos económicos de los próximos 7 días que pueden mover el activo, con sus fuentes. No se conecta a las cotizaciones en tiempo real.",
+        a: "La lectura técnica se basa solo en lo que se ve en tu captura: una captura nítida, con el eje de precios legible, da un mejor análisis. Según el plan elegido, el análisis incluye además las noticias recientes y los eventos económicos de los próximos 7 días que pueden mover el activo, con sus fuentes. No se conecta a las cotizaciones en tiempo real.",
       },
       {
         q: "¿Puedo adaptar el análisis a mi forma de operar?",
@@ -256,7 +252,7 @@ export const es: Dict = {
       },
       {
         q: "¿Cómo se cuentan los análisis?",
-        a: "Cada oferta incluye créditos de análisis que se recargan cada mes, visibles en todo momento en tu cuenta. Una imagen que no es un gráfico no se descuenta.",
+        a: "El número de análisis depende del plan elegido y siempre está visible en tu cuenta. Una imagen que no es un gráfico no se descuenta.",
       },
       {
         q: "¿Puedo cancelar en cualquier momento?",
@@ -274,7 +270,6 @@ export const es: Dict = {
     titleB: "pide una segunda opinión.",
     subtitle: "Scanzivo lee tu gráfico y te responde con niveles precisos.",
     cta: "Leer mi gráfico gratis",
-    note: (starter: string) => `Lectura gratuita de tu gráfico, luego packs desde ${starter}/mes, sin permanencia.`,
   },
   activity: {
     live: "Análisis en directo",

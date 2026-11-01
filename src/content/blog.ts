@@ -1,6 +1,7 @@
 import type { Locale } from "@/i18n/config";
 import { ARTICLES_EN } from "./blog-en";
 import { ARTICLES_ES } from "./blog-es";
+import { ARTICLES_FR_2 } from "./blog-fr-2";
 
 /**
  * Blog articles: educational pieces on reading charts, for search engines and AI assistants as much as for readers.
@@ -24,6 +25,8 @@ export type Article = {
   description: string;
   /** ISO date of publication. */
   date: string;
+  /** ISO date of the last real change, when there was one. */
+  updated?: string;
   body: Block[];
 };
 
@@ -473,7 +476,8 @@ const ARTICLES_FR: Omit<Article, "locale" | "key">[] = [
 ];
 
 export const ARTICLES: Article[] = [
-  ...ARTICLES_FR.map((article) => ({ ...article, key: article.slug, locale: "fr" as const })),
+  // Newest first: the blog index lists them in this order.
+  ...[...ARTICLES_FR_2, ...ARTICLES_FR].map((article) => ({ ...article, key: article.slug, locale: "fr" as const })),
   ...ARTICLES_EN.map((article) => ({ ...article, locale: "en" as const })),
   ...ARTICLES_ES.map((article) => ({ ...article, locale: "es" as const })),
 ];
@@ -485,12 +489,28 @@ export const articlesFor = (locale: Locale) => ARTICLES.filter((article) => arti
 
 export const findArticle = (locale: Locale, slug: string) => ARTICLES.find((article) => article.locale === locale && article.slug === slug);
 
-/** Reading time at about 220 words a minute, never under a minute. */
-export function readingMinutes(article: Article) {
-  const words = article.body
+/**
+ * What to read next: the articles that follow this one in its language, wrapping round, so every article is linked from
+ * three others (search engines find each one, and no article is left without inbound links).
+ */
+export function relatedTo(article: Article, count = 3) {
+  const list = articlesFor(article.locale);
+  const index = list.findIndex((other) => other.slug === article.slug);
+  return Array.from({ length: Math.min(count, list.length - 1) }, (_, step) => list[(index + 1 + step) % list.length]);
+}
+
+/** Words in an article's text (links and bold marks removed). */
+export function articleText(article: Article) {
+  return article.body
     .flatMap((block) => Object.values(block))
     .flat()
     .join(" ")
-    .split(/\s+/).length;
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/\*\*/g, "");
+}
+
+/** Reading time at about 220 words a minute, never under a minute. */
+export function readingMinutes(article: Article) {
+  const words = articleText(article).split(/\s+/).length;
   return Math.max(1, Math.round(words / 220));
 }

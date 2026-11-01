@@ -4,11 +4,23 @@ import { PricingPlans } from "@/components/pricing-plans";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { TrustStrip } from "@/components/trust-strip";
+import { localePath } from "@/i18n/config";
 import { getI18n, languageAlternates } from "@/i18n/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { locale, t } = await getI18n();
-  return { title: t.meta.pricingTitle, alternates: languageAlternates(locale, "/pricing") };
+  return {
+    title: t.meta.pricingTitle,
+    description: t.meta.pricingDescription,
+    alternates: languageAlternates(locale, "/pricing"),
+    // Prices show after a chart is read, not in search results: this page serves signed-in customers.
+    robots: { index: false, follow: true },
+    openGraph: {
+      title: t.meta.pricingTitle,
+      description: t.meta.pricingDescription,
+      images: [{ url: localePath(locale, "/og"), width: 1200, height: 630 }],
+    },
+  };
 }
 
 export default async function PricingPage() {

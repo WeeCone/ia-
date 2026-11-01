@@ -226,6 +226,17 @@ body {
 .article strong {
   color: var(--foreground);
 }
+.article a {
+  color: var(--foreground);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--brand) 60%, transparent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+.article a:hover {
+  text-decoration-color: var(--brand);
+}
 
 /* Sweep used on the screenshot while an analysis runs. */
 @keyframes scan {

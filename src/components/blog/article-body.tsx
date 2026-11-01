@@ -1,11 +1,28 @@
+import Link from "next/link";
 import type { Block } from "@/content/blog";
 
-/** `**bold**` inside a sentence, nothing else: the articles are written as plain text. */
-function Inline({ text }: { text: string }) {
-  return text.split(/(\*\*[^*]+\*\*)/).map((part, i) => (part.startsWith("**") ? <strong key={i}>{part.slice(2, -2)}</strong> : part));
+type Localize = (path: string) => string;
+
+/**
+ * `**bold**` and `[text](/path)` inside a sentence, nothing else: the articles are written as plain text. A link's path
+ * is written without the language (/blog/..., /) and points to the reader's own language.
+ */
+function Inline({ text, localize }: { text: string; localize: Localize }) {
+  return text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/).map((part, i) => {
+    if (part.startsWith("**")) return <strong key={i}>{part.slice(2, -2)}</strong>;
+    const link = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(part);
+    if (link) {
+      return (
+        <Link key={i} href={localize(link[2])}>
+          {link[1]}
+        </Link>
+      );
+    }
+    return part;
+  });
 }
 
-export function ArticleBody({ blocks }: { blocks: Block[] }) {
+export function ArticleBody({ blocks, localize }: { blocks: Block[]; localize: Localize }) {
   return (
     <div className="article">
       {blocks.map((block, i) => {
@@ -16,7 +33,7 @@ export function ArticleBody({ blocks }: { blocks: Block[] }) {
             <ul key={i}>
               {block.ul.map((item) => (
                 <li key={item}>
-                  <Inline text={item} />
+                  <Inline text={item} localize={localize} />
                 </li>
               ))}
             </ul>
@@ -26,7 +43,7 @@ export function ArticleBody({ blocks }: { blocks: Block[] }) {
             <ol key={i}>
               {block.ol.map((item) => (
                 <li key={item}>
-                  <Inline text={item} />
+                  <Inline text={item} localize={localize} />
                 </li>
               ))}
             </ol>
@@ -34,12 +51,12 @@ export function ArticleBody({ blocks }: { blocks: Block[] }) {
         if ("tip" in block)
           return (
             <p key={i} className="rounded-2xl border border-brand/25 bg-brand/[0.06] px-5 py-4 text-[0.98rem]">
-              <Inline text={block.tip} />
+              <Inline text={block.tip} localize={localize} />
             </p>
           );
         return (
           <p key={i}>
-            <Inline text={block.p} />
+            <Inline text={block.p} localize={localize} />
           </p>
         );
       })}

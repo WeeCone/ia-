@@ -8,7 +8,7 @@ import { LanguageSuggestion } from "@/components/language-suggestion";
 import { VisitTracker } from "@/components/visit-tracker";
 import { WhatsAppButton } from "@/components/whatsapp-button";
 import { LocaleProvider } from "@/i18n/client";
-import { LOCALES } from "@/i18n/config";
+import { localePath, LOCALES } from "@/i18n/config";
 import { getI18n } from "@/i18n/server";
 import "../globals.css";
 
@@ -18,16 +18,29 @@ const spaceGrotesk = Space_Grotesk({ variable: "--font-space-grotesk", subsets: 
 const archivoBlack = Archivo_Black({ variable: "--font-archivo-black", subsets: ["latin"], weight: "400" });
 const jetbrainsMono = JetBrains_Mono({ variable: "--font-jetbrains-mono", subsets: ["latin"] });
 
+const OG_LOCALE = { fr: "fr_FR", en: "en_GB", es: "es_ES" } as const;
+
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getI18n();
+  const { t, locale } = await getI18n();
   return {
     metadataBase: new URL("https://scanzivo.com"),
     title: t.meta.title,
     description: t.meta.description,
+    applicationName: "Scanzivo",
+    // The share card is drawn by the og route (one for the site, one per article, see blog/[slug]/og).
+    openGraph: {
+      siteName: "Scanzivo",
+      type: "website",
+      locale: OG_LOCALE[locale],
+      title: t.meta.title,
+      description: t.meta.description,
+      images: [{ url: localePath(locale, "/og"), width: 1200, height: 630, alt: t.meta.title }],
+    },
+    twitter: { card: "summary_large_image", title: t.meta.title, description: t.meta.description, images: [localePath(locale, "/og")] },
   };
 }
 

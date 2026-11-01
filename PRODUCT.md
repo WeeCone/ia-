@@ -59,3 +59,5 @@ A verdict, not a "maybe": the AI commits to the single most probable scenario an
 ## Accessibility & Inclusion
 
 WCAG 2.1 AA contrast and keyboard access on public pages; meaning never carried by bull/bear colour alone (labels accompany colours).
+- No packs and no prices on the landing page, in its header or footer, or in the blog's call to action (since 2026-11-01): the visitor sees them only once a chart is dropped and read (free reading, then the packs). /pricing stays for signed-in customers and is not indexed; the home page's structured data carries no offers.
+- SEO (2026-11-01): share images drawn per page ([lang]/og and blog/[slug]/og routes, at clean URLs), Open Graph and X cards on every page, Organization / WebSite / SoftwareApplication / FAQ data on the home page, Blog and BlogPosting data on the blog, hreflang with x-default, articles linked to each other in their text (`[texte](/blog/slug)`) and in "À lire aussi" (the next three, wrapping round), the blog in the header.

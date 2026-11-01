@@ -6,16 +6,12 @@ import { Faq } from "@/components/faq";
 import { DropBar } from "@/components/drop-bar";
 import { ScanDemo } from "@/components/scan-demo";
 import { PlatformMarquee } from "@/components/platform-marquee";
-import { PricingPlans } from "@/components/pricing-plans";
 import { RotatingWord } from "@/components/rotating-word";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Testimonials } from "@/components/testimonials";
-import { TrustStrip } from "@/components/trust-strip";
-import { formatEur } from "@/i18n/format";
 import { getI18n, languageAlternates } from "@/i18n/server";
-import { OFFER_PRICE_EUR } from "@/lib/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { locale } = await getI18n();
@@ -24,10 +20,25 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Home() {
   const { t, locale } = await getI18n();
-  const priceLine = t.hero.priceLine(formatEur(locale, OFFER_PRICE_EUR.starter));
   // What search engines and AI assistants read about the product: the offer and the FAQ, as structured data.
   const site = `https://scanzivo.com${locale === "fr" ? "" : `/${locale}`}`;
   const structured = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": "https://scanzivo.com/#organization",
+      name: "Scanzivo",
+      url: "https://scanzivo.com",
+      logo: "https://scanzivo.com/brand/scanzivo-icon-512.png",
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "Scanzivo",
+      url: site,
+      inLanguage: locale,
+      publisher: { "@id": "https://scanzivo.com/#organization" },
+    },
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
@@ -37,11 +48,8 @@ export default async function Home() {
       operatingSystem: "Web",
       inLanguage: locale,
       description: t.hero.subtitle,
-      offers: [
-        { "@type": "Offer", name: t.common.starter, price: OFFER_PRICE_EUR.starter, priceCurrency: "EUR" },
-        { "@type": "Offer", name: t.common.monthly, price: OFFER_PRICE_EUR.monthly, priceCurrency: "EUR" },
-        { "@type": "Offer", name: t.common.lifetime, price: OFFER_PRICE_EUR.lifetime, priceCurrency: "EUR" },
-      ],
+      image: `${site}/og`,
+      publisher: { "@id": "https://scanzivo.com/#organization" },
     },
     {
       "@context": "https://schema.org",
@@ -76,13 +84,8 @@ export default async function Home() {
             </p>
             <div id="analyser" style={{ "--d": "0.3s" } as React.CSSProperties} className="rise-in mt-10 scroll-mt-32">
               <DropBar />
-              <p className="mx-auto mt-4 max-w-xl text-sm text-muted [text-shadow:0_1px_12px_var(--background)]">
-                {priceLine.before}
-                <a href="#tarifs" className="font-semibold text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">
-                  {priceLine.offer}
-                </a>
-                {priceLine.after}
-              </p>
+              {/* No price on the landing: the packs appear once a chart is dropped and read. */}
+              <p className="mx-auto mt-4 max-w-xl text-sm text-muted [text-shadow:0_1px_12px_var(--background)]">{t.hero.freeLine}</p>
             </div>
           </div>
           <div data-reveal="fade" className="mx-2 rounded-[2.5rem] border border-border/70 bg-card/40 py-8 backdrop-blur sm:mx-4">
@@ -130,31 +133,6 @@ export default async function Home() {
 
         <Testimonials />
 
-        {/* Pricing */}
-        <section id="tarifs" className="relative isolate scroll-mt-24 overflow-hidden">
-          {/* The New York Stock Exchange facade on the right, washed into the light page like the hero's bull (photo supplied by the owner). */}
-          <div
-            className="pointer-events-none absolute inset-y-0 right-0 -z-10 w-full sm:w-[55%] [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_45%),linear-gradient(to_bottom,transparent,black_18%,black_75%,transparent)]"
-            aria-hidden
-          >
-            <Image src="/media/nyse-facade.jpg" alt="" fill sizes="(min-width: 640px) 55vw, 100vw" className="object-cover object-[50%_30%] opacity-[0.16] sm:opacity-[0.3]" />
-          </div>
-          <div className="mx-auto max-w-6xl px-4 py-20">
-            <h2 data-reveal="fade" className="display text-4xl sm:text-5xl">
-              {t.pricing.titleA} <span className="mark">{t.pricing.titleB}</span>
-            </h2>
-            <p data-reveal="fade" className="mt-5 max-w-xl text-lg text-muted">
-              {t.pricing.subtitle}
-            </p>
-            <div data-reveal="fade" className="mt-12">
-              <PricingPlans />
-            </div>
-            <div data-reveal="fade" className="mt-10 border-t border-border pt-8">
-              <TrustStrip />
-            </div>
-          </div>
-        </section>
-
         <Faq />
 
         {/* Closing CTA */}
@@ -168,7 +146,7 @@ export default async function Home() {
               <a href="#analyser" className="btn-primary mt-9 text-base">
                 {t.closing.cta}
               </a>
-              <p className="mt-4 text-sm text-muted">{t.closing.note(formatEur(locale, OFFER_PRICE_EUR.starter))}</p>
+              <p className="mt-4 text-sm text-muted">{t.hero.freeLine}</p>
             </div>
           </div>
         </section>

@@ -1,6 +1,5 @@
 import { getI18n } from "@/i18n/server";
 import { DemoVideo } from "./demo-video";
-import { PriceNote } from "./price-note";
 import { ScanCta } from "./scan-cta";
 
 /** The scan, shown rather than told: three points and the call to action beside the BTC demo video. */
@@ -23,7 +22,6 @@ export async function ScanDemo() {
           ))}
         </ul>
         <ScanCta className="btn-primary mt-9 rounded-full px-7 py-3.5 text-base">{t.demo.cta}</ScanCta>
-        <PriceNote className="mt-3 text-muted" />
       </div>
 
       <figure>

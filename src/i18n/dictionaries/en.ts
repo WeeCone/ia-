@@ -2,9 +2,10 @@ import type { Dict } from "./fr";
 
 export const en: Dict = {
   meta: {
-    title: "Scanzivo — AI chart analysis",
-    description: "Upload a chart screenshot and get an AI-generated technical analysis and trading scenarios.",
+    title: "Scanzivo — AI trading chart analysis in seconds",
+    description: "Send a screenshot of your chart (TradingView, Binance, MetaTrader): the AI reads the trend, draws support and resistance and puts numbers on a plan. First reading free.",
     pricingTitle: "Pricing — Scanzivo",
+    pricingDescription: "Packs and pricing: Starter, Pro and Lifetime, no commitment. Start with a free reading of your chart.",
     skipLink: "Skip to content",
   },
   common: {
@@ -59,8 +60,7 @@ export const en: Dict = {
     related: "Read next",
     disclaimer: "This article is educational. It is not investment advice. Trading carries a risk of capital loss.",
     ctaTitle: "Get your chart read",
-    ctaText: (starter: string) => `Send a screenshot: the AI shows you its reading for free, then the plan with numbers unlocks with a pack, from ${starter}/month.`,
-    ctaPacks: "See the packs",
+    ctaText: "Send a screenshot of your chart: the AI shows you its reading for free, no card, no sign-up.",
     ctaButton: "Analyse a chart",
   },
   legalLinks: { mentions: "Legal notice", terms: "Terms of sale & use", privacy: "Privacy" },
@@ -69,11 +69,7 @@ export const en: Dict = {
     titleLine2: "of your favourite assets:",
     words: ["crypto", "forex", "gold", "indices", "stocks"],
     subtitle: "Send a screenshot of your chart. In under a minute, you know where to enter, where to put your stop and what to aim for.",
-    priceLine: (starter: string) => ({
-      before: "Free reading, no card, no sign-up. ",
-      offer: `Packs from ${starter}/month`,
-      after: ", no commitment.",
-    }),
+    freeLine: "Free reading of your chart, no card, no sign-up.",
     platforms: "Works with screenshots from your platforms",
     platformsLabel: "Compatible platforms",
   },
@@ -248,7 +244,7 @@ export const en: Dict = {
       },
       {
         q: "What are the analyses based on?",
-        a: "The technical reading relies only on what is visible in your screenshot: a sharp screenshot with a readable price axis gives a better analysis. With the Pro and Lifetime packs, the analysis also includes recent news and the economic events of the next 7 days that could move the asset, with their sources. It does not connect to live quotes.",
+        a: "The technical reading relies only on what is visible in your screenshot: a sharp screenshot with a readable price axis gives a better analysis. Depending on the plan, the analysis also includes recent news and the economic events of the next 7 days that could move the asset, with their sources. It does not connect to live quotes.",
       },
       {
         q: "Can I adapt the analysis to my trading style?",
@@ -256,7 +252,7 @@ export const en: Dict = {
       },
       {
         q: "How are analyses counted?",
-        a: "Each offer includes analysis credits refilled every month, visible at any time in your account. An image that isn't a chart is not counted.",
+        a: "The number of analyses depends on the plan and is always visible in your account. An image that isn't a chart is not counted.",
       },
       {
         q: "Can I cancel at any time?",
@@ -274,7 +270,6 @@ export const en: Dict = {
     titleB: "get a second opinion.",
     subtitle: "Scanzivo reads your chart and answers with precise levels.",
     cta: "Read my chart for free",
-    note: (starter: string) => `Free reading of your chart, then packs from ${starter}/month, no commitment.`,
   },
   activity: {
     live: "Live analysis",

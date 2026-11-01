@@ -1,9 +1,10 @@
 // French: the source language. en.ts and es.ts must have exactly the same shape (checked by TypeScript).
 export const fr = {
   meta: {
-    title: "Scanzivo — Analyse de graphiques par IA",
-    description: "Importez une capture de graphique et obtenez une analyse technique et des scénarios de trading générés par IA.",
+    title: "Scanzivo — Analyse de graphique trading par IA, en quelques secondes",
+    description: "Envoyez une capture de votre graphique (TradingView, Binance, MetaTrader) : l'IA lit la tendance, trace supports et résistances et chiffre un plan. Première lecture gratuite.",
     pricingTitle: "Tarifs — Scanzivo",
+    pricingDescription: "Packs et tarifs : Starter, Pro et À vie, sans engagement. Commencez par une lecture gratuite de votre graphique.",
     skipLink: "Aller au contenu",
   },
   common: {
@@ -58,8 +59,7 @@ export const fr = {
     related: "À lire aussi",
     disclaimer: "Cet article est pédagogique. Il ne constitue pas un conseil en investissement. Le trading comporte un risque de perte en capital.",
     ctaTitle: "Faites lire votre graphique",
-    ctaText: (starter: string) => `Envoyez une capture : l'IA vous montre gratuitement sa lecture, puis le plan chiffré se débloque avec un pack, dès ${starter}/mois.`,
-    ctaPacks: "Voir les packs",
+    ctaText: "Envoyez une capture de votre graphique : l'IA vous montre gratuitement sa lecture, sans carte ni inscription.",
     ctaButton: "Analyser un graphique",
   },
   legalLinks: { mentions: "Mentions légales", terms: "CGV / CGU", privacy: "Confidentialité" },
@@ -68,11 +68,7 @@ export const fr = {
     titleLine2: "de vos actifs préférés :",
     words: ["la crypto", "le forex", "l’or", "les indices", "les actions"],
     subtitle: "Envoyez une capture de votre graphique. En moins d'une minute, vous savez où entrer, où placer votre stop et quoi viser.",
-    priceLine: (starter: string) => ({
-      before: "Lecture gratuite, sans carte ni inscription. ",
-      offer: `Packs dès ${starter}/mois`,
-      after: ", sans engagement.",
-    }),
+    freeLine: "Lecture gratuite de votre graphique, sans carte ni inscription.",
     platforms: "Fonctionne avec les captures de vos plateformes",
     platformsLabel: "Plateformes compatibles",
   },
@@ -247,7 +243,7 @@ export const fr = {
       },
       {
         q: "Sur quoi reposent les analyses ?",
-        a: "La lecture technique repose uniquement sur ce qui est visible dans votre capture : une capture nette, avec l'axe des prix lisible, donne une meilleure analyse. Avec les packs Pro et À vie, l'analyse inclut en plus l'actualité récente et les événements économiques des 7 prochains jours qui peuvent faire bouger l'actif, avec leurs sources. Il ne se connecte pas aux cotations en temps réel.",
+        a: "La lecture technique repose uniquement sur ce qui est visible dans votre capture : une capture nette, avec l'axe des prix lisible, donne une meilleure analyse. Selon la formule choisie, l'analyse inclut aussi l'actualité récente et les événements économiques des 7 prochains jours qui peuvent faire bouger l'actif, avec leurs sources. Il ne se connecte pas aux cotations en temps réel.",
       },
       {
         q: "Puis-je adapter l'analyse à ma façon de trader ?",
@@ -255,7 +251,7 @@ export const fr = {
       },
       {
         q: "Comment sont comptées les analyses ?",
-        a: "Chaque offre inclut des crédits d'analyse rechargés chaque mois, visibles à tout moment dans votre espace. Une image qui n'est pas un graphique n'est pas décomptée.",
+        a: "Le nombre d'analyses dépend de la formule choisie et reste visible à tout moment dans votre espace. Une image qui n'est pas un graphique n'est pas décomptée.",
       },
       {
         q: "Puis-je résilier à tout moment ?",
@@ -273,7 +269,6 @@ export const fr = {
     titleB: "demandez un second avis.",
     subtitle: "Scanzivo lit votre graphique et vous répond avec des niveaux précis.",
     cta: "Lire mon graphique gratuitement",
-    note: (starter: string) => `Lecture gratuite de votre graphique, puis packs dès ${starter}/mois, sans engagement.`,
   },
   activity: {
     live: "Analyse en direct",

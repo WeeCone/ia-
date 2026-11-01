@@ -14,7 +14,6 @@ export async function SiteFooter() {
       links: [
         { href: href("/#fonctionnalites"), label: t.header.nav.features },
         { href: href("/#methode"), label: t.header.nav.method },
-        { href: href("/#tarifs"), label: t.header.nav.pricing },
         { href: href("/#faq"), label: t.header.nav.faq },
         // The blog is linked from here only, in the languages that have articles.
         ...(articlesFor(locale).length ? [{ href: href("/blog"), label: t.footer.blog }] : []),
