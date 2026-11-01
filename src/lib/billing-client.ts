@@ -8,8 +8,9 @@ import { checkoutAttribution, trackEvent } from "./track";
 async function callBilling(route: "checkout" | "portal", body: Record<string, unknown>, locale: Locale) {
   const text = DICTIONARIES[locale].checkout;
   const user = auth.currentUser;
-  // Signed out, only the trial can be bought: Stripe then asks for the email and the account is made from it.
-  if (!user && !(route === "checkout" && body.offer === "trial")) throw new Error(text.sessionExpired);
+  // Signed out, any pack can be bought: Stripe then asks for the email and the account is made from it. The customer
+  // portal needs an account.
+  if (!user && route !== "checkout") throw new Error(text.sessionExpired);
   if (route === "checkout") {
     trackEvent("checkout");
     const offer = body.offer as Offer | undefined;
