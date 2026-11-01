@@ -152,23 +152,27 @@ export const es: Dict = {
     recommended: "Recomendado",
     packs: {
       starter: {
-        pitch: "Para una segunda opinión cada día antes de operar.",
-        features: ["1 análisis al día", "Veredicto y plan con cifras: entrada, stop, objetivos", "Niveles trazados en tu captura", "Sin la parte de noticias"],
+        pitch: "Un plan con cifras cada día, solo con la lectura técnica.",
+        highlight: null,
+        features: ["1 análisis al día", "Veredicto y plan con cifras: entrada, stop, objetivos", "Niveles trazados en tu captura"],
+        excluded: ["Análisis macroeconómico y noticias"],
         note: "Sin permanencia, cancelable desde tu espacio.",
       },
       monthly: {
-        pitch: "Para analizar cada operación, con el contexto del mercado.",
-        features: [
-          "30 análisis al mes",
-          "Análisis completo, con los dos escenarios",
-          "Noticias y anuncios próximos en cada análisis",
-          "Gestión del riesgo propia de cada gráfico",
-        ],
+        pitch: "La lectura técnica, cruzada con lo que puede mover el mercado.",
+        highlight: {
+          title: "Análisis macroeconómico incluido",
+          text: "Bancos centrales, inflación, empleo, resultados: en cada análisis, la IA recoge los anuncios de los próximos 7 días y las noticias de las últimas 48 h sobre tu activo, y te dice cómo tenerlos en cuenta en tu plan. Con sus fuentes.",
+        },
+        features: ["30 análisis al mes", "Análisis completo, con los dos escenarios", "Gestión del riesgo propia de cada gráfico"],
+        excluded: [],
         note: "Sin permanencia, cancelable desde tu espacio.",
       },
       lifetime: {
-        pitch: "El pack Pro, pagado una sola vez.",
-        features: ["30 análisis completos cada mes", "Noticias y anuncios próximos incluidos", "Sin suscripción ni cobros posteriores", "Se recarga el día 1 de cada mes"],
+        pitch: "Todo el pack Pro, pagado una sola vez.",
+        highlight: null,
+        features: ["30 análisis completos cada mes, recargados el día 1", "Análisis macroeconómico y noticias incluidos", "Sin suscripción ni cobros posteriores"],
+        excluded: [],
         note: "Pago único.",
       },
     },

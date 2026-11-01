@@ -151,23 +151,27 @@ export const fr = {
     recommended: "Recommandé",
     packs: {
       starter: {
-        pitch: "Pour un avis chaque jour avant de trader.",
-        features: ["1 analyse par jour", "Verdict et plan chiffré : entrée, stop, objectifs", "Niveaux tracés sur votre capture", "Sans le volet actualité"],
+        pitch: "Un plan chiffré chaque jour, sur la lecture technique seule.",
+        highlight: null,
+        features: ["1 analyse par jour", "Verdict et plan chiffré : entrée, stop, objectifs", "Niveaux tracés sur votre capture"],
+        excluded: ["Analyse macro-économique et actualité"],
         note: "Sans engagement, résiliable depuis votre espace.",
       },
       monthly: {
-        pitch: "Pour analyser chaque trade, avec le contexte du marché.",
-        features: [
-          "30 analyses par mois",
-          "Analyse complète, avec les deux scénarios",
-          "Actualité et annonces à venir sur chaque analyse",
-          "Gestion du risque propre à chaque graphique",
-        ],
+        pitch: "La lecture technique, croisée avec ce qui peut faire bouger le marché.",
+        highlight: {
+          title: "Analyse macro-économique incluse",
+          text: "Banques centrales, inflation, emploi, résultats : sur chaque analyse, l'IA relève les annonces des 7 prochains jours et l'actualité des dernières 48 h sur votre actif, puis vous dit comment en tenir compte dans votre plan. Sources à l'appui.",
+        },
+        features: ["30 analyses par mois", "Analyse complète, avec les deux scénarios", "Gestion du risque propre à chaque graphique"],
+        excluded: [],
         note: "Sans engagement, résiliable depuis votre espace.",
       },
       lifetime: {
-        pitch: "Le pack Pro, payé une seule fois.",
-        features: ["30 analyses complètes chaque mois", "Actualité et annonces à venir incluses", "Aucun abonnement, aucun prélèvement ensuite", "Rechargé le 1er de chaque mois"],
+        pitch: "Tout le pack Pro, payé une seule fois.",
+        highlight: null,
+        features: ["30 analyses complètes chaque mois, rechargées le 1er", "Analyse macro-économique et actualité incluses", "Aucun abonnement, aucun prélèvement ensuite"],
+        excluded: [],
         note: "Paiement unique.",
       },
     },

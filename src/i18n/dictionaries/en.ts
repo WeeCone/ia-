@@ -152,23 +152,27 @@ export const en: Dict = {
     recommended: "Recommended",
     packs: {
       starter: {
-        pitch: "For a second opinion every day before you trade.",
-        features: ["1 analysis a day", "Verdict and plan with numbers: entry, stop, targets", "Levels drawn on your screenshot", "Without the news side"],
+        pitch: "A plan with numbers every day, on the technical reading alone.",
+        highlight: null,
+        features: ["1 analysis a day", "Verdict and plan with numbers: entry, stop, targets", "Levels drawn on your screenshot"],
+        excluded: ["Macroeconomic analysis and news"],
         note: "No commitment, cancel from your space.",
       },
       monthly: {
-        pitch: "To analyse every trade, with the market context.",
-        features: [
-          "30 analyses a month",
-          "Full analysis, with both scenarios",
-          "News and upcoming announcements with every analysis",
-          "Risk management specific to each chart",
-        ],
+        pitch: "The technical reading, checked against what can move the market.",
+        highlight: {
+          title: "Macroeconomic analysis included",
+          text: "Central banks, inflation, jobs, earnings: with every analysis, the AI lists the announcements of the next 7 days and the last 48 hours of news on your asset, then tells you how to factor them into your plan. Sources included.",
+        },
+        features: ["30 analyses a month", "Full analysis, with both scenarios", "Risk management specific to each chart"],
+        excluded: [],
         note: "No commitment, cancel from your space.",
       },
       lifetime: {
-        pitch: "The Pro pack, paid only once.",
-        features: ["30 full analyses every month", "News and upcoming announcements included", "No subscription, nothing charged afterwards", "Refilled on the 1st of each month"],
+        pitch: "Everything in Pro, paid only once.",
+        highlight: null,
+        features: ["30 full analyses every month, refilled on the 1st", "Macroeconomic analysis and news included", "No subscription, nothing charged afterwards"],
+        excluded: [],
         note: "One-off payment.",
       },
     },

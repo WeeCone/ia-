@@ -23,6 +23,23 @@ function Check() {
   );
 }
 
+function Excluded() {
+  return (
+    <svg viewBox="0 0 16 16" className="mt-0.5 size-4 shrink-0 text-muted/70" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden>
+      <path d="M4 8h8" />
+    </svg>
+  );
+}
+
+function GlobeIcon() {
+  return (
+    <svg viewBox="0 0 20 20" className="size-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <circle cx="10" cy="10" r="7.25" />
+      <path d="M2.75 10h14.5M10 2.75c2 2.1 3 4.5 3 7.25s-1 5.15-3 7.25c-2-2.1-3-4.5-3-7.25s1-5.15 3-7.25z" />
+    </svg>
+  );
+}
+
 /** One pack: its price, what it holds, and the button that opens Stripe's payment (signed in or not). */
 export function PackCard({ offer, compact = false, current = false }: { offer: Offer; compact?: boolean; current?: boolean }) {
   const { t, locale } = useI18n();
@@ -47,10 +64,26 @@ export function PackCard({ offer, compact = false, current = false }: { offer: O
         <span className="whitespace-nowrap text-sm text-muted">{lifetime ? p.oneOff : p.perMonth}</span>
       </p>
       <p className="mt-3 font-medium leading-snug">{pack.pitch}</p>
+      {/* What sets Pro apart from Starter, said before the list rather than lost in it. */}
+      {pack.highlight && (
+        <div className={`rounded-xl border border-brand/40 bg-brand/[0.07] ${compact ? "mt-4 p-3.5" : "mt-5 p-4"}`}>
+          <p className="flex items-center gap-2 text-sm font-semibold text-brand">
+            <GlobeIcon />
+            {pack.highlight.title}
+          </p>
+          <p className="mt-1.5 text-sm leading-relaxed text-foreground/80">{pack.highlight.text}</p>
+        </div>
+      )}
       <ul className={`grid gap-2.5 ${compact ? "mt-4" : "mt-5"}`}>
         {pack.features.map((feature) => (
           <li key={feature} className="flex gap-2.5 text-sm text-foreground/85">
             <Check />
+            {feature}
+          </li>
+        ))}
+        {pack.excluded.map((feature) => (
+          <li key={feature} className="flex gap-2.5 text-sm text-muted line-through decoration-muted/60">
+            <Excluded />
             {feature}
           </li>
         ))}

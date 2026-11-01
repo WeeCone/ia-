@@ -110,7 +110,7 @@ export function CheckoutDialog() {
                   </div>
                 )}
                 <ul className="mt-6 hidden space-y-2.5 md:block">
-                  {t.pricing.packs[offer].features.map((feature) => (
+                  {[...(t.pricing.packs[offer].highlight ? [t.pricing.packs[offer].highlight.title] : []), ...t.pricing.packs[offer].features].map((feature) => (
                     <li key={feature} className="flex gap-2.5 text-sm text-muted">
                       <CheckIcon />
                       {feature}
