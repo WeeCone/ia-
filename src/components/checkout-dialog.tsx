@@ -7,6 +7,7 @@ import { createEmbeddedCheckout, redirectToBilling } from "@/lib/billing-client"
 import { EMBEDDED_CHECKOUT, onOpenCheckout } from "@/lib/offers-client";
 import { pendingChartUrl } from "@/lib/pending-chart";
 import { useI18n } from "@/i18n/client";
+import { INTL_LOCALE } from "@/i18n/config";
 import { formatEur } from "@/i18n/format";
 import { OFFER_PRICE_EUR, type Offer } from "@/lib/plans";
 import { useAuth } from "./auth-provider";
@@ -33,16 +34,69 @@ export function CheckoutDialog() {
   const { t, locale } = useI18n();
   const { user } = useAuth();
   const c = t.checkout;
+  // Starter to Pro: a one-click switch on the card on file, when the server can do it; otherwise Stripe's form.
+  const [upgrade, setUpgrade] = useState<
+    | { stage: "checking" | "paying" | "done" }
+    | { stage: "ready"; amountCents: number; nextAt: number; prorationDate: number }
+    | { stage: "off"; note?: string }
+  >({ stage: "off" });
 
   useEffect(() => {
     if (!EMBEDDED_CHECKOUT) return;
     return onOpenCheckout((next) => {
       setError(null);
       setChartUrl(pendingChartUrl());
+      setUpgrade({ stage: next === "monthly" ? "checking" : "off" });
       setOffer(next);
       setAttempt((count) => count + 1);
     });
   }, []);
+
+  // Asks for the one-click quote; anything but a quote (not on Starter, no saved card…) means the ordinary form.
+  useEffect(() => {
+    if (upgrade.stage !== "checking") return;
+    let cancelled = false;
+    (async () => {
+      try {
+        if (!user) throw new Error();
+        const response = await fetch("/api/billing/upgrade", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${await user.getIdToken()}`, "X-Locale": locale, "Content-Type": "application/json" },
+          body: "{}",
+        });
+        const data = await response.json();
+        if (!response.ok || typeof data.amountCents !== "number") throw new Error();
+        if (!cancelled) setUpgrade({ stage: "ready", amountCents: data.amountCents, nextAt: data.nextAt, prorationDate: data.prorationDate });
+      } catch {
+        if (!cancelled) setUpgrade({ stage: "off" });
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [upgrade.stage, user, locale]);
+
+  async function confirmUpgrade() {
+    if (upgrade.stage !== "ready" || !user) return;
+    const { prorationDate } = upgrade;
+    setUpgrade({ stage: "paying" });
+    try {
+      const response = await fetch("/api/billing/upgrade", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${await user.getIdToken()}`, "X-Locale": locale, "Content-Type": "application/json" },
+        body: JSON.stringify({ confirm: true, prorationDate }),
+      });
+      if (response.ok) {
+        setUpgrade({ stage: "done" });
+        return;
+      }
+    } catch {
+      // Falls through to the ordinary form.
+    }
+    // Nothing changed on Stripe's side: the payment form takes over (a bank check is passed there).
+    setUpgrade({ stage: "off", note: c.upgrade.fallback });
+    setAttempt((count) => count + 1);
+  }
 
   useEffect(() => {
     const dialog = ref.current;
@@ -145,7 +199,9 @@ export function CheckoutDialog() {
             </button>
           </div>
           <div className="relative flex-1 p-2 sm:p-4">
-            {error ? (
+            {offer === "monthly" && upgrade.stage !== "off" ? (
+              <UpgradePanel upgrade={upgrade} onConfirm={confirmUpgrade} onClose={close} />
+            ) : error ? (
               <div role="alert" className="px-4 py-16 text-center">
                 <p className="text-sm text-[#e11d48]">{error}</p>
                 {offer && (
@@ -161,6 +217,11 @@ export function CheckoutDialog() {
             ) : (
               offer && (
                 <>
+                  {upgrade.stage === "off" && upgrade.note && (
+                    <p role="status" className="relative mx-2 mb-2 rounded-xl bg-amber-50 px-4 py-3 text-sm text-[#7c4a03]">
+                      {upgrade.note}
+                    </p>
+                  )}
                   <p className="absolute inset-0 grid place-items-center text-sm text-[#57606a]" aria-hidden>
                     {c.loading}
                   </p>
@@ -176,6 +237,65 @@ export function CheckoutDialog() {
         </div>
       </div>
     </dialog>
+  );
+}
+
+type UpgradeState =
+  | { stage: "checking" | "paying" | "done" }
+  | { stage: "ready"; amountCents: number; nextAt: number; prorationDate: number };
+
+/** The one-click switch from Starter to Pro: the amount due today, then a single confirmation. */
+function UpgradePanel({ upgrade, onConfirm, onClose }: { upgrade: UpgradeState; onConfirm: () => void; onClose: () => void }) {
+  const { t, locale, href } = useI18n();
+  const u = t.checkout.upgrade;
+  if (upgrade.stage === "checking") {
+    return <p className="grid min-h-[28rem] place-items-center text-sm text-[#57606a]">{u.checking}</p>;
+  }
+  if (upgrade.stage === "done") {
+    return (
+      <div className="mx-auto flex min-h-[28rem] max-w-md flex-col items-center justify-center px-4 text-center">
+        <span className="grid size-12 place-items-center rounded-full bg-[#047857]/10 text-[#047857]">
+          <svg viewBox="0 0 16 16" className="size-6" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M3.5 8.5l3 3 6-7" />
+          </svg>
+        </span>
+        <p className="mt-4 text-2xl font-semibold">{u.done}</p>
+        <p className="mt-2 text-sm leading-relaxed text-[#57606a]">{u.doneText}</p>
+        <button type="button" onClick={onClose} className="mt-6 rounded-xl bg-[#047857] px-6 py-3 text-sm font-semibold text-white hover:bg-[#065f46]">
+          {u.close}
+        </button>
+      </div>
+    );
+  }
+  const quote = upgrade.stage === "ready" ? upgrade : null;
+  const date = quote ? new Date(quote.nextAt).toLocaleDateString(INTL_LOCALE[locale], { day: "numeric", month: "long" }) : "";
+  return (
+    <div className="mx-auto flex min-h-[28rem] max-w-md flex-col justify-center px-4 py-8">
+      <p className="text-sm font-medium text-[#57606a]">{u.title}</p>
+      <p className="mt-3 flex items-baseline gap-2">
+        <span className="text-5xl font-semibold tracking-tight">{quote ? formatEur(locale, quote.amountCents / 100) : "…"}</span>
+        <span className="text-sm text-[#57606a]">{u.today}</span>
+      </p>
+      <ul className="mt-5 space-y-2 text-sm text-[#3d4550]">
+        <li>{u.deducted}</li>
+        {quote && <li>{u.then(formatEur(locale, OFFER_PRICE_EUR.monthly), date)}</li>}
+        <li>{u.card}</li>
+      </ul>
+      <button
+        type="button"
+        onClick={onConfirm}
+        disabled={!quote}
+        className="mt-7 w-full rounded-xl bg-[#047857] px-5 py-3.5 text-base font-semibold text-white hover:bg-[#065f46] disabled:opacity-60"
+      >
+        {upgrade.stage === "paying" ? u.paying : u.confirm}
+      </button>
+      <p className="mt-3 text-center text-xs leading-relaxed text-[#57606a]">
+        {u.terms}{" "}
+        <a href={href("/legal/cgv")} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+          {u.termsLink}
+        </a>
+      </p>
+    </div>
   );
 }
 
