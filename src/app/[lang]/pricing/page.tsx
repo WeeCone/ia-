@@ -36,7 +36,7 @@ export default async function PricingPage() {
           <h2 id="questions-paiement" className="display text-3xl lg:col-span-4">
             {p.faqTitle}
           </h2>
-          <FaqList items={p.faq} className="space-y-3 lg:col-span-8" />
+          <FaqList items={p.faq} className="lg:col-span-8" />
         </section>
 
         <p className="mt-16 text-xs text-muted">{p.footnote}</p>

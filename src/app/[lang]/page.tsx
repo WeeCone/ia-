@@ -115,18 +115,13 @@ export default async function Home() {
             <h2 data-reveal="fade" className="display text-4xl sm:text-5xl">
               {t.method.titleA} <span className="mark">{t.method.titleB}</span>
             </h2>
-            {/* Progress line over the steps: it fills as the steps arrive. */}
-            <div aria-hidden className="mt-12 hidden h-0.5 overflow-hidden rounded-full bg-border md:block">
-              <div data-reveal="line" className="h-full bg-brand" />
-            </div>
-            <ol data-reveal-stagger className="mt-12 grid gap-5 md:mt-6 md:grid-cols-3">
+            {/* Three steps on one rule, unboxed: the order is the information, the numbers carry it. */}
+            <ol data-reveal-stagger className="mt-12 grid gap-10 border-t border-border pt-8 md:grid-cols-3 md:gap-12">
               {t.method.steps.map((step, index) => (
-                <li key={step.title} className="panel p-6">
-                  <span className="font-mono text-sm font-medium text-brand">
-                    {t.method.step} {index + 1}
-                  </span>
-                  <h3 className="display mt-2 text-2xl">{step.title}</h3>
-                  <p className="mt-2 leading-relaxed text-muted">{step.text}</p>
+                <li key={step.title}>
+                  <span className="display block text-5xl leading-none text-brand tabular-nums">{index + 1}</span>
+                  <h3 className="display mt-5 text-2xl">{step.title}</h3>
+                  <p className="mt-2 max-w-sm leading-relaxed text-muted">{step.text}</p>
                 </li>
               ))}
             </ol>
@@ -165,7 +160,7 @@ export default async function Home() {
         {/* Closing CTA */}
         <section data-reveal="circle" className="theme-dark mx-2 mb-4 rounded-[2.5rem] sm:mx-4">
           <div className="mx-auto w-full max-w-6xl px-4 py-20">
-            <div className="panel relative overflow-hidden px-6 py-16 text-center sm:px-12">
+            <div className="relative px-2 py-10 text-center sm:px-12">
               <h2 className="display mx-auto max-w-3xl text-4xl sm:text-6xl">
                 {t.closing.titleA} <span className="mark">{t.closing.titleB}</span>
               </h2>

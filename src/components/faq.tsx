@@ -4,19 +4,19 @@ import { getI18n } from "@/i18n/server";
 type Item = { q: string; a: string; terms?: boolean };
 
 /** Folding questions; answers marked `terms` end with a link to the terms of sale. */
-export async function FaqList({ items, className = "space-y-4" }: { items: readonly Item[]; className?: string }) {
+export async function FaqList({ items, className = "" }: { items: readonly Item[]; className?: string }) {
   const { t, href } = await getI18n();
   return (
     <div data-reveal-stagger className={className}>
       {items.map(({ q, a, terms }) => (
-        <details key={q} className="group panel open:border-brand/50">
-          <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 font-medium [&::-webkit-details-marker]:hidden">
+        <details key={q} className="group border-b border-border first:border-t">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-lg font-medium transition-colors hover:text-brand [&::-webkit-details-marker]:hidden">
             {q}
             <span className="shrink-0 font-display text-2xl leading-none text-brand transition-transform group-open:rotate-45" aria-hidden>
               +
             </span>
           </summary>
-          <div className="border-t border-border px-5 py-4 leading-relaxed text-muted">
+          <div className="max-w-[65ch] pb-6 leading-relaxed text-muted">
             {a}
             {terms && (
               <>
@@ -46,7 +46,7 @@ export async function Faq() {
             {t.faq.cta}
           </Link>
         </div>
-        <FaqList items={t.faq.items} className="space-y-4 lg:col-span-8" />
+        <FaqList items={t.faq.items} className="lg:col-span-8" />
       </div>
     </section>
   );

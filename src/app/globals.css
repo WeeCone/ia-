@@ -52,8 +52,10 @@ body {
     @apply font-display font-bold leading-[1.05] tracking-tight;
   }
   /* Key words of a headline: set in the brand cyan (solid, no gradient fill). */
+  /* Second line of a section heading: same ink as the first. A two-colour headline on every section is a template
+     tell; the hero's rotating pill carries the brand colour once. */
   .mark {
-    @apply text-brand;
+    color: inherit;
   }
   .panel {
     @apply rounded-2xl border border-border bg-card/70 shadow-[0_8px_32px_-12px_rgb(0_0_0/0.6)] backdrop-blur-md;
