@@ -7,7 +7,7 @@ import { openOffers } from "@/lib/offers-client";
 import { useState } from "react";
 import { isAdminUser } from "@/lib/admin";
 import { auth } from "@/lib/firebase";
-import { availableCredits, MONTHLY_CREDITS, STARTER_DAILY_CREDITS } from "@/lib/plans";
+import { availableCredits, isUnlimited, MONTHLY_CREDITS, STARTER_DAILY_CREDITS } from "@/lib/plans";
 import type { UserProfile } from "@/lib/users";
 import { INTL_LOCALE } from "@/i18n/config";
 import { useI18n } from "@/i18n/client";
@@ -68,7 +68,9 @@ function PlanCard({ profile }: { profile: UserProfile | null }) {
           ? t.account.trialUntil(new Date(profile.trialEndsAt).toLocaleDateString(INTL_LOCALE[locale], { day: "numeric", month: "long" }))
           : profile.plan === "starter"
             ? t.account.perDay(STARTER_DAILY_CREDITS)
-            : t.account.perMonth(MONTHLY_CREDITS)}
+            : isUnlimited(profile.plan)
+              ? t.account.unlimited
+              : t.account.perMonth(MONTHLY_CREDITS)}
       </p>
       {profile.trialEndsAt && <UpgradeNow trialEndsAt={profile.trialEndsAt} compact />}
     </div>
@@ -120,7 +122,7 @@ export function Sidebar({ user, profile, credits, history, activeId, onNew, onSe
 
       <div className="space-y-4 border-t border-border/70 p-3">
         <PlanCard profile={profile} />
-        <CreditsGauge credits={credits} quota={profile?.plan === "starter" ? STARTER_DAILY_CREDITS : MONTHLY_CREDITS} />
+        {!isUnlimited(profile?.plan) && <CreditsGauge credits={credits} quota={profile?.plan === "starter" ? STARTER_DAILY_CREDITS : MONTHLY_CREDITS} />}
 
         <div className="relative">
           {menuOpen && (

@@ -4,7 +4,7 @@ import { isAdminRequest } from "@/lib/admin-auth";
 import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_BYTES, type AllowedImageType } from "@/lib/analysis";
 import { analyzeChart, AnalysisRefusedError, checkChart } from "@/lib/claude";
 import { macroContext } from "@/lib/macro";
-import { availableCredits, budgetFor, creditPeriod, hasNewsSide, MAX_CALL_COST_EUR, periodFor, STARTER_MODEL } from "@/lib/plans";
+import { analysisSetup, availableCredits, budgetFor, creditPeriod, hasNewsSide, isUnlimited, periodFor } from "@/lib/plans";
 import { adminBucket, adminDb } from "@/lib/firebase-admin";
 import { getRequestUid } from "@/lib/server-auth";
 import { recordActivity } from "@/lib/activity";
@@ -48,7 +48,9 @@ export async function POST(request: Request) {
   const userData = userSnap.data() ?? {};
   if (availableCredits(userData) < 1) return error(text.noCredits, 402);
   // Hard monthly ceiling on AI spend per customer, whatever the credits say. The admin is exempt.
-  if (monthSpend(userData) + MAX_CALL_COST_EUR > budgetFor(userData.plan) && !(await isAdminRequest(request))) {
+  // Which model reads this chart: Starter the light one, Pro steps down as its month's spend grows (see analysisSetup).
+  const setup = analysisSetup(userData.plan, monthSpend(userData));
+  if (monthSpend(userData) + setup.maxCost > budgetFor(userData.plan) && !(await isAdminRequest(request))) {
     return error(text.budget, 402);
   }
 
@@ -72,11 +74,10 @@ export async function POST(request: Request) {
   const withMacro = hasNewsSide(userData.plan) || inTrial || (await isAdminRequest(request).catch(() => false));
   const macroPromise =
     withMacro && look?.check
-      ? macroContext({ asset: look.check.asset, timeframe: look.check.timeframe }, locale)
+      ? macroContext({ asset: look.check.asset, timeframe: look.check.timeframe }, locale, { cachedOnly: !setup.freshNews && !inTrial })
       : Promise.resolve({ report: null, costEur: 0 });
   try {
-    const model = userData.plan === "starter" ? STARTER_MODEL : undefined;
-    result = await analyzeChart(bytes.toString("base64"), image.type as AllowedImageType, note || undefined, locale, model);
+    result = await analyzeChart(bytes.toString("base64"), image.type as AllowedImageType, note || undefined, locale, setup.model);
   } catch (err) {
     // Not awaited: the error answers at once, the news side's cost is recorded when it ends.
     void macroPromise.then((macro) => recordSpend(userRef, macro.costEur));
@@ -115,7 +116,8 @@ export async function POST(request: Request) {
       const credits = availableCredits(current);
       if (charged && credits < 1) throw new Error("NO_CREDITS");
       // Absolute write (not increment) so a monthly or daily refill and the debit land together.
-      if (charged) tx.update(userRef, { credits: credits - 1, creditsPeriod: periodFor(current.plan) });
+      // Pro counts nothing: it is unlimited.
+      if (charged && !isUnlimited(current.plan)) tx.update(userRef, { credits: credits - 1, creditsPeriod: periodFor(current.plan) });
       tx.set(analysisRef, {
         ...analysis,
         note: note || null,

@@ -13,7 +13,10 @@ export const TRIAL_CREDITS = 1;
  * Hard ceiling on what one customer can cost in AI calls per calendar month, in euros, by plan.
  * Every call is priced from its real token usage and recorded on the user; once the ceiling is near, analyses stop until next month.
  */
-const BUDGET_EUR: Record<Plan, number> = { none: 7, starter: 5, monthly: 11, lifetime: 11 };
+// Starter: its analyses run on the light model (about 1 centime each), so a month of daily analyses stays under 0,50 €.
+// Pro: unlimited analyses; the ceiling only stops automated use far beyond any human pace (see proModel below for how
+// the model steps down so a normal heavy month stays near 5 €).
+const BUDGET_EUR: Record<Plan, number> = { none: 7, starter: 0.5, monthly: 10, lifetime: 11 };
 export const budgetFor = (plan: Plan | undefined) => BUDGET_EUR[plan ?? "none"] ?? BUDGET_EUR.none;
 /** The highest of the ceilings, for the admin's spend warnings. */
 export const MONTHLY_BUDGET_EUR = Math.max(...Object.values(BUDGET_EUR));
@@ -28,14 +31,48 @@ export const ANALYSIS_COST_EUR = 0.2;
  * ceiling is never crossed.
  */
 export const MAX_CALL_COST_EUR = 0.5;
+/** Worst case for an analysis on the light model (16 000 output tokens, image, first look). */
+export const LIGHT_MAX_CALL_COST_EUR = 0.03;
 
-/** Pro and À vie: analyses per calendar month. */
+/** À vie: analyses per calendar month. */
 export const MONTHLY_CREDITS = 30;
+/** Pro has no analysis count. */
+export const isUnlimited = (plan: Plan | undefined) => plan === "monthly";
 /** Starter: analyses per day. */
 export const STARTER_DAILY_CREDITS = 1;
 
-/** Starter reports are read by a lighter model and come without the news side, which keeps the pack at 10 €. */
-export const STARTER_MODEL = "claude-sonnet-5-5";
+export const OPUS_MODEL = "claude-opus-5-5";
+export const SONNET_MODEL = "claude-sonnet-5-5";
+export const HAIKU_MODEL = "claude-haiku-5-5";
+
+/**
+ * Pro is unlimited, and its AI spend is meant to stay near 5 € a month: the month's first analyses are read by the top
+ * model, then by the mid-size one, then by the light one. Past the last step, the news side is only served from the
+ * day's shared cache (no new web search).
+ */
+const PRO_STEPS_EUR = { sonnet: 3, haiku: 4.5 };
+export function proModel(spentEur: number) {
+  if (spentEur < PRO_STEPS_EUR.sonnet) return { model: OPUS_MODEL, freshNews: true };
+  if (spentEur < PRO_STEPS_EUR.haiku) return { model: SONNET_MODEL, freshNews: true };
+  return { model: HAIKU_MODEL, freshNews: false };
+}
+
+/**
+ * Which model reads an account's next chart, whether its news side may run new searches, and the worst case to keep
+ * free in the budget before starting. Starter: the light model, a reduced report (see the dashboard), no news side.
+ */
+export function analysisSetup(plan: Plan | undefined, spentEur: number) {
+  if (plan === "starter") return { model: HAIKU_MODEL, freshNews: false, maxCost: LIGHT_MAX_CALL_COST_EUR };
+  if (plan === "monthly") {
+    const step = proModel(spentEur);
+    return { ...step, maxCost: step.model === HAIKU_MODEL ? LIGHT_MAX_CALL_COST_EUR : MAX_CALL_COST_EUR };
+  }
+  return { model: OPUS_MODEL, freshNews: true, maxCost: MAX_CALL_COST_EUR };
+}
+
+/** Which offers can ask the AI a question about an analysis (one a day). */
+export const hasChat = (plan: Plan | undefined) => plan === "monthly" || plan === "lifetime";
+export const CHAT_QUESTIONS_PER_DAY = 1;
 
 /** Which offers get the news side (events and news that can move the asset) with every analysis. */
 export const hasNewsSide = (plan: Plan | undefined) => plan === "monthly" || plan === "lifetime";
@@ -61,6 +98,7 @@ type CreditState = { plan?: Plan; credits?: number; creditsPeriod?: string };
 
 /** Credits actually available: À vie gets a fresh monthly quota when the month changes, Starter a fresh one each day. */
 export function availableCredits({ plan, credits = 0, creditsPeriod }: CreditState) {
+  if (isUnlimited(plan)) return Number.POSITIVE_INFINITY;
   if (plan === "lifetime" && creditsPeriod !== creditPeriod()) return MONTHLY_CREDITS;
   if (plan === "starter" && creditsPeriod !== periodFor("starter")) return STARTER_DAILY_CREDITS;
   return credits;

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { hasChat, type Plan } from "@/lib/plans";
+import { AskAi, AskAiLocked } from "./ask-ai";
 import { useI18n } from "@/i18n/client";
 import type { Dict } from "@/i18n/dictionaries";
 import { type ChartAnalysis, preferredPlan } from "@/lib/analysis";
@@ -53,13 +55,16 @@ export function AnalysisView({
   analysis,
   imageUrl,
   onNew,
-  macroLocked = false,
+  analysisId = null,
+  plan,
 }: {
   analysis: ChartAnalysis;
   imageUrl: string | null;
   onNew: () => void;
-  /** Starter: the news side isn't part of the pack, shown locked with the way up to Pro. */
-  macroLocked?: boolean;
+  /** The stored analysis, for questions to the AI (none for the admin's test report). */
+  analysisId?: string | null;
+  /** Starter: a reduced report, what Pro adds shown locked with the way up. */
+  plan?: Plan;
 }) {
   const [copied, setCopied] = useState(false);
   const { t } = useI18n();
@@ -90,7 +95,8 @@ export function AnalysisView({
         </div>
       </div>
       {imageUrl && analysis.is_chart && <AnnotatedChart imageUrl={imageUrl} marks={analysis.level_marks} />}
-      <AnalysisResult analysis={analysis} macroLocked={macroLocked} />
+      <AnalysisResult analysis={analysis} reduced={plan === "starter"} />
+      {analysis.is_chart && analysisId && (hasChat(plan) ? <AskAi analysisId={analysisId} /> : plan === "starter" && <AskAiLocked />)}
     </div>
   );
 }

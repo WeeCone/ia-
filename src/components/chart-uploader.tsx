@@ -16,7 +16,7 @@ import { AnalysisTeaser } from "./analysis-teaser";
 import { FormError } from "./auth-card";
 import { LogoMark } from "./logo";
 
-export type AnalysisOutcome = { analysis: ChartAnalysis; imageUrl: string };
+export type AnalysisOutcome = { analysis: ChartAnalysis; imageUrl: string; id: string | null };
 
 type Props = {
   disabled: boolean;
@@ -171,7 +171,7 @@ export function ChartUploader({
       handedOff.current = true;
       clearPendingChart();
       trackEvent("analysis");
-      onAnalyzed({ analysis: data.analysis, imageUrl: preview });
+      onAnalyzed({ analysis: data.analysis, imageUrl: preview, id: data.id ?? null });
     } catch (err) {
       setError(err instanceof Error ? err.message : u.failed);
       setPending(false);

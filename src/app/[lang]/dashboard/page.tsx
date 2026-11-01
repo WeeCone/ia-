@@ -221,7 +221,8 @@ export default function DashboardPage() {
 
   const firstName = (user.displayName || "").split(" ")[0];
   const quota = plan === "starter" ? STARTER_DAILY_CREDITS : MONTHLY_CREDITS;
-  const gauge = Math.round((Math.min(credits ?? 0, quota) / quota) * 100);
+  const unlimited = credits === Number.POSITIVE_INFINITY;
+  const gauge = unlimited ? 100 : Math.round((Math.min(credits ?? 0, quota) / quota) * 100);
 
   const sidebar = (
     <Sidebar
@@ -309,15 +310,19 @@ export default function DashboardPage() {
               {/* Credits: count + gauge */}
               <div
                 className="flex items-center gap-2.5 whitespace-nowrap rounded-full border border-border bg-card/70 py-1.5 pl-3 pr-3.5 lg:hidden"
-                title={d.creditsLeft(String(credits ?? "–"))}
+                title={unlimited ? t.account.unlimited : d.creditsLeft(String(credits ?? "–"))}
               >
                 <span className="hidden h-1.5 w-16 overflow-hidden rounded-full bg-border sm:block" aria-hidden>
                   <span className="block h-full rounded-full bg-accent" style={{ width: `${gauge}%` }} />
                 </span>
-                <span className="font-mono text-xs">
-                  {credits ?? "–"}
-                  <span className="text-muted">{d.credits}</span>
-                </span>
+                {unlimited ? (
+                  <span className="text-xs">{t.account.unlimited}</span>
+                ) : (
+                  <span className="font-mono text-xs">
+                    {credits ?? "–"}
+                    <span className="text-muted">{d.credits}</span>
+                  </span>
+                )}
                 {profile && <span className="hidden font-mono text-[11px] text-muted md:inline">· {t.plans[profile.plan]}</span>}
               </div>
               <div className="lg:hidden">
@@ -346,7 +351,7 @@ export default function DashboardPage() {
             </div>
           ) : current ? (
             <>
-              <AnalysisView analysis={current.analysis} imageUrl={current.imageUrl} onNew={startNew} macroLocked={plan === "starter"} />
+              <AnalysisView analysis={current.analysis} imageUrl={current.imageUrl} onNew={startNew} analysisId={current.id} plan={plan} />
               {/* The trial's analysis is spent: offer a second one, through the subscription, after the report. */}
               {profile?.trialEndsAt && noCredits && <TrialUpsell trialEndsAt={profile.trialEndsAt} />}
             </>
@@ -390,7 +395,7 @@ export default function DashboardPage() {
                   testMode={testMode && isAdminUser(user)}
                   highlight={tour === 1 ? "zone" : tour === 2 ? "send" : null}
                   onAnalyzed={(outcome: AnalysisOutcome) => {
-                    show({ ...outcome, id: null });
+                    show(outcome);
                     setRefreshKey((key) => key + 1);
                   }}
                 />

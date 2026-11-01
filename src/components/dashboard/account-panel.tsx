@@ -3,7 +3,7 @@
 import type { User } from "firebase/auth";
 import Link from "next/link";
 import { openOffers } from "@/lib/offers-client";
-import { MONTHLY_CREDITS, STARTER_DAILY_CREDITS } from "@/lib/plans";
+import { isUnlimited, MONTHLY_CREDITS, STARTER_DAILY_CREDITS } from "@/lib/plans";
 import { useI18n } from "@/i18n/client";
 import type { UserProfile } from "@/lib/users";
 import { BillingButton } from "../billing-button";
@@ -16,7 +16,10 @@ export function AccountPanel({ user, profile, credits, onBack }: { user: User; p
     [a.rowName, user.displayName || "—"],
     [a.rowEmail, user.email],
     [a.rowPlan, profile ? t.plans[profile.plan] : "—"],
-    [a.rowCredits, `${credits ?? "–"} / ${profile?.plan === "starter" ? STARTER_DAILY_CREDITS : MONTHLY_CREDITS}`],
+    [
+      a.rowCredits,
+      isUnlimited(profile?.plan) ? a.unlimited : `${credits ?? "–"} / ${profile?.plan === "starter" ? STARTER_DAILY_CREDITS : MONTHLY_CREDITS}`,
+    ],
   ];
 
   return (

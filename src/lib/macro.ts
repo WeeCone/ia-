@@ -95,7 +95,7 @@ function cacheRef(asset: string, locale: Locale) {
 
 const UNKNOWN = /^(inconnu|inconnue|unknown|desconocido|n\/a|-)?$/i;
 
-export async function macroContext(target: { asset: string; timeframe: string }, locale: Locale) {
+export async function macroContext(target: { asset: string; timeframe: string }, locale: Locale, { cachedOnly = false } = {}) {
   // Nothing to search for without a named asset.
   if (UNKNOWN.test(target.asset.trim())) return { report: null, costEur: 0 };
 
@@ -105,6 +105,8 @@ export async function macroContext(target: { asset: string; timeframe: string },
     const parsed = MacroReport.safeParse(cached.get("report"));
     if (parsed.success) return { report: parsed.data, costEur: 0 };
   }
+  // Past Pro's last spending step: only what was already found today.
+  if (cachedOnly) return { report: null, costEur: 0 };
 
   const messages: Anthropic.Beta.Messages.BetaMessageParam[] = [
     {

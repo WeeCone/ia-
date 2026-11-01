@@ -46,16 +46,19 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
         <li>
           <strong>Starter — {formatEur("fr", OFFER_PRICE_EUR.starter)} / mois</strong> : abonnement sans engagement, renouvelé
           automatiquement chaque mois. {STARTER_DAILY_CREDITS} analyse par jour, rechargée chaque jour ; l&apos;analyse Starter
-          comprend le verdict, le plan chiffré et les niveaux, sans le volet actualité.
+          est une analyse réduite : verdict, plan chiffré, probabilité du scénario privilégié et niveaux, sans le scénario
+          alternatif, la gestion du risque, le volet actualité ni les questions à l&apos;IA.
         </li>
         <li>
           <strong>Pro — {formatEur("fr", OFFER_PRICE_EUR.monthly)} / mois</strong> : abonnement sans engagement, renouvelé
-          automatiquement chaque mois. {MONTHLY_CREDITS} analyses complètes par mois (usage raisonnable), avec le volet actualité,
-          rechargées à chaque échéance mensuelle.
+          automatiquement chaque mois. Analyses complètes en nombre illimité, pour un usage personnel et
+          non automatisé, avec le volet actualité et une question par jour à l&apos;IA sur ses analyses. Au-delà d&apos;un usage
+          très intensif dans le mois, les analyses suivantes sont rédigées par un modèle d&apos;IA plus rapide, et le volet
+          actualité reprend les recherches déjà faites le jour même.
         </li>
         <li>
-          <strong>À vie — {formatEur("fr", OFFER_PRICE_EUR.lifetime)}, paiement unique</strong> : le contenu du pack Pro, avec{" "}
-          {MONTHLY_CREDITS} analyses complètes par mois, rechargées au début de chaque mois civil, pour la durée de vie du Service,
+          <strong>À vie — {formatEur("fr", OFFER_PRICE_EUR.lifetime)}, paiement unique</strong> : l&apos;analyse complète du pack Pro (volet
+          actualité et une question par jour à l&apos;IA compris), avec {MONTHLY_CREDITS} analyses par mois, rechargées au début de chaque mois civil, pour la durée de vie du Service,
           sans abonnement.
         </li>
       </ul>
@@ -140,17 +143,19 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
       <ul>
         <li>
           <strong>Starter — {formatEur("en", OFFER_PRICE_EUR.starter)} / month</strong>: subscription with no commitment, renewed
-          automatically every month. {STARTER_DAILY_CREDITS} analysis per day, refilled each day; the Starter analysis includes the
-          verdict, the plan with numbers and the levels, without the news side.
+          automatically every month. {STARTER_DAILY_CREDITS} analysis per day, refilled each day; the Starter analysis is a reduced
+          analysis: verdict, plan with numbers, probability of the favoured scenario and levels, without the alternative scenario,
+          risk management, the news side or questions to the AI.
         </li>
         <li>
           <strong>Pro — {formatEur("en", OFFER_PRICE_EUR.monthly)} / month</strong>: subscription with no commitment, renewed
-          automatically every month. {MONTHLY_CREDITS} full analyses per month (fair use), with the news side, refilled at each
-          monthly due date.
+          automatically every month. Unlimited full analyses, for personal, non-automated use, with the news side
+          and one question a day to the AI about your analyses. Beyond very heavy use in a month, the following analyses are
+          written by a faster AI model, and the news side reuses the searches already made that day.
         </li>
         <li>
-          <strong>Lifetime — {formatEur("en", OFFER_PRICE_EUR.lifetime)}, one-off payment</strong>: the Pro pack&apos;s content, with{" "}
-          {MONTHLY_CREDITS} full analyses per month, refilled at the start of each calendar month, for the lifetime of the Service,
+          <strong>Lifetime — {formatEur("en", OFFER_PRICE_EUR.lifetime)}, one-off payment</strong>: the Pro pack&apos;s full analysis (news side and
+          one question a day to the AI included), with {MONTHLY_CREDITS} analyses per month, refilled at the start of each calendar month, for the lifetime of the Service,
           with no subscription.
         </li>
       </ul>
@@ -233,17 +238,20 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
       <ul>
         <li>
           <strong>Starter — {formatEur("es", OFFER_PRICE_EUR.starter)} / mes</strong>: suscripción sin permanencia, renovada
-          automáticamente cada mes. {STARTER_DAILY_CREDITS} análisis al día, recargado cada día; el análisis Starter incluye el
-          veredicto, el plan con cifras y los niveles, sin la parte de noticias.
+          automáticamente cada mes. {STARTER_DAILY_CREDITS} análisis al día, recargado cada día; el análisis Starter es un análisis
+          reducido: veredicto, plan con cifras, probabilidad del escenario preferido y niveles, sin el escenario alternativo, la
+          gestión del riesgo, la parte de noticias ni las preguntas a la IA.
         </li>
         <li>
           <strong>Pro — {formatEur("es", OFFER_PRICE_EUR.monthly)} / mes</strong>: suscripción sin permanencia, renovada
-          automáticamente cada mes. {MONTHLY_CREDITS} análisis completos al mes (uso razonable), con la parte de noticias,
-          recargados en cada vencimiento mensual.
+          automáticamente cada mes. Análisis completos ilimitados, para un uso personal y no
+          automatizado, con la parte de noticias y una pregunta al día a la IA sobre tus análisis. Más allá de un uso muy
+          intensivo en el mes, los análisis siguientes los redacta un modelo de IA más rápido, y la parte de noticias reutiliza
+          las búsquedas ya hechas ese día.
         </li>
         <li>
-          <strong>De por vida — {formatEur("es", OFFER_PRICE_EUR.lifetime)}, pago único</strong>: el contenido del pack Pro, con{" "}
-          {MONTHLY_CREDITS} análisis completos al mes, recargados al inicio de cada mes natural, durante la vida del Servicio, sin
+          <strong>De por vida — {formatEur("es", OFFER_PRICE_EUR.lifetime)}, pago único</strong>: el análisis completo del pack Pro (parte de
+          noticias y una pregunta al día a la IA incluidas), con {MONTHLY_CREDITS} análisis al mes, recargados al inicio de cada mes natural, durante la vida del Servicio, sin
           suscripción.
         </li>
       </ul>

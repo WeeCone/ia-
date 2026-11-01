@@ -140,3 +140,44 @@ export async function checkChart(imageBase64: string, mediaType: AllowedImageTyp
   });
   return { check: response.parsed_output, costEur: callCostEur(response.model, response.usage) };
 }
+
+/** The model that answers a customer's question about one of their analyses. */
+const CHAT_MODEL = "claude-sonnet-5-5";
+
+const CHAT_LANGUAGE: Record<Locale, string> = {
+  fr: "Réponds en français, en vouvoyant.",
+  en: "Answer in English.",
+  es: "Responde en español, tuteando.",
+};
+
+/**
+ * One question about an analysis the customer already has: answered from that report (and its screenshot when it is
+ * kept), in a few short paragraphs. Educational, never a personal investment recommendation.
+ */
+export async function askAboutAnalysis(
+  analysis: object,
+  question: string,
+  locale: Locale,
+  image: { base64: string; mediaType: AllowedImageType } | null,
+) {
+  const content: Anthropic.MessageParam["content"] = [
+    ...(image ? [{ type: "image" as const, source: { type: "base64" as const, media_type: image.mediaType, data: image.base64 } }] : []),
+    { type: "text", text: `Analyse déjà remise au trader (JSON) :\n${JSON.stringify(analysis)}\n\nSa question :\n${question}` },
+  ];
+  const response = await client.messages.create({
+    model: CHAT_MODEL,
+    max_tokens: 1200,
+    system: `Tu es l'analyste technique qui a rédigé l'analyse ci-jointe d'un graphique de prix. Le trader te pose une question à son sujet.
+Réponds à partir de cette analyse et de la capture : explique, précise un niveau, un scénario, une figure, la gestion du risque. Sois concret et bref (3 à 6 phrases, une courte liste si utile), sans titre.
+Si la question sort du graphique (autre actif, sujet sans rapport), dis-le en une phrase et invite à lancer une nouvelle analyse.
+Tu ne connais que la capture : pas de cours en temps réel. Ne promets aucun gain. C'est une aide à la lecture du graphique, pas un conseil en investissement personnalisé : ne dis pas combien investir de son argent.
+${CHAT_LANGUAGE[locale]}`,
+    messages: [{ role: "user", content }],
+  });
+  const answer = response.content
+    .filter((block): block is Anthropic.TextBlock => block.type === "text")
+    .map((block) => block.text)
+    .join("\n")
+    .trim();
+  return { answer, costEur: callCostEur(response.model, response.usage) };
+}

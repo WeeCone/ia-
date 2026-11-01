@@ -255,7 +255,37 @@ function LockedMacroSection({ asset }: { asset: string }) {
   );
 }
 
-export function AnalysisResult({ analysis, macroLocked = false }: { analysis: ChartAnalysis; macroLocked?: boolean }) {
+/**
+ * Starter's reduced report: what the full analysis adds here is named, with the way up to Pro. Nothing of it is shown
+ * (the alternative scenario and the risk notes stay out of the page).
+ */
+function LockedProSection({ items }: { items: string[] }) {
+  const { t, locale } = useI18n();
+  const l = t.report.lockedPro;
+  return (
+    <section className="flex flex-col gap-4 border-t border-border bg-surface/40 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <ul className="space-y-1.5 text-sm">
+          {items.map((item) => (
+            <li key={item} className="flex items-center gap-2.5">
+              <svg viewBox="0 0 20 20" className="size-3.5 shrink-0 text-muted" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <rect x="4" y="9" width="12" height="8" rx="2" />
+                <path d="M7 9V6.5a3 3 0 0 1 6 0V9" />
+              </svg>
+              {item}
+            </li>
+          ))}
+        </ul>
+        <p className="mt-1.5 text-xs text-muted">{l.text}</p>
+      </div>
+      <BillingButton route="checkout" offer="monthly" className="btn-secondary shrink-0 px-4 py-2 text-sm">
+        {l.cta(formatEur(locale, OFFER_PRICE_EUR.monthly))}
+      </BillingButton>
+    </section>
+  );
+}
+
+export function AnalysisResult({ analysis, reduced = false }: { analysis: ChartAnalysis; reduced?: boolean }) {
   const { t } = useI18n();
   const r = t.report;
   if (!analysis.is_chart) {
@@ -336,12 +366,12 @@ export function AnalysisResult({ analysis, macroLocked = false }: { analysis: Ch
         </div>
       </div>
 
-      <AlternativeScenario analysis={analysis} />
+      {reduced ? <LockedProSection items={[t.report.lockedPro.alternative, t.report.lockedPro.risk]} /> : <AlternativeScenario analysis={analysis} />}
 
       {/* Reports made before the news side existed, or whose search failed, have none. */}
-      {analysis.macro ? <MacroSection macro={analysis.macro} /> : macroLocked && <LockedMacroSection asset={analysis.asset} />}
+      {analysis.macro ? <MacroSection macro={analysis.macro} /> : reduced && <LockedMacroSection asset={analysis.asset} />}
 
-      {analysis.risk_notes?.length > 0 && (
+      {!reduced && analysis.risk_notes?.length > 0 && (
         <section className="border-t border-border p-5">
           <h3 className="label text-muted">{r.risk}</h3>
           <ul className="mt-3 grid gap-2 sm:grid-cols-2">

@@ -5,7 +5,7 @@ import { recordActivity } from "@/lib/activity";
 import { analyzeChart, AnalysisRefusedError } from "@/lib/claude";
 import { adminBucket, adminDb } from "@/lib/firebase-admin";
 import { macroContext } from "@/lib/macro";
-import { availableCredits, budgetFor, creditPeriod, hasNewsSide, MAX_CALL_COST_EUR, periodFor, STARTER_MODEL } from "@/lib/plans";
+import { analysisSetup, availableCredits, budgetFor, creditPeriod, hasNewsSide, isUnlimited, periodFor } from "@/lib/plans";
 import { PREVIEW_TTL_MS } from "@/lib/preview";
 import { getRequestUid } from "@/lib/server-auth";
 import { monthSpend } from "@/lib/usage-cost";
@@ -41,7 +41,8 @@ export async function POST(request: Request) {
   const userRef = adminDb.collection("users").doc(uid);
   const userData = (await userRef.get()).data() ?? {};
   if (availableCredits(userData) < 1) return error(text.noCredits, 402);
-  if (monthSpend(userData) + MAX_CALL_COST_EUR > budgetFor(userData.plan)) return error(text.budget, 402);
+  const setup = analysisSetup(userData.plan, monthSpend(userData));
+  if (monthSpend(userData) + setup.maxCost > budgetFor(userData.plan)) return error(text.budget, 402);
 
   const imagePath: string = snapshot.get("imagePath");
   const imageType = snapshot.get("imageType") as AllowedImageType;
@@ -50,11 +51,11 @@ export async function POST(request: Request) {
 
   // The news side runs alongside (Pro and À vie); it never throws and its cost counts in every case.
   const macroPromise = hasNewsSide(userData.plan)
-    ? macroContext({ asset: preview.asset, timeframe: preview.timeframe }, locale)
+    ? macroContext({ asset: preview.asset, timeframe: preview.timeframe }, locale, { cachedOnly: !setup.freshNews })
     : Promise.resolve({ report: null, costEur: 0 });
   let result: Awaited<ReturnType<typeof analyzeChart>>;
   try {
-    result = await analyzeChart(image, imageType, undefined, locale, userData.plan === "starter" ? STARTER_MODEL : undefined);
+    result = await analyzeChart(image, imageType, undefined, locale, setup.model);
   } catch (err) {
     const macro = await macroPromise;
     const spent = macro.costEur + (err instanceof AnalysisRefusedError ? err.costEur : 0);
@@ -79,7 +80,7 @@ export async function POST(request: Request) {
       const spent = monthSpend(data) + (snapshot.get("costEur") ?? 0) + result.costEur + macro.costEur;
       const charged = analysis.is_chart;
       tx.update(userRef, {
-        ...(charged ? { credits: credits - 1, creditsPeriod: periodFor(data.plan) } : {}),
+        ...(charged && !isUnlimited(data.plan) ? { credits: credits - 1, creditsPeriod: periodFor(data.plan) } : {}),
         spendEur: spent,
         spendPeriod: creditPeriod(),
       });
