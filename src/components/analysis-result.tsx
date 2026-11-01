@@ -3,7 +3,10 @@
 import { useI18n } from "@/i18n/client";
 import { keepNumbers } from "@/i18n/format";
 import { type ChartAnalysis, type MacroReport, preferredPlan } from "@/lib/analysis";
+import { formatEur } from "@/i18n/format";
+import { OFFER_PRICE_EUR } from "@/lib/plans";
 import { formatRatio, rewardRatios } from "@/lib/risk";
+import { BillingButton } from "./billing-button";
 
 const confidenceStyle = {
   faible: "border-bear/40 bg-bear/10 text-bear",
@@ -209,7 +212,50 @@ function MacroSection({ macro }: { macro: MacroReport }) {
   );
 }
 
-export function AnalysisResult({ analysis }: { analysis: ChartAnalysis }) {
+/**
+ * Starter's report: the news side is not part of the pack (it is never gathered), so its place shows empty shapes under
+ * a blur and the way up to Pro, which adds it to every analysis.
+ */
+function LockedMacroSection({ asset }: { asset: string }) {
+  const { t, locale } = useI18n();
+  const m = t.report.lockedMacro;
+  return (
+    <section className="border-t border-border p-5">
+      <h3 className="label flex items-center gap-2 text-muted">
+        <svg viewBox="0 0 20 20" className="size-3.5" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <rect x="4" y="9" width="12" height="8" rx="2" />
+          <path d="M7 9V6.5a3 3 0 0 1 6 0V9" />
+        </svg>
+        {t.report.macro.title}
+      </h3>
+      <div className="relative mt-3 overflow-hidden rounded-xl border border-border">
+        {/* Placeholder rows only, behind the offer: nothing was gathered for this analysis. */}
+        <div aria-hidden className="absolute inset-0 select-none divide-y divide-border/70 blur-[5px]">
+          {[70, 55, 82, 64, 76].map((width, index) => (
+            <div key={index} className="flex items-center gap-4 px-4 py-3">
+              <span className="h-4 w-20 rounded bg-foreground/15" />
+              <span className="h-4 rounded bg-foreground/25" style={{ width: `${width}%` }} />
+              <span className="h-5 w-16 shrink-0 rounded-full bg-bear/30" />
+            </div>
+          ))}
+        </div>
+        <div className="relative bg-card/70 px-4 py-8 text-center">
+          <div className="mx-auto max-w-md">
+            <p className="font-semibold">{m.title(asset)}</p>
+            <p className="mt-1 text-sm text-muted">{m.text}</p>
+            <div className="mt-4 flex justify-center">
+              <BillingButton route="checkout" offer="monthly" className="btn-primary px-5 py-2.5">
+                {m.cta(formatEur(locale, OFFER_PRICE_EUR.monthly))}
+              </BillingButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function AnalysisResult({ analysis, macroLocked = false }: { analysis: ChartAnalysis; macroLocked?: boolean }) {
   const { t } = useI18n();
   const r = t.report;
   if (!analysis.is_chart) {
@@ -293,7 +339,7 @@ export function AnalysisResult({ analysis }: { analysis: ChartAnalysis }) {
       <AlternativeScenario analysis={analysis} />
 
       {/* Reports made before the news side existed, or whose search failed, have none. */}
-      {analysis.macro && <MacroSection macro={analysis.macro} />}
+      {analysis.macro ? <MacroSection macro={analysis.macro} /> : macroLocked && <LockedMacroSection asset={analysis.asset} />}
 
       {analysis.risk_notes?.length > 0 && (
         <section className="border-t border-border p-5">

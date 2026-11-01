@@ -53,10 +53,13 @@ export function AnalysisView({
   analysis,
   imageUrl,
   onNew,
+  macroLocked = false,
 }: {
   analysis: ChartAnalysis;
   imageUrl: string | null;
   onNew: () => void;
+  /** Starter: the news side isn't part of the pack, shown locked with the way up to Pro. */
+  macroLocked?: boolean;
 }) {
   const [copied, setCopied] = useState(false);
   const { t } = useI18n();
@@ -87,7 +90,7 @@ export function AnalysisView({
         </div>
       </div>
       {imageUrl && analysis.is_chart && <AnnotatedChart imageUrl={imageUrl} marks={analysis.level_marks} />}
-      <AnalysisResult analysis={analysis} />
+      <AnalysisResult analysis={analysis} macroLocked={macroLocked} />
     </div>
   );
 }

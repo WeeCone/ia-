@@ -624,6 +624,11 @@ export const es: Dict = {
     supports: "Soportes",
     risk: "Gestión del riesgo",
     footer: "Análisis generado por IA, solo a título informativo. No es un asesoramiento de inversión.",
+    lockedMacro: {
+      title: (asset: string) => `Las noticias que pueden mover ${asset} esta semana`,
+      text: "Decisiones de tipos, inflación, resultados, anuncios: el pack Pro cruza cada análisis con los eventos de los próximos 7 días, con sus fuentes.",
+      cta: (price: string) => `Pasar a Pro · ${price}/mes`,
+    },
     macro: {
       title: "Macro y actualidad",
       impact: { fort: "Impacto alto", moyen: "Impacto medio", faible: "Impacto bajo" },

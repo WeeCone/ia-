@@ -346,7 +346,7 @@ export default function DashboardPage() {
             </div>
           ) : current ? (
             <>
-              <AnalysisView analysis={current.analysis} imageUrl={current.imageUrl} onNew={startNew} />
+              <AnalysisView analysis={current.analysis} imageUrl={current.imageUrl} onNew={startNew} macroLocked={plan === "starter"} />
               {/* The trial's analysis is spent: offer a second one, through the subscription, after the report. */}
               {profile?.trialEndsAt && noCredits && <TrialUpsell trialEndsAt={profile.trialEndsAt} />}
             </>

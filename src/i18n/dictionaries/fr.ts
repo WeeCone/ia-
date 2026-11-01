@@ -625,6 +625,11 @@ export const fr = {
     supports: "Supports",
     risk: "Gestion du risque",
     footer: "Analyse générée par IA, à titre informatif uniquement. Ce n'est pas un conseil en investissement.",
+    lockedMacro: {
+      title: (asset: string) => `L'actualité qui peut faire bouger ${asset} cette semaine`,
+      text: "Décisions de taux, inflation, résultats, annonces : le pack Pro croise chaque analyse avec les événements des 7 prochains jours, sources à l'appui.",
+      cta: (price: string) => `Passer à Pro · ${price}/mois`,
+    },
     macro: {
       title: "Macro et actualité",
       impact: { fort: "Impact fort", moyen: "Impact moyen", faible: "Impact faible" },
