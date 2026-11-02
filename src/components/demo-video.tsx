@@ -53,7 +53,7 @@ export function DemoVideo() {
         type="button"
         onClick={toggleSound}
         aria-pressed={!muted}
-        className="absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/60 px-3.5 py-2 text-xs font-medium text-white backdrop-blur transition hover:bg-black/80"
+        className="absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/75 px-3.5 py-2 text-xs font-medium text-white transition hover:bg-black/90"
       >
         <svg
           viewBox="0 0 20 20"

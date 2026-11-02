@@ -353,6 +353,10 @@ body {
     clip-path: circle(0% at 50% 50%);
     opacity: 1;
   }
+  /* A finished reveal keeps no clip: Safari renders a video inside a clipped block as black. */
+  .reveal-ready [data-reveal].reveal-done {
+    clip-path: none;
+  }
   /* Line: draws from the left. */
   .reveal-ready [data-reveal="line"] {
     transform-origin: left;
