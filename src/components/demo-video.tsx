@@ -37,7 +37,7 @@ export function DemoVideo() {
       <video
         ref={ref}
         className="block aspect-video w-full"
-        poster="/media/btc-scan-poster.jpg?v=2"
+        poster="/media/btc-scan-poster.jpg?v=3"
         autoPlay
         muted
         loop
@@ -45,8 +45,9 @@ export function DemoVideo() {
         preload="metadata"
         aria-label={t.demo.videoLabel}
       >
-        <source src="/media/btc-scan.webm?v=2" type="video/webm" />
-        <source src="/media/btc-scan.mp4?v=2" type="video/mp4" />
+        {/* H.264 first: every browser plays it, where Safari can show VP9 WebM as a black frame. */}
+        <source src="/media/btc-scan.mp4?v=3" type="video/mp4" />
+        <source src="/media/btc-scan.webm?v=3" type="video/webm" />
       </video>
       <button
         type="button"
