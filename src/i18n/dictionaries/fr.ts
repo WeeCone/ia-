@@ -90,6 +90,7 @@ export const fr = {
     cta: "Analyser mon graphique",
     caption: "Bitcoin en hebdomadaire · résultats floutés, l'analyse complète est réservée aux abonnés. Pas un conseil en investissement.",
     videoLabel: "Démonstration : Scanzivo scanne un graphique BTC/USD hebdomadaire et produit un plan d'action",
+    play: "Lire la démonstration",
     soundOn: "Activer le son",
     soundOff: "Couper le son",
   },

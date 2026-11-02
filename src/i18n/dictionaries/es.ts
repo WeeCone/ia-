@@ -91,6 +91,7 @@ export const es: Dict = {
     cta: "Analizar mi gráfico",
     caption: "Bitcoin en semanal · resultados difuminados, el análisis completo es para suscriptores. No es un asesoramiento de inversión.",
     videoLabel: "Demostración: Scanzivo escanea un gráfico semanal de BTC/USD y genera un plan de acción",
+    play: "Ver la demostración",
     soundOn: "Activar el sonido",
     soundOff: "Silenciar",
   },

@@ -91,6 +91,7 @@ export const en: Dict = {
     cta: "Analyse my chart",
     caption: "Bitcoin, weekly · results blurred, the full analysis is for subscribers. Not investment advice.",
     videoLabel: "Demo: Scanzivo scans a weekly BTC/USD chart and produces an action plan",
+    play: "Play the demo",
     soundOn: "Turn sound on",
     soundOff: "Mute",
   },
