@@ -2,6 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/i18n/client";
+import poster from "@/assets/media/btc-scan-poster.jpg";
+
+// Bundled with the site's own files (/_next/static/media, fingerprinted) rather than served from /public: the hosting
+// did not serve the /media files, which left a black box and a broken image in Safari.
+const MP4 = new URL("../assets/media/btc-scan.mp4", import.meta.url).href;
+const WEBM = new URL("../assets/media/btc-scan.webm", import.meta.url).href;
 
 /** Looping product demo. Browsers only autoplay muted videos, so sound is opt-in. */
 export function DemoVideo() {
@@ -50,7 +56,7 @@ export function DemoVideo() {
       <video
         ref={ref}
         className="block aspect-video w-full"
-        poster="/media/btc-scan-poster.jpg?v=3"
+        poster={poster.src}
         autoPlay
         muted
         loop
@@ -60,13 +66,13 @@ export function DemoVideo() {
         onPlaying={() => setPlaying(true)}
       >
         {/* H.264 first: every browser plays it, where Safari can show VP9 WebM as a black frame. */}
-        <source src="/media/btc-scan.mp4?v=3" type="video/mp4" />
-        <source src="/media/btc-scan.webm?v=3" type="video/webm" />
+        <source src={MP4} type="video/mp4" />
+        <source src={WEBM} type="video/webm" />
       </video>
       {!playing && (
         <button type="button" onClick={start} aria-label={t.demo.play} className="group absolute inset-0 block cursor-pointer">
           {/* eslint-disable-next-line @next/next/no-img-element -- the video's own poster, already sized */}
-          <img src="/media/btc-scan-poster.jpg?v=3" alt="" className="size-full object-cover" />
+          <img src={poster.src} alt="" className="size-full object-cover" />
           {blocked && (
             <span className="absolute left-1/2 top-1/2 grid size-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-black/75 text-white transition group-hover:bg-black/90">
               <svg viewBox="0 0 20 20" className="ml-1 size-7" fill="currentColor" aria-hidden>
