@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useI18n } from "@/i18n/client";
 import { formatEur } from "@/i18n/format";
 import { OFFER_PRICE_EUR, type Offer, type Plan } from "@/lib/plans";
@@ -51,7 +52,7 @@ export function PackCard({ offer, compact = false, current = false }: { offer: O
 
   return (
     <div
-      className={`panel relative flex flex-col ${pro ? "border-brand/60 ring-1 ring-brand/40" : lifetime ? "border-amber-400/40" : ""} ${compact ? "p-5" : "p-7"}`}
+      className={`panel relative flex flex-col ${pro ? "border-brand/60 ring-1 ring-brand/40" : lifetime ? "border-amber-400/40" : ""} ${compact ? "p-4 sm:p-5" : "p-5 sm:p-7"}`}
     >
       {pro && (
         <span className="label absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-brand px-3 py-1 text-background">
@@ -107,12 +108,45 @@ export function PackCard({ offer, compact = false, current = false }: { offer: O
  * Starter, À vie from Pro, nothing on top of À vie). Any pack can be bought signed out: Stripe asks for the email.
  */
 export function PricingPlans({ compact = false, currentPlan = null }: { compact?: boolean; currentPlan?: Plan | null }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const offers = compact ? buyableOffers(currentPlan) : OFFERS;
+  // Phones: one pack at a time behind a three-way switch, Pro shown first, instead of three tall cards in a column.
+  const [picked, setPicked] = useState<Offer>(offers.includes("monthly") ? "monthly" : (offers[0] ?? "monthly"));
   if (!offers.length) return null;
+  const shown = offers.includes(picked) ? picked : offers[0];
   return (
     <div>
-      <div className={`grid gap-5 ${compact ? "pt-3" : "gap-6 pt-3"} ${offers.length === 3 ? "md:grid-cols-3" : offers.length === 2 ? "md:grid-cols-2" : "mx-auto max-w-md"}`}>
+      {offers.length > 1 && (
+        <div className="md:hidden">
+          <div role="tablist" aria-label={t.pricing.titleA} className="grid gap-1 rounded-2xl border border-border bg-card/60 p-1" style={{ gridTemplateColumns: `repeat(${offers.length}, minmax(0, 1fr))` }}>
+            {offers.map((offer) => {
+              const active = offer === shown;
+              return (
+                <button
+                  key={offer}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setPicked(offer)}
+                  className={`rounded-xl px-2 py-2 text-center transition ${active ? "bg-foreground text-background" : "text-muted hover:text-foreground"}`}
+                >
+                  <span className="block text-sm font-semibold leading-tight">{t.common[offer]}</span>
+                  <span className={`block text-xs ${active ? "opacity-80" : ""}`}>
+                    {formatEur(locale, OFFER_PRICE_EUR[offer])}
+                    {offer === "lifetime" ? "" : t.pricing.perMonth}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          <div className={offers.includes("monthly") ? "pt-6" : "pt-4"}>
+            <PackCard offer={shown} compact={compact} current={!compact && shown === currentPlan} />
+          </div>
+        </div>
+      )}
+      <div
+        className={`${offers.length > 1 ? "hidden md:grid" : "grid"} gap-5 ${compact ? "pt-3" : "gap-6 pt-3"} ${offers.length === 3 ? "md:grid-cols-3" : offers.length === 2 ? "md:grid-cols-2" : "mx-auto max-w-md"}`}
+      >
         {offers.map((offer) => (
           <PackCard key={offer} offer={offer} compact={compact} current={!compact && offer === currentPlan} />
         ))}
