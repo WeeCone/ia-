@@ -20,7 +20,7 @@ export function GET() {
 
 ## Pricing (VAT included)
 - Starter: ${eur(OFFER_PRICE_EUR.starter)} per month, ${STARTER_DAILY_CREDITS} analysis per day, reduced (verdict, plan with numbers, probability of the favoured scenario and levels; no alternative scenario, risk notes, news side or AI questions), no commitment.
-- Pro: ${eur(OFFER_PRICE_EUR.monthly)} per month, unlimited full analyses (personal use; after very heavy use in a month a faster model writes them) with the "macro and news" section and one question a day to the AI about an analysis, no commitment, cancellable at any time from the customer area.
+- Pro: ${eur(OFFER_PRICE_EUR.monthly)} per month, unlimited full analyses (personal use; each day the first analyses use the most advanced model, the following ones a faster model) with the "macro and news" section and one question a day to the AI about an analysis, no commitment, cancellable at any time from the customer area.
 - Lifetime: ${eur(OFFER_PRICE_EUR.lifetime)} once, the full Pro analysis (news side, one AI question a day) with ${MONTHLY_CREDITS} analyses per month, no subscription.
 - Every pack can be bought without creating an account first.
 - Free reading: before paying, anyone can drop a chart and see the AI's general reading (trend, structure, patterns, where the levels sit); the plan with numbers unlocks with a pack.

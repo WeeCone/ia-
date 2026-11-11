@@ -86,9 +86,19 @@ function searchedUrls(blocks: Block[]) {
 /** Today in Paris, the day a shared news side is valid for. */
 const parisDay = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Paris" });
 
-/** One cache entry per asset, language and day ("BTC/USDT" and "btcusdt" share it). */
+/**
+ * The asset as a cache key: its ticker only. The reading names the same chart in several ways ("XAU/USD (Gold / US
+ * Dollar, OANDA)", "XAUUSD (Gold/USD, OANDA)", "XAU/USD (OANDA)"), which must all share one entry: what follows the
+ * first bracket or comma (full name, exchange) is dropped, then everything but letters and digits.
+ */
+export function assetKey(asset: string) {
+  const ticker = asset.split(/[(,·|—–]/)[0] ?? asset;
+  return (ticker.toLowerCase().replace(/[^a-z0-9]/g, "") || asset.toLowerCase().replace(/[^a-z0-9]/g, "")).slice(0, 40);
+}
+
+/** One cache entry per asset, language and day ("BTC/USDT", "btcusdt" and "BTC/USDT (Binance)" share it). */
 function cacheRef(asset: string, locale: Locale) {
-  const normalized = asset.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const normalized = assetKey(asset);
   const id = createHash("sha256").update(`${parisDay()}|${locale}|${normalized}`).digest("hex").slice(0, 32);
   return adminDb.collection("macroCache").doc(id);
 }

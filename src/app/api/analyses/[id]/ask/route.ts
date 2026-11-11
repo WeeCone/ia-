@@ -3,10 +3,10 @@ import { DICTIONARIES } from "@/i18n/dictionaries";
 import type { AllowedImageType } from "@/lib/analysis";
 import { askAboutAnalysis } from "@/lib/claude";
 import { adminBucket, adminDb } from "@/lib/firebase-admin";
-import { CHAT_QUESTIONS_PER_DAY, creditPeriod, hasChat } from "@/lib/plans";
+import { CHAT_QUESTIONS_PER_DAY, hasChat } from "@/lib/plans";
 import { requestLocale } from "@/i18n/server";
 import { getRequestUid } from "@/lib/server-auth";
-import { monthSpend } from "@/lib/usage-cost";
+import { addSpend } from "@/lib/usage-cost";
 
 type Exchange = { question: string; answer: string; at: number };
 
@@ -105,7 +105,7 @@ export async function POST(request: Request, context: RouteContext<"/api/analyse
     analysisRef.update({ chat: [...((chat as Exchange[] | undefined) ?? []), exchange] }),
     adminDb.runTransaction(async (tx) => {
       const user = (await tx.get(userRef)).data() ?? {};
-      tx.update(userRef, { spendEur: monthSpend(user) + result.costEur, spendPeriod: creditPeriod() });
+      tx.update(userRef, addSpend(user, result.costEur));
     }),
   ]).catch((err) => console.error("chat save failed", err));
 

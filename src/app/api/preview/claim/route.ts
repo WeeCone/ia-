@@ -5,10 +5,10 @@ import { recordActivity } from "@/lib/activity";
 import { analyzeChart, AnalysisRefusedError } from "@/lib/claude";
 import { adminBucket, adminDb } from "@/lib/firebase-admin";
 import { macroContext } from "@/lib/macro";
-import { analysisSetup, availableCredits, budgetFor, creditPeriod, hasNewsSide, isUnlimited, periodFor } from "@/lib/plans";
+import { analysisSetup, availableCredits, budgetFor, hasNewsSide, isUnlimited, periodFor } from "@/lib/plans";
 import { PREVIEW_TTL_MS } from "@/lib/preview";
 import { getRequestUid } from "@/lib/server-auth";
-import { monthSpend } from "@/lib/usage-cost";
+import { addSpend, daySpend, monthSpend } from "@/lib/usage-cost";
 import { DICTIONARIES } from "@/i18n/dictionaries";
 import { requestLocale } from "@/i18n/server";
 
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
   const userRef = adminDb.collection("users").doc(uid);
   const userData = (await userRef.get()).data() ?? {};
   if (availableCredits(userData) < 1) return error(text.noCredits, 402);
-  const setup = analysisSetup(userData.plan, monthSpend(userData));
+  const setup = analysisSetup(userData.plan, monthSpend(userData), daySpend(userData));
   if (monthSpend(userData) + setup.maxCost > budgetFor(userData.plan)) return error(text.budget, 402);
 
   const imagePath: string = snapshot.get("imagePath");
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
   } catch (err) {
     const macro = await macroPromise;
     const spent = macro.costEur + (err instanceof AnalysisRefusedError ? err.costEur : 0);
-    await userRef.set({ spendEur: monthSpend(userData) + spent, spendPeriod: creditPeriod() }, { merge: true }).catch(() => {});
+    await userRef.set(addSpend(userData, spent), { merge: true }).catch(() => {});
     if (err instanceof AnalysisRefusedError) return error(text.refused, 422);
     if (err instanceof Anthropic.RateLimitError) return error(text.busy, 503);
     console.error("preview claim: analysis failed", err);
@@ -77,12 +77,11 @@ export async function POST(request: Request) {
       const credits = availableCredits(data);
       if (credits < 1) throw new Error("NO_CREDITS");
       // The free reading's cost counts for this customer too, with the report it led to.
-      const spent = monthSpend(data) + (snapshot.get("costEur") ?? 0) + result.costEur + macro.costEur;
+      const spent = (snapshot.get("costEur") ?? 0) + result.costEur + macro.costEur;
       const charged = analysis.is_chart;
       tx.update(userRef, {
         ...(charged && !isUnlimited(data.plan) ? { credits: credits - 1, creditsPeriod: periodFor(data.plan) } : {}),
-        spendEur: spent,
-        spendPeriod: creditPeriod(),
+        ...addSpend(data, spent),
       });
       tx.set(analysisRef, {
         ...analysis,

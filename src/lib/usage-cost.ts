@@ -24,7 +24,20 @@ export function callCostEur(model: string, usage: Usage) {
   return ((inputTokens * input + (usage.output_tokens ?? 0) * output) / 1_000_000) * USD_TO_EUR;
 }
 
-type SpendState = { spendEur?: number; spendPeriod?: string };
+type SpendState = { spendEur?: number; spendPeriod?: string; spendDayEur?: number; spendDay?: string };
+
+/** Today in Paris (YYYY-MM-DD): the day Pro's daily share of the top model resets. */
+export const parisDay = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Paris" });
+
+/** API spend recorded for the current Paris day. */
+export function daySpend({ spendDayEur = 0, spendDay }: SpendState) {
+  return spendDay === parisDay() && typeof spendDayEur === "number" ? Math.max(0, spendDayEur) : 0;
+}
+
+/** The fields that add one call's cost to the month's and the day's spend (each reset when its period changes). */
+export function addSpend(state: SpendState, costEur: number) {
+  return { spendEur: monthSpend(state) + costEur, spendPeriod: creditPeriod(), spendDayEur: daySpend(state) + costEur, spendDay: parisDay() };
+}
 
 /** API spend recorded for the current calendar month. */
 export function monthSpend({ spendEur = 0, spendPeriod }: SpendState) {

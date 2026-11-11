@@ -52,9 +52,10 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
         <li>
           <strong>Pro — {formatEur("fr", OFFER_PRICE_EUR.monthly)} / mois</strong> : abonnement sans engagement, renouvelé
           automatiquement chaque mois. Analyses complètes en nombre illimité, pour un usage personnel et
-          non automatisé, avec le volet actualité et une question par jour à l&apos;IA sur ses analyses. Au-delà d&apos;un usage
-          très intensif dans le mois, les analyses suivantes sont rédigées par un modèle d&apos;IA plus rapide, et le volet
-          actualité reprend les recherches déjà faites le jour même.
+          non automatisé, avec le volet actualité et une question par jour à l&apos;IA sur ses analyses. Chaque jour, les
+          premières analyses sont rédigées par notre modèle d&apos;IA le plus avancé, les suivantes par un modèle plus rapide ;
+          au-delà d&apos;un usage très intensif dans le mois, par un modèle plus léger, et le volet actualité reprend alors les
+          recherches déjà faites le jour même.
         </li>
         <li>
           <strong>À vie — {formatEur("fr", OFFER_PRICE_EUR.lifetime)}, paiement unique</strong> : l&apos;analyse complète du pack Pro (volet
@@ -150,8 +151,9 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
         <li>
           <strong>Pro — {formatEur("en", OFFER_PRICE_EUR.monthly)} / month</strong>: subscription with no commitment, renewed
           automatically every month. Unlimited full analyses, for personal, non-automated use, with the news side
-          and one question a day to the AI about your analyses. Beyond very heavy use in a month, the following analyses are
-          written by a faster AI model, and the news side reuses the searches already made that day.
+          and one question a day to the AI about your analyses. Each day, the first analyses are written by our
+          most advanced AI model and the following ones by a faster model; beyond very heavy use in a month, by a lighter
+          model, and the news side then reuses the searches already made that day.
         </li>
         <li>
           <strong>Lifetime — {formatEur("en", OFFER_PRICE_EUR.lifetime)}, one-off payment</strong>: the Pro pack&apos;s full analysis (news side and
@@ -245,9 +247,9 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
         <li>
           <strong>Pro — {formatEur("es", OFFER_PRICE_EUR.monthly)} / mes</strong>: suscripción sin permanencia, renovada
           automáticamente cada mes. Análisis completos ilimitados, para un uso personal y no
-          automatizado, con la parte de noticias y una pregunta al día a la IA sobre tus análisis. Más allá de un uso muy
-          intensivo en el mes, los análisis siguientes los redacta un modelo de IA más rápido, y la parte de noticias reutiliza
-          las búsquedas ya hechas ese día.
+          automatizado, con la parte de noticias y una pregunta al día a la IA sobre tus análisis. Cada día, los primeros
+          análisis los redacta nuestro modelo de IA más avanzado y los siguientes un modelo más rápido; más allá de un uso muy
+          intensivo en el mes, un modelo más ligero, y la parte de noticias reutiliza entonces las búsquedas ya hechas ese día.
         </li>
         <li>
           <strong>De por vida — {formatEur("es", OFFER_PRICE_EUR.lifetime)}, pago único</strong>: el análisis completo del pack Pro (parte de

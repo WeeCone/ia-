@@ -4,12 +4,12 @@ import { isAdminRequest } from "@/lib/admin-auth";
 import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_BYTES, type AllowedImageType } from "@/lib/analysis";
 import { analyzeChart, AnalysisRefusedError, checkChart } from "@/lib/claude";
 import { macroContext } from "@/lib/macro";
-import { analysisSetup, availableCredits, budgetFor, creditPeriod, hasNewsSide, isUnlimited, periodFor } from "@/lib/plans";
+import { analysisSetup, availableCredits, budgetFor, hasNewsSide, isUnlimited, periodFor } from "@/lib/plans";
 import { adminBucket, adminDb } from "@/lib/firebase-admin";
 import { getRequestUid } from "@/lib/server-auth";
 import { recordActivity } from "@/lib/activity";
 import { TEST_ANALYSIS } from "@/lib/test-analysis";
-import { monthSpend } from "@/lib/usage-cost";
+import { addSpend, daySpend, monthSpend } from "@/lib/usage-cost";
 import { DICTIONARIES } from "@/i18n/dictionaries";
 import { requestLocale } from "@/i18n/server";
 
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
   if (availableCredits(userData) < 1) return error(text.noCredits, 402);
   // Hard monthly ceiling on AI spend per customer, whatever the credits say. The admin is exempt.
   // Which model reads this chart: Starter the light one, Pro steps down as its month's spend grows (see analysisSetup).
-  const setup = analysisSetup(userData.plan, monthSpend(userData));
+  const setup = analysisSetup(userData.plan, monthSpend(userData), daySpend(userData));
   if (monthSpend(userData) + setup.maxCost > budgetFor(userData.plan) && !(await isAdminRequest(request))) {
     return error(text.budget, 402);
   }
@@ -155,8 +155,7 @@ export async function POST(request: Request) {
 async function recordSpend(userRef: FirebaseFirestore.DocumentReference, costEur: number) {
   try {
     await adminDb.runTransaction(async (tx) => {
-      const spent = monthSpend((await tx.get(userRef)).data() ?? {});
-      tx.set(userRef, { spendEur: spent + costEur, spendPeriod: creditPeriod() }, { merge: true });
+      tx.set(userRef, addSpend((await tx.get(userRef)).data() ?? {}, costEur), { merge: true });
     });
   } catch (err) {
     console.error("spend tracking failed", err);

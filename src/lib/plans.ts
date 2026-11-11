@@ -46,25 +46,27 @@ export const SONNET_MODEL = "claude-sonnet-5-5";
 export const HAIKU_MODEL = "claude-haiku-5-5";
 
 /**
- * Pro is unlimited, and its AI spend is meant to stay near 5 € a month: the month's first analyses are read by the top
- * model, then by the mid-size one, then by the light one. Past the last step, the news side is only served from the
- * day's shared cache (no new web search).
+ * Pro is unlimited, and its AI spend stays bounded. The top model is shared out by day rather than used up in the
+ * month's first days: each Paris day, analyses are read by the top model until 0,40 € of that day's spend (about 4 to
+ * 5 analyses), then by the mid-size one until the next day. Past 8 € in the month, the light model takes over and the
+ * news side is only served from the day's shared cache (no new web search); the 10 € ceiling only stops automated use.
  */
-const PRO_STEPS_EUR = { sonnet: 3, haiku: 4.5 };
-export function proModel(spentEur: number) {
-  if (spentEur < PRO_STEPS_EUR.sonnet) return { model: OPUS_MODEL, freshNews: true };
-  if (spentEur < PRO_STEPS_EUR.haiku) return { model: SONNET_MODEL, freshNews: true };
-  return { model: HAIKU_MODEL, freshNews: false };
+const PRO_TOP_PER_DAY_EUR = 0.4;
+const PRO_LIGHT_FROM_MONTH_EUR = 8;
+export function proModel(monthEur: number, dayEur: number) {
+  if (monthEur >= PRO_LIGHT_FROM_MONTH_EUR) return { model: HAIKU_MODEL, freshNews: false };
+  if (dayEur < PRO_TOP_PER_DAY_EUR) return { model: OPUS_MODEL, freshNews: true };
+  return { model: SONNET_MODEL, freshNews: true };
 }
 
 /**
  * Which model reads an account's next chart, whether its news side may run new searches, and the worst case to keep
  * free in the budget before starting. Starter: the light model, a reduced report (see the dashboard), no news side.
  */
-export function analysisSetup(plan: Plan | undefined, spentEur: number) {
+export function analysisSetup(plan: Plan | undefined, spentEur: number, dayEur = 0) {
   if (plan === "starter") return { model: HAIKU_MODEL, freshNews: false, maxCost: LIGHT_MAX_CALL_COST_EUR };
   if (plan === "monthly") {
-    const step = proModel(spentEur);
+    const step = proModel(spentEur, dayEur);
     return { ...step, maxCost: step.model === HAIKU_MODEL ? LIGHT_MAX_CALL_COST_EUR : MAX_CALL_COST_EUR };
   }
   return { model: OPUS_MODEL, freshNews: true, maxCost: MAX_CALL_COST_EUR };
