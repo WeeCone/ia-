@@ -21,7 +21,7 @@ const MACRO_MODEL = "claude-sonnet-5-5";
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY?.trim() });
 
 /** At most this many searches per analysis: enough for the calendar and the news, and a bound on the cost. */
-const MAX_SEARCHES = 4;
+const MAX_SEARCHES = 2;
 const SEARCH_COST_EUR = 0.01;
 /** Never holds the report back for long: past this, the report comes without its news side. */
 const TIME_LIMIT_MS = 75_000;

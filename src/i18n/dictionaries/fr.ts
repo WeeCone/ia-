@@ -200,7 +200,7 @@ export const fr = {
       },
       {
         q: "Que se passe-t-il quand j'ai utilisé mes analyses ?",
-        a: "Avec Starter, votre analyse du jour revient le lendemain. Pro est illimité : rien à recharger (chaque jour, les premières analyses sont rédigées par notre modèle d'IA le plus avancé, les suivantes par un modèle plus rapide). Avec À vie, vos 30 analyses reviennent le 1er de chaque mois. Rien n'est prélevé en plus, et une image qui n'est pas un graphique n'est pas décomptée.",
+        a: "Avec Starter, votre analyse du jour revient le lendemain. Pro est illimité : rien à recharger (chaque jour, les premières analyses sont rédigées par notre modèle d'IA le plus avancé, les suivantes par des modèles plus rapides). Avec À vie, vos 30 analyses reviennent le 1er de chaque mois. Rien n'est prélevé en plus, et une image qui n'est pas un graphique n'est pas décomptée.",
       },
       {
         q: "Comment résilier un abonnement ?",
