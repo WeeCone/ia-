@@ -72,10 +72,9 @@ env:
     secret: resendApiKey
     availability: [RUNTIME]
   # Accès en lecture seule pour l'assistant (routes /api/ops/*) : un long jeton aléatoire, révocable en changeant le secret.
-  # À réactiver une fois le secret créé (firebase apphosting:secrets:set opsReadToken) : sans lui, le déploiement échoue.
-  # - variable: OPS_READ_TOKEN
-  #   secret: opsReadToken
-  #   availability: [RUNTIME]
+  - variable: OPS_READ_TOKEN
+    secret: opsReadToken
+    availability: [RUNTIME]
   - variable: EMAIL_FROM
     value: "Scanzivo <bonjour@scanzivo.com>"
     availability: [RUNTIME]
