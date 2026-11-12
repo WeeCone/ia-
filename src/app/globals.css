@@ -27,9 +27,10 @@
   --color-bull: var(--bull);
   --color-bear: var(--bear);
   --color-warn: var(--warn);
-  --font-sans: var(--font-inter);
+  /* The Latin web fonts have no Japanese or Korean glyphs: the system's CJK fonts draw those. */
+  --font-sans: var(--font-inter), "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Apple SD Gothic Neo", "Noto Sans JP", "Noto Sans KR", "Yu Gothic", "Malgun Gothic", sans-serif;
   --font-mono: var(--font-jetbrains-mono);
-  --font-display: var(--font-space-grotesk);
+  --font-display: var(--font-space-grotesk), "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Apple SD Gothic Neo", "Noto Sans JP", "Noto Sans KR", "Yu Gothic", "Malgun Gothic", sans-serif;
   --font-logo: var(--font-archivo-black);
 }
 

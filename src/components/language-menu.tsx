@@ -4,10 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/i18n/client";
-import { LOCALES, localePath, unlocalizedPath } from "@/i18n/config";
+import { LANGUAGE_NAMES, LOCALES, localePath, unlocalizedPath } from "@/i18n/config";
 import { rememberLocale } from "./language-switcher";
 
-const NAMES = { fr: "Français", en: "English", es: "Español" } as const;
+const NAMES = LANGUAGE_NAMES;
 
 /** The language choice folded into one small menu, for the header bar. */
 export function LanguageMenu({ className = "" }: { className?: string }) {

@@ -28,12 +28,22 @@ Si l'image n'est pas un graphique de prix, mets is_chart à false et remplis les
  * The report is written in the customer's language. Choice fields keep the schema's French values (the site translates
  * them for display), so stored analyses stay comparable whatever the language.
  */
+/** The rule for a language without a hand-written one: free texts in that language, choice fields left in French. */
+function otherLanguage(language: string, numbers: string) {
+  return `Rédige tous les textes libres (synthèse, thèses, conditions d'entrée, stops, objectifs, verdict, conseils, défauts de capture, horizon…) en ${language}, avec les nombres écrits comme dans cette langue (${numbers}). Les noms d'actifs (BTC/USDT, XAU/USD…) et les unités de temps (4H, 1D…) restent tels quels.
+Les champs à choix gardent exactement les valeurs françaises du schéma (trend, confidence.level, capture_quality.level, verdict.bias, verdict.action, level_marks.kind), et asset / timeframe restent « Inconnu » / « Inconnue » s'ils sont illisibles.`;
+}
+
 const LANGUAGE_RULE: Record<Locale, string> = {
   fr: "Réponds en français.",
   en: `Rédige tous les textes libres (synthèse, thèses, conditions d'entrée, stops, objectifs, verdict, conseils, défauts de capture, horizon…) en anglais, avec les nombres écrits à l'anglaise (65,400.5).
 Les champs à choix gardent exactement les valeurs françaises du schéma (trend, confidence.level, capture_quality.level, verdict.bias, verdict.action, level_marks.kind), et asset / timeframe restent « Inconnu » / « Inconnue » s'ils sont illisibles.`,
   es: `Redacta todos los textos libres (síntesis, tesis, condiciones de entrada, stops, objetivos, veredicto, consejos, defectos de la captura, horizonte…) en español, con los números escritos a la española (65.400,5).
 Los campos de opción conservan exactamente los valores franceses del esquema (trend, confidence.level, capture_quality.level, verdict.bias, verdict.action, level_marks.kind), y asset / timeframe siguen siendo « Inconnu » / « Inconnue » si no son legibles.`,
+  ja: otherLanguage("japonais (registre poli, です・ます調)", "65,400.5"),
+  ko: otherLanguage("coréen (registre poli, 합니다체)", "65,400.5"),
+  vi: otherLanguage("vietnamien", "65.400,5"),
+  id: otherLanguage("indonésien", "65.400,5"),
 };
 
 export class AnalysisRefusedError extends Error {
@@ -148,6 +158,10 @@ const CHAT_LANGUAGE: Record<Locale, string> = {
   fr: "Réponds en français, en vouvoyant.",
   en: "Answer in English.",
   es: "Responde en español, tuteando.",
+  ja: "日本語で、です・ます調で答えてください。",
+  ko: "한국어로, 존댓말(합니다체)로 답하세요.",
+  vi: "Hãy trả lời bằng tiếng Việt, xưng hô lịch sự (bạn).",
+  id: "Jawablah dalam bahasa Indonesia yang sopan (Anda).",
 };
 
 /**

@@ -310,6 +310,11 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
       </p>
     </>
   ),
+  // Japanese, Korean, Vietnamese, Indonesian: the English text, the reference translation of these French terms.
+  ja: (...args: [string]) => CONTENT.en(...args),
+  ko: (...args: [string]) => CONTENT.en(...args),
+  vi: (...args: [string]) => CONTENT.en(...args),
+  id: (...args: [string]) => CONTENT.en(...args),
 };
 
 export default async function CgvPage() {

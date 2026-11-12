@@ -12,13 +12,13 @@ import { localePath, LOCALES } from "@/i18n/config";
 import { getI18n } from "@/i18n/server";
 import "../globals.css";
 
-const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
-const spaceGrotesk = Space_Grotesk({ variable: "--font-space-grotesk", subsets: ["latin"] });
+const inter = Inter({ variable: "--font-inter", subsets: ["latin", "latin-ext", "vietnamese"] });
+const spaceGrotesk = Space_Grotesk({ variable: "--font-space-grotesk", subsets: ["latin", "latin-ext", "vietnamese"] });
 // Logo wordmark only.
 const archivoBlack = Archivo_Black({ variable: "--font-archivo-black", subsets: ["latin"], weight: "400" });
 const jetbrainsMono = JetBrains_Mono({ variable: "--font-jetbrains-mono", subsets: ["latin"] });
 
-const OG_LOCALE = { fr: "fr_FR", en: "en_GB", es: "es_ES" } as const;
+const OG_LOCALE = { fr: "fr_FR", en: "en_GB", es: "es_ES", ja: "ja_JP", ko: "ko_KR", vi: "vi_VN", id: "id_ID" } as const;
 
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));

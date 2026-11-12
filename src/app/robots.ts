@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
+import { LOCALES } from "@/i18n/config";
 
 const SITE = "https://scanzivo.com";
 // The private and transactional pages: nothing for a search engine or an assistant to quote.
-const PRIVATE = ["/api/", "/dashboard", "/admin", "/welcome", "/en/dashboard", "/en/admin", "/en/welcome", "/es/dashboard", "/es/admin", "/es/welcome"];
+const PRIVATE = ["/api/", "/dashboard", "/admin", "/welcome", ...LOCALES.filter((locale) => locale !== "fr").flatMap((locale) => [`/${locale}/dashboard`, `/${locale}/admin`, `/${locale}/welcome`])];
 
 /**
  * Open to search engines and, named explicitly, to the AI assistants' crawlers (ChatGPT, Perplexity, Claude, Gemini),

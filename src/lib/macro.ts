@@ -32,6 +32,10 @@ const LANGUAGE: Record<Locale, string> = {
   fr: "Rédige les textes en français.",
   en: "Write the texts in English.",
   es: "Redacta los textos en español.",
+  ja: "Rédige les textes en japonais (です・ます調), dates comprises (例：11月13日(木) 22:30).",
+  ko: "Rédige les textes en coréen (합니다체), dates comprises (예: 11월 13일(목) 22:30).",
+  vi: "Rédige les textes en vietnamien, dates comprises (ví dụ: Thứ Năm 13/11, 22:30).",
+  id: "Rédige les textes en indonésien, dates comprises (contoh: Kamis 13 Nov, 22.30).",
 };
 
 function systemPrompt(locale: Locale) {

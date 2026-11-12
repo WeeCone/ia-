@@ -283,6 +283,11 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
       </p>
     </>
   ),
+  // Japanese, Korean, Vietnamese, Indonesian: the English text, the reference translation of these French terms.
+  ja: () => CONTENT.en(),
+  ko: () => CONTENT.en(),
+  vi: () => CONTENT.en(),
+  id: () => CONTENT.en(),
 };
 
 export default async function ConfidentialitePage() {
