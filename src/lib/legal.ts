@@ -1,13 +1,7 @@
-// Company details shown on the legal pages. Fill in every "[À COMPLÉTER]" before going live.
+// Company details for the legal pages. The publisher's identity, address and contact are not published yet: the pages
+// show only the brand until they are filled in.
 export const COMPANY = {
   brand: "Scanzivo",
-  name: "[À COMPLÉTER : raison sociale]",
-  legalForm: "[À COMPLÉTER : forme juridique et capital, ex. SAS au capital de 1 000 €]",
-  address: "[À COMPLÉTER : adresse du siège]",
-  registration: "[À COMPLÉTER : RCS / SIREN]",
-  vat: "[À COMPLÉTER : n° de TVA intracommunautaire]",
-  director: "[À COMPLÉTER : directeur de la publication]",
-  email: "[À COMPLÉTER : email de contact]",
 };
 
 /** Date of the current legal texts (all languages). */

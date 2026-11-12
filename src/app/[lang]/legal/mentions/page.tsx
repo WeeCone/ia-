@@ -12,17 +12,6 @@ export async function generateMetadata(): Promise<Metadata> {
 const CONTENT: Record<Locale, () => React.ReactNode> = {
   fr: () => (
     <>
-      <h2>Éditeur du site</h2>
-      <p>
-        Le site {COMPANY.brand} est édité par <strong>{COMPANY.name}</strong>, {COMPANY.legalForm}, dont le siège social est
-        situé {COMPANY.address}, immatriculée sous le numéro {COMPANY.registration}.
-      </p>
-      <ul>
-        <li>TVA intracommunautaire : {COMPANY.vat}</li>
-        <li>Directeur de la publication : {COMPANY.director}</li>
-        <li>Contact : {COMPANY.email}</li>
-      </ul>
-
       <h2>Hébergement</h2>
       <p>
         Le site est hébergé par <strong>Google Cloud (Firebase)</strong>, Google Ireland Limited, Gordon House, Barrow Street,
@@ -41,7 +30,7 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
 
       <h2>Propriété intellectuelle</h2>
       <p>
-        L&apos;ensemble des éléments du site (textes, interface, logo, code) est la propriété de {COMPANY.name}, sauf mention
+        L&apos;ensemble des éléments du site (textes, interface, logo, code) est la propriété de {COMPANY.brand}, sauf mention
         contraire. Toute reproduction sans autorisation est interdite. Les captures d&apos;écran que vous importez restent votre
         propriété.
       </p>
@@ -49,17 +38,6 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
   ),
   en: () => (
     <>
-      <h2>Publisher</h2>
-      <p>
-        The {COMPANY.brand} website is published by <strong>{COMPANY.name}</strong>, {COMPANY.legalForm}, whose registered office
-        is located at {COMPANY.address}, registered under number {COMPANY.registration}.
-      </p>
-      <ul>
-        <li>EU VAT number: {COMPANY.vat}</li>
-        <li>Publication director: {COMPANY.director}</li>
-        <li>Contact: {COMPANY.email}</li>
-      </ul>
-
       <h2>Hosting</h2>
       <p>
         The website is hosted by <strong>Google Cloud (Firebase)</strong>, Google Ireland Limited, Gordon House, Barrow Street,
@@ -77,24 +55,13 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
 
       <h2>Intellectual property</h2>
       <p>
-        All elements of the website (texts, interface, logo, code) are the property of {COMPANY.name}, unless stated otherwise.
+        All elements of the website (texts, interface, logo, code) are the property of {COMPANY.brand}, unless stated otherwise.
         Any reproduction without permission is prohibited. The screenshots you upload remain your property.
       </p>
     </>
   ),
   es: () => (
     <>
-      <h2>Editor del sitio</h2>
-      <p>
-        El sitio {COMPANY.brand} es editado por <strong>{COMPANY.name}</strong>, {COMPANY.legalForm}, con domicilio social en{" "}
-        {COMPANY.address}, inscrita con el número {COMPANY.registration}.
-      </p>
-      <ul>
-        <li>NIF-IVA intracomunitario: {COMPANY.vat}</li>
-        <li>Director de la publicación: {COMPANY.director}</li>
-        <li>Contacto: {COMPANY.email}</li>
-      </ul>
-
       <h2>Alojamiento</h2>
       <p>
         El sitio está alojado por <strong>Google Cloud (Firebase)</strong>, Google Ireland Limited, Gordon House, Barrow Street,
@@ -112,7 +79,7 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
 
       <h2>Propiedad intelectual</h2>
       <p>
-        Todos los elementos del sitio (textos, interfaz, logotipo, código) son propiedad de {COMPANY.name}, salvo indicación en
+        Todos los elementos del sitio (textos, interfaz, logotipo, código) son propiedad de {COMPANY.brand}, salvo indicación en
         contrario. Queda prohibida cualquier reproducción sin autorización. Las capturas de pantalla que usted sube siguen siendo
         de su propiedad.
       </p>

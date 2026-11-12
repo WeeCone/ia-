@@ -23,7 +23,7 @@ const CONTENT: Record<Locale, Terms> = {
       <h2>1. Objet</h2>
       <p>
         Les présentes conditions régissent l&apos;utilisation du service {COMPANY.brand} (le « Service ») et la souscription
-        de ses offres payantes auprès de {COMPANY.name} (« nous »). Créer un compte ou passer commande implique leur
+        de ses offres payantes auprès de {COMPANY.brand} (« nous »). Créer un compte ou passer commande implique leur
         acceptation.
       </p>
 
@@ -110,10 +110,9 @@ const CONTENT: Record<Locale, Terms> = {
         Le traitement de vos données est décrit dans notre <Link href={privacyHref}>politique de confidentialité</Link>.
       </p>
 
-      <h2>10. Réclamations, médiation et droit applicable</h2>
+      <h2>10. Droit applicable</h2>
       <p>
-        Pour toute réclamation : {COMPANY.email}. En cas de litige non résolu, vous pouvez recourir gratuitement au médiateur
-        de la consommation : [À COMPLÉTER : nom et coordonnées du médiateur]. Les présentes conditions sont soumises au droit
+        Les présentes conditions sont soumises au droit
         français.
       </p>
     </>
@@ -123,7 +122,7 @@ const CONTENT: Record<Locale, Terms> = {
       <h2>1. Purpose</h2>
       <p>
         These terms govern the use of the {COMPANY.brand} service (the &quot;Service&quot;) and the purchase of its paid offers
-        from {COMPANY.name} (&quot;we&quot;). Creating an account or placing an order implies accepting them.
+        from {COMPANY.brand} (&quot;we&quot;). Creating an account or placing an order implies accepting them.
       </p>
 
       <h2>2. The Service</h2>
@@ -209,10 +208,9 @@ const CONTENT: Record<Locale, Terms> = {
         How we process your data is described in our <Link href={privacyHref}>privacy policy</Link>.
       </p>
 
-      <h2>10. Complaints, mediation and governing law</h2>
+      <h2>10. Governing law</h2>
       <p>
-        For any complaint: {COMPANY.email}. If a dispute remains unresolved, you may refer it free of charge to the consumer
-        mediator: [À COMPLÉTER : nom et coordonnées du médiateur]. These terms are governed by French law.
+        These terms are governed by French law.
       </p>
     </>
   ),
@@ -221,7 +219,7 @@ const CONTENT: Record<Locale, Terms> = {
       <h2>1. Objeto</h2>
       <p>
         Las presentes condiciones regulan el uso del servicio {COMPANY.brand} (el «Servicio») y la contratación de sus ofertas de
-        pago con {COMPANY.name} («nosotros»). Crear una cuenta o realizar un pedido implica su aceptación.
+        pago con {COMPANY.brand} («nosotros»). Crear una cuenta o realizar un pedido implica su aceptación.
       </p>
 
       <h2>2. El Servicio</h2>
@@ -305,10 +303,9 @@ const CONTENT: Record<Locale, Terms> = {
         El tratamiento de sus datos se describe en nuestra <Link href={privacyHref}>política de privacidad</Link>.
       </p>
 
-      <h2>10. Reclamaciones, mediación y ley aplicable</h2>
+      <h2>10. Ley aplicable</h2>
       <p>
-        Para cualquier reclamación: {COMPANY.email}. En caso de litigio no resuelto, puede recurrir gratuitamente al mediador de
-        consumo: [À COMPLÉTER : nom et coordonnées du médiateur]. Las presentes condiciones se rigen por el derecho francés.
+        Las presentes condiciones se rigen por el derecho francés.
       </p>
     </>
   ),

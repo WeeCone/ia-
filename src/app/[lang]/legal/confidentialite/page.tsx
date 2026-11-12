@@ -12,11 +12,6 @@ export async function generateMetadata(): Promise<Metadata> {
 const CONTENT: Record<Locale, () => React.ReactNode> = {
   fr: () => (
     <>
-      <h2>Responsable du traitement</h2>
-      <p>
-        {COMPANY.name}, {COMPANY.address}. Contact : {COMPANY.email}.
-      </p>
-
       <h2>Données collectées</h2>
       <ul>
         <li>
@@ -97,18 +92,13 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
       <p>
         Vous disposez d&apos;un droit d&apos;accès, de rectification, d&apos;effacement, de limitation, d&apos;opposition et de
         portabilité de vos données. Vous pouvez supprimer vous-même votre compte et toutes vos analyses depuis votre tableau de
-        bord (rubrique « Compte »). Pour exercer vos autres droits, écrivez à {COMPANY.email}. Vous pouvez également introduire
+        bord (rubrique « Compte »). Vous pouvez également introduire
         une réclamation auprès de la CNIL (www.cnil.fr).
       </p>
     </>
   ),
   en: () => (
     <>
-      <h2>Data controller</h2>
-      <p>
-        {COMPANY.name}, {COMPANY.address}. Contact: {COMPANY.email}.
-      </p>
-
       <h2>Data collected</h2>
       <ul>
         <li>
@@ -186,18 +176,13 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
       <h2>Your rights</h2>
       <p>
         You have the right to access, rectify, erase, restrict, object to and port your data. You can delete your account and all
-        your analyses yourself from your dashboard (&quot;Account&quot;). To exercise your other rights, write to {COMPANY.email}.
+        your analyses yourself from your dashboard (&quot;Account&quot;).
         You may also lodge a complaint with the CNIL (www.cnil.fr) or your local data protection authority.
       </p>
     </>
   ),
   es: () => (
     <>
-      <h2>Responsable del tratamiento</h2>
-      <p>
-        {COMPANY.name}, {COMPANY.address}. Contacto: {COMPANY.email}.
-      </p>
-
       <h2>Datos recogidos</h2>
       <ul>
         <li>
@@ -277,8 +262,7 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
       <h2>Sus derechos</h2>
       <p>
         Tiene derecho de acceso, rectificación, supresión, limitación, oposición y portabilidad de sus datos. Puede eliminar usted
-        mismo su cuenta y todos sus análisis desde su panel («Cuenta»). Para ejercer sus demás derechos, escriba a{" "}
-        {COMPANY.email}. También puede presentar una reclamación ante la CNIL (www.cnil.fr) o ante la autoridad de protección de
+        mismo su cuenta y todos sus análisis desde su panel («Cuenta»). También puede presentar una reclamación ante la CNIL (www.cnil.fr) o ante la autoridad de protección de
         datos de su país.
       </p>
     </>
