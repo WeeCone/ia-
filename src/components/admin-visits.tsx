@@ -378,7 +378,8 @@ function LiveNow({ live: { visitors, error } }: { live: LiveState }) {
 const cents = (value: number) => value.toLocaleString("fr-FR", { style: "currency", currency: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 /** The free reading (preview before paying): how many were asked for, how many were of a chart, how many were unlocked, and what they cost. */
-function FreeReadings({ period, reloadKey }: { period: number; reloadKey: number }) {
+export function FreeReadingsTab({ reloadKey }: { reloadKey: number }) {
+  const [period, setPeriod] = useState<(typeof PERIODS)[number]>(30);
   const [data, setData] = useState<AdminFreeReadings | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -396,13 +397,29 @@ function FreeReadings({ period, reloadKey }: { period: number; reloadKey: number
     };
   }, [period, reloadKey]);
 
-  if (error) return <FormError message={error} />;
-  if (!data) return <p className="mt-6 text-sm text-muted">Chargement des lectures gratuites…</p>;
+  const picker = (
+    <div className="flex gap-1 rounded-xl border border-border p-1" role="group" aria-label="Période">
+      {PERIODS.map((value) => (
+        <button
+          key={value}
+          type="button"
+          onClick={() => setPeriod(value)}
+          aria-pressed={period === value}
+          className={`rounded-lg px-3 py-1.5 text-sm ${period === value ? "bg-foreground/10 font-medium" : "text-muted hover:text-foreground"}`}
+        >
+          {value} jours
+        </button>
+      ))}
+    </div>
+  );
+  if (error) return <section className="mt-6">{picker}<div className="mt-4"><FormError message={error} /></div></section>;
+  if (!data) return <section className="mt-6">{picker}<p className="mt-6 text-sm text-muted">Chargement des lectures gratuites…</p></section>;
   const { totals } = data;
   const rows = [...data.days].reverse().filter((row) => row.asked || row.charts);
   return (
-    <section className="mt-8">
-      <h3 className="display text-xl">Lectures gratuites</h3>
+    <section className="mt-6">
+      {picker}
+      <h3 className="display mt-6 text-xl">Lectures gratuites</h3>
       <p className="mt-1 text-xs text-muted">
         Des lectures, pas des personnes : aucune identité n&apos;est gardée. « Demandées » compte aussi les images qui n&apos;étaient pas un graphique (jours UTC).
       </p>
@@ -562,8 +579,6 @@ export function VisitsTab({ reloadKey, live }: { reloadKey: number; live: LiveSt
             }))}
             empty="Aucune visite venue d'un lien de pub. Créez-en un ci-dessous."
           />
-
-          <FreeReadings period={period} reloadKey={reloadKey} />
 
           <LinkBuilder />
 

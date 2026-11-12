@@ -7,7 +7,7 @@ import { useAuth } from "@/components/auth-provider";
 import { FormError } from "@/components/auth-card";
 import { Logo } from "@/components/logo";
 import { AnalysesTab } from "@/components/admin-analyses";
-import { LiveBadge, useLiveVisitors, VisitsTab } from "@/components/admin-visits";
+import { FreeReadingsTab, LiveBadge, useLiveVisitors, VisitsTab } from "@/components/admin-visits";
 import type { AdminOverview, AdminReview, AdminUser, ReviewStatus } from "@/lib/admin";
 import { adminFetch } from "@/lib/admin-client";
 import { optOutOfTracking } from "@/lib/track";
@@ -281,7 +281,7 @@ export default function AdminPage() {
   const [data, setData] = useState<AdminOverview | null>(null);
   const [error, setError] = useState<{ message: string; status?: number } | null>(null);
   const [refreshing, setRefreshing] = useState(false);
-  const [tab, setTab] = useState<"visits" | "users" | "analyses" | "reviews" | "import">("visits");
+  const [tab, setTab] = useState<"visits" | "users" | "analyses" | "free" | "reviews" | "import">("visits");
   const [analysisQuery, setAnalysisQuery] = useState("");
   const [query, setQuery] = useState("");
   const [planFilter, setPlanFilter] = useState<Plan | "all">("all");
@@ -414,6 +414,7 @@ export default function AdminPage() {
                   ["visits", "Visites"],
                   ["users", `Utilisateurs (${data.users.length})`],
                   ["analyses", `Analyses (${totals.analyses})`],
+                  ["free", "Lectures gratuites"],
                   ["reviews", `Avis${pendingReviews ? ` (${pendingReviews} en attente)` : ` (${data.reviews.length})`}`],
                   ["import", "Importer une analyse"],
                 ] as const
@@ -493,6 +494,8 @@ export default function AdminPage() {
               </section>
             ) : tab === "analyses" ? (
               <AnalysesTab query={analysisQuery} onQuery={setAnalysisQuery} reloadKey={reloadKey} />
+            ) : tab === "free" ? (
+              <FreeReadingsTab reloadKey={reloadKey} />
             ) : tab === "reviews" ? (
               <section className="mt-6">
                 {data.reviews.length ? (

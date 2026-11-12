@@ -1,4 +1,4 @@
-import type { Timestamp } from "firebase-admin/firestore";
+import { FieldPath, type Timestamp } from "firebase-admin/firestore";
 import type { AdminFreeReadings } from "@/lib/admin";
 import { forbidden, isAdminRequest } from "@/lib/admin-auth";
 import { adminDb } from "@/lib/firebase-admin";
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
   const from = new Date(`${keys[0]}T00:00:00.000Z`);
 
   const [budgetSnap, previewSnap] = await Promise.all([
-    adminDb.collection("previewBudget").where("__name__", ">=", keys[0]).get(),
+    adminDb.collection("previewBudget").where(FieldPath.documentId(), ">=", keys[0]).get(),
     adminDb.collection("previews").where("createdAt", ">=", from).limit(10000).get(),
   ]);
 
