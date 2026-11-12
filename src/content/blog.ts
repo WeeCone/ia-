@@ -4,6 +4,7 @@ import { ARTICLES_EN_2 } from "./blog-en-2";
 import { ARTICLES_ES } from "./blog-es";
 import { ARTICLES_ES_2 } from "./blog-es-2";
 import { ARTICLES_FR_2 } from "./blog-fr-2";
+import { ARTICLES_FR_GOLD } from "./blog-fr-gold";
 import { ARTICLES_ID } from "./blog-id";
 import { ARTICLES_JA } from "./blog-ja";
 import { ARTICLES_KO } from "./blog-ko";
@@ -37,6 +38,8 @@ export type Article = {
   /** ISO date of the last real change, when there was one. */
   updated?: string;
   body: Block[];
+  /** Set on the guides written for one subject (gold), listed on that subject's page. */
+  topic?: "gold";
 };
 
 const ARTICLES_FR: Omit<Article, "locale" | "key">[] = [
@@ -487,6 +490,7 @@ const ARTICLES_FR: Omit<Article, "locale" | "key">[] = [
 
 export const ARTICLES: Article[] = [
   // Newest first: the blog index lists them in this order.
+  ...ARTICLES_FR_GOLD.map((article) => ({ ...article, key: article.slug, locale: "fr" as const, topic: "gold" as const })),
   ...[...ARTICLES_FR_2, ...ARTICLES_FR].map((article) => ({ ...article, key: article.slug, locale: "fr" as const })),
   ...[...ARTICLES_EN_2, ...ARTICLES_EN].map((article) => ({ ...article, locale: "en" as const })),
   ...[...ARTICLES_ES_2, ...ARTICLES_ES].map((article) => ({ ...article, locale: "es" as const })),
@@ -501,6 +505,9 @@ export const ARTICLES: Article[] = [
 
 /** The same article in the other languages that have it, for hreflang links. */
 export const translationsOf = (article: Article) => ARTICLES.filter((other) => other.key === article.key);
+
+/** The gold guides in a language, for the gold page. */
+export const goldGuides = (locale: Locale) => ARTICLES.filter((article) => article.locale === locale && article.topic === "gold");
 
 export const articlesFor = (locale: Locale) => ARTICLES.filter((article) => article.locale === locale);
 

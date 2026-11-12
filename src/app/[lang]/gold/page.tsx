@@ -5,11 +5,27 @@ import { FaqList } from "@/components/faq";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { goldGuides, readingMinutes } from "@/content/blog";
 import { GOLD, goldLocales } from "@/content/gold";
+import Link from "next/link";
 import { localePath } from "@/i18n/config";
 import { getI18n } from "@/i18n/server";
 
 const SITE = "https://scanzivo.com";
+
+/** Heading of the list of gold guides, per language (the list shows only where guides exist). */
+const GUIDES_TITLE: Record<string, string> = {
+  fr: "Guides pour trader l'or",
+  en: "Guides to trading gold",
+  es: "Guías para operar el oro",
+  it: "Guide per fare trading sull'oro",
+  de: "Ratgeber zum Goldhandel",
+  pt: "Guias para operar ouro",
+  ja: "金（ゴールド）取引のガイド",
+  ko: "금 거래 가이드",
+  vi: "Hướng dẫn giao dịch vàng",
+  id: "Panduan trading emas",
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   const { locale } = await getI18n();
@@ -42,6 +58,7 @@ export default async function GoldPage() {
   const page = GOLD[locale];
   if (!page) notFound();
   const url = `${SITE}${localePath(locale, "/gold")}`;
+  const guides = goldGuides(locale);
   const structured = [
     {
       "@context": "https://schema.org",
@@ -180,6 +197,25 @@ export default async function GoldPage() {
           </h2>
           <FaqList items={page.faq} className="mt-8" />
         </section>
+
+        {guides.length > 0 && (
+          <section className="mx-auto w-full max-w-6xl px-4 pb-20">
+            <h2 data-reveal="fade" className="display text-3xl sm:text-4xl">
+              {GUIDES_TITLE[locale] ?? GUIDES_TITLE.en}
+            </h2>
+            <ul data-reveal-stagger className="mt-8 grid gap-x-10 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+              {guides.map((guide) => (
+                <li key={guide.slug} className="border-t border-border pt-4">
+                  <Link href={localePath(locale, `/blog/${guide.slug}`)} className="display text-lg leading-snug hover:text-warn">
+                    {guide.title}
+                  </Link>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{guide.description}</p>
+                  <p className="mt-2 text-xs text-muted">{readingMinutes(guide)} min</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <section data-reveal="circle" className="theme-dark mx-2 mb-4 rounded-[2.5rem] sm:mx-4">
           <div className="mx-auto max-w-4xl px-4 py-20 text-center">
