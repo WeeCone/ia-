@@ -1,6 +1,8 @@
 import type { Locale } from "@/i18n/config";
 import { ARTICLES_EN } from "./blog-en";
 import { ARTICLES_EN_2 } from "./blog-en-2";
+import { ARTICLES_EN_GOLD } from "./blog-en-gold";
+import { ARTICLES_IT_GOLD } from "./blog-it-gold";
 import { ARTICLES_ES } from "./blog-es";
 import { ARTICLES_ES_2 } from "./blog-es-2";
 import { ARTICLES_FR_2 } from "./blog-fr-2";
@@ -492,12 +494,14 @@ export const ARTICLES: Article[] = [
   // Newest first: the blog index lists them in this order.
   ...ARTICLES_FR_GOLD.map((article) => ({ ...article, key: article.slug, locale: "fr" as const, topic: "gold" as const })),
   ...[...ARTICLES_FR_2, ...ARTICLES_FR].map((article) => ({ ...article, key: article.slug, locale: "fr" as const })),
+  ...ARTICLES_EN_GOLD.map((article) => ({ ...article, locale: "en" as const, topic: "gold" as const })),
   ...[...ARTICLES_EN_2, ...ARTICLES_EN].map((article) => ({ ...article, locale: "en" as const })),
   ...[...ARTICLES_ES_2, ...ARTICLES_ES].map((article) => ({ ...article, locale: "es" as const })),
   ...ARTICLES_JA.map((article) => ({ ...article, locale: "ja" as const })),
   ...ARTICLES_KO.map((article) => ({ ...article, locale: "ko" as const })),
   ...ARTICLES_VI.map((article) => ({ ...article, locale: "vi" as const })),
   ...ARTICLES_ID.map((article) => ({ ...article, locale: "id" as const })),
+  ...ARTICLES_IT_GOLD.map((article) => ({ ...article, locale: "it" as const, topic: "gold" as const })),
   ...ARTICLES_IT.map((article) => ({ ...article, locale: "it" as const })),
   ...ARTICLES_DE.map((article) => ({ ...article, locale: "de" as const })),
   ...ARTICLES_PT.map((article) => ({ ...article, locale: "pt" as const })),
