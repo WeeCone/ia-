@@ -474,7 +474,7 @@ export const it: Dict = {
     credits: " crediti",
     paymentConfirmed: "Pagamento confermato. I Suoi crediti sono disponibili.",
     paymentPending: "Pagamento ricevuto, attivazione dell'offerta in corso…",
-    hello: "Ciao",
+    hello: "Buongiorno",
     welcome: "e benvenuto",
     intro:
       "Carichi lo screenshot di un grafico. Scanzivo Le restituisce lo scenario più probabile, un piano in cifre e i livelli tracciati sull'immagine.",
