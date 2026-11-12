@@ -68,5 +68,5 @@ export const GOLD_DE: GoldPage = {
   navLabel: "Gold",
   homeTitle: "Sie handeln Gold?",
   homeLink: "Zur spezialisierten XAU/USD-Analyse →",
-  reportBadge: "Gold-Analyse, spezialisiert",
+  reportBadge: "Spezialisierte Gold-Analyse",
 };

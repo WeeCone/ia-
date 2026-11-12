@@ -7,7 +7,7 @@ import { getI18n, languageAlternates } from "@/i18n/server";
 import { COMPANY } from "@/lib/legal";
 import { LOCALE_CURRENCY, MONTHLY_CREDITS, STARTER_DAILY_CREDITS, type Currency } from "@/lib/plans";
 
-const CURRENCY_NAME: Record<Currency, string> = { eur: "euros", jpy: "Japanese yen", krw: "Korean won", vnd: "Vietnamese dong", idr: "Indonesian rupiah" };
+const CURRENCY_NAME: Record<Currency, string> = { eur: "euros", jpy: "Japanese yen", krw: "Korean won", vnd: "Vietnamese dong", idr: "Indonesian rupiah", brl: "Brazilian reais" };
 
 export async function generateMetadata(): Promise<Metadata> {
   const { locale, t } = await getI18n();
