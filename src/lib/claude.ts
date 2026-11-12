@@ -160,7 +160,7 @@ export async function checkChart(imageBase64: string, mediaType: AllowedImageTyp
 }
 
 /** The model that answers a customer's question about one of their analyses. */
-const CHAT_MODEL = "claude-sonnet-5-5";
+const CHAT_MODEL = "claude-haiku-5-5";
 
 const CHAT_LANGUAGE: Record<Locale, string> = {
   fr: "Réponds en français, en vouvoyant.",

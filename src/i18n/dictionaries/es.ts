@@ -201,7 +201,7 @@ export const es: Dict = {
       },
       {
         q: "¿Qué pasa cuando he usado mis análisis?",
-        a: "Con Starter, tu análisis del día vuelve al día siguiente. Pro es ilimitado: no hay nada que recargar (cada día, los primeros análisis los redacta nuestro modelo de IA más avanzado y los siguientes modelos más rápidos). Con De por vida, tus 30 análisis vuelven el día 1 de cada mes. No se cobra nada más, y una imagen que no es un gráfico no se descuenta.",
+        a: "Con Starter, tu análisis del día vuelve al día siguiente. Pro es ilimitado: no hay nada que recargar. Con De por vida, tus 30 análisis vuelven el día 1 de cada mes. No se cobra nada más, y una imagen que no es un gráfico no se descuenta.",
       },
       {
         q: "¿Cómo cancelo una suscripción?",

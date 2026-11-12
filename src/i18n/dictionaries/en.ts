@@ -201,7 +201,7 @@ export const en: Dict = {
       },
       {
         q: "What happens once I've used my analyses?",
-        a: "With Starter, your daily analysis comes back the next day. Pro is unlimited: nothing to refill (each day, the first analyses are written by our most advanced AI model, the following ones by faster models). With Lifetime, your 30 analyses come back on the 1st of each month. Nothing extra is charged, and an image that isn't a chart isn't counted.",
+        a: "With Starter, your daily analysis comes back the next day. Pro is unlimited: nothing to refill. With Lifetime, your 30 analyses come back on the 1st of each month. Nothing extra is charged, and an image that isn't a chart isn't counted.",
       },
       {
         q: "How do I cancel a subscription?",

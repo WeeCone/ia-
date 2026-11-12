@@ -98,7 +98,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
       { q: "Quelles unités de temps ?", a: "Toutes, du 1 minute au mensuel. Pour l'intraday, la routine 1 heure, 15 minutes, 5 minutes est un bon point de départ." },
       {
         q: "Puis-je analyser plusieurs fois par jour ?",
-        a: "Oui, avec le pack Pro, sans limite de nombre. Chaque jour, les premières analyses sont rédigées par notre modèle d'IA le plus avancé, les suivantes par des modèles plus rapides. Le pack Starter donne une analyse par jour.",
+        a: "Oui, avec le pack Pro, sans limite de nombre. Le pack Starter donne une analyse par jour.",
       },
       { q: "Faut-il un compte pour essayer ?", a: "Non. Déposez votre capture : l'IA vous montre gratuitement sa première lecture, sans carte ni inscription." },
       { q: "Est-ce un service de signaux ?", a: "Non. Scanzivo vous rend une lecture argumentée de votre graphique et un plan, que vous êtes libre de suivre ou non. Il n'envoie pas d'alertes et ne passe pas d'ordres." },
@@ -168,7 +168,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
       { q: "Which timeframes?", a: "All of them, from 1-minute to monthly. For intraday, the 1-hour, 15-minute, 5-minute routine is a good place to start." },
       {
         q: "Can I analyse several times a day?",
-        a: "Yes, with the Pro pack, with no limit on the number. Each day, the first analyses are written by our most advanced AI model, the following ones by faster models. The Starter pack gives one analysis a day.",
+        a: "Yes, with the Pro pack, with no limit on the number. The Starter pack gives one analysis a day.",
       },
       { q: "Do I need an account to try?", a: "No. Drop your screenshot: the AI shows you its first reading for free, no card, no sign-up." },
       { q: "Is it a signals service?", a: "No. Scanzivo gives you a reasoned reading of your chart and a plan, which you're free to follow or not. It sends no alerts and places no orders." },
@@ -238,7 +238,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
       { q: "¿Qué temporalidades?", a: "Todas, de 1 minuto a mensual. Para intradía, la rutina de 1 hora, 15 minutos y 5 minutos es un buen punto de partida." },
       {
         q: "¿Puedo analizar varias veces al día?",
-        a: "Sí, con el pack Pro, sin límite de número. Cada día, los primeros análisis los redacta nuestro modelo de IA más avanzado y los siguientes, modelos más rápidos. El pack Starter da un análisis al día.",
+        a: "Sí, con el pack Pro, sin límite de número. El pack Starter da un análisis al día.",
       },
       { q: "¿Hace falta una cuenta para probar?", a: "No. Deja tu captura: la IA te muestra gratis su primera lectura, sin tarjeta ni registro." },
       { q: "¿Es un servicio de señales?", a: "No. Scanzivo te da una lectura razonada de tu gráfico y un plan, que eres libre de seguir o no. No envía alertas ni coloca órdenes." },
@@ -308,7 +308,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
       { q: "どの時間足に対応していますか？", a: "1分足から月足まで、すべてです。デイトレードなら、1時間足・15分足・5分足のルーティンがよい出発点です。" },
       {
         q: "1日に何回も分析できますか？",
-        a: "Proパックなら回数無制限です。毎日、最初の分析は最も高性能なAIモデルが、その後はより高速なモデルが作成します。Starterパックは1日1回です。",
+        a: "Proパックなら回数無制限です。Starterパックは1日1回です。",
       },
       { q: "試すのにアカウントは必要ですか？", a: "いいえ。スクリーンショットを入れるだけで、カード登録もアカウント作成もなしに、AIの最初の読み取りを無料でお見せします。" },
       { q: "シグナル配信サービスですか？", a: "いいえ。Scanzivoはチャートの根拠ある読み取りとプランをお届けするだけで、それに従うかどうかはあなた次第です。アラートの配信も注文の発注もしません。" },
@@ -378,7 +378,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
       { q: "어떤 시간 단위를 지원하나요?", a: "1분봉부터 월봉까지 모두 지원합니다. 데이 트레이딩이라면 1시간봉, 15분봉, 5분봉 루틴이 좋은 출발점입니다." },
       {
         q: "하루에 여러 번 분석할 수 있나요?",
-        a: "Pro 팩이라면 횟수 제한 없이 가능합니다. 매일 첫 분석은 가장 고성능 AI 모델이, 이후 분석은 더 빠른 모델이 작성합니다. Starter 팩은 하루 1회입니다.",
+        a: "Pro 팩이라면 횟수 제한 없이 가능합니다. Starter 팩은 하루 1회입니다.",
       },
       { q: "써 보려면 계정이 필요한가요?", a: "아니요. 스크린샷만 올리면 카드 등록도 가입도 없이 AI의 첫 분석을 무료로 보여 드립니다." },
       { q: "시그널 서비스인가요?", a: "아니요. Scanzivo는 차트에 대한 근거 있는 분석과 플랜을 드릴 뿐이며, 따를지는 여러분이 정합니다. 알림을 보내거나 주문을 내지 않습니다." },
@@ -448,7 +448,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
       { q: "Những khung thời gian nào?", a: "Tất cả, từ 1 phút đến khung tháng. Với giao dịch trong ngày, quy trình 1 giờ, 15 phút, 5 phút là điểm khởi đầu tốt." },
       {
         q: "Tôi có thể phân tích nhiều lần mỗi ngày không?",
-        a: "Có, với gói Pro, không giới hạn số lần. Mỗi ngày, các bản phân tích đầu tiên do mô hình AI mạnh nhất của chúng tôi viết, các bản sau do các mô hình nhanh hơn. Gói Starter cho một lần phân tích mỗi ngày.",
+        a: "Có, với gói Pro, không giới hạn số lần. Gói Starter cho một lần phân tích mỗi ngày.",
       },
       { q: "Có cần tài khoản để dùng thử không?", a: "Không. Thả ảnh chụp vào: AI cho bạn xem miễn phí phần đọc đầu tiên, không cần thẻ, không cần đăng ký." },
       { q: "Đây có phải dịch vụ tín hiệu không?", a: "Không. Scanzivo đưa cho bạn một phần đọc có lập luận về biểu đồ và một kế hoạch, bạn tự do làm theo hay không. Nó không gửi cảnh báo và không đặt lệnh." },
@@ -518,7 +518,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
       { q: "Timeframe apa saja?", a: "Semuanya, dari 1 menit hingga bulanan. Untuk intraday, rutinitas 1 jam, 15 menit, 5 menit adalah titik awal yang baik." },
       {
         q: "Bisakah saya menganalisis beberapa kali sehari?",
-        a: "Bisa, dengan paket Pro, tanpa batas jumlah. Setiap hari, analisis pertama ditulis oleh model AI tercanggih kami, berikutnya oleh model yang lebih cepat. Paket Starter memberi satu analisis per hari.",
+        a: "Bisa, dengan paket Pro, tanpa batas jumlah. Paket Starter memberi satu analisis per hari.",
       },
       { q: "Perlukah akun untuk mencoba?", a: "Tidak. Letakkan tangkapan layar Anda: AI menunjukkan bacaan pertamanya secara gratis, tanpa kartu, tanpa pendaftaran." },
       { q: "Apakah ini layanan sinyal?", a: "Bukan. Scanzivo memberi Anda bacaan grafik yang beralasan dan sebuah rencana, yang bebas Anda ikuti atau tidak. Scanzivo tidak mengirim notifikasi sinyal dan tidak memasang order." },

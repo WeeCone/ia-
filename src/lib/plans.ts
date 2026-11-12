@@ -15,8 +15,7 @@ export const TRIAL_CREDITS = 1;
  * Every call is priced from its real token usage and recorded on the user; once the ceiling is near, analyses stop until next month.
  */
 // Starter: its analyses run on the light model (about 1 centime each), so a month of daily analyses stays under 0,50 €.
-// Pro: unlimited analyses for at most 5 € of AI a month (see proModel below for how the day's share steps the model
-// down); the ceiling itself is only reached by automated use.
+// Pro: unlimited analyses on the light model; the 5 € ceiling is only reached by automated use.
 const BUDGET_EUR: Record<Plan, number> = { none: 7, starter: 0.5, monthly: 5, lifetime: 11 };
 export const budgetFor = (plan: Plan | undefined) => BUDGET_EUR[plan ?? "none"] ?? BUDGET_EUR.none;
 /** The highest of the ceilings, for the admin's spend warnings. */
@@ -46,43 +45,17 @@ export const OPUS_MODEL = "claude-opus-5-5";
 export const SONNET_MODEL = "claude-sonnet-5-5";
 export const HAIKU_MODEL = "claude-haiku-5-5";
 
-/**
- * Pro is unlimited and costs at most 5 € a month in AI, however heavily it is used. The spend is shared out by day: each
- * Paris day gets what is left of a 4,50 € monthly target, divided by the days left in the month. Within that daily
- * share, analyses are read by the top model for the first 60 %, then by the mid-size one; once the share is spent, or the
- * target reached, by the light one (about 1 centime), with the news side served only from the day's shared cache. A
- * heavy day therefore makes the next days' shares smaller, and the month ends near the target; the 5 € ceiling
- * (BUDGET_EUR) is only reached by automated use.
- */
-const PRO_TARGET_EUR = 4.5;
-const PRO_TOP_SHARE = 0.6;
-
-/** Days left in the current month, today included (Paris time). */
-function daysLeftInMonth(date = new Date()) {
-  const [year, month, day] = date.toLocaleDateString("sv-SE", { timeZone: "Europe/Paris" }).split("-").map(Number);
-  const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
-  return Math.max(1, daysInMonth - day + 1);
-}
-
-export function proModel(monthEur: number, dayEur: number) {
-  const left = PRO_TARGET_EUR - (monthEur - dayEur);
-  const share = left > 0 ? left / daysLeftInMonth() : 0;
-  if (monthEur < PRO_TARGET_EUR && dayEur < share * PRO_TOP_SHARE) return { model: OPUS_MODEL, freshNews: true };
-  if (monthEur < PRO_TARGET_EUR && dayEur < share) return { model: SONNET_MODEL, freshNews: true };
-  return { model: HAIKU_MODEL, freshNews: false };
-}
+/** Worst case for a news side searched afresh (up to 2 web searches read by the mid-size model). */
+const NEWS_MAX_COST_EUR = 0.15;
 
 /**
- * Which model reads an account's next chart, whether its news side may run new searches, and the worst case to keep
- * free in the budget before starting. Starter: the light model, a reduced report (see the dashboard), no news side.
+ * Every chart is read by the light model, on every pack (since 2026-11-12, at the owner's request: cost first; a chart
+ * reading costs about 0,3 centime). Pro and À vie keep the news side, searched once a day per asset by the mid-size
+ * model and shared between analyses. Pro stays unlimited; its 5 € ceiling (BUDGET_EUR) only stops automated use.
  */
-export function analysisSetup(plan: Plan | undefined, spentEur: number, dayEur = 0) {
+export function analysisSetup(plan: Plan | undefined, _spentEur?: number, _dayEur?: number) {
   if (plan === "starter") return { model: HAIKU_MODEL, freshNews: false, maxCost: LIGHT_MAX_CALL_COST_EUR };
-  if (plan === "monthly") {
-    const step = proModel(spentEur, dayEur);
-    return { ...step, maxCost: step.model === HAIKU_MODEL ? LIGHT_MAX_CALL_COST_EUR : MAX_CALL_COST_EUR };
-  }
-  return { model: OPUS_MODEL, freshNews: true, maxCost: MAX_CALL_COST_EUR };
+  return { model: HAIKU_MODEL, freshNews: true, maxCost: LIGHT_MAX_CALL_COST_EUR + NEWS_MAX_COST_EUR };
 }
 
 /** Which offers can ask the AI a question about an analysis (one a day). */

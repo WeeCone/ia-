@@ -201,7 +201,7 @@ export const vi: Dict = {
       },
       {
         q: "Dùng hết lượt phân tích thì sao?",
-        a: "Với Starter, lượt phân tích trong ngày quay lại vào hôm sau. Pro không giới hạn: không cần nạp lại (mỗi ngày, các bản phân tích đầu tiên do mô hình AI mạnh nhất của chúng tôi viết, các bản sau do các mô hình nhanh hơn). Với Trọn đời, 30 lượt quay lại vào ngày 1 mỗi tháng. Không tính thêm phí, và ảnh không phải biểu đồ sẽ không bị tính lượt.",
+        a: "Với Starter, lượt phân tích trong ngày quay lại vào hôm sau. Pro không giới hạn: không cần nạp lại. Với Trọn đời, 30 lượt quay lại vào ngày 1 mỗi tháng. Không tính thêm phí, và ảnh không phải biểu đồ sẽ không bị tính lượt.",
       },
       {
         q: "Hủy đăng ký như thế nào?",

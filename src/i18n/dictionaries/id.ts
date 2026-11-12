@@ -201,7 +201,7 @@ export const id: Dict = {
       },
       {
         q: "Apa yang terjadi jika jatah analisis saya habis?",
-        a: "Dengan Starter, analisis harian Anda kembali keesokan harinya. Pro tanpa batas: tidak perlu diisi ulang (setiap hari, analisis pertama ditulis oleh model AI tercanggih kami, berikutnya oleh model yang lebih cepat). Dengan Seumur Hidup, 30 analisis Anda kembali setiap tanggal 1. Tidak ada biaya tambahan, dan gambar yang bukan grafik tidak dihitung.",
+        a: "Dengan Starter, analisis harian Anda kembali keesokan harinya. Pro tanpa batas: tidak perlu diisi ulang. Dengan Seumur Hidup, 30 analisis Anda kembali setiap tanggal 1. Tidak ada biaya tambahan, dan gambar yang bukan grafik tidak dihitung.",
       },
       {
         q: "Bagaimana cara membatalkan langganan?",
