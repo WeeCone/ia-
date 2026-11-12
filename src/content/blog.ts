@@ -8,6 +8,9 @@ import { ARTICLES_ID } from "./blog-id";
 import { ARTICLES_JA } from "./blog-ja";
 import { ARTICLES_KO } from "./blog-ko";
 import { ARTICLES_VI } from "./blog-vi";
+import { ARTICLES_IT } from "./blog-it";
+import { ARTICLES_DE } from "./blog-de";
+import { ARTICLES_PT } from "./blog-pt";
 
 /**
  * Blog articles: educational pieces on reading charts, for search engines and AI assistants as much as for readers.
@@ -491,6 +494,9 @@ export const ARTICLES: Article[] = [
   ...ARTICLES_KO.map((article) => ({ ...article, locale: "ko" as const })),
   ...ARTICLES_VI.map((article) => ({ ...article, locale: "vi" as const })),
   ...ARTICLES_ID.map((article) => ({ ...article, locale: "id" as const })),
+  ...ARTICLES_IT.map((article) => ({ ...article, locale: "it" as const })),
+  ...ARTICLES_DE.map((article) => ({ ...article, locale: "de" as const })),
+  ...ARTICLES_PT.map((article) => ({ ...article, locale: "pt" as const })),
 ];
 
 /** The same article in the other languages that have it, for hreflang links. */

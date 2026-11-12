@@ -123,6 +123,9 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
   ko: () => CONTENT.en(),
   vi: () => CONTENT.en(),
   id: () => CONTENT.en(),
+  it: () => CONTENT.en(),
+  de: () => CONTENT.en(),
+  pt: () => CONTENT.en(),
 };
 
 export default async function MentionsPage() {

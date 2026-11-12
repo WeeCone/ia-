@@ -312,11 +312,14 @@ const CONTENT: Record<Locale, Terms> = {
       </p>
     </>
   ),
-  // Japanese, Korean, Vietnamese, Indonesian: the English text, the reference translation of these French terms.
+  // Japanese, Korean, Vietnamese, Indonesian, Italian, German, Portuguese: the English text, the reference translation of these French terms.
   ja: (privacyHref) => CONTENT.en(privacyHref, "ja"),
   ko: (privacyHref) => CONTENT.en(privacyHref, "ko"),
   vi: (privacyHref) => CONTENT.en(privacyHref, "vi"),
   id: (privacyHref) => CONTENT.en(privacyHref, "id"),
+  it: (privacyHref) => CONTENT.en(privacyHref, "it"),
+  de: (privacyHref) => CONTENT.en(privacyHref, "de"),
+  pt: (privacyHref) => CONTENT.en(privacyHref, "pt"),
 };
 
 export default async function CgvPage() {

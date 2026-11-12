@@ -36,6 +36,9 @@ const LANGUAGE: Record<Locale, string> = {
   ko: "Rédige les textes en coréen (합니다체), dates comprises (예: 11월 13일(목) 22:30).",
   vi: "Rédige les textes en vietnamien, dates comprises (ví dụ: Thứ Năm 13/11, 22:30).",
   id: "Rédige les textes en indonésien, dates comprises (contoh: Kamis 13 Nov, 22.30).",
+  it: "Rédige les textes en italien, dates comprises (es.: giovedì 13/11, 22:30).",
+  de: "Rédige les textes en allemand, dates comprises (z. B. Do., 13.11., 22:30).",
+  pt: "Rédige les textes en portugais du Brésil, dates comprises (ex.: quinta 13/11, 22:30, heure de Paris).",
 };
 
 function systemPrompt(locale: Locale, gold = false) {

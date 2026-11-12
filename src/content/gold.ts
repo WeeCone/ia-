@@ -1,4 +1,7 @@
 import type { Locale } from "@/i18n/config";
+import { GOLD_DE } from "./gold-de";
+import { GOLD_IT } from "./gold-it";
+import { GOLD_PT } from "./gold-pt";
 
 /**
  * The gold (XAU/USD) page, in every language of the site (the slug stays /gold; the local word goes in titles). Honest by construction: what the analysis really does on gold (its own rules
@@ -530,6 +533,9 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     homeLink: "Lihat analisis khusus XAU/USD →",
     reportBadge: "Analisis khusus emas",
   },
+  it: GOLD_IT,
+  de: GOLD_DE,
+  pt: GOLD_PT,
 };
 
 /** The languages the gold page exists in. */

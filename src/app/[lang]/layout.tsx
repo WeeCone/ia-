@@ -18,7 +18,7 @@ const spaceGrotesk = Space_Grotesk({ variable: "--font-space-grotesk", subsets: 
 const archivoBlack = Archivo_Black({ variable: "--font-archivo-black", subsets: ["latin"], weight: "400" });
 const jetbrainsMono = JetBrains_Mono({ variable: "--font-jetbrains-mono", subsets: ["latin"] });
 
-const OG_LOCALE = { fr: "fr_FR", en: "en_GB", es: "es_ES", ja: "ja_JP", ko: "ko_KR", vi: "vi_VN", id: "id_ID" } as const;
+const OG_LOCALE = { fr: "fr_FR", en: "en_GB", es: "es_ES", ja: "ja_JP", ko: "ko_KR", vi: "vi_VN", id: "id_ID", it: "it_IT", de: "de_DE", pt: "pt_BR" } as const;
 
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));

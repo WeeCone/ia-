@@ -1,6 +1,6 @@
-export const LOCALES = ["fr", "en", "es", "ja", "ko", "vi", "id"] as const;
+export const LOCALES = ["fr", "en", "es", "ja", "ko", "vi", "id", "it", "de", "pt"] as const;
 export type Locale = (typeof LOCALES)[number];
-/** French keeps the unprefixed URLs (scanzivo.com/…); the others live under /en, /es, /ja, /ko, /vi and /id. */
+/** French keeps the unprefixed URLs (scanzivo.com/…); the others live under /en, /es, /ja, /ko, /vi, /id, /it, /de and /pt. */
 export const DEFAULT_LOCALE: Locale = "fr";
 
 export const hasLocale = (value: string | undefined | null): value is Locale => LOCALES.includes(value as Locale);
@@ -21,7 +21,7 @@ export function unlocalizedPath(pathname: string) {
 }
 
 /** BCP 47 tags for Intl formatting and <html lang>. */
-export const INTL_LOCALE: Record<Locale, string> = { fr: "fr-FR", en: "en-GB", es: "es-ES", ja: "ja-JP", ko: "ko-KR", vi: "vi-VN", id: "id-ID" };
+export const INTL_LOCALE: Record<Locale, string> = { fr: "fr-FR", en: "en-GB", es: "es-ES", ja: "ja-JP", ko: "ko-KR", vi: "vi-VN", id: "id-ID", it: "it-IT", de: "de-DE", pt: "pt-BR" };
 
 export const LANGUAGE_NAMES: Record<Locale, string> = {
   fr: "Français",
@@ -31,4 +31,7 @@ export const LANGUAGE_NAMES: Record<Locale, string> = {
   ko: "한국어",
   vi: "Tiếng Việt",
   id: "Bahasa Indonesia",
+  it: "Italiano",
+  de: "Deutsch",
+  pt: "Português",
 };

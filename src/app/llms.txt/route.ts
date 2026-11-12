@@ -37,11 +37,14 @@ export function GET() {
 - Home (Korean): https://scanzivo.com/ko
 - Home (Vietnamese): https://scanzivo.com/vi
 - Home (Indonesian): https://scanzivo.com/id
+- Home (Italian): https://scanzivo.com/it
+- Home (German): https://scanzivo.com/de
+- Home (Portuguese, Brazil): https://scanzivo.com/pt
 - Pricing: https://scanzivo.com/pricing
 - Terms of sale: https://scanzivo.com/legal/cgv
 - Privacy: https://scanzivo.com/legal/confidentialite
 
-## Guides (blog, in French, English, Spanish, Japanese, Korean, Vietnamese and Indonesian)
+## Guides (blog, in French, English, Spanish, Japanese, Korean, Vietnamese, Indonesian, Italian, German and Portuguese)
 ${ARTICLES.map((article) => `- [${article.title}](https://scanzivo.com${localePath(article.locale, `/blog/${article.slug}`)}): ${article.description}`).join("\n")}
 `;
   return new Response(body, { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" } });

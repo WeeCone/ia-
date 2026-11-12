@@ -44,6 +44,9 @@ Los campos de opción conservan exactamente los valores franceses del esquema (t
   ko: otherLanguage("coréen (registre poli, 합니다체)", "65,400.5"),
   vi: otherLanguage("vietnamien", "65.400,5"),
   id: otherLanguage("indonésien", "65.400,5"),
+  it: otherLanguage("italien (vouvoiement : Lei)", "65.400,5"),
+  de: otherLanguage("allemand (vouvoiement : Sie)", "65.400,5"),
+  pt: otherLanguage("portugais du Brésil (você)", "65.400,5"),
 };
 
 export class AnalysisRefusedError extends Error {
@@ -170,6 +173,9 @@ const CHAT_LANGUAGE: Record<Locale, string> = {
   ko: "한국어로, 존댓말(합니다체)로 답하세요.",
   vi: "Hãy trả lời bằng tiếng Việt, xưng hô lịch sự (bạn).",
   id: "Jawablah dalam bahasa Indonesia yang sopan (Anda).",
+  it: "Rispondi in italiano, dando del Lei.",
+  de: "Antworte auf Deutsch und sieze den Nutzer.",
+  pt: "Responda em português do Brasil, tratando o usuário por você.",
 };
 
 /**
