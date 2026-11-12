@@ -15,7 +15,9 @@ export function formatEur(locale: Locale, amount: number) {
 /** An amount in any currency, written the visitor's way: "¥1,500", "₩14,900", "149.000 ₫", "Rp 99.000". */
 export function formatMoney(locale: Locale, amount: number, currency: Currency) {
   const digits = Number.isInteger(amount) ? 0 : 2;
-  return new Intl.NumberFormat(INTL_LOCALE[locale], {
+  // Euros read "10 €" in European Portuguese, whatever the Brazilian site's own habits.
+  const tag = locale === "pt" && currency === "eur" ? "pt-PT" : INTL_LOCALE[locale];
+  return new Intl.NumberFormat(tag, {
     style: "currency",
     currency: currency.toUpperCase(),
     minimumFractionDigits: digits,

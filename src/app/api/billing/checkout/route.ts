@@ -36,16 +36,20 @@ async function handler(request: Request) {
     embedded = false,
     source,
     campaign,
+    currency: asked,
   } = (await request.json().catch(() => ({}))) as {
     offer?: Offer;
     embedded?: boolean;
     source?: string;
     campaign?: string;
+    currency?: string;
   };
   if (!offer || !OFFERS.includes(offer)) return Response.json({ error: text.unknownOffer }, { status: 400 });
+  // The site's own currency, except that Portuguese readers in Europe are charged in euros (the browser says so).
+  const currency: Currency = locale === "pt" && asked === "eur" ? "eur" : LOCALE_CURRENCY[locale];
 
   // Any offer can be bought without an account: Stripe takes the email and the account is made from it once paid.
-  if (!uid) return guestCheckout(request, locale, offer, embedded, source, campaign);
+  if (!uid) return guestCheckout(request, locale, offer, currency, embedded, source, campaign);
 
   const userRef = adminDb.collection("users").doc(uid);
   const user = await userRef.get();
@@ -70,7 +74,8 @@ async function handler(request: Request) {
   const metadata = { uid, offer, src: statKey(source) ?? "direct", cmp: statKey(campaign) ?? "" };
   // Charged in the currency of the visitor's language (yen on /ja…). A customer Stripe already bills in another
   // currency (an earlier subscription in euros) is charged in euros instead: Stripe refuses mixing them.
-  const createSession = async (customer: string, currency: Currency = LOCALE_CURRENCY[locale]) =>
+  const checkoutCurrency = currency;
+  const createSession = async (customer: string, currency: Currency = checkoutCurrency) =>
     stripe.checkout.sessions.create({
       ...sessionParams(request, locale, offer, embedded, `${dashboard}?checkout=success&session_id={CHECKOUT_SESSION_ID}`, dashboard, await lineFor(offer, currency), metadata),
       customer,
@@ -80,7 +85,7 @@ async function handler(request: Request) {
     try {
       return await createSession(customer);
     } catch (err) {
-      if (LOCALE_CURRENCY[locale] === "eur" || !isCurrencyConflict(err)) throw err;
+      if (checkoutCurrency === "eur" || !isCurrencyConflict(err)) throw err;
       return createSession(customer, "eur");
     }
   };
@@ -100,13 +105,13 @@ async function handler(request: Request) {
 }
 
 /** A purchase by a visitor without an account. Stripe asks for the email; the welcome page makes the account from it. */
-async function guestCheckout(request: Request, locale: Locale, offer: Offer, embedded: boolean, source?: string, campaign?: string) {
+async function guestCheckout(request: Request, locale: Locale, offer: Offer, currency: Currency, embedded: boolean, source?: string, campaign?: string) {
   const base = appUrl(request);
   const welcome = `${base}${localePath(locale, "/welcome")}?session_id={CHECKOUT_SESSION_ID}`;
   // guest: lets the webhook and the welcome page know the account is still to be made (no uid yet).
   const metadata = { guest: "1", offer, locale, src: statKey(source) ?? "direct", cmp: statKey(campaign) ?? "" };
   const session = await getStripe().checkout.sessions.create({
-    ...sessionParams(request, locale, offer, embedded, welcome, base + localePath(locale, "/"), await lineFor(offer, LOCALE_CURRENCY[locale]), metadata),
+    ...sessionParams(request, locale, offer, embedded, welcome, base + localePath(locale, "/"), await lineFor(offer, currency), metadata),
     // A one-off payment makes no customer by default: one is needed for the receipt and the account.
     ...(offer === "lifetime" ? { customer_creation: "always" as const } : {}),
   });

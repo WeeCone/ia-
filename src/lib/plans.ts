@@ -1,4 +1,5 @@
 import type { Locale } from "@/i18n/config";
+import { getCurrencyOverride } from "./currency-choice";
 export type Plan = "none" | "starter" | "monthly" | "lifetime";
 /** What can be bought: Starter and Pro (stored as "monthly") are monthly subscriptions, À vie a one-off payment. */
 export type Offer = Exclude<Plan, "none">;
@@ -90,9 +91,12 @@ const ZERO_DECIMAL: Currency[] = ["jpy", "krw", "vnd"];
 export const toStripeAmount = (currency: Currency, amount: number) => (ZERO_DECIMAL.includes(currency) ? Math.round(amount) : Math.round(amount * 100));
 export const fromStripeAmount = (currency: string, amount: number) => (ZERO_DECIMAL.includes(currency as Currency) ? amount : amount / 100);
 
+/** The currency a language's site shows: its own, or euros for a European-Portuguese reader (chosen in the browser). */
+export const currencyFor = (locale: Locale): Currency => (locale === "pt" && getCurrencyOverride() === "eur" ? "eur" : LOCALE_CURRENCY[locale]);
+
 /** A pack's price in the currency of a language's site. */
 export function offerPrice(locale: Locale, offer: Offer) {
-  const currency = LOCALE_CURRENCY[locale];
+  const currency = currencyFor(locale);
   return { currency, amount: OFFER_PRICES[currency][offer] };
 }
 

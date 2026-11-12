@@ -217,7 +217,7 @@ export const pt: Dict = {
         a: "Na página de pagamento segura da Stripe, nossa parceira de pagamentos. O Scanzivo nunca tem acesso aos seus dados bancários.",
       },
     ],
-    footnote: "Preços em reais (R$), impostos incluídos. As análises têm caráter apenas informativo e não são recomendação de investimento.",
+    footnote: "Preços em reais (R$) no Brasil e em euros (€) na Europa, impostos incluídos. As análises têm caráter apenas informativo e não são recomendação de investimento.",
   },
   trust: [
     "Pagamento seguro via Stripe",

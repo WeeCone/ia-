@@ -2,7 +2,7 @@ import type { Locale } from "@/i18n/config";
 import { DICTIONARIES } from "@/i18n/dictionaries";
 import { auth } from "./firebase";
 import { pixel } from "./meta-pixel";
-import { offerPrice, type Offer } from "./plans";
+import { currencyFor, offerPrice, type Offer } from "./plans";
 import { checkoutAttribution, trackEvent } from "./track";
 
 async function callBilling(route: "checkout" | "portal", body: Record<string, unknown>, locale: Locale) {
@@ -27,7 +27,7 @@ async function callBilling(route: "checkout" | "portal", body: Record<string, un
       "Content-Type": "application/json",
       "X-Locale": locale,
     },
-    body: JSON.stringify({ ...body, locale }),
+    body: JSON.stringify({ ...body, locale, currency: currencyFor(locale) }),
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.error ?? text.unavailable);

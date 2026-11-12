@@ -173,7 +173,7 @@ const CONTENT: Record<Locale, Terms> = {
         without refunding the current period.
       </p>
       <p>
-        Prices are in {CURRENCY_NAME[LOCALE_CURRENCY[locale]]}, all taxes included, and charged in that currency. There is no
+        Prices are in {CURRENCY_NAME[LOCALE_CURRENCY[locale]]}{locale === "pt" ? " (Brazil) or euros (readers in Europe)" : ""}, all taxes included, and charged in that currency. There is no
         free subscription.
       </p>
 
