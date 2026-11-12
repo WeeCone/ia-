@@ -10,7 +10,7 @@ export function GET() {
   const eur = (value: number) => `${value.toFixed(2).replace(".", ",").replace(",00", "")} €`;
   const body = `# Scanzivo
 
-> Scanzivo (https://scanzivo.com) analyses a screenshot of a price chart with AI and returns a technical analysis with one clear action plan: trend, key support and resistance levels drawn on the chart, visible patterns and indicators, the most probable scenario with entry, stop-loss and targets, and the level that would invalidate it. The trial analysis also covers recent news and the economic events of the next 7 days that could move the asset, with sources. The site and reports are available in French, English and Spanish.
+> Scanzivo (https://scanzivo.com) analyses a screenshot of a price chart with AI and returns a technical analysis with one clear action plan: trend, key support and resistance levels drawn on the chart, visible patterns and indicators, the most probable scenario with entry, stop-loss and targets, and the level that would invalidate it. The Pro analysis also covers recent news and the economic events of the next 7 days that could move the asset, with sources. The site and reports are available in French, English, Spanish, Japanese, Korean, Vietnamese and Indonesian.
 
 ## What it does
 - Input: a screenshot (PNG, JPEG, WebP or GIF, up to 5 MB) from any platform: TradingView, Binance, MetaTrader, Bybit, Coinbase, a broker app. Pasted, dropped or picked from the phone gallery. Optional free-text context (for example "5-minute scalping, looking for a short").
@@ -33,11 +33,15 @@ export function GET() {
 - Home (French): https://scanzivo.com/
 - Home (English): https://scanzivo.com/en
 - Home (Spanish): https://scanzivo.com/es
+- Home (Japanese): https://scanzivo.com/ja
+- Home (Korean): https://scanzivo.com/ko
+- Home (Vietnamese): https://scanzivo.com/vi
+- Home (Indonesian): https://scanzivo.com/id
 - Pricing: https://scanzivo.com/pricing
 - Terms of sale: https://scanzivo.com/legal/cgv
 - Privacy: https://scanzivo.com/legal/confidentialite
 
-## Guides (blog, in French, English and Spanish)
+## Guides (blog, in French, English, Spanish, Japanese, Korean, Vietnamese and Indonesian)
 ${ARTICLES.map((article) => `- [${article.title}](https://scanzivo.com${localePath(article.locale, `/blog/${article.slug}`)}): ${article.description}`).join("\n")}
 `;
   return new Response(body, { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" } });

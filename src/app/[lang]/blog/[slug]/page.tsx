@@ -68,7 +68,8 @@ export default async function ArticlePage({ params }: Props) {
       inLanguage: locale,
       mainEntityOfPage: url,
       image: `${url}/og`,
-      wordCount: articleText(article).split(/\s+/).length,
+      // Words are counted by spaces, which Japanese does not use.
+      ...(locale === "ja" ? {} : { wordCount: articleText(article).split(/\s+/).length }),
       author: { "@type": "Organization", name: "Scanzivo", url: SITE },
       publisher: { "@type": "Organization", name: "Scanzivo", url: SITE, logo: { "@type": "ImageObject", url: `${SITE}/brand/scanzivo-icon-512.png` } },
     },

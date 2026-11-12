@@ -4,6 +4,10 @@ import { ARTICLES_EN_2 } from "./blog-en-2";
 import { ARTICLES_ES } from "./blog-es";
 import { ARTICLES_ES_2 } from "./blog-es-2";
 import { ARTICLES_FR_2 } from "./blog-fr-2";
+import { ARTICLES_ID } from "./blog-id";
+import { ARTICLES_JA } from "./blog-ja";
+import { ARTICLES_KO } from "./blog-ko";
+import { ARTICLES_VI } from "./blog-vi";
 
 /**
  * Blog articles: educational pieces on reading charts, for search engines and AI assistants as much as for readers.
@@ -482,6 +486,10 @@ export const ARTICLES: Article[] = [
   ...[...ARTICLES_FR_2, ...ARTICLES_FR].map((article) => ({ ...article, key: article.slug, locale: "fr" as const })),
   ...[...ARTICLES_EN_2, ...ARTICLES_EN].map((article) => ({ ...article, locale: "en" as const })),
   ...[...ARTICLES_ES_2, ...ARTICLES_ES].map((article) => ({ ...article, locale: "es" as const })),
+  ...ARTICLES_JA.map((article) => ({ ...article, locale: "ja" as const })),
+  ...ARTICLES_KO.map((article) => ({ ...article, locale: "ko" as const })),
+  ...ARTICLES_VI.map((article) => ({ ...article, locale: "vi" as const })),
+  ...ARTICLES_ID.map((article) => ({ ...article, locale: "id" as const })),
 ];
 
 /** The same article in the other languages that have it, for hreflang links. */
@@ -511,8 +519,9 @@ export function articleText(article: Article) {
     .replace(/\*\*/g, "");
 }
 
-/** Reading time at about 220 words a minute, never under a minute. */
+/** Reading time at about 220 words a minute (500 characters in Japanese, written without spaces), never under a minute. */
 export function readingMinutes(article: Article) {
-  const words = articleText(article).split(/\s+/).length;
-  return Math.max(1, Math.round(words / 220));
+  const text = articleText(article);
+  if (article.locale === "ja") return Math.max(1, Math.round(text.replace(/\s+/g, "").length / 500));
+  return Math.max(1, Math.round(text.split(/\s+/).length / 220));
 }
