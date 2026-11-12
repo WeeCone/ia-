@@ -68,6 +68,7 @@ export const ARTICLES_ID: Omit<Article, "locale">[] = [
         ],
       },
       { tip: "Jam di kalender sering ditampilkan dalam waktu New York atau UTC. Periksa zona waktunya: salah satu jam saja sudah cukup untuk membuat Anda memegang posisi di saat terburuk." },
+      { p: "Emas adalah aset yang paling sensitif terhadap rilis-rilis ini: The Fed, inflasi, dan lapangan kerja AS memengaruhinya secara langsung, sering kali berlawanan arah dengan dolar. [Halaman analisis emas (XAU/USD)](/gold) kami menjelaskan apa yang diperhitungkan AI pada aset ini." },
       { h2: "Teknikal dan makro: dua cara membaca pasar yang sama" },
       { p: "[Support dan resistance](/blog/support-dan-resistance) tetap menjadi patokan rencana; kalender memberi tahu kapan patokan itu bisa diuji dengan keras. Analisis yang baik menggabungkan keduanya, bukan memilih salah satu." },
       { p: "Itulah yang dilakukan paket Pro [Scanzivo](/): setiap kali menganalisis grafik, AI mencatat pengumuman 7 hari ke depan dan berita terbaru tentang aset tersebut, lengkap dengan sumber, lalu menjelaskan cara memperhitungkannya dalam rencana. AI tidak menebak angkanya: AI membantu Anda tidak terkejut oleh tanggalnya." },

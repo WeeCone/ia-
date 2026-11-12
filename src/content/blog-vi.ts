@@ -68,6 +68,7 @@ export const ARTICLES_VI: Omit<Article, "locale">[] = [
         ],
       },
       { tip: "Giờ trên lịch kinh tế thường hiển thị theo giờ New York hoặc UTC. Hãy kiểm tra múi giờ: lệch một giờ là đủ để bạn đang có lệnh đúng lúc tệ nhất." },
+      { p: "Vàng là tài sản nhạy cảm nhất với các thông báo này: Fed, lạm phát và việc làm của Mỹ tác động trực tiếp đến nó, thường ngược chiều với đồng đô la. [Trang phân tích vàng (XAU/USD)](/gold) của chúng tôi giải thích những gì AI tính đến với tài sản này." },
       { h2: "Kỹ thuật và vĩ mô: hai cách đọc cùng một thị trường" },
       { p: "[Hỗ trợ và kháng cự](/blog/ho-tro-va-khang-cu) vẫn là các mốc của kế hoạch; lịch kinh tế cho biết khi nào những mốc đó có thể bị thử thách dữ dội. Một bản phân tích tốt kết hợp cả hai thay vì chọn một." },
       { p: "Đó là điều gói Pro của [Scanzivo](/) làm: với mỗi lần phân tích biểu đồ, AI liệt kê các thông báo trong 7 ngày tới và tin tức gần đây về tài sản, có kèm nguồn, rồi cho biết cách tính đến chúng trong kế hoạch. Nó không đoán con số: nó giúp bạn không bị bất ngờ vì ngày công bố." },

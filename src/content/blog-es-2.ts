@@ -96,6 +96,7 @@ export const ARTICLES_ES_2: Omit<Article, "locale">[] = [
         ],
       },
       { tip: "Los calendarios suelen mostrar las horas en hora de Nueva York o en UTC. Comprueba la zona horaria: un error de una hora basta para estar dentro en el peor momento." },
+      { p: "El oro es el activo más sensible a estos anuncios: la Fed, la inflación y el empleo de EE. UU. le afectan directamente, a menudo en sentido contrario al dólar. Nuestra [página de análisis del oro (XAU/USD)](/gold) explica lo que la IA tiene en cuenta en este activo." },
       { h2: "Técnico y macro: dos lecturas del mismo mercado" },
       {
         p: "Los [soportes y resistencias](/blog/soportes-y-resistencias) siguen siendo las referencias del plan; el calendario dice cuándo esas referencias pueden ponerse a prueba con violencia. Un buen análisis cruza ambos en lugar de elegir uno.",

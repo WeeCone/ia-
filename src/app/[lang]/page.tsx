@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { ChartAnatomy } from "@/components/chart-anatomy";
 import { ActivityToast } from "@/components/activity-toast";
 import { Faq } from "@/components/faq";
@@ -11,6 +12,7 @@ import { ScrollReveal } from "@/components/scroll-reveal";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Testimonials } from "@/components/testimonials";
+import { GOLD } from "@/content/gold";
 import { getI18n, languageAlternates } from "@/i18n/server";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -19,7 +21,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const { t, locale } = await getI18n();
+  const { t, locale, href } = await getI18n();
+  const gold = GOLD[locale];
   // What search engines and AI assistants read about the product: the offer and the FAQ, as structured data.
   const site = `https://scanzivo.com${locale === "fr" ? "" : `/${locale}`}`;
   const structured = [
@@ -130,6 +133,20 @@ export default async function Home() {
             </ol>
           </div>
         </section>
+
+        {/* Gold traders get their own page: the box points them to it. */}
+        {gold && (
+          <section className="mx-auto w-full max-w-6xl px-4 pb-4">
+            <Link
+              href={href("/gold")}
+              data-reveal="fade"
+              className="group flex flex-col gap-2 rounded-2xl border border-amber-400/40 bg-amber-400/[0.07] px-6 py-5 transition-colors hover:border-amber-400/70 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <span className="display text-xl">{gold.homeTitle}</span>
+              <span className="font-semibold text-warn group-hover:underline">{gold.homeLink}</span>
+            </Link>
+          </section>
+        )}
 
         <Testimonials />
 

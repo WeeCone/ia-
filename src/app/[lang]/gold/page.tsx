@@ -84,7 +84,10 @@ export default async function GoldPage() {
               <br />
               <span className="text-muted">{page.titleB}</span>
             </h1>
-            <p style={{ "--d": "0.15s" } as React.CSSProperties} className="rise-in mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-muted">
+            <p style={{ "--d": "0.1s" } as React.CSSProperties} className="rise-in mx-auto mt-6 max-w-2xl text-xl font-medium leading-snug text-warn">
+              {page.lede}
+            </p>
+            <p style={{ "--d": "0.15s" } as React.CSSProperties} className="rise-in mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-muted">
               {page.intro}
             </p>
             <div id="analyser" style={{ "--d": "0.3s" } as React.CSSProperties} className="rise-in mt-10 scroll-mt-32">

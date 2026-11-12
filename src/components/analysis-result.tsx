@@ -2,7 +2,8 @@
 
 import { useI18n } from "@/i18n/client";
 import { keepNumbers } from "@/i18n/format";
-import { type ChartAnalysis, type MacroReport, preferredPlan } from "@/lib/analysis";
+import { GOLD } from "@/content/gold";
+import { type ChartAnalysis, isGold, type MacroReport, preferredPlan } from "@/lib/analysis";
 import { formatPrice } from "@/i18n/format";
 import { formatRatio, rewardRatios } from "@/lib/risk";
 import { BillingButton } from "./billing-button";
@@ -285,7 +286,7 @@ function LockedProSection({ items }: { items: string[] }) {
 }
 
 export function AnalysisResult({ analysis, reduced = false }: { analysis: ChartAnalysis; reduced?: boolean }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const r = t.report;
   if (!analysis.is_chart) {
     return (
@@ -321,6 +322,8 @@ export function AnalysisResult({ analysis, reduced = false }: { analysis: ChartA
           <span className={`chip ${trendStyle[analysis.trend]}`}>
             {r.trend} {t.enums.trend[analysis.trend]}
           </span>
+          {/* Gold charts are read with gold-specific rules (see GOLD_RULES): the report says so. */}
+          {isGold(analysis.asset) && GOLD[locale] && <span className="chip border-amber-400/50 bg-amber-400/10 text-warn">{GOLD[locale]!.reportBadge}</span>}
         </span>
       </header>
 
