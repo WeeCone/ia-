@@ -91,6 +91,17 @@ export type LiveVisitor = {
   onSiteSeconds: number;
 };
 
+/** Free readings (the preview before paying) over a period: how many were asked for and what they cost. */
+export type AdminFreeReadings = {
+  days: { day: string; asked: number; charts: number; unlocked: number; costEur: number }[];
+  totals: { asked: number; charts: number; unlocked: number; costEur: number; costPerReadingEur: number };
+  locales: Record<string, number>;
+  /** The assets asked for, most frequent first (as the AI read them on the screenshot). */
+  assets: { asset: string; count: number }[];
+  /** The latest readings, newest first. */
+  recent: { id: string; at: number | null; asset: string; timeframe: string; locale: string; unlocked: boolean; costEur: number }[];
+};
+
 export type AdminStats = {
   days: { day: string; visits: number; views: number; signup: number; purchase: number }[];
   totals: FunnelCounts & { views: number };

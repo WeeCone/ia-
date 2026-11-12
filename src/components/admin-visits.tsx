@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { AdminStats, FunnelCounts, LiveVisitor } from "@/lib/admin";
+import type { AdminFreeReadings, AdminStats, FunnelCounts, LiveVisitor } from "@/lib/admin";
 import { adminFetch } from "@/lib/admin-client";
 import { FormError } from "./auth-card";
 
@@ -375,6 +375,107 @@ function LiveNow({ live: { visitors, error } }: { live: LiveState }) {
 }
 
 /** Anonymous audience stats and the sign-up / purchase funnel by source and by ad campaign. */
+const cents = (value: number) => value.toLocaleString("fr-FR", { style: "currency", currency: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+/** The free reading (preview before paying): how many were asked for, how many were of a chart, how many were unlocked, and what they cost. */
+function FreeReadings({ period, reloadKey }: { period: number; reloadKey: number }) {
+  const [data, setData] = useState<AdminFreeReadings | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let stale = false;
+    adminFetch(`/api/admin/free-readings?days=${period}`)
+      .then((result: AdminFreeReadings) => {
+        if (stale) return;
+        setData(result);
+        setError(null);
+      })
+      .catch((err) => !stale && setError(err instanceof Error ? err.message : "Chargement impossible."));
+    return () => {
+      stale = true;
+    };
+  }, [period, reloadKey]);
+
+  if (error) return <FormError message={error} />;
+  if (!data) return <p className="mt-6 text-sm text-muted">Chargement des lectures gratuites…</p>;
+  const { totals } = data;
+  const rows = [...data.days].reverse().filter((row) => row.asked || row.charts);
+  return (
+    <section className="mt-8">
+      <h3 className="display text-xl">Lectures gratuites</h3>
+      <p className="mt-1 text-xs text-muted">
+        Des lectures, pas des personnes : aucune identité n&apos;est gardée. « Demandées » compte aussi les images qui n&apos;étaient pas un graphique (jours UTC).
+      </p>
+      <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+        <Tile label="Demandées" value={int(totals.asked)} hint={`${int(totals.charts)} sur un vrai graphique`} />
+        <Tile label="Débloquées" value={int(totals.unlocked)} hint="devenues une analyse payante" />
+        <Tile label="Coût IA" value={cents(totals.costEur)} hint={`sur ${period} jours`} />
+        <Tile label="Coût par lecture" value={totals.costPerReadingEur ? `${(totals.costPerReadingEur * 100).toLocaleString("fr-FR", { maximumFractionDigits: 2 })} c` : "—"} hint="centimes d'euro" />
+      </div>
+      {data.assets.length > 0 && (
+        <div className="mt-4">
+          <p className="label text-muted">Actifs demandés</p>
+          <p className="mt-2 flex flex-wrap gap-2">
+            {data.assets.map(({ asset, count }) => (
+              <span key={asset} className="chip">
+                {asset} <span className="font-mono text-muted">×{count}</span>
+              </span>
+            ))}
+          </p>
+        </div>
+      )}
+      {rows.length > 0 && (
+        <div className="panel mt-4 overflow-x-auto">
+          <table className="w-full min-w-[520px] text-sm">
+            <thead>
+              <tr className="border-b border-border text-left text-xs text-muted">
+                <th className="px-4 py-2.5 font-medium">Jour</th>
+                <th className="px-4 py-2.5 text-right font-medium">Demandées</th>
+                <th className="px-4 py-2.5 text-right font-medium">Graphiques</th>
+                <th className="px-4 py-2.5 text-right font-medium">Débloquées</th>
+                <th className="px-4 py-2.5 text-right font-medium">Coût</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {rows.map((row) => (
+                <tr key={row.day}>
+                  <td className="px-4 py-2.5">{shortDay(row.day)}</td>
+                  <td className="px-4 py-2.5 text-right font-mono tabular-nums">{int(row.asked)}</td>
+                  <td className="px-4 py-2.5 text-right font-mono tabular-nums">{int(row.charts)}</td>
+                  <td className="px-4 py-2.5 text-right font-mono tabular-nums">{int(row.unlocked)}</td>
+                  <td className="px-4 py-2.5 text-right font-mono tabular-nums">{cents(row.costEur)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {data.recent.length > 0 && (
+        <div className="panel mt-4 overflow-x-auto">
+          <p className="label px-4 pt-3 text-muted">Dernières lectures</p>
+          <table className="mt-1 w-full min-w-[560px] text-sm">
+            <tbody className="divide-y divide-border">
+              {data.recent.map((item) => (
+                <tr key={item.id}>
+                  <td className="px-4 py-2.5 text-muted">
+                    {item.at ? new Date(item.at).toLocaleString("fr-FR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : "—"}
+                  </td>
+                  <td className="px-4 py-2.5 font-medium">
+                    {item.asset} <span className="font-normal text-muted">{item.timeframe}</span>
+                  </td>
+                  <td className="px-4 py-2.5 font-mono text-xs uppercase text-muted">{item.locale}</td>
+                  <td className="px-4 py-2.5 text-right font-mono tabular-nums">{cents(item.costEur)}</td>
+                  <td className="px-4 py-2.5 text-right text-xs">{item.unlocked ? <span className="text-bull">débloquée</span> : <span className="text-muted">non débloquée</span>}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </section>
+  );
+}
+
 export function VisitsTab({ reloadKey, live }: { reloadKey: number; live: LiveState }) {
   const [period, setPeriod] = useState<(typeof PERIODS)[number]>(30);
   const [stats, setStats] = useState<AdminStats | null>(null);
@@ -461,6 +562,8 @@ export function VisitsTab({ reloadKey, live }: { reloadKey: number; live: LiveSt
             }))}
             empty="Aucune visite venue d'un lien de pub. Créez-en un ci-dessous."
           />
+
+          <FreeReadings period={period} reloadKey={reloadKey} />
 
           <LinkBuilder />
 
