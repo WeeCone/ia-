@@ -95,8 +95,7 @@ export default async function GoldPage() {
         <section className="relative isolate -mt-20 overflow-hidden pt-20">
           <div className="absolute -top-48 left-1/2 -z-10 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-amber-400/20 blur-[120px]" aria-hidden />
           <div className="mx-auto max-w-5xl px-4 pb-16 pt-14 text-center sm:pt-20">
-            <p className="label rise-in text-warn">{page.kicker}</p>
-            <h1 className="rise-in display mx-auto mt-5 max-w-4xl text-[2.5rem] leading-[1.02] tracking-[-0.03em] sm:text-6xl lg:text-7xl">
+            <h1 className="rise-in display mx-auto max-w-4xl text-[2.5rem] leading-[1.02] tracking-[-0.03em] sm:text-6xl lg:text-7xl">
               {page.title}
               <br />
               <span className="text-muted">{page.titleB}</span>

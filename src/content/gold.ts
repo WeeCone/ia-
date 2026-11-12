@@ -48,7 +48,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     metaDescription:
       "Envoyez une capture de votre graphique XAU/USD : l'IA lit la tendance, trace les niveaux et chiffre un plan, en tenant compte de ce qui fait bouger l'or. Première lecture gratuite.",
     kicker: "Analyse spécialisée gold · XAU/USD",
-    lede: "Une analyse réglée pour l'or : ses niveaux ronds, ses sessions, ses réactions aux statistiques américaines.",
+    lede: "Réglée pour l'or : elle repère les prix ronds où beaucoup de traders placent leurs ordres, tient compte des heures de Londres et de New York, et se méfie des annonces américaines.",
     title: "L'analyse IA de vos graphiques gold.",
     titleB: "Du 1 heure au 5 minutes.",
     intro:
@@ -72,7 +72,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     },
     knowsTitle: "Ce que l'IA prend en compte sur l'or",
     knows: [
-      { title: "Les chiffres ronds", text: "Les multiples de 50 et de 100 $ attirent les ordres. L'analyse s'en sert pour placer niveaux et objectifs." },
+      { title: "Les chiffres ronds", text: "Des prix comme 3 000 $, 3 050 $ ou 3 100 $ attirent les ordres : beaucoup de traders y placent leurs entrées, leurs stops et leurs objectifs. L'analyse s'en sert pour situer ses niveaux." },
       { title: "Les sessions", text: "Le range asiatique est souvent cassé à l'ouverture de Londres, et l'ouverture américaine, à 14 h 30 heure de Paris, apporte les plus gros mouvements de la journée." },
       { title: "Les statistiques américaines", text: "Inflation (CPI), emploi (NFP), décisions de la Fed : autour de ces annonces, les fausses cassures sont fréquentes. L'analyse le rappelle quand c'est utile." },
       { title: "Le bruit", text: "L'or bouge beaucoup à l'intérieur d'une séance. Les stops proposés sont placés au-delà des mèches récentes, pas au ras d'un niveau." },
@@ -118,7 +118,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     metaDescription:
       "Send a screenshot of your XAU/USD chart: the AI reads the trend, draws the levels and puts numbers on a plan, taking into account what moves gold. First reading free.",
     kicker: "Specialised gold analysis · XAU/USD",
-    lede: "An analysis tuned for gold: its round numbers, its sessions, its reactions to US data.",
+    lede: "Tuned for gold: it spots the round prices where many traders place their orders, accounts for the London and New York hours, and is wary of US announcements.",
     title: "AI analysis of your gold charts.",
     titleB: "From the 1-hour to the 5-minute.",
     intro:
@@ -142,7 +142,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     },
     knowsTitle: "What the AI takes into account on gold",
     knows: [
-      { title: "Round numbers", text: "Multiples of $50 and $100 attract orders. The analysis uses them to place levels and targets." },
+      { title: "Round numbers", text: "Prices like $3,000, $3,050 or $3,100 attract orders: many traders put their entries, stops and targets there. The analysis uses them to place its levels." },
       { title: "Sessions", text: "The Asian range is often broken at the London open, and the US open, at 8:30 a.m. New York time, brings the biggest moves of the day." },
       { title: "US data", text: "Inflation (CPI), jobs (NFP), Fed decisions: around these releases, false breaks are common. The analysis reminds you when it matters." },
       { title: "Noise", text: "Gold moves a lot within a session. The suggested stops sit beyond recent wicks, not right on a level." },
@@ -188,7 +188,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     metaDescription:
       "Envía una captura de tu gráfico XAU/USD: la IA lee la tendencia, traza los niveles y pone cifras a un plan, teniendo en cuenta lo que mueve el oro. Primera lectura gratis.",
     kicker: "Análisis especializado en oro · XAU/USD",
-    lede: "Un análisis ajustado al oro: sus números redondos, sus sesiones, sus reacciones a los datos de EE. UU.",
+    lede: "Ajustado al oro: detecta los precios redondos donde muchos traders colocan sus órdenes, tiene en cuenta los horarios de Londres y Nueva York y desconfía de los anuncios de EE. UU.",
     title: "El análisis IA de tus gráficos de oro.",
     titleB: "Del gráfico de 1 hora al de 5 minutos.",
     intro:
@@ -212,7 +212,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     },
     knowsTitle: "Lo que la IA tiene en cuenta en el oro",
     knows: [
-      { title: "Los números redondos", text: "Los múltiplos de 50 y de 100 $ atraen órdenes. El análisis los usa para situar niveles y objetivos." },
+      { title: "Los números redondos", text: "Precios como 3.000 $, 3.050 $ o 3.100 $ atraen órdenes: muchos traders colocan ahí sus entradas, stops y objetivos. El análisis los usa para situar sus niveles." },
       { title: "Las sesiones", text: "El rango asiático suele romperse en la apertura de Londres, y la apertura estadounidense, a las 14:30 hora peninsular, trae los mayores movimientos del día." },
       { title: "Los datos de EE. UU.", text: "Inflación (CPI), empleo (NFP), decisiones de la Fed: alrededor de estos anuncios, las falsas rupturas son frecuentes. El análisis lo recuerda cuando es útil." },
       { title: "El ruido", text: "El oro se mueve mucho dentro de una sesión. Los stops propuestos se sitúan más allá de las mechas recientes, no pegados a un nivel." },
@@ -258,7 +258,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     metaDescription:
       "XAU/USDチャートのスクリーンショットを送るだけ。金を動かす要因を踏まえて、AIがトレンドを読み、水準を引き、数値付きのプランを示します。初回の読み取りは無料。",
     kicker: "ゴールド特化の分析 · XAU/USD",
-    lede: "金（ゴールド）に合わせた分析：キリのいい水準、取引時間帯、米国指標への反応。",
+    lede: "金に合わせた分析です。多くのトレーダーが注文を置くキリのいい価格を押さえ、ロンドンとニューヨークの時間帯を考慮し、米国の経済指標の発表前後には慎重に見ます。",
     title: "ゴールドチャートをAIが分析。",
     titleB: "1時間足から5分足まで。",
     intro:
@@ -328,7 +328,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     metaDescription:
       "XAU/USD 차트 스크린샷을 보내 주세요. 금을 움직이는 요인을 반영해 AI가 추세를 읽고, 레벨을 그리고, 수치가 담긴 플랜을 제시합니다. 첫 분석은 무료.",
     kicker: "금(골드) 특화 분석 · XAU/USD",
-    lede: "금에 맞춘 분석: 라운드 넘버, 거래 세션, 미국 지표에 대한 반응까지.",
+    lede: "금에 맞춘 분석입니다. 많은 트레이더가 주문을 걸어 두는 딱 떨어지는 가격을 짚고, 런던과 뉴욕 시간대를 반영하며, 미국 지표 발표 전후에는 신중하게 봅니다.",
     title: "AI가 분석하는 금(골드) 차트.",
     titleB: "1시간봉부터 5분봉까지.",
     intro:
@@ -398,7 +398,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     metaDescription:
       "Gửi ảnh chụp biểu đồ XAU/USD: AI đọc xu hướng, vẽ các mức giá và đưa ra kế hoạch có số liệu, có tính đến những yếu tố làm vàng biến động. Lần đọc đầu tiên miễn phí.",
     kicker: "Phân tích chuyên biệt về vàng · XAU/USD",
-    lede: "Một bản phân tích điều chỉnh riêng cho vàng: các mức giá tròn, các phiên giao dịch, phản ứng với số liệu của Mỹ.",
+    lede: "Điều chỉnh riêng cho vàng: nhận ra các mức giá tròn nơi nhiều trader đặt lệnh, tính đến giờ phiên London và New York, và thận trọng quanh các thông báo của Mỹ.",
     title: "AI phân tích biểu đồ vàng của bạn.",
     titleB: "Từ khung 1 giờ đến khung 5 phút.",
     intro:
@@ -468,7 +468,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     metaDescription:
       "Kirim tangkapan layar grafik XAU/USD Anda: AI membaca tren, menggambar level, dan menyusun rencana dengan angka, dengan memperhitungkan apa yang menggerakkan emas. Bacaan pertama gratis.",
     kicker: "Analisis khusus emas · XAU/USD",
-    lede: "Analisis yang disesuaikan untuk emas: angka bulatnya, sesinya, reaksinya terhadap data AS.",
+    lede: "Disesuaikan untuk emas: mengenali harga bulat tempat banyak trader menaruh order, memperhitungkan jam sesi London dan New York, dan berhati-hati menjelang pengumuman data AS.",
     title: "Analisis AI untuk grafik emas Anda.",
     titleB: "Dari grafik 1 jam hingga 5 menit.",
     intro:

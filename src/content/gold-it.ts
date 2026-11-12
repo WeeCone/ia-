@@ -5,7 +5,7 @@ export const GOLD_IT: GoldPage = {
   metaDescription:
     "Carichi uno screenshot del Suo grafico XAU/USD: l'IA legge il trend, traccia i livelli e mette i numeri in un piano, tenendo conto di ciò che muove l'oro. Prima lettura gratuita.",
   kicker: "Analisi specializzata sull'oro · XAU/USD",
-  lede: "Un'analisi tarata sull'oro: i suoi numeri tondi, le sue sessioni, le sue reazioni ai dati americani.",
+  lede: "Tarata sull'oro: riconosce i prezzi tondi dove molti trader piazzano gli ordini, tiene conto degli orari di Londra e New York e diffida degli annunci americani.",
   title: "L'analisi IA dei Suoi grafici sull'oro (XAU/USD).",
   titleB: "Dal grafico a 1 ora a quello a 5 minuti.",
   intro:
@@ -29,7 +29,7 @@ export const GOLD_IT: GoldPage = {
   },
   knowsTitle: "Cosa considera l'IA sull'oro",
   knows: [
-    { title: "I numeri tondi", text: "I multipli di 50 e 100 $ attirano gli ordini. L'analisi li usa per collocare livelli e obiettivi." },
+    { title: "I numeri tondi", text: "Prezzi come 3.000 $, 3.050 $ o 3.100 $ attirano gli ordini: molti trader ci mettono entrate, stop e obiettivi. L'analisi li usa per collocare i suoi livelli." },
     { title: "Le sessioni", text: "Il range asiatico viene spesso rotto all'apertura di Londra, e l'apertura americana, alle 14:30 ora italiana, porta i movimenti più ampi della giornata." },
     { title: "I dati americani", text: "Inflazione (CPI), occupazione (NFP), decisioni della Fed: attorno a questi annunci le false rotture sono frequenti. L'analisi lo ricorda quando serve." },
     { title: "Il rumore", text: "L'oro si muove molto all'interno di una sessione. Gli stop proposti sono messi oltre le ombre recenti, non a ridosso di un livello." },

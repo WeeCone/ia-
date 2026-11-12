@@ -5,7 +5,7 @@ export const GOLD_DE: GoldPage = {
   metaDescription:
     "Senden Sie einen Screenshot Ihres XAU/USD-Charts: Die KI liest den Trend, zeichnet die Marken ein und erstellt einen Plan mit konkreten Zahlen. Dabei berücksichtigt sie, was den Goldpreis bewegt. Erste Auswertung kostenlos.",
   kicker: "Spezialisiert auf Gold · XAU/USD",
-  lede: "Eine Analyse, abgestimmt auf Gold: runde Marken, Handelssessions, Reaktionen auf US-Daten.",
+  lede: "Abgestimmt auf Gold: Sie erkennt die runden Preise, an denen viele Trader ihre Orders platzieren, berücksichtigt die Handelszeiten in London und New York und ist bei US-Meldungen vorsichtig.",
   title: "KI-Analyse für Ihre Gold-Charts.",
   titleB: "Vom 1-Stunden- bis zum 5-Minuten-Chart.",
   intro:
@@ -29,7 +29,7 @@ export const GOLD_DE: GoldPage = {
   },
   knowsTitle: "Was die KI bei Gold berücksichtigt",
   knows: [
-    { title: "Runde Marken", text: "Vielfache von 50 und 100 $ ziehen Orders an. Die Analyse nutzt sie, um Marken und Kursziele zu setzen." },
+    { title: "Runde Marken", text: "Preise wie 3.000 $, 3.050 $ oder 3.100 $ ziehen Orders an: Viele Trader setzen dort Einstieg, Stop und Ziel. Die Analyse nutzt sie, um ihre Marken zu setzen." },
     { title: "Die Sessions", text: "Die Asien-Range wird oft zur Eröffnung in London gebrochen, und die US-Eröffnung um 14:30 Uhr deutscher Zeit bringt die größten Bewegungen des Tages." },
     { title: "US-Daten", text: "Inflation (CPI), Arbeitsmarkt (NFP), Fed-Entscheide: Rund um diese Termine kommt es oft zu Fehlausbrüchen. Die Analyse weist darauf hin, wenn es relevant ist." },
     { title: "Das Rauschen", text: "Gold schwankt innerhalb einer Session stark. Die vorgeschlagenen Stops liegen jenseits der letzten Dochte, nicht knapp an einer Marke." },

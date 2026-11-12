@@ -5,7 +5,7 @@ export const GOLD_PT: GoldPage = {
   metaDescription:
     "Envie um print do seu gráfico XAU/USD: a IA lê a tendência, traça os níveis e monta um plano com números, levando em conta o que mexe com o ouro. Primeira leitura grátis.",
   kicker: "Análise especializada em ouro · XAU/USD",
-  lede: "Uma análise ajustada para o ouro: os números redondos, as sessões, as reações aos dados dos EUA.",
+  lede: "Ajustada para o ouro: reconhece os preços redondos onde muitos traders colocam suas ordens, considera os horários de Londres e Nova York e fica cautelosa com os anúncios dos EUA.",
   title: "A análise com IA dos seus gráficos de ouro.",
   titleB: "Do gráfico de 1 hora ao de 5 minutos.",
   intro:
@@ -29,7 +29,7 @@ export const GOLD_PT: GoldPage = {
   },
   knowsTitle: "O que a IA leva em conta no ouro",
   knows: [
-    { title: "Os números redondos", text: "Os múltiplos de US$ 50 e US$ 100 atraem ordens. A análise usa esses números para posicionar níveis e alvos." },
+    { title: "Os números redondos", text: "Preços como US$ 3.000, US$ 3.050 ou US$ 3.100 atraem ordens: muitos traders colocam ali entradas, stops e alvos. A análise usa esses preços para situar seus níveis." },
     { title: "As sessões", text: "O range asiático costuma ser rompido na abertura de Londres, e a abertura americana, às 9h30 de Brasília (10h30 durante o horário de inverno nos EUA), traz os maiores movimentos do dia." },
     { title: "Os dados dos EUA", text: "Inflação (CPI), emprego (payroll), decisões do Fed: perto desses anúncios, os falsos rompimentos são comuns. A análise lembra disso quando faz diferença." },
     { title: "O ruído", text: "O ouro se mexe muito dentro de um mesmo pregão. Os stops sugeridos ficam além dos pavios recentes, não colados em um nível." },
