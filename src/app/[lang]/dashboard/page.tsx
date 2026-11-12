@@ -89,7 +89,7 @@ export default function DashboardPage() {
           });
           const data = await response.json().catch(() => ({}));
           // The ad pixel's purchase event (consent permitting); the session id keeps it counted once.
-          if (data.ok && data.purchase) pixel("Purchase", { value: data.purchase.value, currency: "EUR" }, data.purchase.id);
+          if (data.ok && data.purchase) pixel("Purchase", { value: data.purchase.value, currency: data.purchase.currency ?? "EUR" }, data.purchase.id);
           if (data.ok || !data.pending) break;
         } catch {}
         await new Promise((resolve) => setTimeout(resolve, 2000));

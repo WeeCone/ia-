@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useI18n } from "@/i18n/client";
-import { formatEur } from "@/i18n/format";
-import { OFFER_PRICE_EUR, type Offer, type Plan } from "@/lib/plans";
+import { formatPrice } from "@/i18n/format";
+import { type Offer, type Plan } from "@/lib/plans";
 import { BillingButton } from "./billing-button";
 
 const OFFERS: Offer[] = ["starter", "monthly", "lifetime"];
@@ -61,7 +61,7 @@ export function PackCard({ offer, compact = false, current = false }: { offer: O
       )}
       <h3 className={`display ${compact ? "text-xl" : "text-2xl"}`}>{name}</h3>
       <p className={`flex flex-wrap items-baseline gap-x-2 ${compact ? "mt-3" : "mt-5"}`}>
-        <span className={`display ${compact ? "text-4xl" : "text-5xl"} ${lifetime ? "text-warn" : ""}`}>{formatEur(locale, OFFER_PRICE_EUR[offer])}</span>
+        <span className={`display ${compact ? "text-4xl" : "text-5xl"} ${lifetime ? "text-warn" : ""}`}>{formatPrice(locale, offer)}</span>
         <span className="whitespace-nowrap text-sm text-muted">{lifetime ? p.oneOff : p.perMonth}</span>
       </p>
       <p className="mt-3 font-medium leading-snug">{pack.pitch}</p>
@@ -132,7 +132,7 @@ export function PricingPlans({ compact = false, currentPlan = null }: { compact?
                 >
                   <span className="block text-sm font-semibold leading-tight">{t.common[offer]}</span>
                   <span className={`block text-xs ${active ? "opacity-80" : ""}`}>
-                    {formatEur(locale, OFFER_PRICE_EUR[offer])}
+                    {formatPrice(locale, offer)}
                     {offer === "lifetime" ? "" : t.pricing.perMonth}
                   </span>
                 </button>

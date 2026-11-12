@@ -1,8 +1,7 @@
 import "server-only";
 import { Resend } from "resend";
 import { INTL_LOCALE, localePath, type Locale } from "@/i18n/config";
-import { formatEur } from "@/i18n/format";
-import { OFFER_PRICE_EUR } from "@/lib/plans";
+import { formatEur, formatPrice } from "@/i18n/format";
 import { DICTIONARIES, type Dict } from "@/i18n/dictionaries";
 
 let client: Resend | null = null;
@@ -203,7 +202,7 @@ export async function sendPurchaseEmail(
     subject: t.subject(t.names[pack]),
     heading: t.heading(t.names[pack]),
     lines: [t.greeting(name)],
-    strong: t.includes[pack](formatEur(locale, OFFER_PRICE_EUR[pack])),
+    strong: t.includes[pack](formatPrice(locale, pack)),
     after: pack === "lifetime" ? t.oneOff : t.cancel,
     cta: t.cta,
     url: `${appUrl}${localePath(locale, "/dashboard")}`,

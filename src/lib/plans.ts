@@ -1,3 +1,4 @@
+import type { Locale } from "@/i18n/config";
 export type Plan = "none" | "starter" | "monthly" | "lifetime";
 /** What can be bought: Starter and Pro (stored as "monthly") are monthly subscriptions, À vie a one-off payment. */
 export type Offer = Exclude<Plan, "none">;
@@ -91,10 +92,39 @@ export const CHAT_QUESTIONS_PER_DAY = 1;
 /** Which offers get the news side (events and news that can move the asset) with every analysis. */
 export const hasNewsSide = (plan: Plan | undefined) => plan === "monthly" || plan === "lifetime";
 
-/** Prices in euros (display; the checkout sends the same amounts to Stripe). Format with formatEur() for the visitor's language. */
-export const OFFER_PRICE_EUR: Record<Offer, number> = { starter: 10, monthly: 19, lifetime: 99 };
-/** The same prices as Stripe bills them, in cents (the checkout sets them inline, see api/billing/checkout). */
-export const OFFER_PRICE_CENTS: Record<Offer, number> = { starter: 1000, monthly: 1900, lifetime: 9900 };
+/**
+ * Prices by currency. The euro grid applies to the French, English and Spanish site; the Japanese, Korean, Vietnamese
+ * and Indonesian sites show and charge their own currency, at prices set for local purchasing power (Japan and Korea
+ * about the euro value, Vietnam and Indonesia about 40 % lower). Format with formatPrice() for the visitor's language.
+ */
+export type Currency = "eur" | "jpy" | "krw" | "vnd" | "idr";
+export const OFFER_PRICES: Record<Currency, Record<Offer, number>> = {
+  eur: { starter: 10, monthly: 19, lifetime: 99 },
+  jpy: { starter: 1500, monthly: 2980, lifetime: 14800 },
+  krw: { starter: 14900, monthly: 27900, lifetime: 139000 },
+  vnd: { starter: 149000, monthly: 279000, lifetime: 1490000 },
+  idr: { starter: 99000, monthly: 189000, lifetime: 990000 },
+};
+export const LOCALE_CURRENCY: Record<Locale, Currency> = { fr: "eur", en: "eur", es: "eur", ja: "jpy", ko: "krw", vi: "vnd", id: "idr" };
+export const isCurrency = (value: string | null | undefined): value is Currency => !!value && value in OFFER_PRICES;
+
+/** The euro grid, for the admin's estimates and the French texts. */
+export const OFFER_PRICE_EUR = OFFER_PRICES.eur;
+
+/** Stripe counts yen, won and dong in whole units, euros and rupiah in hundredths. */
+const ZERO_DECIMAL: Currency[] = ["jpy", "krw", "vnd"];
+export const toStripeAmount = (currency: Currency, amount: number) => (ZERO_DECIMAL.includes(currency) ? Math.round(amount) : Math.round(amount * 100));
+export const fromStripeAmount = (currency: string, amount: number) => (ZERO_DECIMAL.includes(currency as Currency) ? amount : amount / 100);
+
+/** A pack's price in the currency of a language's site. */
+export function offerPrice(locale: Locale, offer: Offer) {
+  const currency = LOCALE_CURRENCY[locale];
+  return { currency, amount: OFFER_PRICES[currency][offer] };
+}
+
+/** Rough euro value of an amount in another currency, for the admin's revenue counters only (not for billing). */
+const EUR_PER_UNIT: Record<Currency, number> = { eur: 1, jpy: 0.006, krw: 0.00065, vnd: 0.000035, idr: 0.000055 };
+export const approxEur = (currency: string, amount: number) => amount * (EUR_PER_UNIT[currency as Currency] ?? 1);
 
 export const PLAN_LABELS: Record<Plan, string> = { none: "Aucune offre", starter: "Starter", monthly: "Pro", lifetime: "À vie" };
 

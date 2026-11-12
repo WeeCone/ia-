@@ -5,6 +5,7 @@ import { getRequestUid } from "@/lib/server-auth";
 import { getStripe, withBillingErrors } from "@/lib/stripe";
 import { DICTIONARIES } from "@/i18n/dictionaries";
 import { requestLocale } from "@/i18n/server";
+import { fromStripeAmount } from "@/lib/plans";
 
 /**
  * Called by the dashboard on return from payment: reads the Checkout Session from Stripe and opens what was paid,
@@ -49,7 +50,7 @@ async function handler(request: Request) {
     }
   }
   // What was paid, for the ad pixel's purchase event (the session id lets Meta drop duplicates).
-  return Response.json({ ok: true, purchase: { id: session.id, value: (session.amount_total ?? 0) / 100 } });
+  return Response.json({ ok: true, purchase: { id: session.id, value: fromStripeAmount(session.currency ?? "eur", session.amount_total ?? 0), currency: (session.currency ?? "eur").toUpperCase() } });
 }
 
 export const POST = withBillingErrors(handler);

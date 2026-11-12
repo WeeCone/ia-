@@ -3,8 +3,7 @@
 import { useI18n } from "@/i18n/client";
 import { keepNumbers } from "@/i18n/format";
 import { type ChartAnalysis, type MacroReport, preferredPlan } from "@/lib/analysis";
-import { formatEur } from "@/i18n/format";
-import { OFFER_PRICE_EUR } from "@/lib/plans";
+import { formatPrice } from "@/i18n/format";
 import { formatRatio, rewardRatios } from "@/lib/risk";
 import { BillingButton } from "./billing-button";
 
@@ -245,7 +244,7 @@ function LockedMacroSection({ asset }: { asset: string }) {
             <p className="mt-1 text-sm text-muted">{m.text}</p>
             <div className="mt-4 flex justify-center">
               <BillingButton route="checkout" offer="monthly" className="btn-primary px-5 py-2.5">
-                {m.cta(formatEur(locale, OFFER_PRICE_EUR.monthly))}
+                {m.cta(formatPrice(locale, "monthly"))}
               </BillingButton>
             </div>
           </div>
@@ -279,7 +278,7 @@ function LockedProSection({ items }: { items: string[] }) {
         <p className="mt-1.5 text-xs text-muted">{l.text}</p>
       </div>
       <BillingButton route="checkout" offer="monthly" className="btn-secondary shrink-0 px-4 py-2 text-sm">
-        {l.cta(formatEur(locale, OFFER_PRICE_EUR.monthly))}
+        {l.cta(formatPrice(locale, "monthly"))}
       </BillingButton>
     </section>
   );

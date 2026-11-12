@@ -217,7 +217,7 @@ export const vi: Dict = {
         a: "Trên trang thanh toán an toàn của Stripe, đối tác thanh toán của chúng tôi. Scanzivo không bao giờ truy cập thông tin thẻ của bạn.",
       },
     ],
-    footnote: "Giá bằng euro, đã gồm thuế. Các bản phân tích chỉ mang tính tham khảo và không phải lời khuyên đầu tư.",
+    footnote: "Giá bằng đồng Việt Nam, đã gồm thuế. Các bản phân tích chỉ mang tính tham khảo và không phải lời khuyên đầu tư.",
   },
   trust: ["Thanh toán an toàn qua Stripe", "Không ràng buộc", "Chỉ bạn xem được ảnh chụp của mình", "Ảnh không phải biểu đồ không bị tính lượt"],
   faq: {

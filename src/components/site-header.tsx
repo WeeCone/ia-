@@ -1,7 +1,5 @@
 import Link from "next/link";
-import { formatEur } from "@/i18n/format";
 import { getI18n } from "@/i18n/server";
-import { OFFER_PRICE_EUR } from "@/lib/plans";
 import { HeaderAccountLink } from "./header-account-link";
 import { LanguageMenu } from "./language-menu";
 import { LanguageSwitcher } from "./language-switcher";

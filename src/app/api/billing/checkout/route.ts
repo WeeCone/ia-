@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { adminDb } from "@/lib/firebase-admin";
-import type { Offer } from "@/lib/plans";
+import { LOCALE_CURRENCY, type Currency, type Offer } from "@/lib/plans";
 import { lineFor } from "@/lib/stripe-products";
 import { getRequestUid } from "@/lib/server-auth";
 import { appUrl, getStripe, withBillingErrors } from "@/lib/stripe";
@@ -14,6 +14,9 @@ const OFFERS: Offer[] = ["starter", "monthly", "lifetime"];
 /** Stripe's answer when a saved customer no longer exists (deleted, or saved in the other test/live mode). */
 const isMissingCustomer = (err: unknown) =>
   err instanceof Stripe.errors.StripeInvalidRequestError && err.code === "resource_missing" && err.param === "customer";
+
+/** Stripe's answer when a customer already billed in one currency is asked to pay in another. */
+const isCurrencyConflict = (err: unknown) => err instanceof Stripe.errors.StripeInvalidRequestError && /currenc/i.test(err.message);
 
 /** Offers an account may not buy given its plan: nothing on top of À vie, no second subscription at the same level. */
 function blocked(plan: string | undefined, offer: Offer) {
@@ -65,23 +68,32 @@ async function handler(request: Request) {
   // The webhook resolves the user from this metadata (subscription invoices, or the one-off checkout session).
   // src / cmp: the ad or site that brought the buyer, for the admin "Visites" tab (anonymous counters only).
   const metadata = { uid, offer, src: statKey(source) ?? "direct", cmp: statKey(campaign) ?? "" };
-  const line = await lineFor(offer);
-  const createSession = (customer: string) =>
+  // Charged in the currency of the visitor's language (yen on /ja…). A customer Stripe already bills in another
+  // currency (an earlier subscription in euros) is charged in euros instead: Stripe refuses mixing them.
+  const createSession = async (customer: string, currency: Currency = LOCALE_CURRENCY[locale]) =>
     stripe.checkout.sessions.create({
-      ...sessionParams(request, locale, offer, embedded, `${dashboard}?checkout=success&session_id={CHECKOUT_SESSION_ID}`, dashboard, line, metadata),
+      ...sessionParams(request, locale, offer, embedded, `${dashboard}?checkout=success&session_id={CHECKOUT_SESSION_ID}`, dashboard, await lineFor(offer, currency), metadata),
       customer,
       client_reference_id: uid,
     });
+  const inLocalCurrencyOrEuros = async (customer: string) => {
+    try {
+      return await createSession(customer);
+    } catch (err) {
+      if (LOCALE_CURRENCY[locale] === "eur" || !isCurrencyConflict(err)) throw err;
+      return createSession(customer, "eur");
+    }
+  };
 
   // The saved customer is used as is (no lookup first, one Stripe round trip fewer); only if Stripe no longer knows it
   // is a fresh one created and the session retried.
   const saved: string | undefined = user.get("stripeCustomerId");
   let session;
   try {
-    session = await createSession(saved ?? (await newCustomer()));
+    session = await inLocalCurrencyOrEuros(saved ?? (await newCustomer()));
   } catch (err) {
     if (!saved || !isMissingCustomer(err)) throw err;
-    session = await createSession(await newCustomer());
+    session = await inLocalCurrencyOrEuros(await newCustomer());
   }
 
   return Response.json(embedded ? { clientSecret: session.client_secret } : { url: session.url });
@@ -94,7 +106,7 @@ async function guestCheckout(request: Request, locale: Locale, offer: Offer, emb
   // guest: lets the webhook and the welcome page know the account is still to be made (no uid yet).
   const metadata = { guest: "1", offer, locale, src: statKey(source) ?? "direct", cmp: statKey(campaign) ?? "" };
   const session = await getStripe().checkout.sessions.create({
-    ...sessionParams(request, locale, offer, embedded, welcome, base + localePath(locale, "/"), await lineFor(offer), metadata),
+    ...sessionParams(request, locale, offer, embedded, welcome, base + localePath(locale, "/"), await lineFor(offer, LOCALE_CURRENCY[locale]), metadata),
     // A one-off payment makes no customer by default: one is needed for the receipt and the account.
     ...(offer === "lifetime" ? { customer_creation: "always" as const } : {}),
   });

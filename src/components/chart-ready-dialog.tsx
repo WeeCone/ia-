@@ -3,10 +3,9 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/i18n/client";
-import { formatEur } from "@/i18n/format";
+import { formatPrice } from "@/i18n/format";
 import { onOpenChartReady, onOpenCheckout, requestAutoAnalyze, savePreview } from "@/lib/offers-client";
 import { pendingChartUrl, readPendingChart } from "@/lib/pending-chart";
-import { OFFER_PRICE_EUR } from "@/lib/plans";
 import type { PreviewTeaser } from "@/lib/preview-types";
 import { AnalysisTeaser } from "./analysis-teaser";
 import { useAuth } from "./auth-provider";
@@ -142,7 +141,7 @@ export function ChartReadyDialog() {
                 imageUrl={chartUrl}
                 onUnlock={() => pay(stage.id)}
                 unlockLabel={c.unlock}
-                terms={c.unlockTerms(formatEur(locale, OFFER_PRICE_EUR.starter))}
+                terms={c.unlockTerms(formatPrice(locale, "starter"))}
               />
             </div>
           ) : (
@@ -198,7 +197,7 @@ export function ChartReadyDialog() {
                   {c.previewCta}
                 </button>
                 <p className="mt-3 text-center text-sm text-muted">
-                  {c.previewTerms(formatEur(locale, OFFER_PRICE_EUR.starter))}
+                  {c.previewTerms(formatPrice(locale, "starter"))}
                 </p>
               </>
             )}

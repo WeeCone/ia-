@@ -6,6 +6,7 @@ import { appUrl, getStripe } from "@/lib/stripe";
 import { sendTrialEmail } from "@/lib/email";
 import { claimGuestSession } from "@/lib/guest-checkout";
 import { hasLocale, type Locale } from "@/i18n/config";
+import { approxEur, fromStripeAmount } from "@/lib/plans";
 
 const ACTIVE_STATUSES: Stripe.Subscription.Status[] = ["active", "trialing"];
 
@@ -31,7 +32,7 @@ async function grantLifetime(session: Stripe.Checkout.Session) {
 async function countPurchase(session: Stripe.Checkout.Session) {
   if (session.payment_status !== "paid") return;
   try {
-    await recordPurchase(session.id, attribution(session.metadata?.src, session.metadata?.cmp), (session.amount_total ?? 0) / 100);
+    await recordPurchase(session.id, attribution(session.metadata?.src, session.metadata?.cmp), approxEur(session.currency ?? "eur", fromStripeAmount(session.currency ?? "eur", session.amount_total ?? 0)));
   } catch (err) {
     console.error("purchase stat failed", err);
   }

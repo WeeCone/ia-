@@ -8,8 +8,8 @@ import { EMBEDDED_CHECKOUT, onOpenCheckout } from "@/lib/offers-client";
 import { pendingChartUrl } from "@/lib/pending-chart";
 import { useI18n } from "@/i18n/client";
 import { INTL_LOCALE } from "@/i18n/config";
-import { formatEur } from "@/i18n/format";
-import { OFFER_PRICE_EUR, type Offer } from "@/lib/plans";
+import { formatMoney, formatPrice } from "@/i18n/format";
+import type { Currency, Offer } from "@/lib/plans";
 import { useAuth } from "./auth-provider";
 import { LogoMark } from "./logo";
 
@@ -37,7 +37,7 @@ export function CheckoutDialog() {
   // Starter to Pro: a one-click switch on the card on file, when the server can do it; otherwise Stripe's form.
   const [upgrade, setUpgrade] = useState<
     | { stage: "checking" | "paying" | "done" }
-    | { stage: "ready"; amountCents: number; nextAt: number; prorationDate: number }
+    | { stage: "ready"; amount: number; currency: Currency; monthly: number; nextAt: number; prorationDate: number }
     | { stage: "off"; note?: string }
   >({ stage: "off" });
 
@@ -65,8 +65,9 @@ export function CheckoutDialog() {
           body: "{}",
         });
         const data = await response.json();
-        if (!response.ok || typeof data.amountCents !== "number") throw new Error();
-        if (!cancelled) setUpgrade({ stage: "ready", amountCents: data.amountCents, nextAt: data.nextAt, prorationDate: data.prorationDate });
+        if (!response.ok || typeof data.amount !== "number") throw new Error();
+        if (!cancelled)
+          setUpgrade({ stage: "ready", amount: data.amount, currency: data.currency, monthly: data.monthly, nextAt: data.nextAt, prorationDate: data.prorationDate });
       } catch {
         if (!cancelled) setUpgrade({ stage: "off" });
       }
@@ -121,7 +122,7 @@ export function CheckoutDialog() {
   if (!EMBEDDED_CHECKOUT) return null;
   const close = () => ref.current?.close();
 
-  const price = offer ? formatEur(locale, OFFER_PRICE_EUR[offer]) : "";
+  const price = offer ? formatPrice(locale, offer) : "";
   const name = offer ? t.common[offer] : "";
 
   return (
@@ -242,7 +243,7 @@ export function CheckoutDialog() {
 
 type UpgradeState =
   | { stage: "checking" | "paying" | "done" }
-  | { stage: "ready"; amountCents: number; nextAt: number; prorationDate: number };
+  | { stage: "ready"; amount: number; currency: Currency; monthly: number; nextAt: number; prorationDate: number };
 
 /** The one-click switch from Starter to Pro: the amount due today, then a single confirmation. */
 function UpgradePanel({ upgrade, onConfirm, onClose }: { upgrade: UpgradeState; onConfirm: () => void; onClose: () => void }) {
@@ -273,12 +274,12 @@ function UpgradePanel({ upgrade, onConfirm, onClose }: { upgrade: UpgradeState; 
     <div className="mx-auto flex min-h-[28rem] max-w-md flex-col justify-center px-4 py-8">
       <p className="text-sm font-medium text-[#57606a]">{u.title}</p>
       <p className="mt-3 flex items-baseline gap-2">
-        <span className="text-5xl font-semibold tracking-tight">{quote ? formatEur(locale, quote.amountCents / 100) : "…"}</span>
+        <span className="text-5xl font-semibold tracking-tight">{quote ? formatMoney(locale, quote.amount, quote.currency) : "…"}</span>
         <span className="text-sm text-[#57606a]">{u.today}</span>
       </p>
       <ul className="mt-5 space-y-2 text-sm text-[#3d4550]">
         <li>{u.deducted}</li>
-        {quote && <li>{u.then(formatEur(locale, OFFER_PRICE_EUR.monthly), date)}</li>}
+        {quote && <li>{u.then(formatMoney(locale, quote.monthly, quote.currency), date)}</li>}
         <li>{u.card}</li>
       </ul>
       <button

@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { useI18n } from "@/i18n/client";
 import { INTL_LOCALE } from "@/i18n/config";
-import { formatEur } from "@/i18n/format";
+import { formatPrice } from "@/i18n/format";
 import { auth } from "@/lib/firebase";
-import { MONTHLY_CREDITS, OFFER_PRICE_EUR } from "@/lib/plans";
+import { MONTHLY_CREDITS } from "@/lib/plans";
 import { FormError } from "../auth-card";
 
 /**
@@ -26,7 +26,7 @@ export function UpgradeNow({
 }) {
   const { t, locale } = useI18n();
   const d = t.dashboard;
-  const monthly = formatEur(locale, OFFER_PRICE_EUR.monthly);
+  const monthly = formatPrice(locale, "monthly");
   const [step, setStep] = useState<"idle" | "confirm" | "pending" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
 

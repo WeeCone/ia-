@@ -2,7 +2,7 @@ import type { Locale } from "@/i18n/config";
 import { DICTIONARIES } from "@/i18n/dictionaries";
 import { auth } from "./firebase";
 import { pixel } from "./meta-pixel";
-import { OFFER_PRICE_EUR, type Offer } from "./plans";
+import { offerPrice, type Offer } from "./plans";
 import { checkoutAttribution, trackEvent } from "./track";
 
 async function callBilling(route: "checkout" | "portal", body: Record<string, unknown>, locale: Locale) {
@@ -14,7 +14,10 @@ async function callBilling(route: "checkout" | "portal", body: Record<string, un
   if (route === "checkout") {
     trackEvent("checkout");
     const offer = body.offer as Offer | undefined;
-    if (offer) pixel("InitiateCheckout", { value: OFFER_PRICE_EUR[offer], currency: "EUR" });
+    if (offer) {
+      const { amount, currency } = offerPrice(locale, offer);
+      pixel("InitiateCheckout", { value: amount, currency: currency.toUpperCase() });
+    }
     body = { ...body, ...checkoutAttribution() };
   }
   const response = await fetch(`/api/billing/${route}`, {

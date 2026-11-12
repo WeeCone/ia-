@@ -1,11 +1,11 @@
 import "server-only";
-import { OFFER_PRICE_CENTS, type Offer } from "./plans";
+import { OFFER_PRICES, toStripeAmount, type Currency, type Offer } from "./plans";
 import { getStripe } from "./stripe";
 
 /**
  * The Stripe product each offer is billed on. Pro and À vie use the existing "Mensuel" and "À vie" products, read once
  * from STRIPE_PRICE_MONTHLY / STRIPE_PRICE_LIFETIME; Starter's product is found by its metadata, or made the first time.
- * Prices themselves are set inline (OFFER_PRICE_CENTS), so changing one never needs a new Price in the dashboard.
+ * Prices themselves are set inline (OFFER_PRICES, in the visitor's currency), so changing one never needs a new Price in the dashboard.
  */
 const products: Partial<Record<Offer, Promise<string>>> = {};
 
@@ -26,9 +26,9 @@ function productFor(offer: Offer) {
   return products[offer]!;
 }
 
-export async function lineFor(offer: Offer) {
+export async function lineFor(offer: Offer, currency: Currency = "eur") {
   const product = await productFor(offer);
   const recurring = offer === "lifetime" ? {} : { recurring: { interval: "month" as const } };
-  return { price_data: { currency: "eur", unit_amount: OFFER_PRICE_CENTS[offer], product, ...recurring }, quantity: 1 };
+  return { price_data: { currency, unit_amount: toStripeAmount(currency, OFFER_PRICES[currency][offer]), product, ...recurring }, quantity: 1 };
 }
 

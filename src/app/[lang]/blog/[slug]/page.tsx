@@ -6,9 +6,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ARTICLES, articleText, findArticle, readingMinutes, relatedTo, translationsOf } from "@/content/blog";
 import { INTL_LOCALE, localePath } from "@/i18n/config";
-import { formatEur } from "@/i18n/format";
 import { getI18n } from "@/i18n/server";
-import { OFFER_PRICE_EUR } from "@/lib/plans";
 
 const SITE = "https://scanzivo.com";
 

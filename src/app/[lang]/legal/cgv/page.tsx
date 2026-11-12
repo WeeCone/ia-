@@ -2,17 +2,22 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalPage } from "@/components/legal-page";
 import type { Locale } from "@/i18n/config";
-import { formatEur } from "@/i18n/format";
+import { formatPrice } from "@/i18n/format";
 import { getI18n, languageAlternates } from "@/i18n/server";
 import { COMPANY } from "@/lib/legal";
-import { MONTHLY_CREDITS, OFFER_PRICE_EUR, STARTER_DAILY_CREDITS } from "@/lib/plans";
+import { LOCALE_CURRENCY, MONTHLY_CREDITS, STARTER_DAILY_CREDITS, type Currency } from "@/lib/plans";
+
+const CURRENCY_NAME: Record<Currency, string> = { eur: "euros", jpy: "Japanese yen", krw: "Korean won", vnd: "Vietnamese dong", idr: "Indonesian rupiah" };
 
 export async function generateMetadata(): Promise<Metadata> {
   const { locale, t } = await getI18n();
   return { title: t.legal.termsMetaTitle, alternates: languageAlternates(locale, "/legal/cgv") };
 }
 
-const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
+/** The English terms also serve the Japanese, Korean, Vietnamese and Indonesian sites, with their own currency. */
+type Terms = (privacyHref: string, locale: Locale) => React.ReactNode;
+
+const CONTENT: Record<Locale, Terms> = {
   fr: (privacyHref) => (
     <>
       <h2>1. Objet</h2>
@@ -44,13 +49,13 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
       <h2>4. Offres et prix</h2>
       <ul>
         <li>
-          <strong>Starter — {formatEur("fr", OFFER_PRICE_EUR.starter)} / mois</strong> : abonnement sans engagement, renouvelé
+          <strong>Starter — {formatPrice("fr", "starter")} / mois</strong> : abonnement sans engagement, renouvelé
           automatiquement chaque mois. {STARTER_DAILY_CREDITS} analyse par jour, rechargée chaque jour ; l&apos;analyse Starter
           est une analyse réduite : verdict, plan chiffré, probabilité du scénario privilégié et niveaux, sans le scénario
           alternatif, la gestion du risque, le volet actualité ni les questions à l&apos;IA.
         </li>
         <li>
-          <strong>Pro — {formatEur("fr", OFFER_PRICE_EUR.monthly)} / mois</strong> : abonnement sans engagement, renouvelé
+          <strong>Pro — {formatPrice("fr", "monthly")} / mois</strong> : abonnement sans engagement, renouvelé
           automatiquement chaque mois. Analyses complètes en nombre illimité, pour un usage personnel et
           non automatisé, avec le volet actualité et une question par jour à l&apos;IA sur ses analyses. Chaque jour, les
           premières analyses sont rédigées par notre modèle d&apos;IA le plus avancé, les suivantes par des modèles plus rapides et plus
@@ -58,7 +63,7 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
           déjà faites le jour même.
         </li>
         <li>
-          <strong>À vie — {formatEur("fr", OFFER_PRICE_EUR.lifetime)}, paiement unique</strong> : l&apos;analyse complète du pack Pro (volet
+          <strong>À vie — {formatPrice("fr", "lifetime")}, paiement unique</strong> : l&apos;analyse complète du pack Pro (volet
           actualité et une question par jour à l&apos;IA compris), avec {MONTHLY_CREDITS} analyses par mois, rechargées au début de chaque mois civil, pour la durée de vie du Service,
           sans abonnement.
         </li>
@@ -115,7 +120,7 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
       </p>
     </>
   ),
-  en: (privacyHref) => (
+  en: (privacyHref, locale) => (
     <>
       <h2>1. Purpose</h2>
       <p>
@@ -143,13 +148,13 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
       <h2>4. Offers and prices</h2>
       <ul>
         <li>
-          <strong>Starter — {formatEur("en", OFFER_PRICE_EUR.starter)} / month</strong>: subscription with no commitment, renewed
+          <strong>Starter — {formatPrice(locale, "starter")} / month</strong>: subscription with no commitment, renewed
           automatically every month. {STARTER_DAILY_CREDITS} analysis per day, refilled each day; the Starter analysis is a reduced
           analysis: verdict, plan with numbers, probability of the favoured scenario and levels, without the alternative scenario,
           risk management, the news side or questions to the AI.
         </li>
         <li>
-          <strong>Pro — {formatEur("en", OFFER_PRICE_EUR.monthly)} / month</strong>: subscription with no commitment, renewed
+          <strong>Pro — {formatPrice(locale, "monthly")} / month</strong>: subscription with no commitment, renewed
           automatically every month. Unlimited full analyses, for personal, non-automated use, with the news side
           and one question a day to the AI about your analyses. Each day, the first analyses are written by our
           most advanced AI model and the following ones by faster, lighter models,
@@ -157,7 +162,7 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
           made that day.
         </li>
         <li>
-          <strong>Lifetime — {formatEur("en", OFFER_PRICE_EUR.lifetime)}, one-off payment</strong>: the Pro pack&apos;s full analysis (news side and
+          <strong>Lifetime — {formatPrice(locale, "lifetime")}, one-off payment</strong>: the Pro pack&apos;s full analysis (news side and
           one question a day to the AI included), with {MONTHLY_CREDITS} analyses per month, refilled at the start of each calendar month, for the lifetime of the Service,
           with no subscription.
         </li>
@@ -172,7 +177,10 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
         their access under the terms in force when they bought it. Moving from Starter to Pro stops the Starter subscription
         without refunding the current period.
       </p>
-      <p>Prices are in euros, all taxes included. There is no free subscription.</p>
+      <p>
+        Prices are in {CURRENCY_NAME[LOCALE_CURRENCY[locale]]}, all taxes included, and charged in that currency. There is no
+        free subscription.
+      </p>
 
       <h2>5. Payment</h2>
       <p>
@@ -240,13 +248,13 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
       <h2>4. Ofertas y precios</h2>
       <ul>
         <li>
-          <strong>Starter — {formatEur("es", OFFER_PRICE_EUR.starter)} / mes</strong>: suscripción sin permanencia, renovada
+          <strong>Starter — {formatPrice("es", "starter")} / mes</strong>: suscripción sin permanencia, renovada
           automáticamente cada mes. {STARTER_DAILY_CREDITS} análisis al día, recargado cada día; el análisis Starter es un análisis
           reducido: veredicto, plan con cifras, probabilidad del escenario preferido y niveles, sin el escenario alternativo, la
           gestión del riesgo, la parte de noticias ni las preguntas a la IA.
         </li>
         <li>
-          <strong>Pro — {formatEur("es", OFFER_PRICE_EUR.monthly)} / mes</strong>: suscripción sin permanencia, renovada
+          <strong>Pro — {formatPrice("es", "monthly")} / mes</strong>: suscripción sin permanencia, renovada
           automáticamente cada mes. Análisis completos ilimitados, para un uso personal y no
           automatizado, con la parte de noticias y una pregunta al día a la IA sobre tus análisis. Cada día, los primeros
           análisis los redacta nuestro modelo de IA más avanzado y los siguientes modelos más rápidos y
@@ -254,7 +262,7 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
           hechas ese día.
         </li>
         <li>
-          <strong>De por vida — {formatEur("es", OFFER_PRICE_EUR.lifetime)}, pago único</strong>: el análisis completo del pack Pro (parte de
+          <strong>De por vida — {formatPrice("es", "lifetime")}, pago único</strong>: el análisis completo del pack Pro (parte de
           noticias y una pregunta al día a la IA incluidas), con {MONTHLY_CREDITS} análisis al mes, recargados al inicio de cada mes natural, durante la vida del Servicio, sin
           suscripción.
         </li>
@@ -311,13 +319,13 @@ const CONTENT: Record<Locale, (privacyHref: string) => React.ReactNode> = {
     </>
   ),
   // Japanese, Korean, Vietnamese, Indonesian: the English text, the reference translation of these French terms.
-  ja: (...args: [string]) => CONTENT.en(...args),
-  ko: (...args: [string]) => CONTENT.en(...args),
-  vi: (...args: [string]) => CONTENT.en(...args),
-  id: (...args: [string]) => CONTENT.en(...args),
+  ja: (privacyHref) => CONTENT.en(privacyHref, "ja"),
+  ko: (privacyHref) => CONTENT.en(privacyHref, "ko"),
+  vi: (privacyHref) => CONTENT.en(privacyHref, "vi"),
+  id: (privacyHref) => CONTENT.en(privacyHref, "id"),
 };
 
 export default async function CgvPage() {
   const { locale, t, href } = await getI18n();
-  return <LegalPage title={t.legal.termsTitle}>{CONTENT[locale](href("/legal/confidentialite"))}</LegalPage>;
+  return <LegalPage title={t.legal.termsTitle}>{CONTENT[locale](href("/legal/confidentialite"), locale)}</LegalPage>;
 }

@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { creditPaidInvoice } from "@/lib/billing-grants";
+import { fromStripeAmount, isCurrency, OFFER_PRICES } from "@/lib/plans";
 import { adminDb } from "@/lib/firebase-admin";
 import { getRequestUid } from "@/lib/server-auth";
 import { getStripe, withBillingErrors } from "@/lib/stripe";
@@ -34,7 +35,10 @@ async function handler(request: Request) {
     return Response.json({ fallback: true }, { status: 409 });
   }
 
-  const { price_data } = await lineFor("monthly");
+  // Pro in the currency this subscription is already billed in (a subscription keeps one currency).
+  const currency = item.price.currency;
+  if (!isCurrency(currency)) return Response.json({ fallback: true }, { status: 409 });
+  const { price_data } = await lineFor("monthly", currency);
   const items = [{ id: item.id, price_data: { ...price_data, recurring: { interval: "month" as const } } }];
 
   if (!body.confirm) {
@@ -44,7 +48,13 @@ async function handler(request: Request) {
       subscription: subscriptionId,
       subscription_details: { items, proration_behavior: "always_invoice", proration_date: prorationDate },
     });
-    return Response.json({ amountCents: Math.max(0, preview.amount_due), nextAt: item.current_period_end * 1000, prorationDate });
+    return Response.json({
+      amount: fromStripeAmount(currency, Math.max(0, preview.amount_due)),
+      currency,
+      monthly: OFFER_PRICES[currency].monthly,
+      nextAt: item.current_period_end * 1000,
+      prorationDate,
+    });
   }
 
   // The quoted proration time, if it is still within the period; otherwise Stripe's "now".

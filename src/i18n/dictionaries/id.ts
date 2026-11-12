@@ -217,7 +217,7 @@ export const id: Dict = {
         a: "Di halaman pembayaran aman Stripe, penyedia pembayaran kami. Scanzivo tidak pernah mengakses data kartu Anda.",
       },
     ],
-    footnote: "Harga dalam euro, sudah termasuk pajak. Analisis hanya bersifat informasi dan bukan saran investasi.",
+    footnote: "Harga dalam rupiah, sudah termasuk pajak. Analisis hanya bersifat informasi dan bukan saran investasi.",
   },
   trust: ["Pembayaran aman oleh Stripe", "Tanpa ikatan", "Tangkapan layar hanya bisa Anda lihat", "Gambar yang bukan grafik tidak dihitung"],
   faq: {

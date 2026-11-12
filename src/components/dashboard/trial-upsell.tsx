@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useI18n } from "@/i18n/client";
-import { formatEur } from "@/i18n/format";
-import { MONTHLY_CREDITS, OFFER_PRICE_EUR } from "@/lib/plans";
+import { formatPrice } from "@/i18n/format";
+import { MONTHLY_CREDITS } from "@/lib/plans";
 import { UpgradeNow } from "./upgrade-now";
 
 const DISMISSED_KEY = "scanzivo:upsell-dismissed";
@@ -43,7 +43,7 @@ export function TrialUpsell({ trialEndsAt }: { trialEndsAt: number }) {
         <UpgradeNow
           trialEndsAt={trialEndsAt}
           heading={d.upsellTitle}
-          text={d.upsellText(formatEur(locale, OFFER_PRICE_EUR.monthly), MONTHLY_CREDITS)}
+          text={d.upsellText(formatPrice(locale, "monthly"), MONTHLY_CREDITS)}
         />
       </div>
     </div>

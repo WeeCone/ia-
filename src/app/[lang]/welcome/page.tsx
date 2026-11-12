@@ -43,12 +43,12 @@ export default function WelcomePage() {
           status?: string;
           token?: string;
           email?: string;
-          purchase?: { id: string; value: number };
+          purchase?: { id: string; value: number; currency?: string };
         } | null;
         if (cancelled) return;
         if (!response?.ok || !data?.status) return setClaim({ status: "failed" });
         // Once per payment: Meta merges repeats of the same session id.
-        if (data.purchase) pixel("Purchase", { value: data.purchase.value, currency: "EUR" }, data.purchase.id);
+        if (data.purchase) pixel("Purchase", { value: data.purchase.value, currency: data.purchase.currency ?? "EUR" }, data.purchase.id);
         if (data.status === "created" && data.token) {
           try {
             await signInWithCustomToken(auth, data.token);

@@ -3,6 +3,7 @@ import { claimGuestSession } from "@/lib/guest-checkout";
 import { appUrl, getStripe, withBillingErrors } from "@/lib/stripe";
 import { DICTIONARIES } from "@/i18n/dictionaries";
 import { requestLocale } from "@/i18n/server";
+import { fromStripeAmount } from "@/lib/plans";
 
 /** How long the return link can sign its buyer in: long enough to come back to the tab, not a lasting key. */
 const SIGN_IN_WINDOW = 24 * 3600;
@@ -20,7 +21,8 @@ async function handler(request: Request) {
   const claim = await claimGuestSession(session, appUrl(request));
   if (!claim) return Response.json({ error: text.unknownOffer }, { status: 400 });
   // What was paid, for the ad pixel's purchase event; not for a payment refunded because the account already pays.
-  const purchase = { id: session.id, value: (session.amount_total ?? 0) / 100 };
+  const currency = session.currency ?? "eur";
+  const purchase = { id: session.id, value: fromStripeAmount(currency, session.amount_total ?? 0), currency: currency.toUpperCase() };
   if (claim.status === "pending" || claim.status === "alreadyActive") return Response.json(claim);
   if (claim.status === "existing") return Response.json({ ...claim, purchase });
 

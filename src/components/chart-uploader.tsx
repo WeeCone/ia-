@@ -7,9 +7,8 @@ import { checkCapture } from "@/lib/capture-check";
 import { prepareImage } from "@/lib/image";
 import { openOffers, requestAutoAnalyze, savePreview, takeAutoAnalyze, takePreview } from "@/lib/offers-client";
 import { clearPendingChart, readPendingChart, savePendingChart } from "@/lib/pending-chart";
-import { OFFER_PRICE_EUR } from "@/lib/plans";
 import { useI18n } from "@/i18n/client";
-import { formatEur } from "@/i18n/format";
+import { formatPrice } from "@/i18n/format";
 import { trackEvent } from "@/lib/track";
 import type { PreviewTeaser } from "@/lib/preview-types";
 import { AnalysisTeaser } from "./analysis-teaser";
@@ -285,7 +284,7 @@ export function ChartUploader({
                 imageUrl={preview}
                 onUnlock={() => unlock(reading.id)}
                 unlockLabel={c.unlock}
-                terms={c.unlockTerms(formatEur(locale, OFFER_PRICE_EUR.starter))}
+                terms={c.unlockTerms(formatPrice(locale, "starter"))}
               />
             ) : (
               <p role="alert" className="rounded-xl border border-amber-400/30 bg-amber-400/5 p-4 leading-relaxed">
@@ -437,7 +436,7 @@ export function ChartUploader({
                   {file ? u.offerReady : u.freeFirst}
                   {u.offerChoose}
                   <span className="whitespace-nowrap font-medium text-foreground">
-                    {formatEur(locale, OFFER_PRICE_EUR.starter)}
+                    {formatPrice(locale, "starter")}
                     {t.common.perMonth}
                   </span>
                   .

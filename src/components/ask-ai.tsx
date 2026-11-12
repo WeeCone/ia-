@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useI18n } from "@/i18n/client";
-import { formatEur } from "@/i18n/format";
+import { formatPrice } from "@/i18n/format";
 import { auth } from "@/lib/firebase";
-import { OFFER_PRICE_EUR } from "@/lib/plans";
 import { FormError } from "./auth-card";
 import { BillingButton } from "./billing-button";
 
@@ -138,7 +137,7 @@ export function AskAiLocked() {
         <p className="mt-1 max-w-xl text-sm text-muted">{c.lockedText}</p>
       </div>
       <BillingButton route="checkout" offer="monthly" className="btn-secondary shrink-0 px-4 py-2 text-sm">
-        {t.report.lockedPro.cta(formatEur(locale, OFFER_PRICE_EUR.monthly))}
+        {t.report.lockedPro.cta(formatPrice(locale, "monthly"))}
       </BillingButton>
     </section>
   );
