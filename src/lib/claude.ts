@@ -2,7 +2,7 @@ import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import type { Locale } from "@/i18n/config";
-import { ChartAnalysis, ChartCheck, ChartPreview, type AllowedImageType } from "./analysis";
+import { ChartAnalysis, ChartCheck, ChartPreview, isGold, type AllowedImageType } from "./analysis";
 import { callCostEur } from "./usage-cost";
 
 // Trimmed: a secret pasted with a trailing newline is otherwise sent as is and rejected as an invalid key.
@@ -59,12 +59,20 @@ export class AnalysisRefusedError extends Error {
 /** Output ceiling of one call; with the input, bounds what a single analysis can cost (see MAX_CALL_COST_EUR). */
 export const MAX_OUTPUT_TOKENS = 16000;
 
+const GOLD_RULES = `L'actif est l'or (XAU/USD). Tiens compte de ce qui lui est propre :
+- les chiffres ronds (multiples de 50 et de 100 $) attirent les ordres et servent souvent de supports, de résistances ou d'objectifs ;
+- le range de la session asiatique est souvent cassé à l'ouverture de Londres, et l'ouverture américaine (14 h 30, heure de Paris) apporte de forts mouvements, avec des fausses cassures fréquentes autour des statistiques américaines ;
+- la volatilité intrajournalière est élevée : place les stops au-delà du bruit (les mèches récentes), pas au ras d'un niveau ;
+- dans risk_notes, rappelle quand c'est utile de vérifier l'agenda américain (inflation CPI, emploi NFP, Fed), et que l'or évolue souvent à l'inverse du dollar et des taux réels américains.`;
+
 export async function analyzeChart(
   imageBase64: string,
   mediaType: AllowedImageType,
   note: string | undefined,
   locale: Locale,
   model = "claude-opus-5-5",
+  /** The asset read beforehand by the light model, when known: gold gets its own rules. */
+  assetHint?: string | null,
 ) {
   const response = await client.beta.messages.parse({
     model,
@@ -72,7 +80,7 @@ export async function analyzeChart(
     betas: ["server-side-fallback-2026-07-01"],
     fallbacks: "default",
     output_config: { effort: "medium", format: betaZodOutputFormat(ChartAnalysis) },
-    system: `${SYSTEM_PROMPT}\n${LANGUAGE_RULE[locale]}`,
+    system: `${SYSTEM_PROMPT}${isGold(assetHint) ? `\n${GOLD_RULES}` : ""}\n${LANGUAGE_RULE[locale]}`,
     messages: [
       {
         role: "user",

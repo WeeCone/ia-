@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { articlesFor } from "@/content/blog";
 import { LEGAL_LINKS } from "@/lib/legal";
+import { GOLD } from "@/content/gold";
 import { getI18n } from "@/i18n/server";
 import { CookieSettingsLink } from "./cookie-banner";
 import { LanguageSwitcher } from "./language-switcher";
@@ -15,6 +16,7 @@ export async function SiteFooter() {
         { href: href("/#fonctionnalites"), label: t.header.nav.features },
         { href: href("/#methode"), label: t.header.nav.method },
         { href: href("/#faq"), label: t.header.nav.faq },
+        ...(GOLD[locale] ? [{ href: href("/gold"), label: GOLD[locale]!.breadcrumb }] : []),
         // The blog is linked from here only, in the languages that have articles.
         ...(articlesFor(locale).length ? [{ href: href("/blog"), label: t.footer.blog }] : []),
       ],

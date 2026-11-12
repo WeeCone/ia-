@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { GOLD } from "@/content/gold";
 import { getI18n } from "@/i18n/server";
 import { HeaderAccountLink } from "./header-account-link";
 import { LanguageMenu } from "./language-menu";
@@ -13,6 +14,8 @@ export async function SiteHeader() {
     { href: href("/#video"), label: t.header.nav.demo },
     { href: href("/#methode"), label: t.header.nav.method },
     { href: href("/#faq"), label: t.header.nav.faq },
+    // The gold page, where it is published.
+    ...(GOLD[locale] ? [{ href: href("/gold"), label: GOLD[locale]!.navLabel }] : []),
     { href: href("/blog"), label: t.footer.blog },
   ];
   return (

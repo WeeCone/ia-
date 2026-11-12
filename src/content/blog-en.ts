@@ -84,6 +84,7 @@ export const ARTICLES_EN: Omit<Article, "locale">[] = [
         ],
       },
       { tip: "Round numbers (60,000 on bitcoin, 1.1000 on EUR/USD) tend to attract orders. When a level you've drawn sits near a round number, it carries more weight." },
+      { p: "On gold, multiples of $50 and $100 play this role all the time: see our [XAU/USD analysis page](/gold)." },
       { h2: "Breakout or fakeout?" },
       {
         p: "Price moving above resistance isn't a breakout until the candle has **closed** above it. Many moves pierce a level for a few minutes and then fall back: that's a fakeout, and anyone who bought too early is trapped.",

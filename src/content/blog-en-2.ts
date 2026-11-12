@@ -96,6 +96,7 @@ export const ARTICLES_EN_2: Omit<Article, "locale">[] = [
         ],
       },
       { tip: "Calendars often show times in New York time or UTC. Check the time zone: an hour's mistake is enough to be in a trade at the wrong moment." },
+      { p: "Gold is the asset most sensitive to these releases: the Fed, US inflation and jobs weigh on it directly, often in the opposite direction to the dollar. Our [gold (XAU/USD) analysis page](/gold) explains what the AI takes into account on it." },
       { h2: "Technicals and macro: two readings of the same market" },
       {
         p: "[Support and resistance](/blog/support-and-resistance) remain the landmarks of the plan; the calendar tells you when those landmarks may be tested violently. A good analysis combines both rather than picking one.",
@@ -130,6 +131,7 @@ export const ARTICLES_EN_2: Omit<Article, "locale">[] = [
         ],
       },
       { tip: "Pick the timeframe for the time you can spend in front of the screen, not the one that promises the most opportunities." },
+      { p: "A common intraday example on gold: the 1-hour for direction, the 15-minute for the plan, the 5-minute for the entry. That routine is laid out step by step on our [XAU/USD analysis page](/gold)." },
       { h2: "Always look one timeframe up" },
       {
         p: "The underlying trend is read on the higher timeframe, entries on yours. If you trade the 1-hour, the 4-hour tells you which way the current flows. Buying a bullish 1-hour signal while the 4-hour and daily are falling is swimming against the current.",

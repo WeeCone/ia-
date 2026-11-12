@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import Anthropic from "@anthropic-ai/sdk";
 import { FieldValue } from "firebase-admin/firestore";
 import type { Locale } from "@/i18n/config";
-import { MacroReport } from "./analysis";
+import { isGold, MacroReport } from "./analysis";
 import { adminDb } from "./firebase-admin";
 import { callCostEur } from "./usage-cost";
 
@@ -38,7 +38,7 @@ const LANGUAGE: Record<Locale, string> = {
   id: "Rédige les textes en indonésien, dates comprises (contoh: Kamis 13 Nov, 22.30).",
 };
 
-function systemPrompt(locale: Locale) {
+function systemPrompt(locale: Locale, gold = false) {
   const today = new Date().toLocaleDateString("fr-FR", {
     weekday: "long",
     day: "numeric",
@@ -47,7 +47,7 @@ function systemPrompt(locale: Locale) {
     timeZone: "Europe/Paris",
   });
   return `Tu prépares le volet macro-économique et actualité d'une analyse technique. Nous sommes le ${today} (heure de Paris).
-L'actif et l'unité de temps te sont donnés. Cherche sur le web :
+L'actif et l'unité de temps te sont donnés.${gold ? " C'est l'or : couvre en priorité la Fed (décisions, discours), l'inflation américaine (CPI, PCE), l'emploi américain (NFP), le dollar (DXY), les taux réels américains, les achats d'or des banques centrales, les flux des ETF or et les tensions géopolitiques." : ""} Cherche sur le web :
 - les événements programmés dans les 7 prochains jours qui peuvent faire bouger cet actif : banques centrales concernées (décisions de taux, discours), inflation, emploi, PIB, résultats d'entreprise pour une action, échéances propres à la crypto (régulation, ETF, déblocages de jetons) ;
 - l'actualité des 48 dernières heures qui pèse sur cet actif.
 Donne les dates et heures en heure de Paris. N'écris que ce que tes recherches confirment : aucun événement ni chiffre inventé, et une liste vide vaut mieux qu'un événement douteux. Garde les 3 à 6 événements les plus importants.
@@ -140,7 +140,7 @@ export async function macroContext(target: { asset: string; timeframe: string },
           betas: ["server-side-fallback-2026-07-01"],
           fallbacks: "default",
           output_config: { effort: "low" },
-          system: systemPrompt(locale),
+          system: systemPrompt(locale, isGold(target.asset)),
           tools: [
             {
               type: "web_search_20260209",

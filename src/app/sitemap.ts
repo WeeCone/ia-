@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { ARTICLES, articlesFor, translationsOf } from "@/content/blog";
+import { goldLocales } from "@/content/gold";
 import { LOCALES, localePath } from "@/i18n/config";
 import { LAST_UPDATED, LEGAL_LINKS } from "@/lib/legal";
 
@@ -25,7 +26,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       },
     })),
   ];
-  return [...pages(), ...blog];
+  // The gold page, in the languages it is published in.
+  const gold: MetadataRoute.Sitemap = goldLocales().map((locale) => ({
+    url: `${SITE}${localePath(locale, "/gold")}`,
+    priority: 0.9,
+    alternates: { languages: Object.fromEntries(goldLocales().map((other) => [other, `${SITE}${localePath(other, "/gold")}`])) },
+  }));
+  return [...pages(), ...gold, ...blog];
 }
 
 /** The most recent publication or update in a list of articles. */

@@ -77,7 +77,7 @@ export async function POST(request: Request) {
       ? macroContext({ asset: look.check.asset, timeframe: look.check.timeframe }, locale, { cachedOnly: !setup.freshNews && !inTrial })
       : Promise.resolve({ report: null, costEur: 0 });
   try {
-    result = await analyzeChart(bytes.toString("base64"), image.type as AllowedImageType, note || undefined, locale, setup.model);
+    result = await analyzeChart(bytes.toString("base64"), image.type as AllowedImageType, note || undefined, locale, setup.model, look?.check?.asset);
   } catch (err) {
     // Not awaited: the error answers at once, the news side's cost is recorded when it ends.
     void macroPromise.then((macro) => recordSpend(userRef, macro.costEur));

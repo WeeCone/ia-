@@ -117,6 +117,7 @@ const ARTICLES_FR: Omit<Article, "locale" | "key">[] = [
         ],
       },
       { tip: "Les chiffres ronds (60 000 sur le bitcoin, 1,1000 sur l'EUR/USD) attirent souvent des ordres. Quand un niveau tracé tombe près d'un chiffre rond, il gagne en importance." },
+      { p: "Sur le gold, les multiples de 50 et de 100 $ jouent ce rôle en permanence : voir notre [page d'analyse XAU/USD](/gold)." },
       { h2: "Cassure ou fausse cassure ?" },
       {
         p: "Le prix qui passe au-dessus d'une résistance n'est pas une cassure tant que la bougie n'a pas **clôturé** au-dessus. Beaucoup de mouvements percent un niveau pendant quelques minutes puis rechutent : c'est une fausse cassure, et ceux qui ont acheté trop tôt se retrouvent piégés.",

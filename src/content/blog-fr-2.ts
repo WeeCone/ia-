@@ -94,6 +94,7 @@ export const ARTICLES_FR_2: Omit<Article, "locale" | "key">[] = [
         ],
       },
       { tip: "Les heures des calendriers sont souvent affichées en heure de New York ou en UTC. Vérifiez le fuseau : une erreur d'une heure suffit à se retrouver en position au mauvais moment." },
+      { p: "L'or est l'actif le plus sensible à ces annonces : la Fed, l'inflation et l'emploi américains pèsent sur lui directement, souvent à l'inverse du dollar. Notre [page dédiée à l'analyse du gold (XAU/USD)](/gold) détaille ce que l'IA prend en compte sur cet actif." },
       { h2: "Technique et macro : deux lectures du même marché" },
       {
         p: "Les [supports et résistances](/blog/supports-et-resistances) restent les repères du plan ; le calendrier dit à quel moment ces repères risquent d'être testés brutalement. Une bonne analyse croise les deux plutôt que d'en choisir une.",
@@ -127,6 +128,7 @@ export const ARTICLES_FR_2: Omit<Article, "locale" | "key">[] = [
         ],
       },
       { tip: "Choisissez l'unité de temps en fonction du temps que vous pouvez passer devant l'écran, pas de celui qui promet le plus d'opportunités." },
+      { p: "Exemple courant en intraday sur le gold : le 1 heure pour la direction, le 15 minutes pour le plan, le 5 minutes pour l'entrée. Cette routine est décrite pas à pas sur notre [page d'analyse XAU/USD](/gold)." },
       { h2: "Toujours regarder une unité au-dessus" },
       {
         p: "La tendance de fond se lit sur l'unité supérieure, les entrées sur la vôtre. Si vous tradez en 1 heure, le 4 heures dit dans quel sens le courant va. Acheter un signal haussier en 1 heure alors que le 4 heures et le journalier baissent, c'est nager contre le courant.",

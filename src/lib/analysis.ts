@@ -147,3 +147,6 @@ export function preferredPlan(analysis: ChartAnalysis) {
   };
   return { bias, scenario, alternative, verdict };
 }
+
+/** Gold (XAU/USD, "Gold Spot", "Or / Dollar"): the one asset Scanzivo reads with its own rules. */
+export const isGold = (asset: string | null | undefined) => !!asset && (/xau|gold/i.test(asset) || /^or\b/i.test(asset.trim()));
