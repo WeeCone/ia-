@@ -1,6 +1,7 @@
 import type { Locale } from "@/i18n/config";
 import { ARTICLES_EN } from "./blog-en";
 import { ARTICLES_EN_2 } from "./blog-en-2";
+import { ARTICLES_EN_3 } from "./blog-en-3";
 import { ARTICLES_EN_GOLD } from "./blog-en-gold";
 import { ARTICLES_IT_GOLD } from "./blog-it-gold";
 import { ARTICLES_ES } from "./blog-es";
@@ -496,6 +497,7 @@ export const ARTICLES: Article[] = [
   ...ARTICLES_FR_3.map((article) => ({ ...article, key: article.slug, locale: "fr" as const })),
   ...ARTICLES_FR_GOLD.map((article) => ({ ...article, key: article.slug, locale: "fr" as const, topic: "gold" as const })),
   ...[...ARTICLES_FR_2, ...ARTICLES_FR].map((article) => ({ ...article, key: article.slug, locale: "fr" as const })),
+  ...ARTICLES_EN_3.map((article) => ({ ...article, locale: "en" as const })),
   ...ARTICLES_EN_GOLD.map((article) => ({ ...article, locale: "en" as const, topic: "gold" as const })),
   ...[...ARTICLES_EN_2, ...ARTICLES_EN].map((article) => ({ ...article, locale: "en" as const })),
   ...[...ARTICLES_ES_2, ...ARTICLES_ES].map((article) => ({ ...article, locale: "es" as const })),

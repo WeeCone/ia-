@@ -4,7 +4,7 @@ import type { Article } from "./blog";
 export const ARTICLES_FR_3: Omit<Article, "locale" | "key">[] = [
   {
     slug: "macd-indicateur",
-    title: "MACD : comment lire l'indicateur (lignes, histogramme, divergences)",
+    title: "MACD : comment lire l'indicateur et ses divergences",
     description:
       "Les deux lignes, l'histogramme, les croisements et les divergences du MACD, avec un exemple chiffré et les limites à connaître avant de vous y fier.",
     date: "2026-11-14",
@@ -153,7 +153,7 @@ export const ARTICLES_FR_3: Omit<Article, "locale" | "key">[] = [
   },
   {
     slug: "bandes-de-bollinger",
-    title: "Bandes de Bollinger : ce qu'elles mesurent et les erreurs courantes",
+    title: "Bandes de Bollinger : ce qu'elles mesurent",
     description:
       "Construction des bandes, lecture de la largeur, squeeze, et pourquoi toucher une bande n'est ni un signal d'achat ni un signal de vente.",
     date: "2026-11-14",
@@ -218,7 +218,7 @@ export const ARTICLES_FR_3: Omit<Article, "locale" | "key">[] = [
   },
   {
     slug: "retracement-de-fibonacci",
-    title: "Retracement de Fibonacci : 38,2 %, 50 %, 61,8 %, comment les tracer",
+    title: "Retracement de Fibonacci : niveaux et tracé",
     description:
       "Comment tracer les niveaux de Fibonacci pas à pas, ce que signifient 38,2 / 50 / 61,8 %, et pourquoi il faut les traiter comme des zones, pas des certitudes.",
     date: "2026-11-14",
@@ -283,7 +283,7 @@ export const ARTICLES_FR_3: Omit<Article, "locale" | "key">[] = [
   },
   {
     slug: "fausse-cassure",
-    title: "Fausse cassure (faux breakout) : reconnaître et éviter le piège",
+    title: "Fausse cassure : reconnaître et éviter le piège",
     description:
       "Pourquoi le prix perce un niveau puis revient, les signes qui doivent vous alerter, et trois habitudes pour limiter les dégâts sans prétendre tout éviter.",
     date: "2026-11-14",
@@ -346,7 +346,7 @@ export const ARTICLES_FR_3: Omit<Article, "locale" | "key">[] = [
   },
   {
     slug: "tendance-et-range",
-    title: "Tendance ou range : comment les reconnaître et adapter sa lecture",
+    title: "Tendance ou range : comment les reconnaître",
     description:
       "Sommets et creux, pente des moyennes, absence de direction : les repères pour distinguer un marché en tendance d'un marché en range, et ce que cela change.",
     date: "2026-11-14",
@@ -419,7 +419,7 @@ export const ARTICLES_FR_3: Omit<Article, "locale" | "key">[] = [
   },
   {
     slug: "volume-trading",
-    title: "Le volume en trading : ce qu'il confirme et ce qu'il ne dit pas",
+    title: "Le volume en trading : ce qu'il confirme",
     description:
       "Comment lire les barres de volume, ce qu'elles confirment sur une cassure ou une tendance, et pourquoi le volume du forex et de la crypto n'a pas le même sens.",
     date: "2026-11-14",

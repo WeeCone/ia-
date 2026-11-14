@@ -208,7 +208,7 @@ export const ARTICLES_EN_GOLD: Omit<Article, "locale">[] = [
   {
     key: "taille-de-lot-xau-usd",
     slug: "gold-lot-size-calculator",
-    title: "Gold Lot Size Calculator (XAU/USD): How to Work Out Your Position",
+    title: "Gold Lot Size Calculator (XAU/USD)",
     description:
       "Contract size, value per dollar move, and a worked example with 1% risk on a dollar account: how to calculate your lot size on gold, and why you must check with your broker.",
     date: "2026-11-12",

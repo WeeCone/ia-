@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/i18n/client";
 import { LANGUAGE_NAMES, LOCALES, localePath, unlocalizedPath } from "@/i18n/config";
+import { useLanguageAlternates } from "./language-alternates";
 import { rememberLocale } from "./language-switcher";
 
 const NAMES = LANGUAGE_NAMES;
@@ -13,6 +14,7 @@ const NAMES = LANGUAGE_NAMES;
 export function LanguageMenu({ className = "" }: { className?: string }) {
   const { locale, t } = useI18n();
   const path = unlocalizedPath(usePathname());
+  const alternates = useLanguageAlternates();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -53,7 +55,7 @@ export function LanguageMenu({ className = "" }: { className?: string }) {
           {LOCALES.map((option) => (
             <li key={option}>
               <Link
-                href={localePath(option, path)}
+                href={localePath(option, alternates?.[option] ?? path)}
                 hrefLang={option}
                 lang={option}
                 aria-current={option === locale ? "true" : undefined}

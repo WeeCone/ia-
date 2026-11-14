@@ -544,7 +544,7 @@ export const ARTICLES_FR_GOLD: Omit<Article, "locale" | "key">[] = [
   },
   {
     slug: "analyser-l-or-avec-l-ia",
-    title: "Analyser l'or avec l'IA : ce qu'elle lit, ce qu'elle ne sait pas faire",
+    title: "Analyser l'or avec l'IA : ce qu'elle lit",
     description:
       "Ce qu'une IA peut lire sur un graphique XAU/USD (tendance, niveaux, plan), ce qu'elle ne peut pas faire (prédire, voir le temps réel) et comment l'utiliser sans se tromper.",
     date: "2026-11-12",

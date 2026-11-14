@@ -16,7 +16,8 @@ export function localePath(locale: Locale, path: string) {
 /** Strips the locale prefix from a pathname: "/en/pricing" → "/pricing". */
 export function unlocalizedPath(pathname: string) {
   const [, first, ...rest] = pathname.split("/");
-  if (hasLocale(first) && first !== DEFAULT_LOCALE) return `/${rest.join("/")}`;
+  // French pages are served by an internal "/fr/…" route behind the unprefixed URL: that prefix is not part of the path either.
+  if (hasLocale(first)) return `/${rest.join("/")}`;
   return pathname || "/";
 }
 

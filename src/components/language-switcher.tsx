@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useI18n } from "@/i18n/client";
+import { useLanguageAlternates } from "./language-alternates";
 import { LOCALES, localePath, unlocalizedPath, type Locale } from "@/i18n/config";
 
 export const LOCALE_CHOICE_KEY = "scanzivo:locale-choice";
@@ -18,12 +19,13 @@ export function rememberLocale(locale: Locale) {
 export function LanguageSwitcher({ className = "" }: { className?: string }) {
   const { locale, t } = useI18n();
   const path = unlocalizedPath(usePathname());
+  const alternates = useLanguageAlternates();
   return (
     <nav aria-label={t.lang.label} className={`flex items-center gap-1 font-mono text-xs ${className}`}>
       {LOCALES.map((option) => (
         <Link
           key={option}
-          href={localePath(option, path)}
+          href={localePath(option, alternates?.[option] ?? path)}
           hrefLang={option}
           lang={option}
           aria-current={option === locale ? "true" : undefined}
