@@ -589,7 +589,7 @@ export function VisitsTab({ reloadKey, live }: { reloadKey: number; live: LiveSt
               labels={PAGE_LABELS}
             />
             <Breakdown title="Appareils" counts={stats.devices} labels={{ mobile: "Mobile", desktop: "Ordinateur" }} />
-            <Breakdown title="Langue du site" counts={stats.locales} labels={{ fr: "Français", en: "Anglais", es: "Espagnol" }} />
+            <Breakdown title="Langue du site" counts={stats.locales} labels={{ fr: "Français", en: "Anglais", es: "Espagnol", ja: "Japonais", ko: "Coréen", vi: "Vietnamien", id: "Indonésien", it: "Italien", de: "Allemand", pt: "Portugais" }} />
           </div>
         </>
       )}
