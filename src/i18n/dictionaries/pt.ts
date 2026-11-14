@@ -58,6 +58,7 @@ export const pt: Dict = {
     minutes: (n: number) => `${n} min de leitura`,
     back: "Todos os artigos",
     related: "Leia também",
+    toc: "Neste artigo",
     disclaimer: "Este artigo é educativo. Não é recomendação de investimento. O trading envolve risco de perda do capital.",
     ctaTitle: "Deixe a IA ler o seu gráfico",
     ctaText: "Envie um print do seu gráfico: a IA mostra a leitura dela de graça, sem cartão e sem cadastro.",

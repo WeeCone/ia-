@@ -9,6 +9,7 @@ import { VisitTracker } from "@/components/visit-tracker";
 import { WhatsAppButton } from "@/components/whatsapp-button";
 import { LocaleProvider } from "@/i18n/client";
 import { localePath, LOCALES } from "@/i18n/config";
+import { metaDescription } from "@/lib/seo";
 import { getI18n } from "@/i18n/server";
 import "../globals.css";
 
@@ -29,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL("https://scanzivo.com"),
     title: t.meta.title,
-    description: t.meta.description,
+    description: metaDescription(t.meta.description),
     applicationName: "Scanzivo",
     // The share card is drawn by the og route (one for the site, one per article, see blog/[slug]/og).
     openGraph: {

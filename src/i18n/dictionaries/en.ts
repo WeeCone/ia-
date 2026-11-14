@@ -58,6 +58,7 @@ export const en: Dict = {
     minutes: (n: number) => `${n} min read`,
     back: "All articles",
     related: "Read next",
+    toc: "In this article",
     disclaimer: "This article is educational. It is not investment advice. Trading carries a risk of capital loss.",
     ctaTitle: "Get your chart read",
     ctaText: "Send a screenshot of your chart: the AI shows you its reading for free, no card, no sign-up.",

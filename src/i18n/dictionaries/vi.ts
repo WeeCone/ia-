@@ -58,6 +58,7 @@ export const vi: Dict = {
     minutes: (n: number) => `${n} phút đọc`,
     back: "Tất cả bài viết",
     related: "Đọc tiếp",
+    toc: "Trong bài viết này",
     disclaimer: "Bài viết mang tính giáo dục và không phải lời khuyên đầu tư. Giao dịch có rủi ro mất vốn.",
     ctaTitle: "Để AI đọc biểu đồ của bạn",
     ctaText: "Gửi ảnh chụp biểu đồ: AI cho bạn xem phần đọc miễn phí, không cần thẻ, không cần đăng ký.",

@@ -2,7 +2,7 @@ import type { Dict } from "./fr";
 
 export const it: Dict = {
   meta: {
-    title: "Scanzivo — Analisi dei grafici di trading con l'IA, in pochi secondi",
+    title: "Scanzivo — Analisi dei grafici di trading con l'IA",
     description: "Carichi uno screenshot del Suo grafico (TradingView, Binance, MetaTrader): l'IA legge il trend, traccia supporti e resistenze e mette i numeri in un piano. Prima lettura gratuita.",
     pricingTitle: "Prezzi — Scanzivo",
     pricingDescription: "Pacchetti e prezzi: Starter, Pro e A vita, senza vincoli. Inizi con una lettura gratuita del Suo grafico.",
@@ -58,6 +58,7 @@ export const it: Dict = {
     minutes: (n: number) => `${n} min di lettura`,
     back: "Tutti gli articoli",
     related: "Da leggere anche",
+    toc: "In questo articolo",
     disclaimer: "Questo articolo ha uno scopo didattico. Non costituisce una consulenza di investimento. Il trading comporta il rischio di perdita del capitale.",
     ctaTitle: "Faccia leggere il Suo grafico",
     ctaText: "Carichi uno screenshot del Suo grafico: l'IA Le mostra gratis la sua lettura, senza carta e senza registrazione.",

@@ -2,7 +2,7 @@ import type { Dict } from "./fr";
 
 export const id: Dict = {
   meta: {
-    title: "Scanzivo — Analisis grafik trading dengan AI dalam hitungan detik",
+    title: "Scanzivo — Analisis grafik trading dengan AI",
     description: "Kirim tangkapan layar grafik Anda (TradingView, Binance, MetaTrader): AI membaca tren, menggambar support dan resistance, lalu menyusun rencana lengkap dengan angka. Bacaan pertama gratis.",
     pricingTitle: "Harga — Scanzivo",
     pricingDescription: "Paket dan harga: Starter, Pro, dan Seumur Hidup, tanpa ikatan. Mulailah dengan bacaan gratis grafik Anda.",
@@ -58,6 +58,7 @@ export const id: Dict = {
     minutes: (n: number) => `${n} menit baca`,
     back: "Semua artikel",
     related: "Baca juga",
+    toc: "Dalam artikel ini",
     disclaimer: "Artikel ini bersifat edukatif dan bukan saran investasi. Trading memiliki risiko kehilangan modal.",
     ctaTitle: "Biarkan AI membaca grafik Anda",
     ctaText: "Kirim tangkapan layar grafik Anda: AI menunjukkan bacaannya secara gratis, tanpa kartu, tanpa pendaftaran.",

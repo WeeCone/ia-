@@ -524,7 +524,11 @@ export const findArticle = (locale: Locale, slug: string) => ARTICLES.find((arti
 export function relatedTo(article: Article, count = 3) {
   const list = articlesFor(article.locale);
   const index = list.findIndex((other) => other.slug === article.slug);
-  return Array.from({ length: Math.min(count, list.length - 1) }, (_, step) => list[(index + 1 + step) % list.length]);
+  const following = Array.from({ length: list.length - 1 }, (_, step) => list[(index + 1 + step) % list.length]);
+  // Guides on the same subject (gold) first, so each one is linked from its neighbours on the topic, then the rest.
+  const sameTopic = following.filter((other) => article.topic && other.topic === article.topic);
+  const rest = following.filter((other) => !sameTopic.includes(other));
+  return [...sameTopic, ...rest].slice(0, count);
 }
 
 /** Words in an article's text (links and bold marks removed). */

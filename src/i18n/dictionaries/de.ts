@@ -58,6 +58,7 @@ export const de: Dict = {
     minutes: (n: number) => `${n} Min. Lesezeit`,
     back: "Alle Artikel",
     related: "Auch lesenswert",
+    toc: "In diesem Artikel",
     disclaimer: "Dieser Artikel dient der Information und Weiterbildung. Er stellt keine Anlageberatung dar. Trading birgt das Risiko von Kapitalverlusten.",
     ctaTitle: "Lassen Sie Ihren Chart auswerten",
     ctaText: "Senden Sie einen Screenshot Ihres Charts: Die KI zeigt Ihnen ihre Auswertung kostenlos, ohne Karte und ohne Registrierung.",

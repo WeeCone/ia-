@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArticleBody } from "@/components/blog/article-body";
+import { ArticleBody, ArticleToc } from "@/components/blog/article-body";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ARTICLES, articleText, findArticle, readingMinutes, relatedTo, translationsOf } from "@/content/blog";
 import { INTL_LOCALE, localePath } from "@/i18n/config";
+import { metaDescription, pageTitle } from "@/lib/seo";
 import { getI18n } from "@/i18n/server";
 
 const SITE = "https://scanzivo.com";
@@ -23,8 +24,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!article) return {};
   const path = localePath(locale, `/blog/${article.slug}`);
   return {
-    title: `${article.title} — Scanzivo`,
-    description: article.description,
+    title: pageTitle(article.title),
+    description: metaDescription(article.description),
     // The same guide in the other languages, so search engines show each reader their own.
     alternates: {
       canonical: path,
@@ -96,6 +97,7 @@ export default async function ArticlePage({ params }: Props) {
             {new Date(article.date).toLocaleDateString(INTL_LOCALE[locale], { day: "numeric", month: "long", year: "numeric" })} ·{" "}
             {t.blog.minutes(readingMinutes(article))}
           </p>
+          <ArticleToc blocks={article.body} title={t.blog.toc} />
           <div className="mt-8">
             <ArticleBody blocks={article.body} localize={href} />
           </div>

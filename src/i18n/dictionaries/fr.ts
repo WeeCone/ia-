@@ -1,7 +1,7 @@
 // French: the source language. en.ts and es.ts must have exactly the same shape (checked by TypeScript).
 export const fr = {
   meta: {
-    title: "Scanzivo — Analyse de graphique trading par IA, en quelques secondes",
+    title: "Scanzivo — Analyse de graphique trading par IA",
     description: "Envoyez une capture de votre graphique (TradingView, Binance, MetaTrader) : l'IA lit la tendance, trace supports et résistances et chiffre un plan. Première lecture gratuite.",
     pricingTitle: "Tarifs — Scanzivo",
     pricingDescription: "Packs et tarifs : Starter, Pro et À vie, sans engagement. Commencez par une lecture gratuite de votre graphique.",
@@ -57,6 +57,7 @@ export const fr = {
     minutes: (n: number) => `${n} min de lecture`,
     back: "Tous les articles",
     related: "À lire aussi",
+    toc: "Dans cet article",
     disclaimer: "Cet article est pédagogique. Il ne constitue pas un conseil en investissement. Le trading comporte un risque de perte en capital.",
     ctaTitle: "Faites lire votre graphique",
     ctaText: "Envoyez une capture de votre graphique : l'IA vous montre gratuitement sa lecture, sans carte ni inscription.",

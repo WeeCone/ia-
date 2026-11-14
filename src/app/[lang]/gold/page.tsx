@@ -9,6 +9,7 @@ import { goldGuides, readingMinutes } from "@/content/blog";
 import { GOLD, goldLocales } from "@/content/gold";
 import Link from "next/link";
 import { localePath } from "@/i18n/config";
+import { metaDescription } from "@/lib/seo";
 import { getI18n } from "@/i18n/server";
 
 const SITE = "https://scanzivo.com";
@@ -34,7 +35,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const path = localePath(locale, "/gold");
   return {
     title: page.metaTitle,
-    description: page.metaDescription,
+    description: metaDescription(page.metaDescription),
     alternates: {
       canonical: path,
       languages: { ...Object.fromEntries(goldLocales().map((other) => [other, localePath(other, "/gold")])), "x-default": "/gold" },

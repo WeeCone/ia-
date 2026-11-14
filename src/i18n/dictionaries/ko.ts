@@ -58,6 +58,7 @@ export const ko: Dict = {
     minutes: (n: number) => `${n}분 분량`,
     back: "전체 글",
     related: "함께 읽어 보세요",
+    toc: "이 글의 내용",
     disclaimer: "이 글은 교육 목적이며 투자 조언이 아닙니다. 트레이딩에는 원금 손실 위험이 있습니다.",
     ctaTitle: "내 차트를 분석받아 보세요",
     ctaText: "차트 스크린샷만 보내 주세요. 카드 등록도 가입도 없이 AI의 분석을 무료로 보여 드립니다.",
