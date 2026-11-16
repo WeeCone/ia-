@@ -294,7 +294,7 @@ export const id: Dict = {
       confirm: "Konfirmasi dan upgrade ke Pro",
       paying: "Memproses pembayaran…",
       done: "Pro sudah aktif.",
-      doneText: "Analisis tanpa batas, analisis makroekonomi, dan pertanyaan harian untuk AI: semuanya sudah terbuka.",
+      doneText: "Analisis tanpa batas dan pertanyaan harian untuk AI: semuanya sudah terbuka.",
       close: "Lanjutkan",
       fallback: "Bank Anda meminta verifikasi: selesaikan pembayaran di bawah.",
       terms: "Dengan mengonfirmasi, Anda menerima syarat penjualan, meminta akses Pro segera, dan melepaskan hak penarikan Anda.",
