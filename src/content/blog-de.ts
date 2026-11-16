@@ -102,7 +102,7 @@ export const ARTICLES_DE: Omit<Article, "locale">[] = [
         p: "[Unterstützungen und Widerstände](/blog/unterstuetzung-und-widerstand) bleiben die Orientierungspunkte Ihres Plans; der Kalender sagt Ihnen, wann diese Marken möglicherweise heftig getestet werden. Eine gute Analyse verbindet beides, statt sich für eine Seite zu entscheiden.",
       },
       {
-        p: "Genau das macht das Pro-Paket von [Scanzivo](/): Zu jeder Chartanalyse listet die KI die Termine der nächsten 7 Tage und aktuelle Nachrichten zum Wert auf, jeweils mit Quellen, und erklärt, wie Sie sie in Ihrem Plan berücksichtigen können. Die Zahl selbst sagt sie nicht voraus, aber der Termin überrascht Sie nicht mehr.",
+        p: "Prüfen Sie deshalb vor jeder Position selbst den Wirtschaftskalender: Die Zahl lässt sich nicht vorhersagen, aber der Termin überrascht Sie dann nicht mehr.",
       },
     ],
   },

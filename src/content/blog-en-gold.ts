@@ -198,7 +198,7 @@ export const ARTICLES_EN_GOLD: Omit<Article, "locale">[] = [
         tip: "A market can rise while all the news is bad, and the other way round. Don't trade a macro opinion against a chart that says the opposite.",
       },
       {
-        p: "To keep the big picture, write a few lines before the session: the direction of the dollar, the trend in yields, the next release. Scanzivo's [gold analysis](/gold), with its news section, cross-checks these points against your screenshot. It can be wrong like any other read. It helps you structure your thinking, it doesn't predict.",
+        p: "To keep the big picture, write a few lines before the session: the direction of the dollar, the trend in yields, the next release. Then check them against your chart: Scanzivo's [gold analysis](/gold) reads your screenshot, but it can be wrong like any other read. It helps you structure your thinking, it doesn't predict.",
       },
       {
         p: "This guide is educational content and is not investment advice. CFDs are complex instruments and carry a high risk of losing money, and no macroeconomic explanation guarantees where the price goes next.",

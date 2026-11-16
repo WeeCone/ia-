@@ -158,14 +158,14 @@ export const vi: Dict = {
           "Số liệu chính: xu hướng, hỗ trợ và kháng cự vẽ trên ảnh chụp",
           "Xác suất chính xác của kịch bản được ưu tiên",
         ],
-        excluded: ["Kịch bản thay thế và quản lý rủi ro", "Phân tích kinh tế vĩ mô và tin tức", "Đặt câu hỏi cho AI"],
+        excluded: ["Kịch bản thay thế và quản lý rủi ro", "Đặt câu hỏi cho AI"],
         note: "Không ràng buộc, hủy ngay trong tài khoản.",
       },
       monthly: {
-        pitch: "Phân tích bao nhiêu tùy thích, kèm bối cảnh thị trường.",
+        pitch: "Phân tích bao nhiêu tùy thích, mọi biểu đồ, mọi khung thời gian.",
         highlight: {
-          title: "Có phân tích kinh tế vĩ mô",
-          text: "Ngân hàng trung ương, lạm phát, việc làm, báo cáo kết quả kinh doanh: với mỗi lần phân tích, AI liệt kê các thông báo trong 7 ngày tới và tin tức 48 giờ qua về tài sản của bạn, rồi cho biết cách tính đến chúng trong kế hoạch. Có kèm nguồn.",
+          title: "Phân tích không giới hạn",
+          text: "Một biểu đồ, nhiều khung thời gian, nhiều tài sản trong ngày: bao nhiêu bản phân tích đầy đủ tùy thích, với hai kịch bản chi tiết và quản lý rủi ro cho từng biểu đồ.",
         },
         features: [
           "Phân tích không giới hạn",
@@ -182,7 +182,7 @@ export const vi: Dict = {
         highlight: null,
         features: [
           "30 bản phân tích đầy đủ mỗi tháng, nạp lại vào ngày 1",
-          "Có phân tích kinh tế vĩ mô và tin tức",
+          "Hai kịch bản chi tiết và quản lý rủi ro",
           "Chat với AI: 1 câu hỏi mỗi ngày",
           "Không đăng ký định kỳ, không bị trừ tiền về sau",
         ],
@@ -241,7 +241,7 @@ export const vi: Dict = {
       },
       {
         q: "Các bản phân tích dựa trên gì?",
-        a: "Phần đọc kỹ thuật chỉ dựa trên những gì hiện trên ảnh chụp: ảnh rõ nét, trục giá đọc được sẽ cho bản phân tích tốt hơn. Tùy gói, bản phân tích còn có tin tức gần đây và các sự kiện kinh tế trong 7 ngày tới có thể tác động đến tài sản, kèm nguồn. Hệ thống không kết nối với giá trực tiếp.",
+        a: "Phần đọc kỹ thuật chỉ dựa trên những gì hiện trên ảnh chụp: ảnh rõ nét, trục giá đọc được sẽ cho bản phân tích tốt hơn. Hệ thống không kết nối với giá trực tiếp.",
       },
       {
         q: "Tôi có thể điều chỉnh theo cách giao dịch của mình không?",
@@ -294,7 +294,7 @@ export const vi: Dict = {
       confirm: "Xác nhận và chuyển sang Pro",
       paying: "Đang thanh toán…",
       done: "Pro đã được kích hoạt.",
-      doneText: "Phân tích không giới hạn, phân tích kinh tế vĩ mô và câu hỏi cho AI mỗi ngày: tất cả đã mở.",
+      doneText: "Phân tích không giới hạn, và câu hỏi cho AI mỗi ngày: tất cả đã mở.",
       close: "Tiếp tục",
       fallback: "Ngân hàng yêu cầu xác thực: hãy hoàn tất thanh toán bên dưới.",
       terms: "Khi xác nhận, bạn chấp nhận điều khoản bán hàng, yêu cầu truy cập Pro ngay và từ bỏ quyền rút lại.",
@@ -337,14 +337,13 @@ export const vi: Dict = {
     statScenario: "kịch bản ưu tiên",
     levelsHidden: (count: number) => `Đã phát hiện ${count} mức giá trên ảnh chụp. Giá của chúng nằm trong kế hoạch.`,
     lockedTitle: "Kế hoạch đã sẵn sàng. Chỉ cần mở khóa.",
-    lockedItems: (locked: { levels: number; patterns: number; macro: boolean }) =>
+    lockedItems: (locked: { levels: number; patterns: number }) =>
       [
         "Kết luận: mua, bán, chờ hoặc đứng ngoài",
         "Điểm vào lệnh, stop và mục tiêu, kèm tỷ lệ lợi nhuận/rủi ro",
         `${locked.levels} mức giá kèm giá, vẽ trên ảnh chụp`,
         "Cả hai kịch bản và xác suất của chúng",
         ...(locked.patterns ? [`${locked.patterns > 1 ? `${locked.patterns} mô hình và tín hiệu` : "Mô hình hoặc tín hiệu"} phát hiện trên biểu đồ`] : []),
-        ...(locked.macro ? ["Tin tức 7 ngày tới về tài sản này (gói Pro và Trọn đời)"] : []),
         "Những điều cần theo dõi để quản lý rủi ro",
       ],
     unlock: "Mở khóa bản phân tích đầy đủ",
@@ -645,11 +644,6 @@ export const vi: Dict = {
     supports: "Hỗ trợ",
     risk: "Quản lý rủi ro",
     footer: "Bản phân tích do AI tạo, chỉ mang tính tham khảo. Đây không phải lời khuyên đầu tư.",
-    lockedMacro: {
-      title: (asset: string) => `Tin tức có thể tác động đến ${asset} tuần này`,
-      text: "Quyết định lãi suất, lạm phát, kết quả kinh doanh, các thông báo: gói Pro đối chiếu mỗi bản phân tích với các sự kiện trong 7 ngày tới, có kèm nguồn.",
-      cta: (price: string) => `Lên Pro · ${price}/tháng`,
-    },
     chat: {
       title: "Có câu hỏi về bản phân tích này?",
       hint: "AI đã đọc biểu đồ sẽ trả lời bạn. 1 câu hỏi mỗi ngày.",
@@ -668,13 +662,6 @@ export const vi: Dict = {
       text: "Có trong bản phân tích đầy đủ của gói Pro.",
       cta: (price: string) => `Nâng cấp lên Pro · ${price}/tháng`,
     },
-    macro: {
-      title: "Vĩ mô và tin tức",
-      impact: { fort: "Tác động mạnh", moyen: "Tác động vừa", faible: "Tác động nhẹ" },
-      noEvents: "Không có sự kiện lớn nào trong 7 ngày tới.",
-      forThisTrade: "Với lệnh này:",
-      sources: "Nguồn:",
-    },
     summary: {
       entry: "Vào lệnh",
       targets: "Mục tiêu",
@@ -691,7 +678,6 @@ export const vi: Dict = {
       alternative: (bias: string) => `Kịch bản ${bias} thay thế`,
       risk: "Quản lý rủi ro:",
       disclaimer: "Phân tích của Scanzivo, chỉ mang tính tham khảo. Không phải lời khuyên đầu tư.",
-      macro: "Vĩ mô và tin tức:",
     },
   },
   api: {
@@ -738,8 +724,8 @@ export const vi: Dict = {
     names: { starter: "Starter", monthly: "Pro", lifetime: "Trọn đời" },
     includes: {
       starter: (price: string) => `Starter, ${price}/tháng: 1 lần phân tích mỗi ngày, với kết luận, kế hoạch có số liệu, xác suất và các mức giá.`,
-      monthly: (price: string) => `Pro, ${price}/tháng: phân tích đầy đủ không giới hạn, kèm tin tức có thể tác động đến tài sản và 1 câu hỏi mỗi ngày cho AI.`,
-      lifetime: (price: string) => `Trọn đời, ${price} trả một lần: 30 bản phân tích đầy đủ mỗi tháng, kèm tin tức, không đăng ký định kỳ.`,
+      monthly: (price: string) => `Pro, ${price}/tháng: phân tích đầy đủ không giới hạn, kèm hai kịch bản chi tiết và 1 câu hỏi mỗi ngày cho AI.`,
+      lifetime: (price: string) => `Trọn đời, ${price} trả một lần: 30 bản phân tích đầy đủ mỗi tháng, kèm hai kịch bản chi tiết, không đăng ký định kỳ.`,
     },
     cancel: "Không ràng buộc: hủy bất cứ lúc nào trong Tài khoản → Quản lý gói đăng ký.",
     oneOff: "Bạn sẽ không bị trừ thêm tiền: lượt phân tích được nạp lại vào ngày 1 mỗi tháng.",

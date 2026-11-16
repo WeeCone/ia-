@@ -102,7 +102,7 @@ export const ARTICLES_ES_2: Omit<Article, "locale">[] = [
         p: "Los [soportes y resistencias](/blog/soportes-y-resistencias) siguen siendo las referencias del plan; el calendario dice cuándo esas referencias pueden ponerse a prueba con violencia. Un buen análisis cruza ambos en lugar de elegir uno.",
       },
       {
-        p: "Es lo que hace el pack Pro de [Scanzivo](/): con cada análisis de gráfico, la IA recoge los anuncios de los próximos 7 días y las noticias recientes sobre el activo, con sus fuentes, y explica cómo tenerlos en cuenta en el plan. No predice el dato: evita que te sorprenda la fecha.",
+        p: "Revisa tú mismo el calendario económico antes de cada operación y anota los anuncios que caen en tu horizonte. No se trata de predecir el dato, sino de que no te sorprenda la fecha.",
       },
     ],
   },

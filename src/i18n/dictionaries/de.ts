@@ -158,14 +158,14 @@ export const de: Dict = {
           "Kernwerte: Trend, Unterstützungen und Widerstände auf Ihrem Screenshot",
           "Genaue Wahrscheinlichkeit des bevorzugten Szenarios",
         ],
-        excluded: ["Alternativszenario und Risikomanagement", "Makroanalyse und Nachrichten", "Fragen an die KI"],
+        excluded: ["Alternativszenario und Risikomanagement", "Fragen an die KI"],
         note: "Jederzeit kündbar, direkt in Ihrem Bereich.",
       },
       monthly: {
-        pitch: "Analysieren Sie so viel Sie möchten, mit dem Marktumfeld.",
+        pitch: "Analysieren Sie so viel Sie möchten, jeden Chart, in jeder Zeiteinheit.",
         highlight: {
-          title: "Makroanalyse inklusive",
-          text: "Notenbanken, Inflation, Arbeitsmarkt, Quartalszahlen: Bei jeder Analyse listet die KI die Termine der nächsten 7 Tage und die Nachrichten der letzten 48 Stunden zu Ihrem Wert auf und sagt Ihnen, wie Sie sie in Ihrem Plan berücksichtigen. Mit Quellenangaben.",
+          title: "Unbegrenzte Analysen",
+          text: "Ein Chart, mehrere Zeiteinheiten, mehrere Werte am Tag: So viele vollständige Analysen, wie Sie möchten, mit beiden Szenarien im Detail und dem Risikomanagement für jeden einzelnen Chart.",
         },
         features: [
           "Unbegrenzte Analysen",
@@ -182,7 +182,7 @@ export const de: Dict = {
         highlight: null,
         features: [
           "30 vollständige Analysen pro Monat, aufgefüllt am 1.",
-          "Makroanalyse und Nachrichten inklusive",
+          "Beide Szenarien im Detail und das Risikomanagement",
           "KI-Chat: 1 Frage pro Tag",
           "Kein Abo, danach keine weiteren Abbuchungen",
         ],
@@ -246,7 +246,7 @@ export const de: Dict = {
       },
       {
         q: "Worauf basieren die Analysen?",
-        a: "Die technische Auswertung stützt sich nur auf das, was auf Ihrem Screenshot zu sehen ist: Ein scharfer Screenshot mit lesbarer Preisachse ergibt eine bessere Analyse. Je nach Paket umfasst die Analyse außerdem aktuelle Nachrichten und die Wirtschaftstermine der nächsten 7 Tage, die den Wert bewegen können, mit Quellenangaben. Eine Verbindung zu Echtzeitkursen gibt es nicht.",
+        a: "Die technische Auswertung stützt sich nur auf das, was auf Ihrem Screenshot zu sehen ist: Ein scharfer Screenshot mit lesbarer Preisachse ergibt eine bessere Analyse. Eine Verbindung zu Echtzeitkursen gibt es nicht.",
       },
       {
         q: "Kann ich die Analyse an meinen Tradingstil anpassen?",
@@ -299,7 +299,7 @@ export const de: Dict = {
       confirm: "Bestätigen und zu Pro wechseln",
       paying: "Zahlung läuft…",
       done: "Pro ist aktiv.",
-      doneText: "Unbegrenzte Analysen, Makroanalyse und die tägliche Frage an die KI: Alles ist freigeschaltet.",
+      doneText: "Unbegrenzte Analysen und die tägliche Frage an die KI: Alles ist freigeschaltet.",
       close: "Weiter",
       fallback: "Ihre Bank verlangt eine Bestätigung: Schließen Sie die Zahlung unten ab.",
       terms: "Mit der Bestätigung akzeptieren Sie die AGB, verlangen den sofortigen Zugang zu Pro und verzichten auf Ihr Widerrufsrecht.",
@@ -342,14 +342,13 @@ export const de: Dict = {
     statScenario: "bevorzugtes Szenario",
     levelsHidden: (count: number) => `${count} ${count > 1 ? "Marken" : "Marke"} auf Ihrem Screenshot erkannt. Die Preise dazu sind Teil des Plans.`,
     lockedTitle: "Der Plan ist fertig. Er muss nur noch freigeschaltet werden.",
-    lockedItems: (locked: { levels: number; patterns: number; macro: boolean }) =>
+    lockedItems: (locked: { levels: number; patterns: number }) =>
       [
         "Das Urteil: kaufen, verkaufen, abwarten oder nicht traden",
         "Einstieg, Stop und Kursziele, mit dem Chance-Risiko-Verhältnis",
         `Die ${locked.levels} Marken mit Preis, eingezeichnet auf Ihrem Screenshot`,
         "Beide Szenarien und ihre Wahrscheinlichkeit",
         ...(locked.patterns ? [`${locked.patterns > 1 ? `Die ${locked.patterns} erkannten Formationen und Signale` : "Die erkannte Formation bzw. das erkannte Signal"} im Chart`] : []),
-        ...(locked.macro ? ["Die Nachrichten der nächsten 7 Tage zu diesem Wert (Pakete Pro und Lifetime)"] : []),
         "Worauf Sie beim Risikomanagement achten sollten",
       ],
     unlock: "Vollständige Analyse freischalten",
@@ -660,11 +659,6 @@ export const de: Dict = {
     supports: "Unterstützungen",
     risk: "Risikomanagement",
     footer: "KI-generierte Analyse, nur zur Information. Dies ist keine Anlageberatung.",
-    lockedMacro: {
-      title: (asset: string) => `Die Nachrichten, die ${asset} diese Woche bewegen können`,
-      text: "Zinsentscheide, Inflation, Quartalszahlen, Ankündigungen: Das Pro-Paket gleicht jede Analyse mit den Terminen der nächsten 7 Tage ab, mit Quellenangaben.",
-      cta: (price: string) => `Zu Pro wechseln · ${price}/Monat`,
-    },
     chat: {
       title: "Eine Frage zu dieser Analyse?",
       hint: "Die KI, die Ihren Chart gelesen hat, antwortet Ihnen. 1 Frage pro Tag.",
@@ -683,13 +677,6 @@ export const de: Dict = {
       text: "Teil der vollständigen Analyse im Pro-Paket.",
       cta: (price: string) => `Zu Pro wechseln · ${price}/Monat`,
     },
-    macro: {
-      title: "Makro und Nachrichten",
-      impact: { fort: "Starker Einfluss", moyen: "Mittlerer Einfluss", faible: "Geringer Einfluss" },
-      noEvents: "Keine wichtigen Termine in den nächsten 7 Tagen.",
-      forThisTrade: "Für diesen Trade:",
-      sources: "Quellen:",
-    },
     summary: {
       entry: "Einstieg",
       targets: "Ziele",
@@ -706,7 +693,6 @@ export const de: Dict = {
       alternative: (bias: string) => `Alternative: ${bias}`,
       risk: "Risikomanagement:",
       disclaimer: "Scanzivo-Analyse, nur zur Information. Keine Anlageberatung.",
-      macro: "Makro und Nachrichten:",
     },
   },
   // Messages returned by the API routes.
@@ -755,8 +741,8 @@ export const de: Dict = {
     names: { starter: "Starter", monthly: "Pro", lifetime: "Lifetime" },
     includes: {
       starter: (price: string) => `Starter, ${price}/Monat: 1 Analyse pro Tag, mit Urteil, Plan in Zahlen, Wahrscheinlichkeit und Marken.`,
-      monthly: (price: string) => `Pro, ${price}/Monat: unbegrenzte, vollständige Analysen, mit den Nachrichten, die den Wert bewegen können, und einer Frage pro Tag an die KI.`,
-      lifetime: (price: string) => `Lifetime, ${price} einmalig bezahlt: 30 vollständige Analysen pro Monat, mit Nachrichten, ohne Abo.`,
+      monthly: (price: string) => `Pro, ${price}/Monat: unbegrenzte, vollständige Analysen, mit beiden Szenarien im Detail und einer Frage pro Tag an die KI.`,
+      lifetime: (price: string) => `Lifetime, ${price} einmalig bezahlt: 30 vollständige Analysen pro Monat, mit beiden Szenarien im Detail, ohne Abo.`,
     },
     cancel: "Jederzeit kündbar: Sie kündigen, wann Sie wollen, unter Mein Konto → Abo verwalten.",
     oneOff: "Es folgt keine weitere Abbuchung: Ihre Analysen werden am 1. jedes Monats aufgefüllt.",

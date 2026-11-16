@@ -52,17 +52,16 @@ const CONTENT: Record<Locale, Terms> = {
           <strong>Starter — {formatPrice("fr", "starter")} / mois</strong> : abonnement sans engagement, renouvelé
           automatiquement chaque mois. {STARTER_DAILY_CREDITS} analyse par jour, rechargée chaque jour ; l&apos;analyse Starter
           est une analyse réduite : verdict, plan chiffré, probabilité du scénario privilégié et niveaux, sans le scénario
-          alternatif, la gestion du risque, le volet actualité ni les questions à l&apos;IA.
+          alternatif, la gestion du risque ni les questions à l&apos;IA.
         </li>
         <li>
           <strong>Pro — {formatPrice("fr", "monthly")} / mois</strong> : abonnement sans engagement, renouvelé
           automatiquement chaque mois. Analyses complètes en nombre illimité, pour un usage personnel et
-          non automatisé, avec le volet actualité et une question par jour à l&apos;IA sur ses analyses. Le volet actualité est recherché une fois
-          par jour et par actif, puis repris pour les analyses suivantes du même actif ce jour-là.
+          non automatisé, avec les deux scénarios détaillés, la gestion du risque et une question par jour à l&apos;IA sur ses analyses.
         </li>
         <li>
-          <strong>À vie — {formatPrice("fr", "lifetime")}, paiement unique</strong> : l&apos;analyse complète du pack Pro (volet
-          actualité et une question par jour à l&apos;IA compris), avec {MONTHLY_CREDITS} analyses par mois, rechargées au début de chaque mois civil, pour la durée de vie du Service,
+          <strong>À vie — {formatPrice("fr", "lifetime")}, paiement unique</strong> : l&apos;analyse complète du pack Pro (une
+          question par jour à l&apos;IA comprise), avec {MONTHLY_CREDITS} analyses par mois, rechargées au début de chaque mois civil, pour la durée de vie du Service,
           sans abonnement.
         </li>
       </ul>
@@ -148,17 +147,16 @@ const CONTENT: Record<Locale, Terms> = {
           <strong>Starter — {formatPrice(locale, "starter")} / month</strong>: subscription with no commitment, renewed
           automatically every month. {STARTER_DAILY_CREDITS} analysis per day, refilled each day; the Starter analysis is a reduced
           analysis: verdict, plan with numbers, probability of the favoured scenario and levels, without the alternative scenario,
-          risk management, the news side or questions to the AI.
+          risk management or questions to the AI.
         </li>
         <li>
           <strong>Pro — {formatPrice(locale, "monthly")} / month</strong>: subscription with no commitment, renewed
-          automatically every month. Unlimited full analyses, for personal, non-automated use, with the news side
-          and one question a day to the AI about your analyses. The news side is searched once a day per asset,
-          then reused for later analyses of the same asset that day.
+          automatically every month. Unlimited full analyses, for personal, non-automated use, with both scenarios in detail, risk management
+          and one question a day to the AI about your analyses.
         </li>
         <li>
-          <strong>Lifetime — {formatPrice(locale, "lifetime")}, one-off payment</strong>: the Pro pack&apos;s full analysis (news side and
-          one question a day to the AI included), with {MONTHLY_CREDITS} analyses per month, refilled at the start of each calendar month, for the lifetime of the Service,
+          <strong>Lifetime — {formatPrice(locale, "lifetime")}, one-off payment</strong>: the Pro pack&apos;s full analysis (one
+          question a day to the AI included), with {MONTHLY_CREDITS} analyses per month, refilled at the start of each calendar month, for the lifetime of the Service,
           with no subscription.
         </li>
       </ul>
@@ -245,17 +243,16 @@ const CONTENT: Record<Locale, Terms> = {
           <strong>Starter — {formatPrice("es", "starter")} / mes</strong>: suscripción sin permanencia, renovada
           automáticamente cada mes. {STARTER_DAILY_CREDITS} análisis al día, recargado cada día; el análisis Starter es un análisis
           reducido: veredicto, plan con cifras, probabilidad del escenario preferido y niveles, sin el escenario alternativo, la
-          gestión del riesgo, la parte de noticias ni las preguntas a la IA.
+          gestión del riesgo ni las preguntas a la IA.
         </li>
         <li>
           <strong>Pro — {formatPrice("es", "monthly")} / mes</strong>: suscripción sin permanencia, renovada
           automáticamente cada mes. Análisis completos ilimitados, para un uso personal y no
-          automatizado, con la parte de noticias y una pregunta al día a la IA sobre tus análisis. La parte de noticias se busca una vez al día por
-          activo y se reutiliza en los análisis siguientes del mismo activo ese día.
+          automatizado, con los dos escenarios detallados, la gestión del riesgo y una pregunta al día a la IA sobre tus análisis.
         </li>
         <li>
-          <strong>De por vida — {formatPrice("es", "lifetime")}, pago único</strong>: el análisis completo del pack Pro (parte de
-          noticias y una pregunta al día a la IA incluidas), con {MONTHLY_CREDITS} análisis al mes, recargados al inicio de cada mes natural, durante la vida del Servicio, sin
+          <strong>De por vida — {formatPrice("es", "lifetime")}, pago único</strong>: el análisis completo del pack Pro (una
+          pregunta al día a la IA incluida), con {MONTHLY_CREDITS} análisis al mes, recargados al inicio de cada mes natural, durante la vida del Servicio, sin
           suscripción.
         </li>
       </ul>

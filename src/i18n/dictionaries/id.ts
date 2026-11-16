@@ -158,14 +158,14 @@ export const id: Dict = {
           "Data utama: tren, support dan resistance yang digambar di tangkapan layar",
           "Probabilitas pasti dari skenario utama",
         ],
-        excluded: ["Skenario alternatif dan manajemen risiko", "Analisis makroekonomi dan berita", "Bertanya kepada AI"],
+        excluded: ["Skenario alternatif dan manajemen risiko", "Bertanya kepada AI"],
         note: "Tanpa ikatan, bisa dibatalkan dari akun Anda.",
       },
       monthly: {
-        pitch: "Analisis sebanyak yang Anda mau, dengan konteks pasar.",
+        pitch: "Analisis sebanyak yang Anda mau, setiap grafik, di setiap timeframe.",
         highlight: {
-          title: "Termasuk analisis makroekonomi",
-          text: "Bank sentral, inflasi, lapangan kerja, laporan keuangan: setiap kali analisis, AI mencatat pengumuman 7 hari ke depan dan berita 48 jam terakhir tentang aset Anda, lalu menjelaskan cara memperhitungkannya dalam rencana Anda. Lengkap dengan sumber.",
+          title: "Analisis tanpa batas",
+          text: "Satu grafik, beberapa timeframe, beberapa aset dalam sehari: analisis lengkap sebanyak yang Anda mau, dengan kedua skenario yang mendetail dan manajemen risiko untuk setiap grafik.",
         },
         features: [
           "Analisis tanpa batas",
@@ -182,7 +182,7 @@ export const id: Dict = {
         highlight: null,
         features: [
           "30 analisis lengkap setiap bulan, diisi ulang setiap tanggal 1",
-          "Termasuk analisis makroekonomi dan berita",
+          "Kedua skenario secara mendetail dan manajemen risiko",
           "Chat AI: 1 pertanyaan per hari",
           "Tanpa langganan, tanpa tagihan setelahnya",
         ],
@@ -241,7 +241,7 @@ export const id: Dict = {
       },
       {
         q: "Analisisnya berdasarkan apa?",
-        a: "Bacaan teknikal hanya berdasarkan apa yang terlihat di tangkapan layar: tangkapan layar yang tajam dengan sumbu harga yang terbaca menghasilkan analisis yang lebih baik. Tergantung paketnya, analisis juga mencakup berita terbaru dan peristiwa ekonomi 7 hari ke depan yang bisa menggerakkan aset, lengkap dengan sumber. Layanan ini tidak terhubung ke harga real-time.",
+        a: "Bacaan teknikal hanya berdasarkan apa yang terlihat di tangkapan layar: tangkapan layar yang tajam dengan sumbu harga yang terbaca menghasilkan analisis yang lebih baik. Layanan ini tidak terhubung ke harga real-time.",
       },
       {
         q: "Bisakah analisisnya disesuaikan dengan gaya trading saya?",
@@ -337,14 +337,13 @@ export const id: Dict = {
     statScenario: "skenario utama",
     levelsHidden: (count: number) => `${count} level ditemukan di tangkapan layar Anda. Harganya termasuk dalam rencana.`,
     lockedTitle: "Rencananya sudah siap. Tinggal dibuka.",
-    lockedItems: (locked: { levels: number; patterns: number; macro: boolean }) =>
+    lockedItems: (locked: { levels: number; patterns: number }) =>
       [
         "Kesimpulan: beli, jual, tunggu, atau tidak trading",
         "Entry, stop, dan target, dengan rasio reward/risk",
         `${locked.levels} level beserta harganya, digambar di tangkapan layar`,
         "Kedua skenario dan probabilitasnya",
         ...(locked.patterns ? [`${locked.patterns > 1 ? `${locked.patterns} pola dan sinyal` : "Pola atau sinyal"} yang ditemukan di grafik`] : []),
-        ...(locked.macro ? ["Berita 7 hari ke depan tentang aset ini (paket Pro dan Seumur Hidup)"] : []),
         "Hal yang perlu diperhatikan untuk mengelola risiko",
       ],
     unlock: "Buka analisis lengkap",
@@ -645,11 +644,6 @@ export const id: Dict = {
     supports: "Support",
     risk: "Manajemen risiko",
     footer: "Analisis yang dibuat AI, hanya untuk informasi. Ini bukan saran investasi.",
-    lockedMacro: {
-      title: (asset: string) => `Berita yang bisa menggerakkan ${asset} minggu ini`,
-      text: "Keputusan suku bunga, inflasi, laporan keuangan, pengumuman: paket Pro mencocokkan setiap analisis dengan peristiwa 7 hari ke depan, lengkap dengan sumber.",
-      cta: (price: string) => `Pindah ke Pro · ${price}/bulan`,
-    },
     chat: {
       title: "Ada pertanyaan tentang analisis ini?",
       hint: "AI yang membaca grafik Anda akan menjawab. 1 pertanyaan per hari.",
@@ -668,13 +662,6 @@ export const id: Dict = {
       text: "Termasuk dalam analisis lengkap paket Pro.",
       cta: (price: string) => `Upgrade ke Pro · ${price}/bulan`,
     },
-    macro: {
-      title: "Makro dan berita",
-      impact: { fort: "Dampak tinggi", moyen: "Dampak sedang", faible: "Dampak rendah" },
-      noEvents: "Tidak ada peristiwa besar yang dijadwalkan dalam 7 hari ke depan.",
-      forThisTrade: "Untuk trading ini:",
-      sources: "Sumber:",
-    },
     summary: {
       entry: "Entry",
       targets: "Target",
@@ -691,7 +678,6 @@ export const id: Dict = {
       alternative: (bias: string) => `Alternatif ${bias}`,
       risk: "Manajemen risiko:",
       disclaimer: "Analisis Scanzivo, hanya untuk informasi. Bukan saran investasi.",
-      macro: "Makro dan berita:",
     },
   },
   api: {
@@ -738,8 +724,8 @@ export const id: Dict = {
     names: { starter: "Starter", monthly: "Pro", lifetime: "Seumur Hidup" },
     includes: {
       starter: (price: string) => `Starter, ${price}/bulan: 1 analisis per hari, dengan kesimpulan, rencana dengan angka, probabilitas, dan level.`,
-      monthly: (price: string) => `Pro, ${price}/bulan: analisis lengkap tanpa batas, dengan berita yang bisa menggerakkan aset dan 1 pertanyaan per hari untuk AI.`,
-      lifetime: (price: string) => `Seumur Hidup, ${price} sekali bayar: 30 analisis lengkap setiap bulan, dengan berita, tanpa langganan.`,
+      monthly: (price: string) => `Pro, ${price}/bulan: analisis lengkap tanpa batas, dengan kedua skenario yang mendetail dan 1 pertanyaan per hari untuk AI.`,
+      lifetime: (price: string) => `Seumur Hidup, ${price} sekali bayar: 30 analisis lengkap setiap bulan, dengan kedua skenario yang mendetail, tanpa langganan.`,
     },
     cancel: "Tanpa ikatan: batalkan kapan saja dari Akun saya → Kelola langganan.",
     oneOff: "Tidak ada tagihan lagi: analisis Anda diisi ulang setiap tanggal 1.",

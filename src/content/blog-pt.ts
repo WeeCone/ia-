@@ -71,7 +71,7 @@ export const ARTICLES_PT: Omit<Article, "locale">[] = [
       { p: "O ouro é o ativo mais sensível a esses anúncios: Fed, inflação e emprego americanos pesam sobre ele diretamente, muitas vezes no sentido contrário ao dólar. Nossa [página de análise do ouro (XAU/USD)](/gold) explica o que a IA leva em conta nesse ativo." },
       { h2: "Técnica e macro: duas leituras do mesmo mercado" },
       { p: "Os [suportes e resistências](/blog/suporte-e-resistencia) continuam sendo as referências do plano; o calendário diz em que momento essas referências podem ser testadas com violência. Uma boa análise cruza as duas em vez de escolher uma." },
-      { p: "É o que faz o pacote Pro do [Scanzivo](/): junto com cada análise de gráfico, a IA levanta os anúncios dos próximos 7 dias e as notícias recentes sobre o ativo, com as fontes, e diz como considerá-los no plano. Ela não prevê o número: evita que a data pegue você de surpresa." },
+      { p: "Por isso, antes de cada operação, consulte você mesmo o calendário econômico do seu ativo e leve as datas importantes em conta no plano. Ninguém prevê o número: o que dá para evitar é que a data pegue você de surpresa." },
     ],
   },
   {
@@ -414,7 +414,7 @@ export const ARTICLES_PT: Omit<Article, "locale">[] = [
       { h3: "Montar um plano antes de clicar" },
       { p: "O ponto fraco da maioria dos traders pessoa física não é a análise, é a falta de plano: entram sem saber onde vão sair. Uma ferramenta que sempre devolve uma entrada, um stop, um alvo e o nível que invalida a ideia obriga você a responder a essas perguntas antes de comprar, e não depois." },
       { h3: "Filtrar as notícias" },
-      { p: "Uma decisão de juros, um dado de inflação ou um balanço podem apagar qualquer sinal técnico. Uma IA conectada à internet consegue levantar, em poucos segundos e com as fontes, os anúncios dos próximos dias que afetam o seu ativo." },
+      { p: "Uma decisão de juros, um dado de inflação ou um balanço podem apagar qualquer sinal técnico. Uma IA conectada à internet consegue levantar, em poucos segundos e com as fontes, os anúncios dos próximos dias que afetam o seu ativo. Mesmo assim, confira o calendário econômico você mesmo." },
       { h2: "O que ela não vai fazer por você" },
       {
         ul: [

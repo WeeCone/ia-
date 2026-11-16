@@ -100,7 +100,7 @@ export const ARTICLES_FR_2: Omit<Article, "locale" | "key">[] = [
         p: "Les [supports et résistances](/blog/supports-et-resistances) restent les repères du plan ; le calendrier dit à quel moment ces repères risquent d'être testés brutalement. Une bonne analyse croise les deux plutôt que d'en choisir une.",
       },
       {
-        p: "C'est ce que fait le pack Pro de [Scanzivo](/) : avec chaque analyse de graphique, l'IA relève les annonces des 7 prochains jours et l'actualité récente sur l'actif, sources à l'appui, puis dit comment en tenir compte dans le plan. Elle ne prédit pas le chiffre : elle vous évite d'être surpris par la date.",
+        p: "Gardez donc le calendrier ouvert à côté du graphique : la date d'une annonce ne prédit pas le chiffre, mais elle vous évite d'être surpris au mauvais moment. Une analyse de [Scanzivo](/) vous donne les niveaux et le plan ; le calendrier vous dit quand les surveiller de plus près.",
       },
     ],
   },

@@ -158,14 +158,14 @@ export const en: Dict = {
           "Key stats: trend, supports and resistances drawn on your screenshot",
           "Exact probability of the favoured scenario",
         ],
-        excluded: ["Alternative scenario and risk management", "Macroeconomic analysis and news", "Questions to the AI"],
+        excluded: ["Alternative scenario and risk management", "Questions to the AI"],
         note: "No commitment, cancel from your space.",
       },
       monthly: {
         pitch: "Analyse as much as you like, with the market context.",
         highlight: {
-          title: "Macroeconomic analysis included",
-          text: "Central banks, inflation, jobs, earnings: with every analysis, the AI lists the announcements of the next 7 days and the last 48 hours of news on your asset, then tells you how to factor them into your plan. Sources included.",
+          title: "Unlimited analyses",
+          text: "One chart, several timeframes, several assets in a day: as many full analyses as you want, with the two detailed scenarios and the risk management of each chart.",
         },
         features: [
           "Unlimited analyses",
@@ -182,7 +182,7 @@ export const en: Dict = {
         highlight: null,
         features: [
           "30 full analyses every month, refilled on the 1st",
-          "Macroeconomic analysis and news included",
+          "The two detailed scenarios and the risk management",
           "AI chat: 1 question a day",
           "No subscription, nothing charged afterwards",
         ],
@@ -246,7 +246,7 @@ export const en: Dict = {
       },
       {
         q: "What are the analyses based on?",
-        a: "The technical reading relies only on what is visible in your screenshot: a sharp screenshot with a readable price axis gives a better analysis. Depending on the plan, the analysis also includes recent news and the economic events of the next 7 days that could move the asset, with their sources. It does not connect to live quotes.",
+        a: "The technical reading relies only on what is visible in your screenshot: a sharp screenshot with a readable price axis gives a better analysis. It does not connect to live quotes.",
       },
       {
         q: "Can I adapt the analysis to my trading style?",
@@ -299,7 +299,7 @@ export const en: Dict = {
       confirm: "Confirm and upgrade to Pro",
       paying: "Processing payment…",
       done: "Pro is active.",
-      doneText: "Unlimited analyses, macroeconomic analysis and the AI question of the day: everything is open.",
+      doneText: "Unlimited analyses and the AI question of the day: everything is open.",
       close: "Continue",
       fallback: "Your bank asks for a check: finish the payment below.",
       terms: "By confirming, you accept the terms of sale, ask for immediate access to Pro and waive your right of withdrawal.",
@@ -342,14 +342,13 @@ export const en: Dict = {
     statScenario: "preferred scenario",
     levelsHidden: (count: number) => `${count} level${count > 1 ? "s" : ""} spotted on your screenshot. Their prices are part of the plan.`,
     lockedTitle: "The plan is ready. It just needs unlocking.",
-    lockedItems: (locked: { levels: number; patterns: number; macro: boolean }) =>
+    lockedItems: (locked: { levels: number; patterns: number }) =>
       [
         "The verdict: buy, sell, wait or stay out",
         "The entry, the stop and the targets, with the risk/reward ratio",
         `The ${locked.levels} levels with their prices, drawn on your screenshot`,
         "Both scenarios and their probability",
         ...(locked.patterns ? [`${locked.patterns > 1 ? `The ${locked.patterns} patterns and signals spotted` : "The pattern or signal spotted"} on the chart`] : []),
-        ...(locked.macro ? ["The news over the next 7 days on this asset (Pro and Lifetime packs)"] : []),
         "What to watch to manage the risk",
       ],
     unlock: "Unlock the full analysis",
@@ -658,11 +657,6 @@ export const en: Dict = {
     supports: "Support",
     risk: "Risk management",
     footer: "AI-generated analysis, for information only. This is not investment advice.",
-    lockedMacro: {
-      title: (asset: string) => `The news that could move ${asset} this week`,
-      text: "Rate decisions, inflation, earnings, announcements: the Pro pack checks every analysis against the events of the next 7 days, with sources.",
-      cta: (price: string) => `Move to Pro · ${price}/month`,
-    },
     chat: {
       title: "A question about this analysis?",
       hint: "The AI that read your chart answers. 1 question a day.",
@@ -681,13 +675,6 @@ export const en: Dict = {
       text: "Part of the full analysis in the Pro pack.",
       cta: (price: string) => `Upgrade to Pro · ${price}/month`,
     },
-    macro: {
-      title: "Macro and news",
-      impact: { fort: "High impact", moyen: "Medium impact", faible: "Low impact" },
-      noEvents: "No major event scheduled in the next 7 days.",
-      forThisTrade: "For this trade:",
-      sources: "Sources:",
-    },
     summary: {
       entry: "Entry",
       targets: "Targets",
@@ -704,7 +691,6 @@ export const en: Dict = {
       alternative: (bias: string) => `${bias.charAt(0).toUpperCase()}${bias.slice(1)} alternative`,
       risk: "Risk management:",
       disclaimer: "Scanzivo analysis, for information only. Not investment advice.",
-      macro: "Macro and news:",
     },
   },
   api: {
@@ -752,8 +738,8 @@ export const en: Dict = {
     names: { starter: "Starter", monthly: "Pro", lifetime: "Lifetime" },
     includes: {
       starter: (price: string) => `Starter, ${price}/month: 1 analysis a day, with the verdict, the plan with numbers, the probability and the levels.`,
-      monthly: (price: string) => `Pro, ${price}/month: unlimited full analyses, with the news that could move the asset and one question a day to the AI.`,
-      lifetime: (price: string) => `Lifetime, ${price} paid once: 30 full analyses every month, with the news, no subscription.`,
+      monthly: (price: string) => `Pro, ${price}/month: unlimited full analyses, with the two detailed scenarios and one question a day to the AI.`,
+      lifetime: (price: string) => `Lifetime, ${price} paid once: 30 full analyses every month, with the two detailed scenarios, no subscription.`,
     },
     cancel: "No commitment: cancel whenever you like from My account → Manage my subscription.",
     oneOff: "Nothing more will be charged: your analyses refill on the 1st of each month.",

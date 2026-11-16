@@ -158,14 +158,14 @@ export const ko: Dict = {
           "핵심 지표: 추세, 스크린샷에 그려진 지지선과 저항선",
           "우세 시나리오의 정확한 확률",
         ],
-        excluded: ["대안 시나리오와 리스크 관리", "거시경제 분석과 뉴스", "AI에게 질문하기"],
+        excluded: ["대안 시나리오와 리스크 관리", "AI에게 질문하기"],
         note: "약정 없음. 내 계정에서 해지할 수 있습니다.",
       },
       monthly: {
-        pitch: "시장 상황까지 반영해, 원하는 만큼 분석하세요.",
+        pitch: "원하는 만큼, 모든 차트를 모든 시간대로 분석하세요.",
         highlight: {
-          title: "거시경제 분석 포함",
-          text: "중앙은행, 물가, 고용, 실적: 분석할 때마다 AI가 향후 7일간의 발표와 최근 48시간의 뉴스를 정리하고, 플랜에 어떻게 반영할지 알려 드립니다. 출처 포함.",
+          title: "무제한 분석",
+          text: "하나의 차트를 여러 시간대로, 하루에 여러 종목을: 원하는 만큼 전체 분석을 받아 보세요. 차트마다 두 가지 시나리오의 자세한 내용과 리스크 관리가 포함됩니다.",
         },
         features: [
           "분석 무제한",
@@ -182,7 +182,7 @@ export const ko: Dict = {
         highlight: null,
         features: [
           "매월 30회 전체 분석, 매월 1일 충전",
-          "거시경제 분석과 뉴스 포함",
+          "두 가지 시나리오의 자세한 내용과 리스크 관리",
           "AI 채팅: 하루 1개 질문",
           "구독 없음, 이후 결제 없음",
         ],
@@ -241,7 +241,7 @@ export const ko: Dict = {
       },
       {
         q: "분석은 무엇을 근거로 하나요?",
-        a: "기술적 분석은 스크린샷에 보이는 것만을 근거로 합니다. 가격 축이 읽히는 선명한 스크린샷일수록 분석이 정확해집니다. 플랜에 따라 최근 뉴스와 향후 7일간 종목을 움직일 수 있는 경제 이벤트도 출처와 함께 포함됩니다. 실시간 시세에는 연결되지 않습니다.",
+        a: "기술적 분석은 스크린샷에 보이는 것만을 근거로 합니다. 가격 축이 읽히는 선명한 스크린샷일수록 분석이 정확해집니다. 실시간 시세에는 연결되지 않습니다.",
       },
       {
         q: "내 트레이딩 스타일에 맞출 수 있나요?",
@@ -294,7 +294,7 @@ export const ko: Dict = {
       confirm: "확인하고 Pro로 전환",
       paying: "결제 중입니다…",
       done: "Pro가 활성화되었습니다.",
-      doneText: "무제한 분석, 거시경제 분석, 하루 1개 AI 질문: 모두 이용할 수 있습니다.",
+      doneText: "무제한 분석, 하루 1개 AI 질문: 모두 이용할 수 있습니다.",
       close: "계속",
       fallback: "카드사에서 인증을 요청합니다. 아래에서 결제를 완료해 주세요.",
       terms: "확인하시면 이용약관에 동의하고, Pro의 즉시 이용을 요청하며, 청약 철회권을 포기하시게 됩니다.",
@@ -337,14 +337,13 @@ export const ko: Dict = {
     statScenario: "우세 시나리오",
     levelsHidden: (count: number) => `스크린샷에서 ${count}개의 레벨을 찾았습니다. 그 가격은 플랜에 포함되어 있습니다.`,
     lockedTitle: "플랜은 준비되어 있습니다. 열기만 하면 됩니다.",
-    lockedItems: (locked: { levels: number; patterns: number; macro: boolean }) =>
+    lockedItems: (locked: { levels: number; patterns: number }) =>
       [
         "결론: 매수, 매도, 관망 또는 거래 보류",
         "진입, 손절, 목표가와 손익비",
         `${locked.levels}개 레벨의 가격과 스크린샷 위 표시`,
         "두 가지 시나리오와 그 확률",
         ...(locked.patterns ? [`차트에서 찾은 ${locked.patterns > 1 ? `${locked.patterns}개의 패턴과 신호` : "패턴 또는 신호"}`] : []),
-        ...(locked.macro ? ["이 종목의 향후 7일간 뉴스(Pro와 평생 이용권)"] : []),
         "리스크 관리를 위해 지켜볼 점",
       ],
     unlock: "전체 분석 열기",
@@ -645,11 +644,6 @@ export const ko: Dict = {
     supports: "지지선",
     risk: "리스크 관리",
     footer: "AI가 생성한 분석으로, 정보 제공용입니다. 투자 조언이 아닙니다.",
-    lockedMacro: {
-      title: (asset: string) => `이번 주 ${asset}을(를) 움직일 수 있는 뉴스`,
-      text: "금리 결정, 물가, 실적, 각종 발표: Pro 팩은 모든 분석을 향후 7일간의 이벤트와 대조합니다. 출처 포함.",
-      cta: (price: string) => `Pro로 · 월 ${price}`,
-    },
     chat: {
       title: "이 분석에 대해 궁금한 점이 있으신가요?",
       hint: "차트를 읽은 AI가 답해 드립니다. 하루 1개 질문.",
@@ -668,13 +662,6 @@ export const ko: Dict = {
       text: "Pro 팩의 전체 분석에 포함됩니다.",
       cta: (price: string) => `Pro로 업그레이드 · 월 ${price}`,
     },
-    macro: {
-      title: "거시경제와 뉴스",
-      impact: { fort: "영향 큼", moyen: "영향 보통", faible: "영향 작음" },
-      noEvents: "향후 7일간 예정된 주요 이벤트가 없습니다.",
-      forThisTrade: "이 거래에서는:",
-      sources: "출처:",
-    },
     summary: {
       entry: "진입",
       targets: "목표가",
@@ -691,7 +678,6 @@ export const ko: Dict = {
       alternative: (bias: string) => `대안 ${bias} 시나리오`,
       risk: "리스크 관리:",
       disclaimer: "Scanzivo 분석, 정보 제공용입니다. 투자 조언이 아닙니다.",
-      macro: "거시경제와 뉴스:",
     },
   },
   api: {
@@ -738,8 +724,8 @@ export const ko: Dict = {
     names: { starter: "Starter", monthly: "Pro", lifetime: "평생 이용권" },
     includes: {
       starter: (price: string) => `Starter, 월 ${price}: 하루 1회 분석. 결론, 수치가 담긴 플랜, 확률, 레벨 포함.`,
-      monthly: (price: string) => `Pro, 월 ${price}: 무제한 전체 분석. 종목을 움직일 수 있는 뉴스와 하루 1개 AI 질문 포함.`,
-      lifetime: (price: string) => `평생 이용권, ${price} 1회 결제: 매월 30회 전체 분석, 뉴스 포함, 구독 없음.`,
+      monthly: (price: string) => `Pro, 월 ${price}: 무제한 전체 분석. 두 가지 시나리오의 자세한 내용과 하루 1개 AI 질문 포함.`,
+      lifetime: (price: string) => `평생 이용권, ${price} 1회 결제: 매월 30회 전체 분석, 두 가지 시나리오의 자세한 내용 포함, 구독 없음.`,
     },
     cancel: "약정 없음: 내 계정 → 구독 관리에서 언제든 해지할 수 있습니다.",
     oneOff: "추가 결제는 없습니다. 분석 횟수는 매월 1일에 충전됩니다.",

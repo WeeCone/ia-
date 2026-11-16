@@ -71,7 +71,7 @@ export const ARTICLES_IT: Omit<Article, "locale">[] = [
       { p: "L'oro è l'asset più sensibile a questi annunci: Fed, inflazione e occupazione americane pesano direttamente su di lui, spesso in direzione opposta al dollaro. La nostra [pagina dedicata all'analisi dell'oro (XAU/USD)](/gold) spiega che cosa considera l'IA su questo strumento." },
       { h2: "Tecnica e macro: due letture dello stesso mercato" },
       { p: "I [supporti e le resistenze](/blog/supporti-e-resistenze) restano i riferimenti del piano; il calendario dice in quale momento quei riferimenti rischiano di essere messi alla prova in modo brusco. Una buona analisi incrocia le due letture invece di sceglierne una." },
-      { p: "È quello che fa il pacchetto Pro di [Scanzivo](/): con ogni analisi del grafico, l'IA segnala gli annunci dei prossimi 7 giorni e le notizie recenti sull'asset, con le fonti, e poi indica come tenerne conto nel piano. Non prevede il dato: Le evita di essere colto di sorpresa dalla data." },
+      { p: "Scanzivo non segnala questi annunci: li consulti Lei stesso nel [calendario economico](/blog/calendario-economico) prima di aprire una posizione, e decida in anticipo come comportarsi se un dato importante cade durante il trade." },
     ],
   },
   {
@@ -414,7 +414,7 @@ export const ARTICLES_IT: Omit<Article, "locale">[] = [
       { h3: "Impostare un piano prima di cliccare" },
       { p: "Il punto debole della maggior parte dei trader privati non è l'analisi, è la mancanza di un piano: si entra senza sapere dove uscire. Uno strumento che Le restituisce sempre un ingresso, uno stop, un obiettivo e il livello che invalida l'idea La costringe a porsi queste domande prima di comprare, non dopo." },
       { h3: "Fare ordine tra le notizie" },
-      { p: "Una decisione sui tassi, un dato sull'inflazione o una trimestrale possono cancellare qualsiasi segnale tecnico. Un'IA collegata al web può segnalare in pochi secondi gli annunci dei prossimi giorni che riguardano il Suo strumento, con le relative fonti." },
+      { p: "Una decisione sui tassi, un dato sull'inflazione o una trimestrale possono cancellare qualsiasi segnale tecnico. Un'IA che legge il grafico non vede il calendario: gli annunci in agenda vanno verificati da Lei (veda il [calendario economico](/blog/calendario-economico))." },
       { h2: "Che cosa non farà al posto Suo" },
       {
         ul: [

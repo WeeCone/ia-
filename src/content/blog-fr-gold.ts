@@ -195,7 +195,7 @@ export const ARTICLES_FR_GOLD: Omit<Article, "locale" | "key">[] = [
         tip: "Un marché peut monter alors que toutes les nouvelles sont mauvaises, et inversement. Ne tradez pas une opinion macro contre un graphique qui dit le contraire.",
       },
       {
-        p: "Pour garder une vue d'ensemble, notez en quelques lignes avant la séance : le sens du dollar, la tendance des taux, la prochaine annonce. L'[analyse spécialisée gold](/gold) de Scanzivo, avec son volet actualité, croise ces éléments avec votre capture. Elle peut se tromper comme n'importe quelle lecture : elle aide à structurer, pas à prédire.",
+        p: "Pour garder une vue d'ensemble, notez en quelques lignes avant la séance : le sens du dollar, la tendance des taux, la prochaine annonce. L'[analyse spécialisée gold](/gold) de Scanzivo lit votre capture avec des règles propres à l'or : niveaux ronds, sessions, publications américaines. Elle peut se tromper comme n'importe quelle lecture : elle aide à structurer, pas à prédire.",
       },
       {
         p: "Ce guide est un contenu éducatif et ne constitue pas un conseil en investissement. Les CFD sont des produits complexes qui comportent un risque élevé de perte en capital, et aucune explication macro-économique ne garantit la direction du prix.",

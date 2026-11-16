@@ -158,14 +158,14 @@ export const pt: Dict = {
           "Dados principais: tendência, suportes e resistências traçados no seu print",
           "Probabilidade exata do cenário preferido",
         ],
-        excluded: ["Cenário alternativo e gestão de risco", "Análise macroeconômica e notícias", "Perguntas à IA"],
+        excluded: ["Cenário alternativo e gestão de risco", "Perguntas à IA"],
         note: "Sem fidelidade, cancele pela sua conta.",
       },
       monthly: {
-        pitch: "Analise quanto quiser, com o contexto do mercado.",
+        pitch: "Analise quanto quiser, todos os gráficos, em todos os tempos gráficos.",
         highlight: {
-          title: "Análise macroeconômica incluída",
-          text: "Bancos centrais, inflação, emprego, balanços: em cada análise, a IA reúne os anúncios dos próximos 7 dias e as notícias das últimas 48 h sobre o seu ativo, e diz como levar isso em conta no seu plano. Com as fontes.",
+          title: "Análises ilimitadas",
+          text: "Um gráfico, vários tempos gráficos, vários ativos no mesmo dia: quantas análises completas você quiser, com os dois cenários detalhados e a gestão de risco de cada gráfico.",
         },
         features: [
           "Análises ilimitadas",
@@ -182,7 +182,7 @@ export const pt: Dict = {
         highlight: null,
         features: [
           "30 análises completas por mês, renovadas no dia 1º",
-          "Análise macroeconômica e notícias incluídas",
+          "Os dois cenários detalhados e a gestão de risco",
           "Chat com a IA: 1 pergunta por dia",
           "Sem assinatura e sem cobranças depois",
         ],
@@ -246,7 +246,7 @@ export const pt: Dict = {
       },
       {
         q: "Em que as análises se baseiam?",
-        a: "A leitura técnica se baseia só no que aparece no seu print: um print nítido, com o eixo de preços legível, rende uma análise melhor. Conforme o plano escolhido, a análise também inclui as notícias recentes e os eventos econômicos dos próximos 7 dias que podem mexer com o ativo, com as fontes. Ela não se conecta às cotações em tempo real.",
+        a: "A leitura técnica se baseia só no que aparece no seu print: um print nítido, com o eixo de preços legível, rende uma análise melhor. Ela não se conecta às cotações em tempo real.",
       },
       {
         q: "Posso adaptar a análise ao meu jeito de operar?",
@@ -299,7 +299,7 @@ export const pt: Dict = {
       confirm: "Confirmar e mudar para o Pro",
       paying: "Processando o pagamento…",
       done: "O Pro está ativo.",
-      doneText: "Análises ilimitadas, análise macroeconômica e a pergunta do dia à IA: está tudo liberado.",
+      doneText: "Análises ilimitadas e a pergunta do dia à IA: está tudo liberado.",
       close: "Continuar",
       fallback: "Seu banco pediu uma confirmação: conclua o pagamento abaixo.",
       terms: "Ao confirmar, você aceita os termos de uso, pede o acesso imediato ao Pro e abre mão do seu direito de arrependimento.",
@@ -342,14 +342,13 @@ export const pt: Dict = {
     statScenario: "cenário preferido",
     levelsHidden: (count: number) => `${count} ${count > 1 ? "níveis identificados" : "nível identificado"} no seu print. Os preços fazem parte do plano.`,
     lockedTitle: "O plano está pronto. Só falta liberar.",
-    lockedItems: (locked: { levels: number; patterns: number; macro: boolean }) =>
+    lockedItems: (locked: { levels: number; patterns: number }) =>
       [
         "O veredito: comprar, vender, esperar ou não operar",
         "A entrada, o stop e os alvos, com a relação retorno/risco",
         `Os ${locked.levels} níveis com preço, traçados no seu print`,
         "Os dois cenários e a probabilidade de cada um",
         ...(locked.patterns ? [`${locked.patterns > 1 ? `Os ${locked.patterns} padrões e sinais identificados` : "O padrão ou sinal identificado"} no gráfico`] : []),
-        ...(locked.macro ? ["As notícias dos próximos 7 dias sobre este ativo (pacotes Pro e Vitalício)"] : []),
         "Os pontos de atenção para gerenciar o risco",
       ],
     unlock: "Liberar a análise completa",
@@ -658,11 +657,6 @@ export const pt: Dict = {
     supports: "Suportes",
     risk: "Gestão de risco",
     footer: "Análise gerada por IA, apenas para fins informativos. Não é recomendação de investimento.",
-    lockedMacro: {
-      title: (asset: string) => `As notícias que podem mexer com ${asset} nesta semana`,
-      text: "Decisões de juros, inflação, balanços, anúncios: o pacote Pro cruza cada análise com os eventos dos próximos 7 dias, com as fontes.",
-      cta: (price: string) => `Mudar para o Pro · ${price}/mês`,
-    },
     chat: {
       title: "Alguma dúvida sobre esta análise?",
       hint: "A IA que leu o seu gráfico responde. 1 pergunta por dia.",
@@ -681,13 +675,6 @@ export const pt: Dict = {
       text: "Incluído na análise completa do pacote Pro.",
       cta: (price: string) => `Mudar para o Pro · ${price}/mês`,
     },
-    macro: {
-      title: "Macro e notícias",
-      impact: { fort: "Impacto alto", moyen: "Impacto médio", faible: "Impacto baixo" },
-      noEvents: "Nenhum evento importante previsto para os próximos 7 dias.",
-      forThisTrade: "Para este trade:",
-      sources: "Fontes:",
-    },
     summary: {
       entry: "Entrada",
       targets: "Alvos",
@@ -704,7 +691,6 @@ export const pt: Dict = {
       alternative: (bias: string) => `Alternativa ${bias}`,
       risk: "Gestão de risco:",
       disclaimer: "Análise Scanzivo, apenas informativa. Não é recomendação de investimento.",
-      macro: "Macro e notícias:",
     },
   },
   api: {
@@ -752,8 +738,8 @@ export const pt: Dict = {
     names: { starter: "Starter", monthly: "Pro", lifetime: "Vitalício" },
     includes: {
       starter: (price: string) => `Starter, ${price}/mês: 1 análise por dia, com o veredito, o plano com números, a probabilidade e os níveis.`,
-      monthly: (price: string) => `Pro, ${price}/mês: análises ilimitadas e completas, com as notícias que podem mexer com o ativo e uma pergunta por dia à IA.`,
-      lifetime: (price: string) => `Vitalício, ${price} pagos uma vez: 30 análises completas por mês, com as notícias, sem assinatura.`,
+      monthly: (price: string) => `Pro, ${price}/mês: análises ilimitadas e completas, com os dois cenários detalhados e uma pergunta por dia à IA.`,
+      lifetime: (price: string) => `Vitalício, ${price} pagos uma vez: 30 análises completas por mês, com os dois cenários detalhados, sem assinatura.`,
     },
     cancel: "Sem fidelidade: cancele quando quiser em Minha conta → Gerenciar minha assinatura.",
     oneOff: "Não haverá outras cobranças: as suas análises são renovadas no dia 1º de cada mês.",

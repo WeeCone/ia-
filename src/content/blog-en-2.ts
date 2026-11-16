@@ -102,7 +102,7 @@ export const ARTICLES_EN_2: Omit<Article, "locale">[] = [
         p: "[Support and resistance](/blog/support-and-resistance) remain the landmarks of the plan; the calendar tells you when those landmarks may be tested violently. A good analysis combines both rather than picking one.",
       },
       {
-        p: "That's what [Scanzivo](/)'s Pro pack does: with each chart analysis, the AI lists the announcements of the next 7 days and the recent news on the asset, with sources, then explains how to factor them into the plan. It doesn't predict the figure: it keeps the date from catching you out.",
+        p: "Before each session, check the calendar yourself for the announcements of the next few days on your asset. You can't predict the figure, but you can keep the date from catching you out.",
       },
     ],
   },
