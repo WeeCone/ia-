@@ -34,9 +34,6 @@ export const GOLD_DE: GoldPage = {
     { title: "US-Daten", text: "Inflation (CPI), Arbeitsmarkt (NFP), Fed-Entscheide: Rund um diese Termine kommt es oft zu Fehlausbrüchen. Die Analyse weist darauf hin, wenn es relevant ist." },
     { title: "Das Rauschen", text: "Gold schwankt innerhalb einer Session stark. Die vorgeschlagenen Stops liegen jenseits der letzten Dochte, nicht knapp an einer Marke." },
   ],
-  macroTitle: "Mit dem Pro-Paket: das Umfeld, das Gold bewegt",
-  macroText:
-    "Jede Gold-Analyse wird mit den Terminen der nächsten 7 Tage und aktuellen Nachrichten abgeglichen: Fed, US-Inflation und -Arbeitsmarkt, Dollar, Realzinsen, Goldkäufe der Notenbanken, ETF-Zuflüsse. Mit Quellenangaben und einem Satz dazu, wie Sie das in Ihrem Plan berücksichtigen.",
   platformsTitle: "Mit Ihren Tools",
   platformsText:
     "Ein Screenshot aus TradingView, MetaTrader 4 oder 5, cTrader oder der App Ihres Brokers genügt, egal wie das Symbol heißt: XAU/USD, XAUUSD, GOLD. Die Preisachse muss nur lesbar sein.",
@@ -53,7 +50,7 @@ export const GOLD_DE: GoldPage = {
   faq: [
     {
       q: "Ist die KI wirklich auf Gold spezialisiert?",
-      a: "Wenn der Screenshot Gold zeigt, folgt die Analyse eigenen Vorgaben für XAU/USD (runde Marken, Sessions, US-Daten, Platzierung der Stops), und der Nachrichtenteil des Pro-Pakets sucht zuerst nach dem, was Gold bewegt. Das KI-Modell selbst ist dasselbe wie bei anderen Werten.",
+      a: "Wenn der Screenshot Gold zeigt, folgt die Analyse eigenen Vorgaben für XAU/USD (runde Marken, Sessions, US-Daten, Platzierung der Stops). Das KI-Modell selbst ist dasselbe wie bei anderen Werten.",
     },
     { q: "Welche Zeitrahmen?", a: "Alle, vom 1-Minuten- bis zum Monatschart. Für Intraday ist die Routine 1 Stunde, 15 Minuten, 5 Minuten ein guter Ausgangspunkt." },
     {

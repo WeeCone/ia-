@@ -5,7 +5,7 @@ import { GOLD_PT } from "./gold-pt";
 
 /**
  * The gold (XAU/USD) page, in every language of the site (the slug stays /gold; the local word goes in titles). Honest by construction: what the analysis really does on gold (its own rules
- * in the prompt, the news side's gold priorities), what it does not do, the CFD risk, and no price.
+ * in the prompt), what it does not do, the CFD risk, and no price.
  */
 export type GoldPage = {
   metaTitle: string;
@@ -23,8 +23,6 @@ export type GoldPage = {
   example: { label: string; rows: { tf: string; reading: string; plan: string }[]; note: string };
   knowsTitle: string;
   knows: { title: string; text: string }[];
-  macroTitle: string;
-  macroText: string;
   platformsTitle: string;
   platformsText: string;
   limitsTitle: string;
@@ -77,9 +75,6 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
       { title: "Les statistiques américaines", text: "Inflation (CPI), emploi (NFP), décisions de la Fed : autour de ces annonces, les fausses cassures sont fréquentes. L'analyse le rappelle quand c'est utile." },
       { title: "Le bruit", text: "L'or bouge beaucoup à l'intérieur d'une séance. Les stops proposés sont placés au-delà des mèches récentes, pas au ras d'un niveau." },
     ],
-    macroTitle: "Avec le pack Pro : le contexte qui fait bouger l'or",
-    macroText:
-      "Chaque analyse gold est croisée avec les annonces des 7 prochains jours et l'actualité récente : Fed, inflation et emploi américains, dollar, taux réels, achats d'or des banques centrales, flux des ETF. Sources à l'appui, avec une phrase sur la façon d'en tenir compte dans votre plan.",
     platformsTitle: "Avec vos outils",
     platformsText:
       "Une capture TradingView, MetaTrader 4 ou 5, cTrader ou de l'application de votre courtier suffit, quel que soit le nom affiché : XAU/USD, XAUUSD, GOLD. Il faut juste que l'axe des prix soit lisible.",
@@ -96,7 +91,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     faq: [
       {
         q: "L'IA est-elle vraiment spécialisée sur le gold ?",
-        a: "Quand la capture montre de l'or, l'analyse suit des consignes propres au XAU/USD (chiffres ronds, sessions, statistiques américaines, placement des stops), et le volet actualité du pack Pro cherche en priorité ce qui fait bouger l'or. Le modèle d'IA, lui, est le même que pour les autres actifs.",
+        a: "Quand la capture montre de l'or, l'analyse suit des consignes propres au XAU/USD (chiffres ronds, sessions, statistiques américaines, placement des stops). Le modèle d'IA, lui, est le même que pour les autres actifs.",
       },
       { q: "Quelles unités de temps ?", a: "Toutes, du 1 minute au mensuel. Pour l'intraday, la routine 1 heure, 15 minutes, 5 minutes est un bon point de départ." },
       {
@@ -147,9 +142,6 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
       { title: "US data", text: "Inflation (CPI), jobs (NFP), Fed decisions: around these releases, false breaks are common. The analysis reminds you when it matters." },
       { title: "Noise", text: "Gold moves a lot within a session. The suggested stops sit beyond recent wicks, not right on a level." },
     ],
-    macroTitle: "With the Pro pack: the context that moves gold",
-    macroText:
-      "Every gold analysis is checked against the announcements of the next 7 days and recent news: the Fed, US inflation and jobs, the dollar, real yields, central-bank gold buying, ETF flows. With sources, and a sentence on how to factor it into your plan.",
     platformsTitle: "With your tools",
     platformsText:
       "A screenshot from TradingView, MetaTrader 4 or 5, cTrader or your broker's app is enough, whatever the symbol says: XAU/USD, XAUUSD, GOLD. The price axis just needs to be readable.",
@@ -166,7 +158,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     faq: [
       {
         q: "Is the AI really specialised in gold?",
-        a: "When the screenshot shows gold, the analysis follows XAU/USD-specific instructions (round numbers, sessions, US data, stop placement), and the Pro pack's news side looks first for what moves gold. The AI model itself is the same as for other assets.",
+        a: "When the screenshot shows gold, the analysis follows XAU/USD-specific instructions (round numbers, sessions, US data, stop placement). The AI model itself is the same as for other assets.",
       },
       { q: "Which timeframes?", a: "All of them, from 1-minute to monthly. For intraday, the 1-hour, 15-minute, 5-minute routine is a good place to start." },
       {
@@ -217,9 +209,6 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
       { title: "Los datos de EE. UU.", text: "Inflación (CPI), empleo (NFP), decisiones de la Fed: alrededor de estos anuncios, las falsas rupturas son frecuentes. El análisis lo recuerda cuando es útil." },
       { title: "El ruido", text: "El oro se mueve mucho dentro de una sesión. Los stops propuestos se sitúan más allá de las mechas recientes, no pegados a un nivel." },
     ],
-    macroTitle: "Con el pack Pro: el contexto que mueve el oro",
-    macroText:
-      "Cada análisis de oro se cruza con los anuncios de los próximos 7 días y las noticias recientes: Fed, inflación y empleo de EE. UU., dólar, tipos reales, compras de oro de los bancos centrales, flujos de los ETF. Con sus fuentes y una frase sobre cómo tenerlo en cuenta en tu plan.",
     platformsTitle: "Con tus herramientas",
     platformsText:
       "Basta una captura de TradingView, MetaTrader 4 o 5, cTrader o la app de tu bróker, sea cual sea el nombre que aparezca: XAU/USD, XAUUSD, GOLD. Solo hace falta que el eje de precios se lea bien.",
@@ -236,7 +225,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     faq: [
       {
         q: "¿La IA está realmente especializada en oro?",
-        a: "Cuando la captura muestra oro, el análisis sigue instrucciones propias del XAU/USD (números redondos, sesiones, datos de EE. UU., colocación de los stops), y la parte de noticias del pack Pro busca primero lo que mueve el oro. El modelo de IA es el mismo que para los demás activos.",
+        a: "Cuando la captura muestra oro, el análisis sigue instrucciones propias del XAU/USD (números redondos, sesiones, datos de EE. UU., colocación de los stops). El modelo de IA es el mismo que para los demás activos.",
       },
       { q: "¿Qué temporalidades?", a: "Todas, de 1 minuto a mensual. Para intradía, la rutina de 1 hora, 15 minutos y 5 minutos es un buen punto de partida." },
       {
@@ -287,9 +276,6 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
       { title: "米国の経済指標", text: "インフレ（CPI）、雇用（NFP）、FRBの決定。こうした発表の前後はだましが多く、分析は必要に応じてそれを伝えます。" },
       { title: "ノイズ", text: "金は1日のうちに大きく動きます。提案するストップは、水準ぎりぎりではなく、直近のヒゲの外側に置きます。" },
     ],
-    macroTitle: "Proパックなら：金を動かす背景も",
-    macroText:
-      "ゴールドの分析のたびに、今後7日間の発表と最近のニュースを照らし合わせます。FRB、米国のインフレと雇用、ドル、実質金利、中央銀行の金購入、ETFの資金フロー。出典付きで、プランへの織り込み方も一言添えます。",
     platformsTitle: "お使いのツールで",
     platformsText:
       "TradingView、MetaTrader 4・5、cTrader、またはお使いの証券会社のアプリのスクリーンショットで十分です。表示名がXAU/USD、XAUUSD、GOLDのどれでも構いません。価格軸が読めれば大丈夫です。",
@@ -306,7 +292,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     faq: [
       {
         q: "AIは本当にゴールドに特化しているのですか？",
-        a: "スクリーンショットが金を示している場合、分析はXAU/USD専用の指示（キリのいい水準、取引時間帯、米国指標、ストップの置き方）に従い、Proパックのニュース分析は金を動かす要因を優先して調べます。AIモデル自体は、他の銘柄と同じものです。",
+        a: "スクリーンショットが金を示している場合、分析はXAU/USD専用の指示（キリのいい水準、取引時間帯、米国指標、ストップの置き方）に従います。AIモデル自体は、他の銘柄と同じものです。",
       },
       { q: "どの時間足に対応していますか？", a: "1分足から月足まで、すべてです。デイトレードなら、1時間足・15分足・5分足のルーティンがよい出発点です。" },
       {
@@ -357,9 +343,6 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
       { title: "미국 경제 지표", text: "물가(CPI), 고용(NFP), 연준 결정. 이런 발표 전후에는 가짜 돌파가 잦고, 분석은 필요할 때 이를 알려 줍니다." },
       { title: "노이즈", text: "금은 하루 안에서도 크게 움직입니다. 제안하는 손절은 레벨 바로 위가 아니라 최근 꼬리 바깥에 둡니다." },
     ],
-    macroTitle: "Pro 팩이라면: 금을 움직이는 배경까지",
-    macroText:
-      "금 분석을 할 때마다 향후 7일간의 발표와 최근 뉴스를 함께 살핍니다. 연준, 미국 물가와 고용, 달러, 실질금리, 중앙은행의 금 매입, ETF 자금 흐름. 출처와 함께, 플랜에 어떻게 반영할지 한 문장으로 알려 드립니다.",
     platformsTitle: "쓰시는 도구 그대로",
     platformsText:
       "TradingView, MetaTrader 4·5, cTrader, 또는 쓰시는 증권사 앱의 스크린샷이면 충분합니다. 종목명이 XAU/USD, XAUUSD, GOLD 중 무엇이든 괜찮습니다. 가격 축만 읽히면 됩니다.",
@@ -376,7 +359,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     faq: [
       {
         q: "AI가 정말 금에 특화되어 있나요?",
-        a: "스크린샷이 금을 보여 주면, 분석은 XAU/USD 전용 지침(라운드 넘버, 거래 세션, 미국 지표, 손절 위치)을 따르고, Pro 팩의 뉴스 분석은 금을 움직이는 요인을 우선해서 찾습니다. AI 모델 자체는 다른 자산과 같습니다.",
+        a: "스크린샷이 금을 보여 주면, 분석은 XAU/USD 전용 지침(라운드 넘버, 거래 세션, 미국 지표, 손절 위치)을 따릅니다. AI 모델 자체는 다른 자산과 같습니다.",
       },
       { q: "어떤 시간 단위를 지원하나요?", a: "1분봉부터 월봉까지 모두 지원합니다. 데이 트레이딩이라면 1시간봉, 15분봉, 5분봉 루틴이 좋은 출발점입니다." },
       {
@@ -427,9 +410,6 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
       { title: "Số liệu của Mỹ", text: "Lạm phát (CPI), việc làm (NFP), quyết định của Fed: quanh các thông báo này, phá vỡ giả rất thường gặp. Bản phân tích nhắc điều đó khi cần." },
       { title: "Nhiễu", text: "Vàng biến động mạnh trong một phiên. Các stop đề xuất được đặt bên ngoài các bóng nến gần nhất, không sát ngay mức giá." },
     ],
-    macroTitle: "Với gói Pro: bối cảnh làm vàng biến động",
-    macroText:
-      "Mỗi bản phân tích vàng được đối chiếu với các thông báo trong 7 ngày tới và tin tức gần đây: Fed, lạm phát và việc làm của Mỹ, đồng đô la, lãi suất thực, hoạt động mua vàng của các ngân hàng trung ương, dòng tiền vào các quỹ ETF. Có kèm nguồn, cùng một câu về cách tính đến chúng trong kế hoạch.",
     platformsTitle: "Dùng với công cụ của bạn",
     platformsText:
       "Một ảnh chụp từ TradingView, MetaTrader 4 hoặc 5, cTrader hay ứng dụng của sàn là đủ, dù tên hiển thị là XAU/USD, XAUUSD hay GOLD. Chỉ cần trục giá đọc được.",
@@ -446,7 +426,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     faq: [
       {
         q: "AI có thực sự chuyên về vàng không?",
-        a: "Khi ảnh chụp là biểu đồ vàng, bản phân tích tuân theo các hướng dẫn riêng cho XAU/USD (mức giá tròn, các phiên, số liệu Mỹ, cách đặt stop), và phần tin tức của gói Pro ưu tiên tìm những gì làm vàng biến động. Còn mô hình AI thì vẫn là mô hình dùng cho các tài sản khác.",
+        a: "Khi ảnh chụp là biểu đồ vàng, bản phân tích tuân theo các hướng dẫn riêng cho XAU/USD (mức giá tròn, các phiên, số liệu Mỹ, cách đặt stop). Còn mô hình AI thì vẫn là mô hình dùng cho các tài sản khác.",
       },
       { q: "Những khung thời gian nào?", a: "Tất cả, từ 1 phút đến khung tháng. Với giao dịch trong ngày, quy trình 1 giờ, 15 phút, 5 phút là điểm khởi đầu tốt." },
       {
@@ -497,9 +477,6 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
       { title: "Data ekonomi AS", text: "Inflasi (CPI), lapangan kerja (NFP), keputusan The Fed: di sekitar rilis ini, breakout palsu sering terjadi. Analisis mengingatkannya bila perlu." },
       { title: "Noise", text: "Emas bergerak liar dalam satu sesi. Stop yang diusulkan ditempatkan di luar shadow terakhir, bukan menempel di level." },
     ],
-    macroTitle: "Dengan paket Pro: konteks yang menggerakkan emas",
-    macroText:
-      "Setiap analisis emas dicocokkan dengan pengumuman 7 hari ke depan dan berita terbaru: The Fed, inflasi dan lapangan kerja AS, dolar, imbal hasil riil, pembelian emas oleh bank sentral, arus dana ETF. Lengkap dengan sumber, dan satu kalimat tentang cara memperhitungkannya dalam rencana Anda.",
     platformsTitle: "Dengan alat Anda",
     platformsText:
       "Tangkapan layar dari TradingView, MetaTrader 4 atau 5, cTrader, atau aplikasi broker Anda sudah cukup, apa pun nama yang tampil: XAU/USD, XAUUSD, GOLD. Yang penting sumbu harganya terbaca.",
@@ -516,7 +493,7 @@ export const GOLD: Partial<Record<Locale, GoldPage>> = {
     faq: [
       {
         q: "Apakah AI-nya benar-benar khusus emas?",
-        a: "Jika tangkapan layar menunjukkan emas, analisis mengikuti instruksi khusus XAU/USD (angka bulat, sesi, data AS, penempatan stop), dan bagian berita paket Pro lebih dulu mencari apa yang menggerakkan emas. Model AI-nya sendiri sama dengan untuk aset lain.",
+        a: "Jika tangkapan layar menunjukkan emas, analisis mengikuti instruksi khusus XAU/USD (angka bulat, sesi, data AS, penempatan stop). Model AI-nya sendiri sama dengan untuk aset lain.",
       },
       { q: "Timeframe apa saja?", a: "Semuanya, dari 1 menit hingga bulanan. Untuk intraday, rutinitas 1 jam, 15 menit, 5 menit adalah titik awal yang baik." },
       {

@@ -14,7 +14,7 @@ export type PreviewTeaser = {
   /** Where the levels sit on the capture (lines only, their prices stay locked). */
   marks: { kind: "support" | "resistance"; y: number }[];
   /** How much the locked part holds, to say it plainly. */
-  locked: { levels: number; patterns: number; macro: boolean };
+  locked: { levels: number; patterns: number };
   /** Share of the report shown for free, in percent: its words over those of a typical full report. */
   shownPercent: number;
 };

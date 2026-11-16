@@ -3,7 +3,7 @@
 import { useI18n } from "@/i18n/client";
 import { keepNumbers } from "@/i18n/format";
 import { GOLD } from "@/content/gold";
-import { type ChartAnalysis, isGold, type MacroReport, preferredPlan } from "@/lib/analysis";
+import { type ChartAnalysis, isGold, preferredPlan } from "@/lib/analysis";
 import { formatPrice } from "@/i18n/format";
 import { formatRatio, rewardRatios } from "@/lib/risk";
 import { BillingButton } from "./billing-button";
@@ -162,99 +162,6 @@ function AlternativeScenario({ analysis }: { analysis: ChartAnalysis }) {
   );
 }
 
-/** Scheduled events and recent news that can move the asset, found on the web when the analysis ran. */
-function MacroSection({ macro }: { macro: MacroReport }) {
-  const { t } = useI18n();
-  const m = t.report.macro;
-  return (
-    <section className="border-t border-border p-5">
-      <h3 className="label text-muted">{m.title}</h3>
-      <p className="mt-3 leading-relaxed">{macro.context}</p>
-
-      {macro.events.length > 0 ? (
-        <ul className="mt-4 divide-y divide-border/70 rounded-xl border border-border">
-          {macro.events.map((event) => (
-            <li key={`${event.date}-${event.title}`} className="grid gap-1 px-4 py-3 sm:grid-cols-[9rem_1fr_auto] sm:items-baseline sm:gap-4">
-              <span className="font-mono text-sm tabular-nums text-muted">{event.date}</span>
-              <span>
-                <span className="font-medium">{event.title}</span>
-                <span className="block text-sm text-muted">{event.why}</span>
-              </span>
-              <span className={`chip justify-self-start ${impactStyle[event.impact]}`}>{m.impact[event.impact]}</span>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="mt-3 text-sm text-muted">{m.noEvents}</p>
-      )}
-
-      {macro.plan_impact && (
-        <p className="mt-4 rounded-xl border border-brand/30 bg-brand/5 px-4 py-3 text-sm">
-          <span className="font-semibold text-brand">{m.forThisTrade} </span>
-          {macro.plan_impact}
-        </p>
-      )}
-
-      {macro.sources.length > 0 && (
-        <p className="mt-4 text-xs text-muted">
-          {m.sources}{" "}
-          {macro.sources.map((source, index) => (
-            <span key={source.url}>
-              {index > 0 && " · "}
-              <a href={source.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-foreground">
-                {source.title}
-              </a>
-            </span>
-          ))}
-        </p>
-      )}
-    </section>
-  );
-}
-
-/**
- * Starter's report: the news side is not part of the pack (it is never gathered), so its place shows empty shapes under
- * a blur and the way up to Pro, which adds it to every analysis.
- */
-function LockedMacroSection({ asset }: { asset: string }) {
-  const { t, locale } = useI18n();
-  const m = t.report.lockedMacro;
-  return (
-    <section className="border-t border-border p-5">
-      <h3 className="label flex items-center gap-2 text-muted">
-        <svg viewBox="0 0 20 20" className="size-3.5" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-          <rect x="4" y="9" width="12" height="8" rx="2" />
-          <path d="M7 9V6.5a3 3 0 0 1 6 0V9" />
-        </svg>
-        {t.report.macro.title}
-      </h3>
-      <div className="relative mt-3 overflow-hidden rounded-xl border border-border">
-        {/* Placeholder rows only, behind the offer: nothing was gathered for this analysis. */}
-        <div aria-hidden className="absolute inset-0 select-none divide-y divide-border/70 blur-[5px]">
-          {[70, 55, 82, 64, 76].map((width, index) => (
-            <div key={index} className="flex items-center gap-4 px-4 py-3">
-              <span className="h-4 w-20 rounded bg-foreground/15" />
-              <span className="h-4 rounded bg-foreground/25" style={{ width: `${width}%` }} />
-              <span className="h-5 w-16 shrink-0 rounded-full bg-bear/30" />
-            </div>
-          ))}
-        </div>
-        <div className="relative bg-card/70 px-4 py-8 text-center">
-          <div className="mx-auto max-w-md">
-            <p className="font-semibold">{m.title(asset)}</p>
-            <p className="mt-1 text-sm text-muted">{m.text}</p>
-            <div className="mt-4 flex justify-center">
-              <BillingButton route="checkout" offer="monthly" className="btn-primary px-5 py-2.5">
-                {m.cta(formatPrice(locale, "monthly"))}
-              </BillingButton>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /**
  * Starter's reduced report: what the full analysis adds here is named, with the way up to Pro. Nothing of it is shown
  * (the alternative scenario and the risk notes stay out of the page).
@@ -371,7 +278,6 @@ export function AnalysisResult({ analysis, reduced = false }: { analysis: ChartA
       {reduced ? <LockedProSection items={[t.report.lockedPro.alternative, t.report.lockedPro.risk]} /> : <AlternativeScenario analysis={analysis} />}
 
       {/* Reports made before the news side existed, or whose search failed, have none. */}
-      {analysis.macro ? <MacroSection macro={analysis.macro} /> : reduced && <LockedMacroSection asset={analysis.asset} />}
 
       {!reduced && analysis.risk_notes?.length > 0 && (
         <section className="border-t border-border p-5">

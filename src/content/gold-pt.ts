@@ -34,9 +34,6 @@ export const GOLD_PT: GoldPage = {
     { title: "Os dados dos EUA", text: "Inflação (CPI), emprego (payroll), decisões do Fed: perto desses anúncios, os falsos rompimentos são comuns. A análise lembra disso quando faz diferença." },
     { title: "O ruído", text: "O ouro se mexe muito dentro de um mesmo pregão. Os stops sugeridos ficam além dos pavios recentes, não colados em um nível." },
   ],
-  macroTitle: "Com o pacote Pro: o contexto que mexe com o ouro",
-  macroText:
-    "Cada análise de ouro é cruzada com os anúncios dos próximos 7 dias e as notícias recentes: Fed, inflação e emprego nos EUA, dólar, juros reais, compras de ouro pelos bancos centrais, fluxos dos ETFs. Com as fontes, e uma frase sobre como levar isso em conta no seu plano.",
   platformsTitle: "Com as suas ferramentas",
   platformsText:
     "Basta um print do TradingView, do MetaTrader 4 ou 5, do cTrader ou do app da sua corretora, seja qual for o nome exibido: XAU/USD, XAUUSD, GOLD. Só é preciso que o eixo de preços esteja legível.",
@@ -53,7 +50,7 @@ export const GOLD_PT: GoldPage = {
   faq: [
     {
       q: "A IA é mesmo especializada em ouro?",
-      a: "Quando o print mostra ouro, a análise segue instruções próprias do XAU/USD (números redondos, sessões, dados dos EUA, posição dos stops), e a parte de notícias do pacote Pro procura primeiro o que mexe com o ouro. O modelo de IA em si é o mesmo usado para os outros ativos.",
+      a: "Quando o print mostra ouro, a análise segue instruções próprias do XAU/USD (números redondos, sessões, dados dos EUA, posição dos stops). O modelo de IA em si é o mesmo usado para os outros ativos.",
     },
     { q: "Quais tempos gráficos?", a: "Todos, do 1 minuto ao mensal. Para day trade, a rotina de 1 hora, 15 minutos e 5 minutos é um bom ponto de partida." },
     {

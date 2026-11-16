@@ -164,10 +164,6 @@ export default async function GoldPage() {
                 </li>
               ))}
             </ul>
-            <div data-reveal="fade" className="mt-14 rounded-2xl border border-amber-400/30 bg-amber-400/[0.06] p-6 sm:p-8">
-              <h3 className="display text-2xl text-warn">{page.macroTitle}</h3>
-              <p className="mt-3 max-w-3xl leading-relaxed text-foreground/85">{page.macroText}</p>
-            </div>
           </div>
         </section>
 

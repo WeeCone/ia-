@@ -34,9 +34,6 @@ export const GOLD_IT: GoldPage = {
     { title: "I dati americani", text: "Inflazione (CPI), occupazione (NFP), decisioni della Fed: attorno a questi annunci le false rotture sono frequenti. L'analisi lo ricorda quando serve." },
     { title: "Il rumore", text: "L'oro si muove molto all'interno di una sessione. Gli stop proposti sono messi oltre le ombre recenti, non a ridosso di un livello." },
   ],
-  macroTitle: "Con il pacchetto Pro: il contesto che muove l'oro",
-  macroText:
-    "Ogni analisi sull'oro viene incrociata con gli annunci dei prossimi 7 giorni e con le notizie recenti: Fed, inflazione e occupazione americane, dollaro, tassi reali, acquisti di oro delle banche centrali, flussi degli ETF. Con le fonti e una frase su come tenerne conto nel Suo piano.",
   platformsTitle: "Con i Suoi strumenti",
   platformsText:
     "Basta uno screenshot di TradingView, MetaTrader 4 o 5, cTrader o dell'app del Suo broker, qualunque sia il nome mostrato: XAU/USD, XAUUSD, GOLD. Serve solo che l'asse dei prezzi sia leggibile.",
@@ -53,7 +50,7 @@ export const GOLD_IT: GoldPage = {
   faq: [
     {
       q: "L'IA è davvero specializzata sull'oro?",
-      a: "Quando lo screenshot mostra l'oro, l'analisi segue istruzioni specifiche per l'XAU/USD (numeri tondi, sessioni, dati americani, posizionamento degli stop), e la parte notizie del pacchetto Pro cerca per prima cosa ciò che muove l'oro. Il modello di IA, invece, è lo stesso usato per gli altri asset.",
+      a: "Quando lo screenshot mostra l'oro, l'analisi segue istruzioni specifiche per l'XAU/USD (numeri tondi, sessioni, dati americani, posizionamento degli stop). Il modello di IA, invece, è lo stesso usato per gli altri asset.",
     },
     { q: "Quali timeframe?", a: "Tutti, dal 1 minuto al mensile. Per l'intraday, la routine 1 ora, 15 minuti, 5 minuti è un buon punto di partenza." },
     {

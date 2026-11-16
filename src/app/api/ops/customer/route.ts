@@ -50,7 +50,6 @@ export async function GET(request: Request) {
       model: a.model ?? null,
       costEur: a.usage?.costEur ?? null,
       outputTokens: a.usage?.outputTokens ?? null,
-      macro: Boolean(a.macro),
       questions: Array.isArray(a.chat) ? a.chat.map((c: { question: string; answer: string }) => ({ question: c.question, answer: c.answer })) : [],
     };
   });

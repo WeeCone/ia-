@@ -46,25 +46,18 @@ export const OPUS_MODEL = "claude-opus-5-5";
 export const SONNET_MODEL = "claude-sonnet-5-5";
 export const HAIKU_MODEL = "claude-haiku-5-5";
 
-/** Worst case for a news side searched afresh (up to 2 web searches read by the mid-size model). */
-const NEWS_MAX_COST_EUR = 0.15;
-
 /**
  * Every chart is read by the light model, on every pack (since 2026-11-12, at the owner's request: cost first; a chart
- * reading costs about 0,3 centime). Pro and À vie keep the news side, searched once a day per asset by the mid-size
- * model and shared between analyses. Pro stays unlimited; its 5 € ceiling (BUDGET_EUR) only stops automated use.
+ * reading costs about 0,3 centime). The news side (web search, mid-size model) was withdrawn on 2026-11-17, also at
+ * the owner's request. Pro stays unlimited; its 5 € ceiling (BUDGET_EUR) only stops automated use.
  */
-export function analysisSetup(plan: Plan | undefined, _spentEur?: number, _dayEur?: number) {
-  if (plan === "starter") return { model: HAIKU_MODEL, freshNews: false, maxCost: LIGHT_MAX_CALL_COST_EUR };
-  return { model: HAIKU_MODEL, freshNews: true, maxCost: LIGHT_MAX_CALL_COST_EUR + NEWS_MAX_COST_EUR };
+export function analysisSetup(_plan?: Plan, _spentEur?: number, _dayEur?: number) {
+  return { model: HAIKU_MODEL, maxCost: LIGHT_MAX_CALL_COST_EUR };
 }
 
 /** Which offers can ask the AI a question about an analysis (one a day). */
 export const hasChat = (plan: Plan | undefined) => plan === "monthly" || plan === "lifetime";
 export const CHAT_QUESTIONS_PER_DAY = 1;
-
-/** Which offers get the news side (events and news that can move the asset) with every analysis. */
-export const hasNewsSide = (plan: Plan | undefined) => plan === "monthly" || plan === "lifetime";
 
 /**
  * Prices by currency. The euro grid applies to the French, English, Spanish, Italian and German site; the Japanese,

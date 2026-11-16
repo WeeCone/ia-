@@ -43,7 +43,7 @@ export function teaserOf(preview: ChartPreview): PreviewTeaser {
     summary: preview.summary,
     stakes: preview.stakes,
     marks,
-    locked: { levels: marks.length, patterns: Math.max(0, Math.round(preview.patterns_count)), macro: preview.is_chart },
+    locked: { levels: marks.length, patterns: Math.max(0, Math.round(preview.patterns_count)) },
     shownPercent: Math.max(1, Math.round((shown / (shown + TYPICAL_LOCKED_WORDS)) * 100)),
   };
 }

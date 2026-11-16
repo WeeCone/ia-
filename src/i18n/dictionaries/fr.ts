@@ -157,14 +157,14 @@ export const fr = {
           "Stats clés : tendance, supports et résistances tracés sur votre capture",
           "Probabilité exacte du scénario privilégié",
         ],
-        excluded: ["Scénario alternatif et gestion du risque", "Analyse macro-économique et actualité", "Questions à l'IA"],
+        excluded: ["Scénario alternatif et gestion du risque", "Questions à l'IA"],
         note: "Sans engagement, résiliable depuis votre espace.",
       },
       monthly: {
-        pitch: "Analysez autant que vous voulez, avec le contexte du marché.",
+        pitch: "Analysez autant que vous voulez, chaque graphique, à chaque unité de temps.",
         highlight: {
-          title: "Analyse macro-économique incluse",
-          text: "Banques centrales, inflation, emploi, résultats : sur chaque analyse, l'IA relève les annonces des 7 prochains jours et l'actualité des dernières 48 h sur votre actif, puis vous dit comment en tenir compte dans votre plan. Sources à l'appui.",
+          title: "Analyses illimitées",
+          text: "Un graphique, plusieurs unités de temps, plusieurs actifs dans la journée : autant d'analyses complètes que vous voulez, avec les deux scénarios détaillés et la gestion du risque de chaque graphique.",
         },
         features: [
           "Analyses illimitées",
@@ -181,7 +181,7 @@ export const fr = {
         highlight: null,
         features: [
           "30 analyses complètes chaque mois, rechargées le 1er",
-          "Analyse macro-économique et actualité incluses",
+          "Les deux scénarios détaillés et la gestion du risque",
           "Chat IA : 1 question par jour",
           "Aucun abonnement, aucun prélèvement ensuite",
         ],
@@ -245,7 +245,7 @@ export const fr = {
       },
       {
         q: "Sur quoi reposent les analyses ?",
-        a: "La lecture technique repose uniquement sur ce qui est visible dans votre capture : une capture nette, avec l'axe des prix lisible, donne une meilleure analyse. Selon la formule choisie, l'analyse inclut aussi l'actualité récente et les événements économiques des 7 prochains jours qui peuvent faire bouger l'actif, avec leurs sources. Il ne se connecte pas aux cotations en temps réel.",
+        a: "La lecture technique repose uniquement sur ce qui est visible dans votre capture : une capture nette, avec l'axe des prix lisible, donne une meilleure analyse. Il ne se connecte pas aux cotations en temps réel.",
       },
       {
         q: "Puis-je adapter l'analyse à ma façon de trader ?",
@@ -298,7 +298,7 @@ export const fr = {
       confirm: "Confirmer et passer à Pro",
       paying: "Paiement en cours…",
       done: "Pro est actif.",
-      doneText: "Analyses illimitées, analyse macro-économique et question du jour à l'IA : tout est ouvert.",
+      doneText: "Analyses illimitées et question du jour à l'IA : tout est ouvert.",
       close: "Continuer",
       fallback: "Votre banque demande une validation : finalisez le paiement ci-dessous.",
       terms: "En confirmant, vous acceptez les conditions générales, demandez l'accès immédiat à Pro et renoncez à votre droit de rétractation.",
@@ -341,14 +341,13 @@ export const fr = {
     statScenario: "scénario privilégié",
     levelsHidden: (count: number) => `${count} niveau${count > 1 ? "x" : ""} repéré${count > 1 ? "s" : ""} sur votre capture. Leurs prix font partie du plan.`,
     lockedTitle: "Le plan est prêt. Il reste à le débloquer.",
-    lockedItems: (locked: { levels: number; patterns: number; macro: boolean }) =>
+    lockedItems: (locked: { levels: number; patterns: number }) =>
       [
         "Le verdict : acheter, vendre, attendre ou ne pas trader",
         "L'entrée, le stop et les objectifs, avec le ratio gain/risque",
         `Les ${locked.levels} niveaux chiffrés, tracés sur votre capture`,
         "Les deux scénarios et leur probabilité",
         ...(locked.patterns ? [`${locked.patterns > 1 ? `Les ${locked.patterns} figures et signaux repérés` : "La figure ou le signal repéré"} sur le graphique`] : []),
-        ...(locked.macro ? ["L'actualité des 7 prochains jours sur cet actif (packs Pro et À vie)"] : []),
         "Les points de vigilance pour gérer le risque",
       ],
     unlock: "Débloquer l'analyse complète",
@@ -659,11 +658,6 @@ export const fr = {
     supports: "Supports",
     risk: "Gestion du risque",
     footer: "Analyse générée par IA, à titre informatif uniquement. Ce n'est pas un conseil en investissement.",
-    lockedMacro: {
-      title: (asset: string) => `L'actualité qui peut faire bouger ${asset} cette semaine`,
-      text: "Décisions de taux, inflation, résultats, annonces : le pack Pro croise chaque analyse avec les événements des 7 prochains jours, sources à l'appui.",
-      cta: (price: string) => `Passer à Pro · ${price}/mois`,
-    },
     chat: {
       title: "Une question sur cette analyse ?",
       hint: "L'IA qui a lu votre graphique vous répond. 1 question par jour.",
@@ -682,13 +676,6 @@ export const fr = {
       text: "Inclus dans l'analyse complète du pack Pro.",
       cta: (price: string) => `Passer à Pro · ${price}/mois`,
     },
-    macro: {
-      title: "Macro et actualité",
-      impact: { fort: "Impact fort", moyen: "Impact moyen", faible: "Impact faible" },
-      noEvents: "Aucun événement majeur prévu dans les 7 prochains jours.",
-      forThisTrade: "Pour ce trade :",
-      sources: "Sources :",
-    },
     summary: {
       entry: "Entrée",
       targets: "Objectifs",
@@ -705,7 +692,6 @@ export const fr = {
       alternative: (bias: string) => `Alternative ${bias}`,
       risk: "Gestion du risque :",
       disclaimer: "Analyse Scanzivo, à titre informatif. Pas un conseil en investissement.",
-      macro: "Macro et actualité :",
     },
   },
   // Messages returned by the API routes.
@@ -754,8 +740,8 @@ export const fr = {
     names: { starter: "Starter", monthly: "Pro", lifetime: "À vie" },
     includes: {
       starter: (price: string) => `Starter, ${price}/mois : 1 analyse par jour, avec le verdict, le plan chiffré, la probabilité et les niveaux.`,
-      monthly: (price: string) => `Pro, ${price}/mois : analyses illimitées et complètes, avec l'actualité qui peut faire bouger l'actif et une question par jour à l'IA.`,
-      lifetime: (price: string) => `À vie, ${price} payés une fois : 30 analyses complètes chaque mois, avec l'actualité, sans abonnement.`,
+      monthly: (price: string) => `Pro, ${price}/mois : analyses illimitées et complètes, avec les deux scénarios détaillés et une question par jour à l'IA.`,
+      lifetime: (price: string) => `À vie, ${price} payés une fois : 30 analyses complètes chaque mois, avec les deux scénarios détaillés, sans abonnement.`,
     },
     cancel: "Sans engagement : vous résiliez quand vous voulez depuis Mon compte → Gérer mon abonnement.",
     oneOff: "Aucun prélèvement ne suivra : vos analyses se rechargent le 1er de chaque mois.",

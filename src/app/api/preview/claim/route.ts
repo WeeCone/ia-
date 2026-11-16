@@ -4,8 +4,7 @@ import type { AllowedImageType, ChartAnalysis, ChartPreview } from "@/lib/analys
 import { recordActivity } from "@/lib/activity";
 import { analyzeChart, AnalysisRefusedError } from "@/lib/claude";
 import { adminBucket, adminDb } from "@/lib/firebase-admin";
-import { macroContext } from "@/lib/macro";
-import { analysisSetup, availableCredits, budgetFor, hasNewsSide, isUnlimited, periodFor } from "@/lib/plans";
+import { analysisSetup, availableCredits, budgetFor, isUnlimited, periodFor } from "@/lib/plans";
 import { PREVIEW_TTL_MS } from "@/lib/preview";
 import { getRequestUid } from "@/lib/server-auth";
 import { addSpend, daySpend, monthSpend } from "@/lib/usage-cost";
@@ -49,24 +48,18 @@ export async function POST(request: Request) {
   const [bytes] = await adminBucket().file(imagePath).download();
   const image = bytes.toString("base64");
 
-  // The news side runs alongside (Pro and À vie); it never throws and its cost counts in every case.
-  const macroPromise = hasNewsSide(userData.plan)
-    ? macroContext({ asset: preview.asset, timeframe: preview.timeframe }, locale, { cachedOnly: !setup.freshNews })
-    : Promise.resolve({ report: null, costEur: 0 });
   let result: Awaited<ReturnType<typeof analyzeChart>>;
   try {
     result = await analyzeChart(image, imageType, undefined, locale, setup.model, preview.asset, preview.trend);
   } catch (err) {
-    const macro = await macroPromise;
-    const spent = macro.costEur + (err instanceof AnalysisRefusedError ? err.costEur : 0);
+    const spent = err instanceof AnalysisRefusedError ? err.costEur : 0;
     await userRef.set(addSpend(userData, spent), { merge: true }).catch(() => {});
     if (err instanceof AnalysisRefusedError) return error(text.refused, 422);
     if (err instanceof Anthropic.RateLimitError) return error(text.busy, 503);
     console.error("preview claim: analysis failed", err);
     return error(text.failed, 502);
   }
-  const macro = await macroPromise;
-  const analysis: ChartAnalysis = { ...result.analysis, macro: result.analysis.is_chart ? macro.report : null };
+  const analysis: ChartAnalysis = result.analysis;
 
   const analysisRef = userRef.collection("analyses").doc();
   try {
@@ -77,7 +70,7 @@ export async function POST(request: Request) {
       const credits = availableCredits(data);
       if (credits < 1) throw new Error("NO_CREDITS");
       // The free reading's cost counts for this customer too, with the report it led to.
-      const spent = (snapshot.get("costEur") ?? 0) + result.costEur + macro.costEur;
+      const spent = (snapshot.get("costEur") ?? 0) + result.costEur;
       const charged = analysis.is_chart;
       tx.update(userRef, {
         ...(charged && !isUnlimited(data.plan) ? { credits: credits - 1, creditsPeriod: periodFor(data.plan) } : {}),
@@ -87,7 +80,7 @@ export async function POST(request: Request) {
         ...analysis,
         note: null,
         model: result.model,
-        usage: { outputTokens: result.outputTokens, costEur: result.costEur + macro.costEur + (snapshot.get("costEur") ?? 0) },
+        usage: { outputTokens: result.outputTokens, costEur: result.costEur + (snapshot.get("costEur") ?? 0) },
         createdAt: FieldValue.serverTimestamp(),
       });
       tx.update(previewRef, { claimedBy: uid, analysisId: analysisRef.id });
