@@ -144,7 +144,7 @@ export async function previewChart(imageBase64: string, mediaType: AllowedImageT
 
 /**
  * Before a paid analysis: a fraction-of-a-cent look by the light model. An image that is not a chart stops here
- * instead of running the full analysis; a chart gives the asset the news side searches for.
+ * instead of running the full analysis; a chart gives the asset.
  */
 export async function checkChart(imageBase64: string, mediaType: AllowedImageType) {
   const response = await client.beta.messages.parse({

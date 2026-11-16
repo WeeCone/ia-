@@ -17,7 +17,7 @@ const error = (message: string, status: number) => Response.json({ error: messag
 
 /**
  * After payment: the full report is made from the screenshot the visitor previewed, for one credit like any analysis
- * (on the plan's model, with the news side for Pro and À vie). 404 / 410 tell the dashboard to run the chart afresh.
+ * (on the plan's model). 404 / 410 tell the dashboard to run the chart afresh.
  */
 export async function POST(request: Request) {
   const locale = requestLocale(request);

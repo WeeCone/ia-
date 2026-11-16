@@ -58,7 +58,7 @@ export async function POST(request: Request) {
   const startedAt = Date.now();
 
   // A first look by the light model (a fraction of a cent): an image that is not a chart stops here, not charged,
-  // and a chart names the asset the news side searches for. If the look itself fails, the analysis goes ahead.
+  // and a chart names the asset (gold gets its own rules). If the look itself fails, the analysis goes ahead.
   const look = await checkChart(bytes.toString("base64"), image.type as AllowedImageType).catch((err) => {
     console.error("chart check failed", err);
     return null;

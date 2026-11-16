@@ -277,8 +277,6 @@ export function AnalysisResult({ analysis, reduced = false }: { analysis: ChartA
 
       {reduced ? <LockedProSection items={[t.report.lockedPro.alternative, t.report.lockedPro.risk]} /> : <AlternativeScenario analysis={analysis} />}
 
-      {/* Reports made before the news side existed, or whose search failed, have none. */}
-
       {!reduced && analysis.risk_notes?.length > 0 && (
         <section className="border-t border-border p-5">
           <h3 className="label text-muted">{r.risk}</h3>

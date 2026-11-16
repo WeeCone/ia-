@@ -10,7 +10,7 @@ export function GET() {
   const eur = (value: number) => `${value.toFixed(2).replace(".", ",").replace(",00", "")} €`;
   const body = `# Scanzivo
 
-> Scanzivo (https://scanzivo.com) analyses a screenshot of a price chart with AI and returns a technical analysis with one clear action plan: trend, key support and resistance levels drawn on the chart, visible patterns and indicators, the most probable scenario with entry, stop-loss and targets, and the level that would invalidate it. The Pro analysis also covers recent news and the economic events of the next 7 days that could move the asset, with sources. The site and reports are available in French, English, Spanish, Japanese, Korean, Vietnamese and Indonesian.
+> Scanzivo (https://scanzivo.com) analyses a screenshot of a price chart with AI and returns a technical analysis with one clear action plan: trend, key support and resistance levels drawn on the chart, visible patterns and indicators, the most probable scenario with entry, stop-loss and targets, and the level that would invalidate it. The site and reports are available in French, English, Spanish, Japanese, Korean, Vietnamese and Indonesian.
 
 ## What it does
 - Input: a screenshot (PNG, JPEG, WebP or GIF, up to 5 MB) from any platform: TradingView, Binance, MetaTrader, Bybit, Coinbase, a broker app. Pasted, dropped or picked from the phone gallery. Optional free-text context (for example "5-minute scalping, looking for a short").

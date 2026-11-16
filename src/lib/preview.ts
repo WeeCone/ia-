@@ -26,9 +26,9 @@ const countWords = (text: string) => text.split(/\s+/).filter(Boolean).length;
 
 /**
  * Words in a typical full report besides the reading shown for free: plan, both scenarios, levels, patterns, risk
- * notes and the news side of Pro and À vie (an estimate from the report's structure, to be checked on real reports).
+ * notes (an estimate from the report's structure, to be checked on real reports).
  */
-const TYPICAL_LOCKED_WORDS = 500;
+const TYPICAL_LOCKED_WORDS = 420;
 
 /** The beginning of the report, as a visitor sees it for free: the market, the AI's confidence and what it spotted. */
 export function teaserOf(preview: ChartPreview): PreviewTeaser {

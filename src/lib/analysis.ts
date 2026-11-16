@@ -37,7 +37,7 @@ export const ChartPreview = z.object({
 });
 export type ChartPreview = z.infer<typeof ChartPreview>;
 
-/** The light model's first look before a paid analysis: is it a chart, and of what (names the news side's search). */
+/** The light model's first look before a paid analysis: is it a chart, and of what (names the asset, so gold gets its own rules). */
 export const ChartCheck = z.object({
   is_chart: z.boolean().describe("false si l'image n'est pas un graphique de prix exploitable."),
   asset: z.string().describe("Actif identifié (ex. BTC/USDT), ou « Inconnu »."),
@@ -102,7 +102,7 @@ export const ChartAnalysis = z.object({
     .describe("2 à 4 conseils concrets de gestion du risque propres à ce graphique (taille de position, attente de confirmation, volatilité…)."),
 });
 
-/** A report as stored and shown: the chart reading, plus the news side when it could be gathered (older reports have none). */
+/** A report as stored and shown: the chart reading. */
 export type ChartAnalysis = z.infer<typeof ChartAnalysis>;
 export type LevelMark = ChartAnalysis["level_marks"][number];
 export type Scenario = ChartAnalysis["bullish"];
