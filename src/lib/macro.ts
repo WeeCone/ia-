@@ -112,12 +112,23 @@ function cacheRef(asset: string, locale: Locale) {
 
 const UNKNOWN = /^(inconnu|inconnue|unknown|desconocido|n\/a|-)?$/i;
 
+/**
+ * Searches in progress, by cache entry: analyses of the same asset started together (the 1H, 15m and 5m of one chart,
+ * sent a few seconds apart) wait for one search instead of each paying for its own. Only the one that ran it is billed.
+ */
+const inFlight = new Map<string, Promise<{ report: MacroReport | null; costEur: number }>>();
+
 export async function macroContext(target: { asset: string; timeframe: string }, locale: Locale, { cachedOnly = false } = {}) {
   // Nothing to search for without a named asset.
   if (UNKNOWN.test(target.asset.trim())) return { report: null, costEur: 0 };
 
   const ref = cacheRef(target.asset, locale);
-  const cached = await ref.get().catch(() => null);
+  const running = inFlight.get(ref.id);
+  if (running) return running.then((result) => ({ report: result.report, costEur: 0 }));
+  const cached = await ref.get().catch((err) => {
+    console.error("macro cache read failed", err);
+    return null;
+  });
   if (cached?.exists) {
     const parsed = MacroReport.safeParse(cached.get("report"));
     if (parsed.success) return { report: parsed.data, costEur: 0 };
@@ -125,6 +136,16 @@ export async function macroContext(target: { asset: string; timeframe: string },
   // Past Pro's last spending step: only what was already found today.
   if (cachedOnly) return { report: null, costEur: 0 };
 
+  const search = runSearch(target, locale, ref);
+  inFlight.set(ref.id, search);
+  try {
+    return await search;
+  } finally {
+    inFlight.delete(ref.id);
+  }
+}
+
+async function runSearch(target: { asset: string; timeframe: string }, locale: Locale, ref: ReturnType<typeof cacheRef>) {
   const messages: Anthropic.Beta.Messages.BetaMessageParam[] = [
     {
       role: "user",
@@ -181,6 +202,6 @@ export async function macroContext(target: { asset: string; timeframe: string },
     sources: parsed.sources.filter((source) => searched.has(source.url)).slice(0, 5),
   };
   // Shared for the rest of the day; best effort.
-  await ref.set({ report, asset: target.asset, locale, day: parisDay(), createdAt: FieldValue.serverTimestamp() }).catch(() => {});
+  await ref.set({ report, asset: target.asset, locale, day: parisDay(), createdAt: FieldValue.serverTimestamp() }).catch((err) => console.error("macro cache write failed", err));
   return { report, costEur };
 }
