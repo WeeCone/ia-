@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { hasChat, type Plan } from "@/lib/plans";
 import { AskAi, AskAiLocked } from "./ask-ai";
-import { useI18n } from "@/i18n/client";
+import { LocaleProvider, useI18n } from "@/i18n/client";
+import { hasLocale } from "@/i18n/config";
 import type { Dict } from "@/i18n/dictionaries";
 import { type ChartAnalysis, preferredPlan } from "@/lib/analysis";
 import { formatRatio, rewardRatios } from "@/lib/risk";
@@ -44,7 +45,7 @@ function summaryText(analysis: ChartAnalysis, t: Dict) {
 }
 
 /** A finished analysis: the annotated screenshot (when available), the report, and what to do next. */
-export function AnalysisView({
+function AnalysisViewInner({
   analysis,
   imageUrl,
   onNew,
@@ -91,5 +92,20 @@ export function AnalysisView({
       <AnalysisResult analysis={analysis} reduced={plan === "starter"} />
       {analysis.is_chart && analysisId && (hasChat(plan) ? <AskAi analysisId={analysisId} /> : plan === "starter" && <AskAiLocked />)}
     </div>
+  );
+}
+
+/**
+ * A report is shown whole in the language its text was written in (labels, buttons, the question to the AI), so one
+ * report never mixes two languages when the page language differs. Reports from before the language was kept have none
+ * and follow the page.
+ */
+export function AnalysisView(props: React.ComponentProps<typeof AnalysisViewInner>) {
+  const { locale } = useI18n();
+  const stored = props.analysis.locale;
+  return (
+    <LocaleProvider locale={stored && hasLocale(stored) ? stored : locale}>
+      <AnalysisViewInner {...props} />
+    </LocaleProvider>
   );
 }

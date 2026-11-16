@@ -59,7 +59,7 @@ export async function POST(request: Request) {
     console.error("preview claim: analysis failed", err);
     return error(text.failed, 502);
   }
-  const analysis: ChartAnalysis = result.analysis;
+  const analysis: ChartAnalysis = { ...result.analysis, locale };
 
   const analysisRef = userRef.collection("analyses").doc();
   try {

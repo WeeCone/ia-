@@ -91,7 +91,8 @@ export async function POST(request: Request) {
 
   // Every call counts toward the monthly budget, even one that is not charged a credit.
   await recordSpend(userRef, result.costEur);
-  const analysis = result.analysis;
+  // Kept with the report: its labels are shown in the language its text was written in, whatever the page language.
+  const analysis = { ...result.analysis, locale };
 
   // Only charge for a usable chart; re-check credits inside the transaction to avoid double spending.
   const charged = result.analysis.is_chart;

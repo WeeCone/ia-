@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { Locale } from "@/i18n/config";
 
 const Scenario = z.object({
   probability: z.number().describe("Probabilité estimée en pourcentage (0-100). Haussier + baissier = 100. Le scénario dominant est à 65-80 dès que la structure penche d'un côté."),
@@ -103,7 +104,8 @@ export const ChartAnalysis = z.object({
 });
 
 /** A report as stored and shown: the chart reading. */
-export type ChartAnalysis = z.infer<typeof ChartAnalysis>;
+/** The report as stored: `locale` is the language its text was written in (reports from before it was kept have none). */
+export type ChartAnalysis = z.infer<typeof ChartAnalysis> & { locale?: Locale };
 export type LevelMark = ChartAnalysis["level_marks"][number];
 export type Scenario = ChartAnalysis["bullish"];
 
