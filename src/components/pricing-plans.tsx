@@ -18,7 +18,7 @@ export function buyableOffers(plan: Plan | null | undefined): Offer[] {
 
 function Check() {
   return (
-    <svg viewBox="0 0 16 16" className="mt-0.5 size-4 shrink-0 text-accent" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <svg viewBox="0 0 16 16" className="mt-px size-3.5 shrink-0 text-accent" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <path d="M3.5 8.5l3 3 6-7" />
     </svg>
   );
@@ -26,7 +26,7 @@ function Check() {
 
 function Excluded() {
   return (
-    <svg viewBox="0 0 16 16" className="mt-0.5 size-4 shrink-0 text-muted/70" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden>
+    <svg viewBox="0 0 16 16" className="mt-px size-3.5 shrink-0 text-muted/70" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden>
       <path d="M4 8h8" />
     </svg>
   );
@@ -34,7 +34,7 @@ function Excluded() {
 
 function GlobeIcon() {
   return (
-    <svg viewBox="0 0 20 20" className="size-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <svg viewBox="0 0 20 20" className="size-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <circle cx="10" cy="10" r="7.25" />
       <path d="M2.75 10h14.5M10 2.75c2 2.1 3 4.5 3 7.25s-1 5.15-3 7.25c-2-2.1-3-4.5-3-7.25s1-5.15 3-7.25z" />
     </svg>
@@ -52,52 +52,51 @@ export function PackCard({ offer, compact = false, current = false }: { offer: O
 
   return (
     <div
-      className={`panel relative flex flex-col ${pro ? "border-brand/60 ring-1 ring-brand/40" : lifetime ? "border-amber-400/40" : ""} ${compact ? "p-4 sm:p-5" : "p-5 sm:p-7"}`}
+      className={`panel relative flex flex-col ${pro ? "border-brand/60 ring-1 ring-brand/40" : lifetime ? "border-amber-400/40" : ""} p-3.5 sm:p-4`}
     >
       {pro && (
         <span className="label absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-brand px-3 py-1 text-background">
           {p.recommended}
         </span>
       )}
-      <h3 className={`display ${compact ? "text-xl" : "text-2xl"}`}>{name}</h3>
-      <p className={`flex flex-wrap items-baseline gap-x-2 ${compact ? "mt-3" : "mt-5"}`}>
-        <span className={`display ${compact ? "text-4xl" : "text-5xl"} ${lifetime ? "text-warn" : ""}`}>{formatPrice(locale, offer)}</span>
-        <span className="whitespace-nowrap text-sm text-muted">{lifetime ? p.oneOff : p.perMonth}</span>
+      <h3 className="display text-base">{name}</h3>
+      <p className="mt-1.5 flex flex-wrap items-baseline gap-x-1.5">
+        <span className={`display text-3xl ${lifetime ? "text-warn" : ""}`}>{formatPrice(locale, offer)}</span>
+        <span className="whitespace-nowrap text-xs text-muted">{lifetime ? p.oneOff : p.perMonth}</span>
       </p>
-      <p className="mt-3 font-medium leading-snug">{pack.pitch}</p>
+      <p className="mt-2 text-sm font-medium leading-snug">{pack.pitch}</p>
       {/* What sets Pro apart from Starter, said before the list rather than lost in it. */}
       {pack.highlight && (
-        <div className={`rounded-xl border border-brand/40 bg-brand/[0.07] ${compact ? "mt-4 p-3.5" : "mt-5 p-4"}`}>
-          <p className="flex items-center gap-2 text-sm font-semibold text-brand">
+        <div className="mt-2.5 rounded-lg border border-brand/40 bg-brand/[0.07] px-2.5 py-1.5">
+          <p className="flex items-center gap-1.5 text-xs font-semibold text-brand">
             <GlobeIcon />
             {pack.highlight.title}
           </p>
-          <p className="mt-1.5 text-sm leading-relaxed text-foreground/80">{pack.highlight.text}</p>
         </div>
       )}
-      <ul className={`grid gap-2.5 ${compact ? "mt-4" : "mt-5"}`}>
+      <ul className="mt-3 grid gap-1.5">
         {pack.features.map((feature) => (
-          <li key={feature} className="flex gap-2.5 text-sm text-foreground/85">
+          <li key={feature} className="flex gap-2 text-[13px] leading-snug text-foreground/85">
             <Check />
             {feature}
           </li>
         ))}
         {pack.excluded.map((feature) => (
-          <li key={feature} className="flex gap-2.5 text-sm text-muted line-through decoration-muted/60">
+          <li key={feature} className="flex gap-2 text-[13px] leading-snug text-muted line-through decoration-muted/60">
             <Excluded />
             {feature}
           </li>
         ))}
       </ul>
-      <div className={`mt-auto ${compact ? "pt-5" : "pt-7"}`}>
+      <div className="mt-auto pt-3.5">
         {current ? (
-          <p className="rounded-xl border border-border py-3 text-center text-sm text-muted">{p.current}</p>
+          <p className="rounded-lg border border-border py-2 text-center text-xs text-muted">{p.current}</p>
         ) : (
-          <BillingButton route="checkout" offer={offer} block className={`${pro ? "btn-primary" : "btn-secondary"} w-full`}>
+          <BillingButton route="checkout" offer={offer} block className={`${pro ? "btn-primary" : "btn-secondary"} w-full !px-4 !py-2 !text-[13px]`}>
             {p.cta(name)}
           </BillingButton>
         )}
-        <p className="mt-2 text-center text-xs text-muted">{pack.note}</p>
+        <p className="mt-1.5 text-center text-[11px] leading-tight text-muted">{pack.note}</p>
       </div>
     </div>
   );
@@ -139,19 +138,19 @@ export function PricingPlans({ compact = false, currentPlan = null }: { compact?
               );
             })}
           </div>
-          <div className={offers.includes("monthly") ? "pt-6" : "pt-4"}>
+          <div className={offers.includes("monthly") ? "mx-auto max-w-xs pt-5" : "mx-auto max-w-xs pt-3"}>
             <PackCard offer={shown} compact={compact} current={!compact && shown === currentPlan} />
           </div>
         </div>
       )}
       <div
-        className={`${offers.length > 1 ? "hidden md:grid" : "grid"} gap-5 ${compact ? "pt-3" : "gap-6 pt-3"} ${offers.length === 3 ? "md:grid-cols-3" : offers.length === 2 ? "md:grid-cols-2" : "mx-auto max-w-md"}`}
+        className={`${offers.length > 1 ? "hidden md:grid" : "grid"} gap-3 pt-3 ${offers.length === 3 ? "mx-auto max-w-3xl md:grid-cols-3" : offers.length === 2 ? "mx-auto max-w-xl md:grid-cols-2" : "mx-auto max-w-xs"}`}
       >
         {offers.map((offer) => (
           <PackCard key={offer} offer={offer} compact={compact} current={!compact && offer === currentPlan} />
         ))}
       </div>
-      <p className="mt-4 text-center text-sm text-muted">{t.pricing.compactNote}</p>
+      <p className="mt-3 text-center text-xs text-muted">{t.pricing.compactNote}</p>
     </div>
   );
 }
