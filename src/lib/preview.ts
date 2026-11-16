@@ -39,6 +39,7 @@ export function teaserOf(preview: ChartPreview): PreviewTeaser {
     asset: preview.asset,
     timeframe: preview.timeframe,
     confidence: preview.confidence,
+    trend: preview.trend,
     summary: preview.summary,
     stakes: preview.stakes,
     marks,

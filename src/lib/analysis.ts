@@ -46,6 +46,7 @@ export const ChartPreview = z.object({
     .describe(
       "2 ou 3 phrases courtes sur ce qui se joue sur ce graphique : le point clé repéré et la question qu'il pose pour la suite, SANS révéler la direction probable, aucun prix ni niveau chiffré, aucun verdict.",
     ),
+  trend: z.enum(["haussière", "baissière", "neutre"]).describe("Tendance de fond visible sur ce graphique (le sens général des prix sur la fenêtre affichée). Champ à part : elle n'est jamais écrite dans summary ni stakes."),
   patterns_count: z.number().describe("Nombre de figures chartistes ou signaux d'indicateurs visibles."),
   level_marks: z
     .array(z.object({ kind: z.enum(["support", "resistance"]), y: z.number().describe("Position verticale : 0 = bord haut de l'image, 1 = bord bas.") }))

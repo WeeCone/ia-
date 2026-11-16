@@ -76,6 +76,8 @@ export async function analyzeChart(
   model = "claude-opus-5-5",
   /** The asset read beforehand by the light model, when known: gold gets its own rules. */
   assetHint?: string | null,
+  /** The trend shown to the trader in the free reading, when the full report follows it: it stays consistent with it. */
+  earlierTrend?: string | null,
 ) {
   const response = await client.beta.messages.parse({
     model,
@@ -89,7 +91,7 @@ export async function analyzeChart(
         role: "user",
         content: [
           { type: "image", source: { type: "base64", media_type: mediaType, data: imageBase64 } },
-          { type: "text", text: note ? `Contexte fourni par le trader : ${note}` : "Analyse ce graphique." },
+          { type: "text", text: `${note ? `Contexte fourni par le trader : ${note}` : "Analyse ce graphique."}${earlierTrend ? `\nLa première lecture gratuite a déjà indiqué au trader une tendance ${earlierTrend} : reste cohérent avec elle, sauf si le graphique montre clairement le contraire (dis-le alors).` : ""}` },
         ],
       },
     ],
@@ -112,6 +114,7 @@ const PREVIEW_MODEL = "claude-haiku-5-5";
 const PREVIEW_PROMPT = `Tu es un analyste technique. On te fournit la capture d'écran d'un graphique de prix. Le trader verra gratuitement cette première lecture ; le résultat (tendance, scénarios, probabilités, verdict, plan chiffré) lui sera donné ensuite.
 Écris un résumé (summary) de 1 ou 2 phrases courtes sur le contexte visible, puis un texte (stakes) de 2 ou 3 phrases courtes sur ce qui se joue sur CE graphique : le point clé repéré (zone testée, figure en formation, signal d'un indicateur affiché, volume…) et la question que cela pose pour la suite. Sois concret et bref : c'est un avant-goût, l'analyse complète vient ensuite.
 Interdit dans ces deux textes : la tendance ou la direction probable (haussier, baissier, acheteur, vendeur, hausse, baisse, rebond, cassure à la hausse ou à la baisse…), tout prix ou niveau chiffré, tout verdict ou conseil, toute promesse. Pas de superlatifs, pas d'urgence, pas de formule publicitaire.
+Donne aussi la tendance de fond visible (champ trend : haussière, baissière ou neutre) : c'est ce que tout lecteur voit sur le graphique, elle ne compte pas comme un verdict ; elle reste dans son champ et n'apparaît dans aucun des deux textes.
 Indique l'actif, l'unité de temps, ta confiance dans la lecture, le nombre de figures ou signaux visibles, et place les principaux supports et résistances sur l'image (y de 0 en haut à 1 en bas de l'image entière) en t'appuyant sur les graduations de l'axe des prix.
 Si l'image n'est pas un graphique de prix, mets is_chart à false et remplis le reste de façon minimale.`;
 

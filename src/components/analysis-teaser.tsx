@@ -68,6 +68,14 @@ export function AnalysisTeaser({
                 >
                   <LockIcon className="size-3" />
                 </span>
+                {/* The price of the level, hidden: a blurred chip says a number sits there. */}
+                <span
+                  aria-hidden
+                  className="absolute right-0 top-0 flex -translate-y-1/2 items-center rounded px-1.5 py-1"
+                  style={{ background: mark.kind === "support" ? "var(--bull)" : "var(--bear)" }}
+                >
+                  <span className="block h-2 w-9 rounded-sm bg-background/80 blur-[1.5px]" />
+                </span>
               </span>
             ))}
           </div>
@@ -78,7 +86,17 @@ export function AnalysisTeaser({
       <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {[
           [teaser.timeframe, teaser.asset],
-          [<LockIcon key="lock" className="size-5" />, r.trend],
+          [
+            teaser.trend ? (
+              <span key="trend" className={`flex items-center gap-1 text-base ${teaser.trend === "haussière" ? "text-bull" : teaser.trend === "baissière" ? "text-bear" : "text-foreground"}`}>
+                <span aria-hidden>{teaser.trend === "haussière" ? "↗" : teaser.trend === "baissière" ? "↘" : "→"}</span>
+                {t.enums.trend[teaser.trend]}
+              </span>
+            ) : (
+              <LockIcon key="lock" className="size-5" />
+            ),
+            r.trend,
+          ],
           [teaser.locked.levels, c.statLevels],
           [teaser.locked.patterns, c.statSignals],
         ].map(([value, label], index) => (
@@ -117,15 +135,23 @@ export function AnalysisTeaser({
         <Heading>{c.lockedHeading}</Heading>
         {/* Empty shapes only, blurred: the plan, the levels' prices and the probabilities are not in the page. */}
         <div aria-hidden className="relative mt-2 select-none overflow-hidden rounded-2xl border border-border bg-card p-4">
-          <div className="space-y-3 blur-[6px]">
-            {[78, 64, 88, 52, 70].map((width, index) => (
-              <div key={index} className="flex items-center gap-3">
-                <span className="h-4 w-20 rounded bg-foreground/15" />
-                <span className="h-4 rounded bg-accent/40" style={{ width: `${width}%` }} />
+          {/* The rows of the plan are named (they are in every report); only their values are hidden. */}
+          <div className="space-y-3">
+            {(
+              [
+                [r.entry, 46],
+                [r.stop, 38],
+                [r.targets, 62],
+                [r.rr, 30],
+              ] as const
+            ).map(([label, width]) => (
+              <div key={label} className="flex items-center gap-3">
+                <span className="w-24 shrink-0 text-sm font-medium">{label}</span>
+                <span className="h-4 rounded bg-accent/40 blur-[5px]" style={{ width: `${width}%` }} />
               </div>
             ))}
           </div>
-          <div className="absolute inset-0 bg-gradient-to-b from-card/0 to-card/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-card/0 to-card/60" />
         </div>
 
         <div className="mt-6 text-center">
@@ -149,14 +175,18 @@ export function AnalysisTeaser({
               </li>
             ))}
           </ul>
-          <button type="button" onClick={onUnlock} className="btn-primary mt-6 w-full py-3.5 text-base">
-            {unlockLabel}
-          </button>
-          <p className="mt-3 text-xs leading-relaxed text-muted">{terms}</p>
         </div>
       </section>
 
       <p className="text-xs text-muted">{r.footer}</p>
+
+      {/* The way forward stays in view while the reading is scrolled: no hunting for the button at the bottom. */}
+      <div className="sticky bottom-0 z-10 -mx-5 bg-gradient-to-t from-background from-80% to-transparent px-5 pb-3 pt-5 sm:-mx-7 sm:px-7">
+        <button type="button" onClick={onUnlock} className="btn-primary w-full py-3.5 text-base">
+          {unlockLabel}
+        </button>
+        <p className="mt-2 text-center text-xs leading-snug text-muted">{terms}</p>
+      </div>
     </div>
   );
 }

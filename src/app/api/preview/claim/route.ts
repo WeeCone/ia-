@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     : Promise.resolve({ report: null, costEur: 0 });
   let result: Awaited<ReturnType<typeof analyzeChart>>;
   try {
-    result = await analyzeChart(image, imageType, undefined, locale, setup.model, preview.asset);
+    result = await analyzeChart(image, imageType, undefined, locale, setup.model, preview.asset, preview.trend);
   } catch (err) {
     const macro = await macroPromise;
     const spent = macro.costEur + (err instanceof AnalysisRefusedError ? err.costEur : 0);
