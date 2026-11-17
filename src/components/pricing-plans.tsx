@@ -24,14 +24,6 @@ function Check() {
   );
 }
 
-function Excluded() {
-  return (
-    <svg viewBox="0 0 16 16" className="mt-px size-3.5 shrink-0 text-muted/70" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden>
-      <path d="M4 8h8" />
-    </svg>
-  );
-}
-
 /** One pack: its price, what it holds, and the button that opens Stripe's payment (signed in or not). */
 export function PackCard({ offer, compact = false, current = false }: { offer: Offer; compact?: boolean; current?: boolean }) {
   const { t, locale } = useI18n();
@@ -43,7 +35,11 @@ export function PackCard({ offer, compact = false, current = false }: { offer: O
 
   // The first line of every pack is what it holds (analyses per day, unlimited, per month): said once, as the headline
   // under the price, then the rest of the list.
-  const [capacity, ...features] = pack.features;
+  const [fullCapacity, ...allFeatures] = pack.features;
+  // The headline keeps its first clause ("30 analyses complètes chaque mois"), not the detail after the comma, and the
+  // list its first three lines: the rest (what the pack does not hold, the sales line) is in the FAQ and the terms.
+  const capacity = fullCapacity.split(/\s*[,，、]\s*/)[0] || fullCapacity;
+  const features = allFeatures.slice(0, 3);
 
   return (
     <div
@@ -65,17 +61,10 @@ export function PackCard({ offer, compact = false, current = false }: { offer: O
         <Check />
         {capacity}
       </p>
-      <p className="mt-2.5 text-[13px] leading-snug text-foreground/80">{pack.pitch}</p>
-      <ul className="mt-2.5 grid gap-1.5 border-t border-border pt-2.5">
+      <ul className="mt-3 grid gap-1.5">
         {features.map((feature) => (
           <li key={feature} className="flex gap-2 text-[13px] leading-snug text-foreground/85">
             <Check />
-            {feature}
-          </li>
-        ))}
-        {pack.excluded.map((feature) => (
-          <li key={feature} className="flex gap-2 text-xs leading-snug text-muted">
-            <Excluded />
             {feature}
           </li>
         ))}
