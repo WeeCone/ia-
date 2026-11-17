@@ -33,13 +33,11 @@ export function PackCard({ offer, compact = false, current = false }: { offer: O
   const pro = offer === "monthly";
   const lifetime = offer === "lifetime";
 
-  // The first line of every pack is what it holds (analyses per day, unlimited, per month): said once, as the headline
-  // under the price, then the rest of the list.
-  const [fullCapacity, ...allFeatures] = pack.features;
-  // The headline keeps its first clause ("30 analyses complètes chaque mois"), not the detail after the comma, and the
-  // list its first three lines: the rest (what the pack does not hold, the sales line) is in the FAQ and the terms.
+  const [fullCapacity] = pack.features;
+  // The card says one thing, how many analyses the pack holds ("1 analyse par jour", "Analyses illimitées", "30 analyses
+  // complètes chaque mois"), first clause only. The detail of what each pack holds is shown in the payment window beside
+  // the order, and in the FAQ and the terms.
   const capacity = fullCapacity.split(/\s*[,，、]\s*/)[0] || fullCapacity;
-  const features = allFeatures.slice(0, 3);
 
   return (
     <div
@@ -57,18 +55,10 @@ export function PackCard({ offer, compact = false, current = false }: { offer: O
         <span className={`display text-3xl tabular-nums ${lifetime ? "text-warn" : ""}`}>{formatPrice(locale, offer)}</span>
         <span className="whitespace-nowrap text-xs text-muted">{lifetime ? p.oneOff : p.perMonth}</span>
       </p>
-      <p className="mt-2.5 flex items-start gap-2 rounded-lg bg-accent/10 px-2.5 py-1.5 text-[13px] font-semibold leading-snug">
+      <p className="mt-3 flex items-start gap-2 rounded-lg bg-accent/10 px-3 py-2.5 text-[15px] font-bold leading-snug">
         <Check />
         {capacity}
       </p>
-      <ul className="mt-3 grid gap-1.5">
-        {features.map((feature) => (
-          <li key={feature} className="flex gap-2 text-[13px] leading-snug text-foreground/85">
-            <Check />
-            {feature}
-          </li>
-        ))}
-      </ul>
       <div className="mt-auto pt-3.5">
         {current ? (
           <p className="rounded-lg border border-border py-2 text-center text-xs text-muted">{p.current}</p>
@@ -125,7 +115,7 @@ export function PricingPlans({ compact = false, currentPlan = null }: { compact?
         </div>
       )}
       <div
-        className={`${offers.length > 1 ? "hidden md:grid" : "grid"} gap-3 pt-3 ${offers.length === 3 ? "mx-auto max-w-3xl md:grid-cols-3" : offers.length === 2 ? "mx-auto max-w-xl md:grid-cols-2" : "mx-auto max-w-xs"}`}
+        className={`${offers.length > 1 ? "hidden md:grid" : "grid"} gap-3 pt-3 ${offers.length === 3 ? "mx-auto max-w-2xl md:grid-cols-3" : offers.length === 2 ? "mx-auto max-w-xl md:grid-cols-2" : "mx-auto max-w-xs"}`}
       >
         {offers.map((offer) => (
           <PackCard key={offer} offer={offer} compact={compact} current={!compact && offer === currentPlan} />

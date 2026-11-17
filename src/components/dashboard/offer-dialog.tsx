@@ -36,7 +36,7 @@ export function OfferDialog({
       onClose={onClose}
       onClick={(event) => event.target === event.currentTarget && onClose()}
       aria-labelledby="offer-dialog-title"
-      className="theme-light m-auto w-[min(46rem,calc(100%-2rem))] max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-3xl border border-border bg-background p-0 text-foreground shadow-[0_40px_120px_-30px_rgb(15_23_42/0.5)] backdrop:bg-[rgb(11_14_20/0.55)] backdrop:backdrop-blur-sm open:animate-[rise-in_0.35s_cubic-bezier(0.16,1,0.3,1)]"
+      className="theme-light m-auto w-[min(40rem,calc(100%-2rem))] max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-3xl border border-border bg-background p-0 text-foreground shadow-[0_40px_120px_-30px_rgb(15_23_42/0.5)] backdrop:bg-[rgb(11_14_20/0.55)] backdrop:backdrop-blur-sm open:animate-[rise-in_0.35s_cubic-bezier(0.16,1,0.3,1)]"
     >
       <div className="p-5 sm:p-8">
         <div className="flex items-start justify-between gap-4">
