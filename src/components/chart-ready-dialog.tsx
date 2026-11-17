@@ -145,9 +145,17 @@ export function ChartReadyDialog() {
           </div>
         ) : stage.name === "packs" ? (
           <div className="mt-3">
-            <h2 className="display text-3xl">{c.packsTitle}</h2>
-            <p className="mt-2 leading-relaxed text-muted">{c.packsText}</p>
-            <div className="mt-6">
+            <div className="flex items-center gap-4">
+              {chartUrl && (
+                // eslint-disable-next-line @next/next/no-img-element -- a local data URL, nothing to optimise
+                <img src={chartUrl} alt="" className="h-14 w-20 shrink-0 rounded-lg border border-border object-cover" />
+              )}
+              <div>
+                <h2 className="display text-2xl sm:text-3xl">{c.packsTitle}</h2>
+                <p className="mt-1 text-sm leading-snug text-muted">{c.packsText}</p>
+              </div>
+            </div>
+            <div className="mt-5">
               <PricingPlans compact />
             </div>
           </div>

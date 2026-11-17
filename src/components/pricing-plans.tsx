@@ -32,15 +32,6 @@ function Excluded() {
   );
 }
 
-function GlobeIcon() {
-  return (
-    <svg viewBox="0 0 20 20" className="size-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <circle cx="10" cy="10" r="7.25" />
-      <path d="M2.75 10h14.5M10 2.75c2 2.1 3 4.5 3 7.25s-1 5.15-3 7.25c-2-2.1-3-4.5-3-7.25s1-5.15 3-7.25z" />
-    </svg>
-  );
-}
-
 /** One pack: its price, what it holds, and the button that opens Stripe's payment (signed in or not). */
 export function PackCard({ offer, compact = false, current = false }: { offer: Offer; compact?: boolean; current?: boolean }) {
   const { t, locale } = useI18n();
@@ -50,9 +41,15 @@ export function PackCard({ offer, compact = false, current = false }: { offer: O
   const pro = offer === "monthly";
   const lifetime = offer === "lifetime";
 
+  // The first line of every pack is what it holds (analyses per day, unlimited, per month): said once, as the headline
+  // under the price, then the rest of the list.
+  const [capacity, ...features] = pack.features;
+
   return (
     <div
-      className={`panel relative flex flex-col ${pro ? "border-brand/60 ring-1 ring-brand/40" : lifetime ? "border-amber-400/40" : ""} p-3.5 sm:p-4`}
+      className={`panel relative flex flex-col p-3.5 sm:p-4 ${
+        pro ? "border-brand/70 bg-gradient-to-b from-brand/[0.10] to-transparent shadow-[0_16px_40px_-18px_rgb(0_210_255/0.45)] ring-1 ring-brand/50" : lifetime ? "border-amber-400/40" : ""
+      }`}
     >
       {pro && (
         <span className="label absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-brand px-3 py-1 text-background">
@@ -60,29 +57,24 @@ export function PackCard({ offer, compact = false, current = false }: { offer: O
         </span>
       )}
       <h3 className="display text-base">{name}</h3>
-      <p className="mt-1.5 flex flex-wrap items-baseline gap-x-1.5">
-        <span className={`display text-3xl ${lifetime ? "text-warn" : ""}`}>{formatPrice(locale, offer)}</span>
+      <p className="mt-1 flex flex-wrap items-baseline gap-x-1.5">
+        <span className={`display text-3xl tabular-nums ${lifetime ? "text-warn" : ""}`}>{formatPrice(locale, offer)}</span>
         <span className="whitespace-nowrap text-xs text-muted">{lifetime ? p.oneOff : p.perMonth}</span>
       </p>
-      <p className="mt-2 text-sm font-medium leading-snug">{pack.pitch}</p>
-      {/* What sets Pro apart from Starter, said before the list rather than lost in it. */}
-      {pack.highlight && (
-        <div className="mt-2.5 rounded-lg border border-brand/40 bg-brand/[0.07] px-2.5 py-1.5">
-          <p className="flex items-center gap-1.5 text-xs font-semibold text-brand">
-            <GlobeIcon />
-            {pack.highlight.title}
-          </p>
-        </div>
-      )}
-      <ul className="mt-3 grid gap-1.5">
-        {pack.features.map((feature) => (
+      <p className="mt-2.5 flex items-start gap-2 rounded-lg bg-accent/10 px-2.5 py-1.5 text-[13px] font-semibold leading-snug">
+        <Check />
+        {capacity}
+      </p>
+      <p className="mt-2.5 text-[13px] leading-snug text-foreground/80">{pack.pitch}</p>
+      <ul className="mt-2.5 grid gap-1.5 border-t border-border pt-2.5">
+        {features.map((feature) => (
           <li key={feature} className="flex gap-2 text-[13px] leading-snug text-foreground/85">
             <Check />
             {feature}
           </li>
         ))}
         {pack.excluded.map((feature) => (
-          <li key={feature} className="flex gap-2 text-[13px] leading-snug text-muted line-through decoration-muted/60">
+          <li key={feature} className="flex gap-2 text-xs leading-snug text-muted">
             <Excluded />
             {feature}
           </li>
@@ -92,7 +84,7 @@ export function PackCard({ offer, compact = false, current = false }: { offer: O
         {current ? (
           <p className="rounded-lg border border-border py-2 text-center text-xs text-muted">{p.current}</p>
         ) : (
-          <BillingButton route="checkout" offer={offer} block className={`${pro ? "btn-primary" : "btn-secondary"} w-full !px-4 !py-2 !text-[13px]`}>
+          <BillingButton route="checkout" offer={offer} block className={`${pro ? "btn-primary" : "btn-secondary"} w-full !px-4 !py-2.5 !text-sm`}>
             {p.cta(name)}
           </BillingButton>
         )}
