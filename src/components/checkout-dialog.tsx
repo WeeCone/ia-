@@ -137,14 +137,14 @@ export function CheckoutDialog() {
     >
       <div className="grid md:grid-cols-[minmax(0,22rem)_1fr]">
         {/* The order, in Scanzivo's own world; Stripe's form sits beside it on white. */}
-        <aside className="theme-dark relative overflow-hidden bg-background p-6 text-foreground sm:p-8">
+        <aside className="theme-dark relative overflow-hidden bg-background px-4 py-3.5 text-foreground md:p-8">
           <div className="pointer-events-none absolute -right-24 -top-24 size-64 rounded-full bg-accent/15 blur-3xl" aria-hidden />
           <div className="relative flex h-full flex-col">
             <div className="flex items-start justify-between gap-4">
               {/* Not a link: leaving from inside the payment would drop it. */}
               <p className="flex items-center gap-2.5" aria-label="Scanzivo">
-                <LogoMark className="size-9 drop-shadow-[0_0_12px_rgb(0_210_255/0.45)]" />
-                <span className="font-logo text-xl uppercase tracking-tight">Scanzivo</span>
+                <LogoMark className="size-7 drop-shadow-[0_0_12px_rgb(0_210_255/0.45)] md:size-9" />
+                <span className="font-logo text-lg uppercase tracking-tight md:text-xl">Scanzivo</span>
               </p>
               <button type="button" onClick={close} aria-label={c.closeLabel} className="-mr-2 -mt-1 rounded-lg px-2 text-2xl leading-none text-muted hover:text-foreground md:hidden">
                 ×
@@ -152,16 +152,19 @@ export function CheckoutDialog() {
             </div>
             {offer && (
               <>
-                <p className="label mt-8 text-muted">{c.summary}</p>
-                <p className="display mt-2 text-2xl">{name}</p>
-                <p className="mt-3 flex flex-wrap items-baseline gap-x-2">
-                  <span className="display text-5xl">{price}</span>
+                <p className="label mt-8 hidden text-muted md:block">{c.summary}</p>
+                {/* Phones: the order on one line (pack and price), the rest of the screen is for the payment form. */}
+                <div className="mt-2.5 flex flex-wrap items-baseline gap-x-3 md:mt-0 md:block">
+                <p className="display text-lg md:mt-2 md:text-2xl">{name}</p>
+                <p className="flex flex-wrap items-baseline gap-x-2 md:mt-3">
+                  <span className="display text-2xl md:text-5xl">{price}</span>
                   <span className="text-sm text-muted">{offer === "lifetime" ? c.oneOffPeriod : c.monthlyPeriod}</span>
                 </p>
+                </div>
                 {/* Signed out: no sign-up step, the email typed beside it becomes the account. */}
-                {!user && <p className="mt-4 text-sm leading-relaxed text-muted">{c.guestHint}</p>}
+                {!user && <p className="mt-2 text-xs leading-snug text-muted md:mt-4 md:text-sm md:leading-relaxed">{c.guestHint}</p>}
                 {chartUrl && (
-                  <div className="mt-5 flex items-center gap-3 rounded-xl border border-border bg-card/60 p-2.5">
+                  <div className="mt-5 hidden items-center gap-3 rounded-xl border border-border bg-card/60 p-2.5 md:flex">
                     {/* eslint-disable-next-line @next/next/no-img-element -- a local data URL, nothing to optimise */}
                     <img src={chartUrl} alt="" className="h-12 w-16 shrink-0 rounded-md object-cover" />
                     <p className="text-sm leading-snug">{c.chartWaiting}</p>
@@ -176,8 +179,8 @@ export function CheckoutDialog() {
                   ))}
                 </ul>
                 {/* Pushes the reassurance to the bottom of the column, never closer than 2rem to the offer. */}
-                <div className="min-h-8 flex-1" aria-hidden />
-                <ul className="space-y-2 border-t border-border pt-5 text-xs text-muted">
+                <div className="hidden min-h-8 flex-1 md:block" aria-hidden />
+                <ul className="hidden space-y-2 border-t border-border pt-5 text-xs text-muted md:block">
                   <li className="flex gap-2">
                     <LockIcon />
                     {c.trustBank}
@@ -192,8 +195,8 @@ export function CheckoutDialog() {
           </div>
         </aside>
 
-        <div className="relative flex min-h-[32rem] flex-col">
-          <div className="flex items-center justify-between gap-4 px-5 pt-4 sm:px-6">
+        <div className="relative flex flex-col md:min-h-[32rem]">
+          <div className="flex items-center justify-between gap-4 px-4 pt-3 sm:px-6 sm:pt-4">
             <p className="flex items-center gap-2 text-sm font-medium text-[#57606a]">
               <LockIcon />
               {c.secure}
@@ -202,7 +205,7 @@ export function CheckoutDialog() {
               ×
             </button>
           </div>
-          <div className="relative flex-1 p-2 sm:p-4">
+          <div className="relative flex-1 p-1 sm:p-4">
             {offer === "monthly" && upgrade.stage !== "off" ? (
               <UpgradePanel upgrade={upgrade} onConfirm={confirmUpgrade} onClose={close} />
             ) : error ? (
@@ -253,11 +256,11 @@ function UpgradePanel({ upgrade, onConfirm, onClose }: { upgrade: UpgradeState; 
   const { t, locale, href } = useI18n();
   const u = t.checkout.upgrade;
   if (upgrade.stage === "checking") {
-    return <p className="grid min-h-[28rem] place-items-center text-sm text-[#57606a]">{u.checking}</p>;
+    return <p className="grid min-h-[12rem] place-items-center md:min-h-[28rem] text-sm text-[#57606a]">{u.checking}</p>;
   }
   if (upgrade.stage === "done") {
     return (
-      <div className="mx-auto flex min-h-[28rem] max-w-md flex-col items-center justify-center px-4 text-center">
+      <div className="mx-auto flex min-h-[14rem] max-w-md flex-col items-center justify-center px-4 py-6 text-center md:min-h-[28rem]">
         <span className="grid size-12 place-items-center rounded-full bg-[#047857]/10 text-[#047857]">
           <svg viewBox="0 0 16 16" className="size-6" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <path d="M3.5 8.5l3 3 6-7" />
@@ -274,7 +277,7 @@ function UpgradePanel({ upgrade, onConfirm, onClose }: { upgrade: UpgradeState; 
   const quote = upgrade.stage === "ready" ? upgrade : null;
   const date = quote ? new Date(quote.nextAt).toLocaleDateString(INTL_LOCALE[locale], { day: "numeric", month: "long" }) : "";
   return (
-    <div className="mx-auto flex min-h-[28rem] max-w-md flex-col justify-center px-4 py-8">
+    <div className="mx-auto flex min-h-[14rem] max-w-md flex-col justify-center px-4 py-5 md:min-h-[28rem] md:py-8">
       <p className="text-sm font-medium text-[#57606a]">{u.title}</p>
       <p className="mt-3 flex items-baseline gap-2">
         <span className="text-5xl font-semibold tracking-tight">{quote ? formatMoney(locale, quote.amount, quote.currency) : "…"}</span>
