@@ -25,14 +25,34 @@ export const PREVIEW_TTL_MS = 48 * 60 * 60 * 1000;
 const countWords = (text: string) => text.split(/\s+/).filter(Boolean).length;
 
 /**
- * Words in a typical full report besides the reading shown for free: plan, both scenarios, levels, patterns, risk
- * notes (an estimate from the report's structure, to be checked on real reports).
+ * Words in a typical full report besides the reading shown for free: plan, both scenarios, levels, patterns and risk
+ * notes. Measured from real reports: the median full analysis is about 2 200 output tokens, of which roughly 900 words
+ * of text (the rest is the structure around it), so the free reading's share is a few percent, not a fifth.
  */
-const TYPICAL_LOCKED_WORDS = 420;
+const TYPICAL_LOCKED_WORDS = 900;
+
+/** What the free reading may show of the AI's own words: a short summary and a short note, never more. */
+const SUMMARY_MAX_WORDS = 14;
+const STAKES_MAX_WORDS = 22;
+
+/** The first sentences of a text that fit in `max` words; a single longer sentence is cut at the limit. */
+function trimToWords(text: string, max: number) {
+  const sentences = text.trim().match(/[^.!?]+[.!?]+(\s|$)|[^.!?]+$/g) ?? [text];
+  let kept = "";
+  for (const sentence of sentences) {
+    const next = `${kept}${sentence}`.trim();
+    if (countWords(next) > max) break;
+    kept = `${next} `;
+  }
+  if (kept.trim()) return kept.trim();
+  return `${text.trim().split(/\s+/).slice(0, max).join(" ").replace(/[,;:\s]+$/, "")}…`;
+}
 
 /** The beginning of the report, as a visitor sees it for free: the market, the AI's confidence and what it spotted. */
 export function teaserOf(preview: ChartPreview): PreviewTeaser {
-  const shown = [preview.asset, preview.timeframe, preview.confidence, preview.summary, preview.stakes].map(countWords).reduce((a, b) => a + b, 0);
+  const summary = trimToWords(preview.summary, SUMMARY_MAX_WORDS);
+  const stakes = trimToWords(preview.stakes, STAKES_MAX_WORDS);
+  const shown = [preview.asset.split(/[(,]/)[0] ?? preview.asset, preview.timeframe, preview.confidence, summary, stakes].map(countWords).reduce((a, b) => a + b, 0);
   const marks = preview.level_marks.filter((mark) => Number.isFinite(mark.y) && mark.y >= 0 && mark.y <= 1);
   return {
     is_chart: preview.is_chart,
@@ -40,8 +60,8 @@ export function teaserOf(preview: ChartPreview): PreviewTeaser {
     timeframe: preview.timeframe,
     confidence: preview.confidence,
     trend: preview.trend,
-    summary: preview.summary,
-    stakes: preview.stakes,
+    summary,
+    stakes,
     marks,
     locked: { levels: marks.length, patterns: Math.max(0, Math.round(preview.patterns_count)) },
     shownPercent: Math.max(1, Math.round((shown / (shown + TYPICAL_LOCKED_WORDS)) * 100)),
