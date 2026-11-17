@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/i18n/client";
 import { formatPrice } from "@/i18n/format";
-import { onOpenChartReady, onOpenCheckout, requestAutoAnalyze, savePreview } from "@/lib/offers-client";
+import { onCheckoutClosed, onOpenChartReady, onOpenCheckout, requestAutoAnalyze, savePreview } from "@/lib/offers-client";
 import { pendingChartUrl, readPendingChart } from "@/lib/pending-chart";
 import type { PreviewTeaser } from "@/lib/preview-types";
 import { AnalysisTeaser } from "./analysis-teaser";
@@ -61,8 +61,26 @@ export function ChartReadyDialog() {
     };
   }, [stage.name]);
 
-  // Paying happens in its own dialog: this one steps aside.
-  useEffect(() => onOpenCheckout(() => ref.current?.close()), []);
+  // Paying happens in its own dialog: this one steps aside, and comes back as it was if the payment is closed without
+  // paying (the free reading, or the packs, are still there: nothing has to be read again).
+  const stepAside = useRef(false);
+  useEffect(
+    () =>
+      onOpenCheckout(() => {
+        stepAside.current = Boolean(ref.current?.open);
+        ref.current?.close();
+      }),
+    [],
+  );
+  useEffect(
+    () =>
+      onCheckoutClosed(() => {
+        if (!stepAside.current) return;
+        stepAside.current = false;
+        if (ref.current && !ref.current.open) ref.current.showModal();
+      }),
+    [],
+  );
 
   function pay(previewId: string | null) {
     // Unlocks the previewed analysis after payment; without one, the dashboard runs the waiting chart.

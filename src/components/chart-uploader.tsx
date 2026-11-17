@@ -477,8 +477,18 @@ export function ChartUploader({
         {disabled && !offerFirst && !testMode && disabledNotice}
       </div>
 
-      <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(event) => pick(event.target.files?.[0])} />
-      <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(event) => pick(event.target.files?.[0])} />
+      <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(event) => {
+          const file = event.target.files?.[0];
+          event.target.value = "";
+          pick(file);
+        }}
+      />
+      <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(event) => {
+          const file = event.target.files?.[0];
+          event.target.value = "";
+          pick(file);
+        }}
+      />
     </div>
   );
 }

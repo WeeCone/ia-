@@ -26,6 +26,18 @@ export function onOpenCheckout(listener: (offer: Offer) => void) {
   return () => window.removeEventListener(CHECKOUT_EVENT, handler);
 }
 
+// The payment window was closed without paying: whatever stood behind it (the free reading) can come back.
+const CHECKOUT_CLOSED_EVENT = "scanzivo:checkout-closed";
+
+export function notifyCheckoutClosed() {
+  window.dispatchEvent(new Event(CHECKOUT_CLOSED_EVENT));
+}
+
+export function onCheckoutClosed(listener: () => void) {
+  window.addEventListener(CHECKOUT_CLOSED_EVENT, listener);
+  return () => window.removeEventListener(CHECKOUT_CLOSED_EVENT, listener);
+}
+
 // An offer picked on the pricing page before having an account: checkout starts as soon as the account exists.
 const PENDING_OFFER_KEY = "scanzivo:pending-offer";
 

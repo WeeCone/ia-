@@ -4,7 +4,7 @@ import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe
 import { loadStripe } from "@stripe/stripe-js";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createEmbeddedCheckout, redirectToBilling } from "@/lib/billing-client";
-import { EMBEDDED_CHECKOUT, onOpenCheckout } from "@/lib/offers-client";
+import { EMBEDDED_CHECKOUT, notifyCheckoutClosed, onOpenCheckout } from "@/lib/offers-client";
 import { pendingChartUrl } from "@/lib/pending-chart";
 import { useI18n } from "@/i18n/client";
 import { INTL_LOCALE } from "@/i18n/config";
@@ -128,7 +128,10 @@ export function CheckoutDialog() {
   return (
     <dialog
       ref={ref}
-      onClose={() => setOffer(null)}
+      onClose={() => {
+        setOffer(null);
+        notifyCheckoutClosed();
+      }}
       aria-label={c.dialogLabel}
       className="m-auto max-h-[calc(100dvh-1.5rem)] w-[min(66rem,calc(100%-1.5rem))] overflow-y-auto rounded-[1.75rem] bg-white p-0 text-[#0b0e14] shadow-[0_40px_120px_-30px_rgb(0_0_0/0.65)] backdrop:bg-[rgb(11_14_20/0.6)] backdrop:backdrop-blur-sm open:animate-[rise-in_0.35s_cubic-bezier(0.16,1,0.3,1)]"
     >

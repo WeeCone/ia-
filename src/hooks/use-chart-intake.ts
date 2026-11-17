@@ -73,7 +73,12 @@ export function useChartIntake({ listenPaste = false }: { listenPaste?: boolean 
     type: "file" as const,
     accept: "image/*",
     className: "hidden",
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => take(event.target.files?.[0]),
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      // Emptied so that choosing the same image again counts as a new choice (a browser fires no change otherwise).
+      event.target.value = "";
+      take(file);
+    },
   };
 
   return { dragging, busy, error, dropProps, pick, input };
