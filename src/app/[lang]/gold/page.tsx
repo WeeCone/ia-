@@ -64,13 +64,40 @@ export default async function GoldPage() {
     {
       "@context": "https://schema.org",
       "@type": "WebPage",
+      "@id": url,
       name: page.metaTitle,
       description: page.metaDescription,
       url,
       inLanguage: locale,
-      about: { "@type": "Thing", name: "XAU/USD" },
+      about: { "@type": "Thing", name: "XAU/USD", alternateName: ["Gold", "XAUUSD", "GOLD"] },
       publisher: { "@id": "https://scanzivo.com/#organization" },
     },
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: page.metaTitle,
+      serviceType: "AI technical analysis of gold (XAU/USD) charts",
+      description: page.metaDescription,
+      inLanguage: locale,
+      provider: { "@id": "https://scanzivo.com/#organization" },
+      areaServed: "Worldwide",
+      url,
+    },
+    ...(guides.length
+      ? [
+          {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: GUIDES_TITLE[locale] ?? GUIDES_TITLE.en,
+            itemListElement: guides.map((guide, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              name: guide.title,
+              url: `${SITE}${localePath(locale, `/blog/${guide.slug}`)}`,
+            })),
+          },
+        ]
+      : []),
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",

@@ -18,6 +18,9 @@ export function GET() {
 - Output: a report with a directive verdict (buy on confirmation, sell on confirmation, wait, or don't trade), entry zone, stop-loss, 1 to 3 targets, reward/risk ratio, invalidation level, an alternative scenario, risk-management notes, capture-quality advice, the levels drawn on the user's own screenshot.
 - History of past analyses with their annotated screenshots.
 
+## Specialisation: gold (XAU/USD)
+Scanzivo has a specialised analysis for gold: the AI follows XAU/USD-specific rules (round numbers such as multiples of $50 and $100, the London and New York sessions, US data releases, stop placement), a 1-hour / 15-minute / 5-minute routine, and a set of guides on trading gold. It is still a chart-reading tool, not investment advice. Gold pages: https://scanzivo.com/gold (French), https://scanzivo.com/en/gold (English), and in the other languages of the site under /<language>/gold.
+
 ## Pricing (VAT included)
 - Starter: ${eur(OFFER_PRICE_EUR.starter)} per month, ${STARTER_DAILY_CREDITS} analysis per day, reduced (verdict, plan with numbers, probability of the favoured scenario and levels; no alternative scenario, risk notes or AI questions), no commitment.
 - Pro: ${eur(OFFER_PRICE_EUR.monthly)} per month, unlimited full analyses (personal use) with both scenarios in detail, risk notes and one question a day to the AI about an analysis, no commitment, cancellable at any time from the customer area.

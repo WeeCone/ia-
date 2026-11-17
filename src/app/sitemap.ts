@@ -19,7 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...ARTICLES.map((article) => ({
       url: `${SITE}${localePath(article.locale, `/blog/${article.slug}`)}`,
       lastModified: new Date(article.updated ?? article.date),
-      priority: 0.6,
+      priority: article.topic === "gold" ? 0.8 : 0.6,
       // Each article with its translations (hreflang), as on the page itself.
       alternates: {
         languages: Object.fromEntries(translationsOf(article).map((other) => [other.locale, `${SITE}${localePath(other.locale, `/blog/${other.slug}`)}`])),

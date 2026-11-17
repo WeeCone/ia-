@@ -102,6 +102,10 @@ export default async function ArticlePage({ params }: Props) {
       ...(locale === "ja"
         ? {}
         : { wordCount: articleText(article).split(/\s+/).length }),
+      // The gold guides belong to the gold page and say what they are about.
+      ...(article.topic === "gold"
+        ? { about: { "@type": "Thing", name: "XAU/USD", alternateName: ["Gold", "XAUUSD"] }, isPartOf: { "@id": `${SITE}${localePath(locale, "/gold")}` } }
+        : {}),
       author: { "@type": "Organization", name: "Scanzivo", url: SITE },
       publisher: {
         "@type": "Organization",

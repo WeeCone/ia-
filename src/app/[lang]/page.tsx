@@ -33,6 +33,8 @@ export default async function Home() {
       name: "Scanzivo",
       url: "https://scanzivo.com",
       logo: "https://scanzivo.com/brand/scanzivo-icon-512.png",
+      // What the site is about, for search engines and AI assistants: chart reading, with a page and guides on gold.
+      knowsAbout: ["AI technical analysis of trading charts", "Gold (XAU/USD) chart analysis", "Support and resistance", "Risk management in trading"],
     },
     {
       "@context": "https://schema.org",
@@ -51,6 +53,8 @@ export default async function Home() {
       operatingSystem: "Web",
       inLanguage: locale,
       description: t.hero.subtitle,
+      // The gold page, as a specialisation of the application (shown where the language has one).
+      ...(gold ? { featureList: [gold.title, gold.lede] } : {}),
       image: `${site}/og`,
       publisher: { "@id": "https://scanzivo.com/#organization" },
     },
