@@ -17,7 +17,7 @@ export const TRIAL_CREDITS = 1;
  */
 // Starter: its analyses run on the light model (about 1 centime each), so a month of daily analyses stays under 0,50 €.
 // Pro: unlimited analyses on the light model; the 5 € ceiling is only reached by automated use.
-const BUDGET_EUR: Record<Plan, number> = { none: 7, starter: 0.5, monthly: 5, lifetime: 11 };
+const BUDGET_EUR: Record<Plan, number> = { none: 7, starter: 0.5, monthly: 5, lifetime: 5 };
 export const budgetFor = (plan: Plan | undefined) => BUDGET_EUR[plan ?? "none"] ?? BUDGET_EUR.none;
 /** The highest of the ceilings, for the admin's spend warnings. */
 export const MONTHLY_BUDGET_EUR = Math.max(...Object.values(BUDGET_EUR));
@@ -35,10 +35,10 @@ export const MAX_CALL_COST_EUR = 0.5;
 /** Worst case for an analysis on the light model (16 000 output tokens, image, first look). */
 export const LIGHT_MAX_CALL_COST_EUR = 0.03;
 
-/** À vie: analyses per calendar month. */
+/** The monthly credits older accounts were granted (À vie had 30 a month until 2026-11-18, when it became unlimited). */
 export const MONTHLY_CREDITS = 30;
-/** Pro has no analysis count. */
-export const isUnlimited = (plan: Plan | undefined) => plan === "monthly";
+/** Pro and À vie have no analysis count (for personal, non-automated use; their cost ceiling stops automated use). */
+export const isUnlimited = (plan: Plan | undefined) => plan === "monthly" || plan === "lifetime";
 /** Starter: analyses per day. */
 export const STARTER_DAILY_CREDITS = 1;
 
@@ -111,10 +111,9 @@ export function periodFor(plan: Plan | undefined, date = new Date()) {
 
 type CreditState = { plan?: Plan; credits?: number; creditsPeriod?: string };
 
-/** Credits actually available: À vie gets a fresh monthly quota when the month changes, Starter a fresh one each day. */
+/** Credits actually available: Pro and À vie are unlimited, Starter gets a fresh one each day. */
 export function availableCredits({ plan, credits = 0, creditsPeriod }: CreditState) {
   if (isUnlimited(plan)) return Number.POSITIVE_INFINITY;
-  if (plan === "lifetime" && creditsPeriod !== creditPeriod()) return MONTHLY_CREDITS;
   if (plan === "starter" && creditsPeriod !== periodFor("starter")) return STARTER_DAILY_CREDITS;
   return credits;
 }

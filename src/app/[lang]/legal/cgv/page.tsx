@@ -5,7 +5,7 @@ import type { Locale } from "@/i18n/config";
 import { formatPrice } from "@/i18n/format";
 import { getI18n, languageAlternates } from "@/i18n/server";
 import { COMPANY } from "@/lib/legal";
-import { LOCALE_CURRENCY, MONTHLY_CREDITS, STARTER_DAILY_CREDITS, type Currency } from "@/lib/plans";
+import { LOCALE_CURRENCY, STARTER_DAILY_CREDITS, type Currency } from "@/lib/plans";
 
 const CURRENCY_NAME: Record<Currency, string> = { eur: "euros", jpy: "Japanese yen", krw: "Korean won", vnd: "Vietnamese dong", idr: "Indonesian rupiah", brl: "Brazilian reais" };
 
@@ -61,7 +61,7 @@ const CONTENT: Record<Locale, Terms> = {
         </li>
         <li>
           <strong>À vie — {formatPrice("fr", "lifetime")}, paiement unique</strong> : l&apos;analyse complète du pack Pro (une
-          question par jour à l&apos;IA comprise), avec {MONTHLY_CREDITS} analyses par mois, rechargées au début de chaque mois civil, pour la durée de vie du Service,
+          question par jour à l&apos;IA comprise), en nombre illimité, pour un usage personnel et non automatisé, pour la durée de vie du Service,
           sans abonnement.
         </li>
       </ul>
@@ -156,7 +156,7 @@ const CONTENT: Record<Locale, Terms> = {
         </li>
         <li>
           <strong>Lifetime — {formatPrice(locale, "lifetime")}, one-off payment</strong>: the Pro pack&apos;s full analysis (one
-          question a day to the AI included), with {MONTHLY_CREDITS} analyses per month, refilled at the start of each calendar month, for the lifetime of the Service,
+          question a day to the AI included), in unlimited number, for personal, non-automated use, for the lifetime of the Service,
           with no subscription.
         </li>
       </ul>
@@ -252,7 +252,7 @@ const CONTENT: Record<Locale, Terms> = {
         </li>
         <li>
           <strong>De por vida — {formatPrice("es", "lifetime")}, pago único</strong>: el análisis completo del pack Pro (una
-          pregunta al día a la IA incluida), con {MONTHLY_CREDITS} análisis al mes, recargados al inicio de cada mes natural, durante la vida del Servicio, sin
+          pregunta al día a la IA incluida), en número ilimitado, para un uso personal y no automatizado, durante la vida del Servicio, sin
           suscripción.
         </li>
       </ul>

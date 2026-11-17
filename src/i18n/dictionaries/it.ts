@@ -181,7 +181,7 @@ export const it: Dict = {
         pitch: "L'analisi completa di Pro, pagata una sola volta.",
         highlight: null,
         features: [
-          "30 analisi complete ogni mese, ricaricate il giorno 1",
+          "Analisi illimitate",
           "I due scenari dettagliati e la gestione del rischio",
           "Chat IA: 1 domanda al giorno",
           "Nessun abbonamento, nessun addebito successivo",
@@ -202,7 +202,7 @@ export const it: Dict = {
       },
       {
         q: "Cosa succede quando ho usato le mie analisi?",
-        a: "Con Starter, l'analisi del giorno torna disponibile l'indomani. Pro è illimitato: non c'è nulla da ricaricare. Con A vita, le 30 analisi tornano il giorno 1 di ogni mese. Non viene addebitato nulla in più, e un'immagine che non è un grafico non viene conteggiata.",
+        a: "Con Starter, l'analisi del giorno torna disponibile l'indomani. Pro e A vita sono illimitati: non c'è nulla da ricaricare. Non viene addebitato nulla in più, e un'immagine che non è un grafico non viene conteggiata.",
       },
       {
         q: "Come si disdice un abbonamento?",
@@ -739,10 +739,10 @@ export const it: Dict = {
     includes: {
       starter: (price: string) => `Starter, ${price}/mese: 1 analisi al giorno, con verdetto, piano in cifre, probabilità e livelli.`,
       monthly: (price: string) => `Pro, ${price}/mese: analisi illimitate e complete, con i due scenari dettagliati e una domanda al giorno all'IA.`,
-      lifetime: (price: string) => `A vita, ${price} pagati una volta: 30 analisi complete ogni mese, con i due scenari dettagliati, senza abbonamento.`,
+      lifetime: (price: string) => `A vita, ${price} pagati una volta: analisi illimitate e complete, con i due scenari dettagliati, senza abbonamento.`,
     },
     cancel: "Senza vincoli: può disdire quando vuole da Il mio account → Gestisci il mio abbonamento.",
-    oneOff: "Non seguiranno altri addebiti: le analisi si ricaricano il giorno 1 di ogni mese.",
+    oneOff: "Non seguiranno altri addebiti.",
     cta: "Apri la mia area",
     password: "Per accedere di nuovo in seguito, scelga una password:",
     passwordCta: "Scegli la mia password",

@@ -181,7 +181,7 @@ export const vi: Dict = {
         pitch: "Bản phân tích đầy đủ của Pro, chỉ trả một lần.",
         highlight: null,
         features: [
-          "30 bản phân tích đầy đủ mỗi tháng, nạp lại vào ngày 1",
+          "Phân tích không giới hạn",
           "Hai kịch bản chi tiết và quản lý rủi ro",
           "Chat với AI: 1 câu hỏi mỗi ngày",
           "Không đăng ký định kỳ, không bị trừ tiền về sau",
@@ -202,7 +202,7 @@ export const vi: Dict = {
       },
       {
         q: "Dùng hết lượt phân tích thì sao?",
-        a: "Với Starter, lượt phân tích trong ngày quay lại vào hôm sau. Pro không giới hạn: không cần nạp lại. Với Trọn đời, 30 lượt quay lại vào ngày 1 mỗi tháng. Không tính thêm phí, và ảnh không phải biểu đồ sẽ không bị tính lượt.",
+        a: "Với Starter, lượt phân tích trong ngày quay lại vào hôm sau. Pro và Trọn đời không giới hạn: không cần nạp lại. Không tính thêm phí, và ảnh không phải biểu đồ sẽ không bị tính lượt.",
       },
       {
         q: "Hủy đăng ký như thế nào?",
@@ -725,10 +725,10 @@ export const vi: Dict = {
     includes: {
       starter: (price: string) => `Starter, ${price}/tháng: 1 lần phân tích mỗi ngày, với kết luận, kế hoạch có số liệu, xác suất và các mức giá.`,
       monthly: (price: string) => `Pro, ${price}/tháng: phân tích đầy đủ không giới hạn, kèm hai kịch bản chi tiết và 1 câu hỏi mỗi ngày cho AI.`,
-      lifetime: (price: string) => `Trọn đời, ${price} trả một lần: 30 bản phân tích đầy đủ mỗi tháng, kèm hai kịch bản chi tiết, không đăng ký định kỳ.`,
+      lifetime: (price: string) => `Trọn đời, ${price} trả một lần: phân tích đầy đủ không giới hạn, kèm hai kịch bản chi tiết, không đăng ký định kỳ.`,
     },
     cancel: "Không ràng buộc: hủy bất cứ lúc nào trong Tài khoản → Quản lý gói đăng ký.",
-    oneOff: "Bạn sẽ không bị trừ thêm tiền: lượt phân tích được nạp lại vào ngày 1 mỗi tháng.",
+    oneOff: "Bạn sẽ không bị trừ thêm tiền.",
     cta: "Mở tài khoản",
     password: "Để đăng nhập lại sau này, hãy đặt mật khẩu:",
     passwordCta: "Đặt mật khẩu",

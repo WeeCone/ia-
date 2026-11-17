@@ -181,7 +181,7 @@ export const de: Dict = {
         pitch: "Die vollständige Pro-Analyse, nur einmal bezahlt.",
         highlight: null,
         features: [
-          "30 vollständige Analysen pro Monat, aufgefüllt am 1.",
+          "Unbegrenzte Analysen",
           "Beide Szenarien im Detail und das Risikomanagement",
           "KI-Chat: 1 Frage pro Tag",
           "Kein Abo, danach keine weiteren Abbuchungen",
@@ -202,7 +202,7 @@ export const de: Dict = {
       },
       {
         q: "Was passiert, wenn meine Analysen aufgebraucht sind?",
-        a: "Bei Starter ist Ihre Tagesanalyse am nächsten Tag wieder verfügbar. Pro ist unbegrenzt: Es muss nichts aufgefüllt werden. Bei Lifetime stehen Ihnen Ihre 30 Analysen am 1. jedes Monats wieder zur Verfügung. Es wird nichts zusätzlich abgebucht, und ein Bild, das kein Chart ist, wird nicht angerechnet.",
+        a: "Bei Starter ist Ihre Tagesanalyse am nächsten Tag wieder verfügbar. Pro und Lifetime sind unbegrenzt: Es muss nichts aufgefüllt werden. Es wird nichts zusätzlich abgebucht, und ein Bild, das kein Chart ist, wird nicht angerechnet.",
       },
       {
         q: "Wie kündige ich ein Abo?",
@@ -742,10 +742,10 @@ export const de: Dict = {
     includes: {
       starter: (price: string) => `Starter, ${price}/Monat: 1 Analyse pro Tag, mit Urteil, Plan in Zahlen, Wahrscheinlichkeit und Marken.`,
       monthly: (price: string) => `Pro, ${price}/Monat: unbegrenzte, vollständige Analysen, mit beiden Szenarien im Detail und einer Frage pro Tag an die KI.`,
-      lifetime: (price: string) => `Lifetime, ${price} einmalig bezahlt: 30 vollständige Analysen pro Monat, mit beiden Szenarien im Detail, ohne Abo.`,
+      lifetime: (price: string) => `Lifetime, ${price} einmalig bezahlt: unbegrenzte, vollständige Analysen, mit beiden Szenarien im Detail, ohne Abo.`,
     },
     cancel: "Jederzeit kündbar: Sie kündigen, wann Sie wollen, unter Mein Konto → Abo verwalten.",
-    oneOff: "Es folgt keine weitere Abbuchung: Ihre Analysen werden am 1. jedes Monats aufgefüllt.",
+    oneOff: "Es folgt keine weitere Abbuchung.",
     cta: "Meinen Bereich öffnen",
     password: "Um sich später wieder anzumelden, wählen Sie ein Passwort:",
     passwordCta: "Passwort festlegen",

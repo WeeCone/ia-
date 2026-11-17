@@ -181,7 +181,7 @@ export const id: Dict = {
         pitch: "Analisis lengkap Pro, cukup bayar sekali.",
         highlight: null,
         features: [
-          "30 analisis lengkap setiap bulan, diisi ulang setiap tanggal 1",
+          "Analisis tanpa batas",
           "Kedua skenario secara mendetail dan manajemen risiko",
           "Chat AI: 1 pertanyaan per hari",
           "Tanpa langganan, tanpa tagihan setelahnya",
@@ -202,7 +202,7 @@ export const id: Dict = {
       },
       {
         q: "Apa yang terjadi jika jatah analisis saya habis?",
-        a: "Dengan Starter, analisis harian Anda kembali keesokan harinya. Pro tanpa batas: tidak perlu diisi ulang. Dengan Seumur Hidup, 30 analisis Anda kembali setiap tanggal 1. Tidak ada biaya tambahan, dan gambar yang bukan grafik tidak dihitung.",
+        a: "Dengan Starter, analisis harian Anda kembali keesokan harinya. Pro dan Seumur Hidup tanpa batas: tidak perlu diisi ulang. Tidak ada biaya tambahan, dan gambar yang bukan grafik tidak dihitung.",
       },
       {
         q: "Bagaimana cara membatalkan langganan?",
@@ -725,10 +725,10 @@ export const id: Dict = {
     includes: {
       starter: (price: string) => `Starter, ${price}/bulan: 1 analisis per hari, dengan kesimpulan, rencana dengan angka, probabilitas, dan level.`,
       monthly: (price: string) => `Pro, ${price}/bulan: analisis lengkap tanpa batas, dengan kedua skenario yang mendetail dan 1 pertanyaan per hari untuk AI.`,
-      lifetime: (price: string) => `Seumur Hidup, ${price} sekali bayar: 30 analisis lengkap setiap bulan, dengan kedua skenario yang mendetail, tanpa langganan.`,
+      lifetime: (price: string) => `Seumur Hidup, ${price} sekali bayar: analisis lengkap tanpa batas, dengan kedua skenario yang mendetail, tanpa langganan.`,
     },
     cancel: "Tanpa ikatan: batalkan kapan saja dari Akun saya → Kelola langganan.",
-    oneOff: "Tidak ada tagihan lagi: analisis Anda diisi ulang setiap tanggal 1.",
+    oneOff: "Tidak ada tagihan lagi.",
     cta: "Buka akun saya",
     password: "Untuk masuk lagi nanti, buat kata sandi:",
     passwordCta: "Buat kata sandi",

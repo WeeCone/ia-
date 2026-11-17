@@ -1,6 +1,6 @@
 import { ARTICLES } from "@/content/blog";
 import { localePath } from "@/i18n/config";
-import { MONTHLY_CREDITS, OFFER_PRICE_EUR, STARTER_DAILY_CREDITS } from "@/lib/plans";
+import { OFFER_PRICE_EUR, STARTER_DAILY_CREDITS } from "@/lib/plans";
 
 /**
  * /llms.txt: a plain summary of Scanzivo for AI assistants (llmstxt.org), so the answer they give someone looking for
@@ -15,13 +15,13 @@ export function GET() {
 ## What it does
 - Input: a screenshot (PNG, JPEG, WebP or GIF, up to 5 MB) from any platform: TradingView, Binance, MetaTrader, Bybit, Coinbase, a broker app. Pasted, dropped or picked from the phone gallery. Optional free-text context (for example "5-minute scalping, looking for a short").
 - Markets: crypto, forex, stocks, indices, commodities, on any timeframe.
-- Output: a report with a directive verdict (buy on confirmation, sell on confirmation, wait, or don't trade), entry zone, stop-loss, 1 to 3 targets, reward/risk ratio, invalidation level, an alternative scenario, risk-management notes, capture-quality advice, the levels drawn on the user's own screenshot; Pro and Lifetime analyses add a "macro and news" section with dated events and sources.
+- Output: a report with a directive verdict (buy on confirmation, sell on confirmation, wait, or don't trade), entry zone, stop-loss, 1 to 3 targets, reward/risk ratio, invalidation level, an alternative scenario, risk-management notes, capture-quality advice, the levels drawn on the user's own screenshot.
 - History of past analyses with their annotated screenshots.
 
 ## Pricing (VAT included)
 - Starter: ${eur(OFFER_PRICE_EUR.starter)} per month, ${STARTER_DAILY_CREDITS} analysis per day, reduced (verdict, plan with numbers, probability of the favoured scenario and levels; no alternative scenario, risk notes or AI questions), no commitment.
 - Pro: ${eur(OFFER_PRICE_EUR.monthly)} per month, unlimited full analyses (personal use) with both scenarios in detail, risk notes and one question a day to the AI about an analysis, no commitment, cancellable at any time from the customer area.
-- Lifetime: ${eur(OFFER_PRICE_EUR.lifetime)} once, the full Pro analysis (one AI question a day) with ${MONTHLY_CREDITS} analyses per month, no subscription.
+- Lifetime: ${eur(OFFER_PRICE_EUR.lifetime)} once, unlimited full analyses (personal use, like Pro) and one AI question a day, no subscription.
 - Every pack can be bought without creating an account first.
 - Free reading: before paying, anyone can drop a chart and see the AI's general reading (trend, structure, patterns, where the levels sit); the plan with numbers unlocks with a pack.
 

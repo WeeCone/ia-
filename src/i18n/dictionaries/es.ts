@@ -181,7 +181,7 @@ export const es: Dict = {
         pitch: "El análisis completo de Pro, pagado una sola vez.",
         highlight: null,
         features: [
-          "30 análisis completos cada mes, recargados el día 1",
+          "Análisis ilimitados",
           "Los dos escenarios detallados y la gestión del riesgo",
           "Chat IA: 1 pregunta al día",
           "Sin suscripción ni cobros posteriores",
@@ -202,7 +202,7 @@ export const es: Dict = {
       },
       {
         q: "¿Qué pasa cuando he usado mis análisis?",
-        a: "Con Starter, tu análisis del día vuelve al día siguiente. Pro es ilimitado: no hay nada que recargar. Con De por vida, tus 30 análisis vuelven el día 1 de cada mes. No se cobra nada más, y una imagen que no es un gráfico no se descuenta.",
+        a: "Con Starter, tu análisis del día vuelve al día siguiente. Pro y De por vida son ilimitados: no hay nada que recargar. No se cobra nada más, y una imagen que no es un gráfico no se descuenta.",
       },
       {
         q: "¿Cómo cancelo una suscripción?",
@@ -739,10 +739,10 @@ export const es: Dict = {
     includes: {
       starter: (price: string) => `Starter, ${price}/mes: 1 análisis al día, con el veredicto, el plan con cifras, la probabilidad y los niveles.`,
       monthly: (price: string) => `Pro, ${price}/mes: análisis ilimitados y completos, con los dos escenarios detallados y una pregunta al día a la IA.`,
-      lifetime: (price: string) => `De por vida, ${price} pagados una vez: 30 análisis completos cada mes, con los dos escenarios detallados, sin suscripción.`,
+      lifetime: (price: string) => `De por vida, ${price} pagados una vez: análisis ilimitados y completos, con los dos escenarios detallados, sin suscripción.`,
     },
     cancel: "Sin permanencia: cancela cuando quieras desde Mi cuenta → Gestionar mi suscripción.",
-    oneOff: "No habrá más cobros: tus análisis se recargan el día 1 de cada mes.",
+    oneOff: "No habrá más cobros.",
     cta: "Abrir mi espacio",
     password: "Para volver a entrar más tarde, elige una contraseña:",
     passwordCta: "Elegir mi contraseña",

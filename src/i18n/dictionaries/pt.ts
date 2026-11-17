@@ -181,7 +181,7 @@ export const pt: Dict = {
         pitch: "A análise completa do Pro, paga uma única vez.",
         highlight: null,
         features: [
-          "30 análises completas por mês, renovadas no dia 1º",
+          "Análises ilimitadas",
           "Os dois cenários detalhados e a gestão de risco",
           "Chat com a IA: 1 pergunta por dia",
           "Sem assinatura e sem cobranças depois",
@@ -202,7 +202,7 @@ export const pt: Dict = {
       },
       {
         q: "O que acontece quando eu uso todas as minhas análises?",
-        a: "No Starter, a análise do dia volta no dia seguinte. O Pro é ilimitado: não há nada para renovar. No Vitalício, as suas 30 análises voltam no dia 1º de cada mês. Nada é cobrado a mais, e uma imagem que não é um gráfico não é descontada.",
+        a: "No Starter, a análise do dia volta no dia seguinte. O Pro e o Vitalício são ilimitados: não há nada para renovar. Nada é cobrado a mais, e uma imagem que não é um gráfico não é descontada.",
       },
       {
         q: "Como cancelo uma assinatura?",
@@ -739,10 +739,10 @@ export const pt: Dict = {
     includes: {
       starter: (price: string) => `Starter, ${price}/mês: 1 análise por dia, com o veredito, o plano com números, a probabilidade e os níveis.`,
       monthly: (price: string) => `Pro, ${price}/mês: análises ilimitadas e completas, com os dois cenários detalhados e uma pergunta por dia à IA.`,
-      lifetime: (price: string) => `Vitalício, ${price} pagos uma vez: 30 análises completas por mês, com os dois cenários detalhados, sem assinatura.`,
+      lifetime: (price: string) => `Vitalício, ${price} pagos uma vez: análises ilimitadas e completas, com os dois cenários detalhados, sem assinatura.`,
     },
     cancel: "Sem fidelidade: cancele quando quiser em Minha conta → Gerenciar minha assinatura.",
-    oneOff: "Não haverá outras cobranças: as suas análises são renovadas no dia 1º de cada mês.",
+    oneOff: "Não haverá outras cobranças.",
     cta: "Abrir minha conta",
     password: "Para entrar de novo mais tarde, escolha uma senha:",
     passwordCta: "Escolher minha senha",

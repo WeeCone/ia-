@@ -181,7 +181,7 @@ export const en: Dict = {
         pitch: "Pro's full analysis, paid only once.",
         highlight: null,
         features: [
-          "30 full analyses every month, refilled on the 1st",
+          "Unlimited analyses",
           "The two detailed scenarios and the risk management",
           "AI chat: 1 question a day",
           "No subscription, nothing charged afterwards",
@@ -202,7 +202,7 @@ export const en: Dict = {
       },
       {
         q: "What happens once I've used my analyses?",
-        a: "With Starter, your daily analysis comes back the next day. Pro is unlimited: nothing to refill. With Lifetime, your 30 analyses come back on the 1st of each month. Nothing extra is charged, and an image that isn't a chart isn't counted.",
+        a: "With Starter, your daily analysis comes back the next day. Pro and Lifetime are unlimited: nothing to refill. Nothing extra is charged, and an image that isn't a chart isn't counted.",
       },
       {
         q: "How do I cancel a subscription?",
@@ -739,10 +739,10 @@ export const en: Dict = {
     includes: {
       starter: (price: string) => `Starter, ${price}/month: 1 analysis a day, with the verdict, the plan with numbers, the probability and the levels.`,
       monthly: (price: string) => `Pro, ${price}/month: unlimited full analyses, with the two detailed scenarios and one question a day to the AI.`,
-      lifetime: (price: string) => `Lifetime, ${price} paid once: 30 full analyses every month, with the two detailed scenarios, no subscription.`,
+      lifetime: (price: string) => `Lifetime, ${price} paid once: unlimited full analyses, with the two detailed scenarios, no subscription.`,
     },
     cancel: "No commitment: cancel whenever you like from My account → Manage my subscription.",
-    oneOff: "Nothing more will be charged: your analyses refill on the 1st of each month.",
+    oneOff: "Nothing more will be charged.",
     cta: "Open my space",
     password: "To sign back in later, choose a password:",
     passwordCta: "Choose my password",
