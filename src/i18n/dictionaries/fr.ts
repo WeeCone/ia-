@@ -180,7 +180,7 @@ export const fr = {
         pitch: "L'analyse complète de Pro, payée une seule fois.",
         highlight: null,
         features: [
-          "30 analyses complètes chaque mois, rechargées le 1er",
+          "Analyses illimitées",
           "Les deux scénarios détaillés et la gestion du risque",
           "Chat IA : 1 question par jour",
           "Aucun abonnement, aucun prélèvement ensuite",
@@ -201,7 +201,7 @@ export const fr = {
       },
       {
         q: "Que se passe-t-il quand j'ai utilisé mes analyses ?",
-        a: "Avec Starter, votre analyse du jour revient le lendemain. Pro est illimité : rien à recharger. Avec À vie, vos 30 analyses reviennent le 1er de chaque mois. Rien n'est prélevé en plus, et une image qui n'est pas un graphique n'est pas décomptée.",
+        a: "Avec Starter, votre analyse du jour revient le lendemain. Pro et À vie sont illimités : rien à recharger. Rien n'est prélevé en plus, et une image qui n'est pas un graphique n'est pas décomptée.",
       },
       {
         q: "Comment résilier un abonnement ?",
@@ -741,10 +741,10 @@ export const fr = {
     includes: {
       starter: (price: string) => `Starter, ${price}/mois : 1 analyse par jour, avec le verdict, le plan chiffré, la probabilité et les niveaux.`,
       monthly: (price: string) => `Pro, ${price}/mois : analyses illimitées et complètes, avec les deux scénarios détaillés et une question par jour à l'IA.`,
-      lifetime: (price: string) => `À vie, ${price} payés une fois : 30 analyses complètes chaque mois, avec les deux scénarios détaillés, sans abonnement.`,
+      lifetime: (price: string) => `À vie, ${price} payés une fois : analyses illimitées et complètes, avec les deux scénarios détaillés, sans abonnement.`,
     },
     cancel: "Sans engagement : vous résiliez quand vous voulez depuis Mon compte → Gérer mon abonnement.",
-    oneOff: "Aucun prélèvement ne suivra : vos analyses se rechargent le 1er de chaque mois.",
+    oneOff: "Aucun prélèvement ne suivra.",
     cta: "Ouvrir mon espace",
     password: "Pour vous reconnecter plus tard, choisissez un mot de passe :",
     passwordCta: "Choisir mon mot de passe",
