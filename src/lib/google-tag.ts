@@ -3,8 +3,8 @@
 import { readConsent } from "./consent";
 
 /**
- * Google Tag Manager (the container behind Google Ads conversion tracking), loaded only once the visitor accepts
- * advertising cookies, with Google's consent mode set to "granted" at that moment. Every call is a no-op without a
+ * Google Tag Manager (the container behind Google Ads conversion tracking), in the page head with consent mode on
+ * "denied" until the visitor accepts advertising cookies, which switches it to "granted". Every call is a no-op without a
  * container id or without consent. The conversions themselves (free reading, checkout, purchase) are pushed as named
  * events on the data layer; the triggers live in the container.
  */
@@ -16,7 +16,7 @@ declare global {
   }
 }
 
-let loaded = false;
+let granted = false;
 
 // GTM reads consent commands as `arguments` objects, not arrays: this mirrors Google's own snippet.
 function gtag(..._args: unknown[]) {
@@ -24,28 +24,23 @@ function gtag(..._args: unknown[]) {
   window.dataLayer!.push(arguments);
 }
 
-/** Loads the container if the visitor accepted; safe to call on every page. Returns whether it is active. */
+function setConsent(value: "granted" | "denied") {
+  gtag("consent", "update", { ad_storage: value, ad_user_data: value, ad_personalization: value, analytics_storage: value });
+  granted = value === "granted";
+}
+
+/** The tag itself sits in the head (app/[lang]/layout.tsx); this tells it the visitor's choice. Safe on every page. */
 export function loadGoogleTag() {
   if (!GTM_ID || readConsent() !== "granted") return false;
-  if (!loaded) {
-    window.dataLayer = window.dataLayer ?? [];
-    gtag("consent", "default", { ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied", analytics_storage: "denied" });
-    gtag("consent", "update", { ad_storage: "granted", ad_user_data: "granted", ad_personalization: "granted", analytics_storage: "granted" });
-    window.dataLayer.push({ "gtm.start": Date.now(), event: "gtm.js" });
-    const script = document.createElement("script");
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(GTM_ID)}`;
-    document.head.appendChild(script);
-    loaded = true;
-  }
+  window.dataLayer = window.dataLayer ?? [];
+  if (!granted) setConsent("granted");
   return true;
 }
 
 /** After a refusal following an acceptance: Google stops storing and sending advertising data from this page on. */
 export function revokeGoogleTag() {
-  if (!loaded) return;
-  gtag("consent", "update", { ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied", analytics_storage: "denied" });
-  loaded = false;
+  if (!GTM_ID || !granted) return;
+  setConsent("denied");
 }
 
 type GoogleEvent = "free_reading" | "sign_up" | "begin_checkout" | "purchase";

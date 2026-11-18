@@ -13,6 +13,16 @@ import { metaDescription } from "@/lib/seo";
 import { getI18n } from "@/i18n/server";
 import "../globals.css";
 
+// Google's tag, in the head as Google Ads asks. Consent mode starts every storage type on "denied"; it flips to "granted"
+// only for a visitor who accepted in the cookie banner (stored in this browser, see lib/consent.ts), and it is updated live
+// when the banner is answered (lib/google-tag.ts).
+const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID ?? "";
+const GTM_HEAD = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
+var d={ad_storage:"denied",ad_user_data:"denied",ad_personalization:"denied",analytics_storage:"denied",wait_for_update:500};
+gtag("consent","default",d);
+try{var c=JSON.parse(localStorage.getItem("scanzivo:consent")||"null");if(c&&c.value==="granted"&&Date.now()-c.at<${182 * 24 * 3600 * 1000}){gtag("consent","update",{ad_storage:"granted",ad_user_data:"granted",ad_personalization:"granted",analytics_storage:"granted"})}}catch(e){}
+gtag("js",new Date());`;
+
 const inter = Inter({ variable: "--font-inter", subsets: ["latin", "latin-ext", "vietnamese"] });
 const spaceGrotesk = Space_Grotesk({ variable: "--font-space-grotesk", subsets: ["latin", "latin-ext", "vietnamese"] });
 // Logo wordmark only.
@@ -49,6 +59,12 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
   const { locale, t } = await getI18n();
   return (
     <html lang={locale} className={`${inter.variable} ${spaceGrotesk.variable} ${archivoBlack.variable} ${jetbrainsMono.variable} h-full antialiased`}>
+      {GTM_ID && (
+        <head>
+          <script async src={`https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`} />
+          <script dangerouslySetInnerHTML={{ __html: GTM_HEAD }} />
+        </head>
+      )}
       <body className="min-h-full flex flex-col">
         <a
           href="#contenu"
