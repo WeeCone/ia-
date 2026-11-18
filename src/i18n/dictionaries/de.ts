@@ -762,6 +762,41 @@ export const de: Dict = {
     failed: "Ihre Zahlung ist eingegangen, aber Ihr Bereich ließ sich nicht öffnen. Versuchen Sie es erneut oder schreiben Sie uns per WhatsApp.",
     login: "Anmelden",
   },
+  // Optional marketing e-mails: the sign-up box, the dashboard question, the reminders and the unsubscribe page.
+  marketing: {
+    optIn: "Ich möchte Tipps und Angebote von Scanzivo per E-Mail erhalten (jederzeit abbestellbar).",
+    prompt: {
+      title: "Unsere Tipps per E-Mail erhalten?",
+      text: "Ein paar E-Mails, damit Sie Scanzivo gut nutzen und das passende Paket wählen können. Kein Spam, jederzeit abbestellbar.",
+      accept: "Ja, gerne",
+      decline: "Nein, danke",
+      thanks: "Vermerkt. Sie können es sich jederzeit anders überlegen, über den Link am Ende unserer E-Mails.",
+    },
+    unsubscribed: { title: "Sie sind abgemeldet", text: "Sie erhalten keine Tipps oder Angebote von Scanzivo mehr per E-Mail. E-Mails zu Ihrem Konto und Ihren Zahlungen erhalten Sie weiterhin." },
+    relance: {
+      sentBecause: "Sie erhalten diese E-Mail, weil Sie zugestimmt haben, die Tipps von Scanzivo zu erhalten.",
+      unsubscribe: "Abbestellen",
+      sender: "Scanzivo, scanzivo.com",
+      first: {
+        subject: "Ihre erste Scanzivo-Analyse",
+        heading: "Ihr Konto ist bereit",
+        lines: (price: string) => [
+          "Sie haben Ihr Scanzivo-Konto erstellt: Jetzt fehlt nur noch der Screenshot eines Charts.",
+          `Zuerst erhalten Sie eine kostenlose Auswertung. Der Plan in Zahlen (Einstieg, Stop, Kursziele) wird mit einem Paket freigeschaltet, ab ${price} pro Monat und ohne Bindung.`,
+        ],
+        cta: "Chart analysieren",
+      },
+      second: {
+        subject: "Welches Scanzivo-Paket passt zu Ihnen?",
+        heading: "Ein Paket für jeden Bedarf",
+        lines: (prices: { starter: string; monthly: string; lifetime: string }) => [
+          `Starter, ${prices.starter} pro Monat: eine Analyse pro Tag. Pro, ${prices.monthly} pro Monat: unbegrenzte Analysen, mit beiden Szenarien im Detail. Lifetime, ${prices.lifetime} einmalig: unbegrenzte Analysen, kein Abo.`,
+          "Alle drei sind ohne Bindung, und Sie beginnen mit einer kostenlosen Auswertung. Eine Frage? Antworten Sie einfach auf diese E-Mail.",
+        ],
+        cta: "Pakete ansehen",
+      },
+    },
+  },
   welcomeEmail: {
     subject: "Willkommen bei Scanzivo",
     greeting: (name: string | null) => (name ? `Hallo ${name},` : "Hallo,"),

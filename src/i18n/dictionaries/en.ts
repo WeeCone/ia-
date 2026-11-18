@@ -759,6 +759,41 @@ export const en: Dict = {
     failed: "Your payment went through, but your account couldn't be opened. Try again, or message us on WhatsApp.",
     login: "Log in",
   },
+  // Optional marketing e-mails: the sign-up box, the dashboard question, the reminders and the unsubscribe page.
+  marketing: {
+    optIn: "I would like to receive tips and offers from Scanzivo by email (unsubscribe at any time).",
+    prompt: {
+      title: "Get our tips by email?",
+      text: "A few emails to help you get the most out of Scanzivo and choose your pack. No spam, unsubscribe at any time.",
+      accept: "Yes, please",
+      decline: "No thanks",
+      thanks: "Noted. You can change your mind at any time from the link at the bottom of our emails.",
+    },
+    unsubscribed: { title: "You are unsubscribed", text: "You will no longer receive tips or offers from Scanzivo by email. Emails about your account and payments continue." },
+    relance: {
+      sentBecause: "You are receiving this email because you agreed to receive Scanzivo's tips.",
+      unsubscribe: "Unsubscribe",
+      sender: "Scanzivo, scanzivo.com",
+      first: {
+        subject: "Your first Scanzivo analysis",
+        heading: "Your account is ready",
+        lines: (price: string) => [
+          "You created your Scanzivo account: all that is left is to drop a chart screenshot.",
+          `You get a free reading first. The plan with numbers (entry, stop, targets) unlocks with a pack, from ${price} a month and with no commitment.`,
+        ],
+        cta: "Analyse a chart",
+      },
+      second: {
+        subject: "Which Scanzivo pack should you choose?",
+        heading: "A pack for every use",
+        lines: (prices: { starter: string; monthly: string; lifetime: string }) => [
+          `Starter, ${prices.starter} a month: one analysis a day. Pro, ${prices.monthly} a month: unlimited analyses, with both scenarios in detail. Lifetime, ${prices.lifetime} once: unlimited analyses, no subscription.`,
+          "All three are commitment-free, and you start with a free reading. A question? Just reply to this email.",
+        ],
+        cta: "See the packs",
+      },
+    },
+  },
   welcomeEmail: {
     subject: "Welcome to Scanzivo",
     greeting: (name: string | null) => (name ? `Hello ${name},` : "Hello,"),

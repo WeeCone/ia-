@@ -759,6 +759,41 @@ export const it: Dict = {
     failed: "Il pagamento è stato registrato, ma non è stato possibile aprire la Sua area. Riprovi, oppure ci scriva su WhatsApp.",
     login: "Accedi",
   },
+  // Optional marketing e-mails: the sign-up box, the dashboard question, the reminders and the unsubscribe page.
+  marketing: {
+    optIn: "Desidero ricevere via e-mail consigli e offerte di Scanzivo (disiscrizione in qualsiasi momento).",
+    prompt: {
+      title: "Ricevere i nostri consigli via e-mail?",
+      text: "Qualche e-mail per usare al meglio Scanzivo e scegliere la Sua offerta. Niente spam, disiscrizione in qualsiasi momento.",
+      accept: "Sì, volentieri",
+      decline: "No, grazie",
+      thanks: "Annotato. Può cambiare idea in qualsiasi momento dal link in fondo alle nostre e-mail.",
+    },
+    unsubscribed: { title: "Disiscrizione completata", text: "Non riceverà più e-mail di consigli o offerte di Scanzivo. Le e-mail relative al Suo account e ai Suoi pagamenti continuano." },
+    relance: {
+      sentBecause: "Riceve questa e-mail perché ha accettato di ricevere i consigli di Scanzivo.",
+      unsubscribe: "Annulla l'iscrizione",
+      sender: "Scanzivo, scanzivo.com",
+      first: {
+        subject: "La Sua prima analisi Scanzivo",
+        heading: "Il Suo account è pronto",
+        lines: (price: string) => [
+          "Ha creato il Suo account Scanzivo: non resta che caricare lo screenshot di un grafico.",
+          `Ottiene prima una lettura gratuita. Il piano con i valori (ingresso, stop, obiettivi) si sblocca con un pack, da ${price} al mese e senza vincoli.`,
+        ],
+        cta: "Analizza un grafico",
+      },
+      second: {
+        subject: "Quale pack scegliere per Scanzivo?",
+        heading: "Un pack per ogni esigenza",
+        lines: (prices: { starter: string; monthly: string; lifetime: string }) => [
+          `Starter, ${prices.starter} al mese: un'analisi al giorno. Pro, ${prices.monthly} al mese: analisi illimitate, con i due scenari dettagliati. A vita, ${prices.lifetime} una sola volta: analisi illimitate, senza abbonamento.`,
+          "Tutti e tre sono senza vincoli, e si parte con una lettura gratuita. Una domanda? Risponda semplicemente a questa e-mail.",
+        ],
+        cta: "Vedi i pack",
+      },
+    },
+  },
   welcomeEmail: {
     subject: "Benvenuto su Scanzivo",
     greeting: (name: string | null) => (name ? `Gentile ${name},` : "Buongiorno,"),

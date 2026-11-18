@@ -212,3 +212,60 @@ export async function sendPurchaseEmail(
     label: "purchase email",
   });
 }
+
+/**
+ * A reminder to an account that agreed to receive tips and has not bought a pack: "first" a day after sign-up, "second"
+ * (the packs side by side) after three. Always with the way to unsubscribe, in the page and in the mail headers.
+ */
+export async function sendRelanceEmail(to: string, name: string | null, stage: "first" | "second", appUrl: string, locale: Locale, unsubscribe: string) {
+  const resend = getResend();
+  if (!resend || !process.env.EMAIL_FROM) {
+    console.warn("relance email skipped: RESEND_API_KEY / EMAIL_FROM not set");
+    return false;
+  }
+  const m = DICTIONARIES[locale].marketing.relance;
+  const content = stage === "first" ? m.first : m.second;
+  const lines =
+    stage === "first"
+      ? m.first.lines(formatPrice(locale, "starter"))
+      : m.second.lines({ starter: formatPrice(locale, "starter"), monthly: formatPrice(locale, "monthly"), lifetime: formatPrice(locale, "lifetime") });
+  const url = `${appUrl}${localePath(locale, stage === "first" ? "/dashboard" : "/pricing")}`;
+  const disclaimer = DICTIONARIES[locale].welcomeEmail.disclaimer;
+  const paragraph = (text: string) => `<p style="margin:0 0 14px;line-height:1.6;color:#94a3b8">${escapeHtml(text)}</p>`;
+  const { error } = await resend.emails.send({
+    from: process.env.EMAIL_FROM,
+    to,
+    subject: content.subject,
+    headers: { "List-Unsubscribe": `<${unsubscribe}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" },
+    text: [name ? `${name},` : "", ...lines, "", `${content.cta} : ${url}`, "", disclaimer, "", m.sentBecause, `${m.unsubscribe} : ${unsubscribe}`, m.sender].filter((line, index) => line !== "" || index > 0).join("\n"),
+    html: `<!doctype html>
+<html lang="${locale}">
+  <body style="margin:0;background:#0b0f19;font-family:Arial,Helvetica,sans-serif;color:#f1f5f9">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0b0f19;padding:32px 16px">
+      <tr><td align="center">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#151d2c;border:2px solid #263247">
+          <tr><td style="padding:20px 28px;border-bottom:2px solid #263247">
+            <img src="${appUrl}/brand/scanzivo-logo-transparent.png" alt="Scanzivo" width="180" height="52" style="display:block;border:0">
+          </td></tr>
+          <tr><td style="padding:32px 28px">
+            <h1 style="margin:0 0 20px;font-size:28px;line-height:1.15">${escapeHtml(content.heading)}</h1>
+            ${lines.map(paragraph).join("\n            ")}
+            <a href="${url}" style="display:inline-block;margin-top:14px;background:#00f5a0;color:#0b0f19;font-weight:700;text-decoration:none;padding:14px 24px;border-radius:999px">${escapeHtml(content.cta)}</a>
+          </td></tr>
+          <tr><td style="padding:16px 28px;border-top:2px solid #263247;font-size:12px;line-height:1.6;color:#94a3b8">
+            ${escapeHtml(disclaimer)}<br><br>
+            ${escapeHtml(m.sentBecause)} <a href="${unsubscribe}" style="color:#94a3b8">${escapeHtml(m.unsubscribe)}</a><br>
+            ${escapeHtml(m.sender)}
+          </td></tr>
+        </table>
+      </td></tr>
+    </table>
+  </body>
+</html>`,
+  });
+  if (error) {
+    console.error("relance email failed", error);
+    return false;
+  }
+  return true;
+}

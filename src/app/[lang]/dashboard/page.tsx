@@ -10,6 +10,7 @@ import { CaptureGuide } from "@/components/capture-guide";
 import { ChartUploader, type AnalysisOutcome } from "@/components/chart-uploader";
 import { AccountPanel } from "@/components/dashboard/account-panel";
 import { EmailBanner } from "@/components/dashboard/email-banner";
+import { MarketingPrompt } from "@/components/dashboard/marketing-prompt";
 import { AccountMenu } from "@/components/dashboard/account-menu";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { TourPopover } from "@/components/dashboard/tour";
@@ -333,6 +334,7 @@ export default function DashboardPage() {
         </header>
 
         <EmailBanner user={user} />
+        <MarketingPrompt user={user} profile={profile} />
         {checkoutDone && (
           <div className="flex items-center gap-3 border-b border-bull/30 bg-bull/10 px-4 py-2.5 text-sm text-bull">
             <p className="mx-auto w-full max-w-6xl flex-1">

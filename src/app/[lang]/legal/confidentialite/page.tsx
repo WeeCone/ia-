@@ -88,6 +88,14 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
         d&apos;autres traitements ; cette mesure est donc dispensée de consentement selon les recommandations de la CNIL.
       </p>
 
+      <h2>E-mails de conseils et d&apos;offres</h2>
+      <p>
+        Si vous cochez la case prévue à l&apos;inscription (ou répondez oui à la question posée dans votre espace), nous vous envoyons
+        quelques e-mails de conseils et d&apos;offres, par exemple quelques jours après la création de votre compte. Votre accord repose sur
+        cette réponse, et vous pouvez le retirer à tout moment avec le lien « Se désinscrire » présent dans chaque e-mail. Les e-mails
+        liés à votre compte et à vos paiements ne sont pas concernés.
+      </p>
+
       <h2>Vos droits</h2>
       <p>
         Vous disposez d&apos;un droit d&apos;accès, de rectification, d&apos;effacement, de limitation, d&apos;opposition et de
@@ -171,6 +179,13 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
         IP address, no identifier and no link to your account. When you make a purchase, only the name of that campaign is
         attached to the payment, to count sales per campaign. This data is used for our statistics only and is never shared or
         combined with other processing, so under the CNIL guidelines this measurement does not require consent.
+      </p>
+
+      <h2>Tips and offers by email</h2>
+      <p>
+        If you tick the box at sign-up (or answer yes to the question asked in your account), we send you a few emails with tips and
+        offers, for example a few days after you create your account. Your consent rests on that answer, and you can withdraw it at any
+        time with the &quot;Unsubscribe&quot; link in every email. Emails about your account and payments are not concerned.
       </p>
 
       <h2>Your rights</h2>
@@ -257,6 +272,13 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
         caso de compra, solo el nombre de esa campaña se adjunta al pago, para contar las ventas por campaña. Estos datos solo
         sirven para nuestras estadísticas y nunca se comparten ni se cruzan con otros tratamientos; por ello, según las
         recomendaciones de la CNIL, esta medición no requiere consentimiento.
+      </p>
+
+      <h2>Correos de consejos y ofertas</h2>
+      <p>
+        Si marca la casilla del registro (o responde que sí a la pregunta de su cuenta), le enviamos unos pocos correos con consejos y
+        ofertas, por ejemplo unos días después de crear su cuenta. Su consentimiento se basa en esa respuesta y puede retirarlo en
+        cualquier momento con el enlace «Darse de baja» de cada correo. Los correos sobre su cuenta y sus pagos no están afectados.
       </p>
 
       <h2>Sus derechos</h2>

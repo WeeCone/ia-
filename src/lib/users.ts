@@ -20,6 +20,9 @@ export type UserProfile = {
   trialEndsAt?: number | null;
   /** Language chosen at sign-up: emails and analyses default to it. */
   locale?: Locale;
+  /** Answer to "receive tips and offers by email?": absent until the account has answered. */
+  marketingConsent?: boolean;
+  marketingDecidedAt?: unknown;
 };
 
 /** Creates users/{uid} on first sign-in; leaves existing profiles untouched. */

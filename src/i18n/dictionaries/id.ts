@@ -745,6 +745,41 @@ export const id: Dict = {
     failed: "Pembayaran berhasil, tetapi akun Anda belum bisa dibuka. Coba lagi, atau hubungi kami lewat WhatsApp.",
     login: "Masuk",
   },
+  // Optional marketing e-mails: the sign-up box, the dashboard question, the reminders and the unsubscribe page.
+  marketing: {
+    optIn: "Saya ingin menerima tips dan penawaran dari Scanzivo lewat email (berhenti berlangganan kapan saja).",
+    prompt: {
+      title: "Terima tips kami lewat email?",
+      text: "Beberapa email untuk membantu Anda memakai Scanzivo dengan baik dan memilih paket. Tanpa spam, berhenti kapan saja.",
+      accept: "Ya, tentu",
+      decline: "Tidak, terima kasih",
+      thanks: "Sudah dicatat. Anda dapat mengubah pilihan kapan saja lewat tautan di bagian bawah email kami.",
+    },
+    unsubscribed: { title: "Anda telah berhenti berlangganan", text: "Anda tidak akan lagi menerima email tips atau penawaran dari Scanzivo. Email terkait akun dan pembayaran Anda tetap dikirim." },
+    relance: {
+      sentBecause: "Anda menerima email ini karena Anda setuju menerima tips dari Scanzivo.",
+      unsubscribe: "Berhenti berlangganan",
+      sender: "Scanzivo, scanzivo.com",
+      first: {
+        subject: "Analisis Scanzivo pertama Anda",
+        heading: "Akun Anda sudah siap",
+        lines: (price: string) => [
+          "Anda sudah membuat akun Scanzivo: tinggal mengunggah tangkapan layar sebuah grafik.",
+          `Anda mendapat bacaan gratis lebih dulu. Rencana dengan angka (entry, stop, target) terbuka dengan paket, mulai dari ${price} per bulan dan tanpa ikatan.`,
+        ],
+        cta: "Analisis grafik",
+      },
+      second: {
+        subject: "Paket Scanzivo mana yang sebaiknya dipilih?",
+        heading: "Satu paket untuk setiap kebutuhan",
+        lines: (prices: { starter: string; monthly: string; lifetime: string }) => [
+          `Starter, ${prices.starter} per bulan: satu analisis per hari. Pro, ${prices.monthly} per bulan: analisis tanpa batas, dengan kedua skenario secara rinci. Seumur Hidup, ${prices.lifetime} sekali bayar: analisis tanpa batas, tanpa langganan.`,
+          "Ketiganya tanpa ikatan, dan Anda memulai dengan bacaan gratis. Ada pertanyaan? Cukup balas email ini.",
+        ],
+        cta: "Lihat paket",
+      },
+    },
+  },
   welcomeEmail: {
     subject: "Selamat datang di Scanzivo",
     greeting: (name: string | null) => (name ? `Halo ${name},` : "Halo,"),
