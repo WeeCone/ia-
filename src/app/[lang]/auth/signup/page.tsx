@@ -50,6 +50,13 @@ export default function SignupPage() {
     try {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
       await ensureUserProfile(user, undefined, locale);
+      // The optional box: recorded on the account by the server (best effort; the dashboard asks again if it failed).
+      if (form.get("marketing")) {
+        user
+          .getIdToken()
+          .then((token) => fetch("/api/account/marketing", { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify({ consent: true }) }))
+          .catch(() => {});
+      }
       // Best effort: the dashboard banner offers to resend it.
       auth.languageCode = locale;
       sendEmailVerification(user).catch(() => {});
@@ -108,6 +115,11 @@ export default function SignupPage() {
             </Link>
             {a.signup.termsC}
           </span>
+        </label>
+        {/* Optional and unticked: tips and offers by email only for those who say yes. */}
+        <label className="flex items-start gap-2 text-xs leading-relaxed text-muted">
+          <input name="marketing" type="checkbox" className="mt-0.5 size-4 accent-brand" />
+          <span>{t.marketing.optIn}</span>
         </label>
         <FormError message={error} />
         <button type="submit" disabled={pending} className="btn-primary w-full">

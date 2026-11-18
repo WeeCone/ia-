@@ -750,6 +750,41 @@ export const ja: Dict = {
     failed: "お支払いは完了しましたが、アカウントを開けませんでした。再試行するか、WhatsAppでご連絡ください。",
     login: "ログイン",
   },
+  // Optional marketing e-mails: the sign-up box, the dashboard question, the reminders and the unsubscribe page.
+  marketing: {
+    optIn: "Scanzivoからのヒントやご案内をメールで受け取る（配信停止はいつでも可能です）。",
+    prompt: {
+      title: "ヒントをメールで受け取りますか？",
+      text: "Scanzivoの使い方やパック選びに役立つメールを、少数お送りします。迷惑メールではありません。配信停止はいつでも可能です。",
+      accept: "はい、受け取ります",
+      decline: "いいえ、結構です",
+      thanks: "承知しました。お気持ちが変わったときは、メール下部のリンクからいつでも変更できます。",
+    },
+    unsubscribed: { title: "配信を停止しました", text: "Scanzivoからのヒントやご案内のメールは、今後お送りしません。アカウントやお支払いに関するメールは引き続きお届けします。" },
+    relance: {
+      sentBecause: "このメールは、Scanzivoからのヒントの受け取りにご同意いただいたためお送りしています。",
+      unsubscribe: "配信を停止する",
+      sender: "Scanzivo, scanzivo.com",
+      first: {
+        subject: "Scanzivoでの最初の分析",
+        heading: "アカウントの準備ができました",
+        lines: (price: string) => [
+          "Scanzivoのアカウントを作成いただきました。あとはチャートのスクリーンショットをアップロードするだけです。",
+          `最初は無料の読み取りをご利用いただけます。数値入りのプラン（エントリー、ストップ、目標）は、パックで解放されます。月${price}から、縛りはありません。`,
+        ],
+        cta: "チャートを分析する",
+      },
+      second: {
+        subject: "Scanzivoのパック、どれを選ぶ？",
+        heading: "用途に合わせたパック",
+        lines: (prices: { starter: string; monthly: string; lifetime: string }) => [
+          `Starterは月${prices.starter}で、1日1回の分析。Proは月${prices.monthly}で、分析回数は無制限、2つのシナリオを詳しく確認できます。ライフタイムは一回払いの${prices.lifetime}で、分析回数は無制限、サブスクなしです。`,
+          "いずれも縛りはなく、最初は無料の読み取りから始められます。ご質問があれば、このメールにそのままご返信ください。",
+        ],
+        cta: "パックを見る",
+      },
+    },
+  },
   welcomeEmail: {
     subject: "Scanzivoへようこそ",
     greeting: (name: string | null) => (name ? `${name}様` : "こんにちは。"),

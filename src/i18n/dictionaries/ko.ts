@@ -745,6 +745,41 @@ export const ko: Dict = {
     failed: "결제는 완료되었지만 계정을 열지 못했습니다. 다시 시도하시거나 WhatsApp으로 연락해 주세요.",
     login: "로그인",
   },
+  // Optional marketing e-mails: the sign-up box, the dashboard question, the reminders and the unsubscribe page.
+  marketing: {
+    optIn: "Scanzivo의 이용 팁과 혜택 안내를 이메일로 받겠습니다(언제든 수신 거부 가능).",
+    prompt: {
+      title: "이용 팁을 이메일로 받으시겠어요?",
+      text: "Scanzivo를 잘 활용하고 알맞은 팩을 고르시는 데 도움이 되는 이메일 몇 통을 보내드립니다. 스팸은 없으며, 언제든 수신 거부할 수 있습니다.",
+      accept: "네, 받겠습니다",
+      decline: "아니요, 괜찮습니다",
+      thanks: "확인했습니다. 이메일 하단의 링크에서 언제든 설정을 바꾸실 수 있습니다.",
+    },
+    unsubscribed: { title: "수신 거부가 완료되었습니다", text: "이제 Scanzivo의 이용 팁이나 혜택 안내 이메일은 발송되지 않습니다. 계정 및 결제와 관련된 이메일은 계속 발송됩니다." },
+    relance: {
+      sentBecause: "Scanzivo의 이용 팁 수신에 동의하셨기 때문에 이 이메일을 받으셨습니다.",
+      unsubscribe: "수신 거부",
+      sender: "Scanzivo, scanzivo.com",
+      first: {
+        subject: "Scanzivo 첫 분석",
+        heading: "계정이 준비되었습니다",
+        lines: (price: string) => [
+          "Scanzivo 계정을 만드셨습니다. 이제 차트 스크린샷만 올리시면 됩니다.",
+          `먼저 무료 분석을 받으실 수 있습니다. 수치가 담긴 플랜(진입, 손절, 목표가)은 팩으로 열리며, 월 ${price}부터 약정 없이 이용하실 수 있습니다.`,
+        ],
+        cta: "차트 분석하기",
+      },
+      second: {
+        subject: "Scanzivo 팩, 무엇을 고를까요?",
+        heading: "용도에 맞는 팩",
+        lines: (prices: { starter: string; monthly: string; lifetime: string }) => [
+          `Starter, 월 ${prices.starter}: 하루 1회 분석. Pro, 월 ${prices.monthly}: 분석 무제한, 두 시나리오를 자세히 제공. 평생 이용권, 1회 ${prices.lifetime}: 분석 무제한, 구독 없음.`,
+          "세 가지 모두 약정이 없으며, 무료 분석으로 먼저 시작하실 수 있습니다. 궁금한 점이 있으시면 이 이메일에 회신해 주세요.",
+        ],
+        cta: "팩 보기",
+      },
+    },
+  },
   welcomeEmail: {
     subject: "Scanzivo에 오신 것을 환영합니다",
     greeting: (name: string | null) => (name ? `${name}님, 안녕하세요.` : "안녕하세요."),

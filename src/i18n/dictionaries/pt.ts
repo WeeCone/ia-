@@ -759,6 +759,41 @@ export const pt: Dict = {
     failed: "Seu pagamento foi registrado, mas não conseguimos abrir a sua conta. Tente de novo ou fale com a gente pelo WhatsApp.",
     login: "Entrar",
   },
+  // Optional marketing e-mails: the sign-up box, the dashboard question, the reminders and the unsubscribe page.
+  marketing: {
+    optIn: "Quero receber dicas e ofertas do Scanzivo por e-mail (cancelamento a qualquer momento).",
+    prompt: {
+      title: "Receber nossas dicas por e-mail?",
+      text: "Alguns e-mails para você aproveitar bem o Scanzivo e escolher o seu pacote. Sem spam, cancelamento a qualquer momento.",
+      accept: "Sim, quero",
+      decline: "Não, obrigado",
+      thanks: "Anotado. Você pode mudar de ideia a qualquer momento pelo link no final dos nossos e-mails.",
+    },
+    unsubscribed: { title: "Você cancelou o recebimento", text: "Você não receberá mais e-mails de dicas ou ofertas do Scanzivo. Os e-mails sobre a sua conta e os seus pagamentos continuam." },
+    relance: {
+      sentBecause: "Você recebe este e-mail porque aceitou receber as dicas do Scanzivo.",
+      unsubscribe: "Cancelar o recebimento",
+      sender: "Scanzivo, scanzivo.com",
+      first: {
+        subject: "Sua primeira análise no Scanzivo",
+        heading: "Sua conta está pronta",
+        lines: (price: string) => [
+          "Você criou a sua conta no Scanzivo: falta só enviar a captura de um gráfico.",
+          `Você começa com uma leitura grátis. O plano com números (entrada, stop, alvos) é liberado com um pacote, a partir de ${price} por mês e sem fidelidade.`,
+        ],
+        cta: "Analisar um gráfico",
+      },
+      second: {
+        subject: "Qual pacote do Scanzivo escolher?",
+        heading: "Um pacote para cada uso",
+        lines: (prices: { starter: string; monthly: string; lifetime: string }) => [
+          `Starter, ${prices.starter} por mês: uma análise por dia. Pro, ${prices.monthly} por mês: análises ilimitadas, com os dois cenários detalhados. Vitalício, ${prices.lifetime} uma única vez: análises ilimitadas, sem assinatura.`,
+          "Os três são sem fidelidade, e você começa com uma leitura grátis. Alguma dúvida? É só responder a este e-mail.",
+        ],
+        cta: "Ver os pacotes",
+      },
+    },
+  },
   welcomeEmail: {
     subject: "Boas-vindas ao Scanzivo",
     greeting: (name: string | null) => (name ? `Olá, ${name}!` : "Olá!"),

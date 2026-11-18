@@ -745,6 +745,41 @@ export const vi: Dict = {
     failed: "Thanh toán đã thành công nhưng chưa mở được tài khoản. Hãy thử lại, hoặc nhắn cho chúng tôi qua WhatsApp.",
     login: "Đăng nhập",
   },
+  // Optional marketing e-mails: the sign-up box, the dashboard question, the reminders and the unsubscribe page.
+  marketing: {
+    optIn: "Tôi muốn nhận mẹo và ưu đãi từ Scanzivo qua email (hủy đăng ký bất cứ lúc nào).",
+    prompt: {
+      title: "Nhận mẹo của chúng tôi qua email?",
+      text: "Vài email giúp bạn dùng Scanzivo hiệu quả và chọn gói phù hợp. Không spam, hủy đăng ký bất cứ lúc nào.",
+      accept: "Có, tôi muốn nhận",
+      decline: "Không, cảm ơn",
+      thanks: "Đã ghi nhận. Bạn có thể đổi ý bất cứ lúc nào qua liên kết ở cuối email của chúng tôi.",
+    },
+    unsubscribed: { title: "Bạn đã hủy đăng ký", text: "Bạn sẽ không nhận thêm email về mẹo hoặc ưu đãi từ Scanzivo. Email liên quan đến tài khoản và thanh toán của bạn vẫn được gửi." },
+    relance: {
+      sentBecause: "Bạn nhận email này vì bạn đã đồng ý nhận các mẹo từ Scanzivo.",
+      unsubscribe: "Hủy đăng ký",
+      sender: "Scanzivo, scanzivo.com",
+      first: {
+        subject: "Lần phân tích đầu tiên của bạn trên Scanzivo",
+        heading: "Tài khoản của bạn đã sẵn sàng",
+        lines: (price: string) => [
+          "Bạn đã tạo tài khoản Scanzivo: chỉ còn việc thả vào một ảnh chụp biểu đồ.",
+          `Trước tiên bạn nhận một lần đọc biểu đồ miễn phí. Kế hoạch có số liệu (điểm vào lệnh, stop, mục tiêu) được mở bằng một gói, từ ${price}/tháng và không ràng buộc.`,
+        ],
+        cta: "Phân tích biểu đồ",
+      },
+      second: {
+        subject: "Nên chọn gói Scanzivo nào?",
+        heading: "Mỗi nhu cầu một gói",
+        lines: (prices: { starter: string; monthly: string; lifetime: string }) => [
+          `Starter, ${prices.starter}/tháng: một lượt phân tích mỗi ngày. Pro, ${prices.monthly}/tháng: phân tích không giới hạn, kèm chi tiết cả hai kịch bản. Trọn đời, ${prices.lifetime} một lần: phân tích không giới hạn, không cần đăng ký thuê bao.`,
+          "Cả ba gói đều không ràng buộc, và bạn bắt đầu bằng một lần đọc biểu đồ miễn phí. Có thắc mắc? Chỉ cần trả lời email này.",
+        ],
+        cta: "Xem các gói",
+      },
+    },
+  },
   welcomeEmail: {
     subject: "Chào mừng bạn đến với Scanzivo",
     greeting: (name: string | null) => (name ? `Xin chào ${name},` : "Xin chào,"),
