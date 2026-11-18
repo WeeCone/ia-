@@ -1,4 +1,19 @@
 import type { Locale } from "@/i18n/config";
+import { ARTICLES_ES_3 } from "./blog-es-3";
+import { ARTICLES_ES_GOLD } from "./blog-es-gold";
+import { ARTICLES_DE_3 } from "./blog-de-3";
+import { ARTICLES_DE_GOLD } from "./blog-de-gold";
+import { ARTICLES_PT_3 } from "./blog-pt-3";
+import { ARTICLES_PT_GOLD } from "./blog-pt-gold";
+import { ARTICLES_JA_3 } from "./blog-ja-3";
+import { ARTICLES_JA_GOLD } from "./blog-ja-gold";
+import { ARTICLES_KO_3 } from "./blog-ko-3";
+import { ARTICLES_KO_GOLD } from "./blog-ko-gold";
+import { ARTICLES_VI_3 } from "./blog-vi-3";
+import { ARTICLES_VI_GOLD } from "./blog-vi-gold";
+import { ARTICLES_ID_3 } from "./blog-id-3";
+import { ARTICLES_ID_GOLD } from "./blog-id-gold";
+import { ARTICLES_IT_3 } from "./blog-it-3";
 import { ARTICLES_EN } from "./blog-en";
 import { ARTICLES_EN_2 } from "./blog-en-2";
 import { ARTICLES_EN_3 } from "./blog-en-3";
@@ -500,14 +515,29 @@ export const ARTICLES: Article[] = [
   ...ARTICLES_EN_3.map((article) => ({ ...article, locale: "en" as const })),
   ...ARTICLES_EN_GOLD.map((article) => ({ ...article, locale: "en" as const, topic: "gold" as const })),
   ...[...ARTICLES_EN_2, ...ARTICLES_EN].map((article) => ({ ...article, locale: "en" as const })),
+  ...ARTICLES_ES_GOLD.map((article) => ({ ...article, locale: "es" as const, topic: "gold" as const })),
+  ...ARTICLES_ES_3.map((article) => ({ ...article, locale: "es" as const })),
   ...[...ARTICLES_ES_2, ...ARTICLES_ES].map((article) => ({ ...article, locale: "es" as const })),
+  ...ARTICLES_JA_GOLD.map((article) => ({ ...article, locale: "ja" as const, topic: "gold" as const })),
+  ...ARTICLES_JA_3.map((article) => ({ ...article, locale: "ja" as const })),
   ...ARTICLES_JA.map((article) => ({ ...article, locale: "ja" as const })),
+  ...ARTICLES_KO_GOLD.map((article) => ({ ...article, locale: "ko" as const, topic: "gold" as const })),
+  ...ARTICLES_KO_3.map((article) => ({ ...article, locale: "ko" as const })),
   ...ARTICLES_KO.map((article) => ({ ...article, locale: "ko" as const })),
+  ...ARTICLES_VI_GOLD.map((article) => ({ ...article, locale: "vi" as const, topic: "gold" as const })),
+  ...ARTICLES_VI_3.map((article) => ({ ...article, locale: "vi" as const })),
   ...ARTICLES_VI.map((article) => ({ ...article, locale: "vi" as const })),
+  ...ARTICLES_ID_GOLD.map((article) => ({ ...article, locale: "id" as const, topic: "gold" as const })),
+  ...ARTICLES_ID_3.map((article) => ({ ...article, locale: "id" as const })),
   ...ARTICLES_ID.map((article) => ({ ...article, locale: "id" as const })),
+  ...ARTICLES_IT_3.map((article) => ({ ...article, locale: "it" as const })),
   ...ARTICLES_IT_GOLD.map((article) => ({ ...article, locale: "it" as const, topic: "gold" as const })),
   ...ARTICLES_IT.map((article) => ({ ...article, locale: "it" as const })),
+  ...ARTICLES_DE_GOLD.map((article) => ({ ...article, locale: "de" as const, topic: "gold" as const })),
+  ...ARTICLES_DE_3.map((article) => ({ ...article, locale: "de" as const })),
   ...ARTICLES_DE.map((article) => ({ ...article, locale: "de" as const })),
+  ...ARTICLES_PT_GOLD.map((article) => ({ ...article, locale: "pt" as const, topic: "gold" as const })),
+  ...ARTICLES_PT_3.map((article) => ({ ...article, locale: "pt" as const })),
   ...ARTICLES_PT.map((article) => ({ ...article, locale: "pt" as const })),
 ];
 
