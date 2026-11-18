@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import heroBull from "@/assets/media/hero-bull.jpg";
 import Link from "next/link";
 import { ChartAnatomy } from "@/components/chart-anatomy";
 import { ActivityToast } from "@/components/activity-toast";
@@ -74,7 +75,7 @@ export default async function Home() {
         <section className="relative isolate -mt-20 overflow-hidden pt-20">
           {/* Wall Street's bull on the right, fading into the page (photo supplied by the owner). */}
           <div className="pointer-events-none absolute inset-y-0 right-0 -z-20 w-full sm:w-[58%] [mask-image:linear-gradient(to_right,transparent,black_45%)]" aria-hidden>
-            <Image src="/media/hero-bull.jpg" alt="" fill priority sizes="(min-width: 640px) 58vw, 100vw" className="object-cover object-[55%_45%] opacity-[0.22] sm:opacity-[0.38]" />
+            <Image src={heroBull} alt="" fill priority sizes="(min-width: 640px) 58vw, 100vw" className="object-cover object-[55%_45%] opacity-[0.22] sm:opacity-[0.38]" />
           </div>
           <div className="absolute inset-x-0 bottom-0 -z-10 h-1/3 bg-[linear-gradient(180deg,transparent,var(--background))]" aria-hidden />
           <div className="absolute -top-40 left-1/2 -z-10 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-brand/15 blur-[120px]" aria-hidden />
