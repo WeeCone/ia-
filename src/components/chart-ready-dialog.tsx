@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/i18n/client";
+import { googleEvent } from "@/lib/google-tag";
 import { formatPrice } from "@/i18n/format";
 import { onCheckoutClosed, onOpenChartReady, onOpenCheckout, requestAutoAnalyze, savePreview } from "@/lib/offers-client";
 import { pendingChartUrl, readPendingChart } from "@/lib/pending-chart";
@@ -102,7 +103,10 @@ export function ChartReadyDialog() {
       if (user) headers.Authorization = `Bearer ${await user.getIdToken()}`;
       const response = await fetch("/api/preview", { method: "POST", headers, body });
       const data = await response.json().catch(() => ({}));
-      if (response.ok && data.teaser) return setStage({ name: "teaser", id: data.id ?? null, teaser: data.teaser });
+      if (response.ok && data.teaser) {
+        googleEvent("free_reading");
+        return setStage({ name: "teaser", id: data.id ?? null, teaser: data.teaser });
+      }
       // No free reading this time: say why, with the packs and (after an error) another try a click away.
       if (data.fallback) return setStage({ name: "unavailable", reason: data.reason === "limit" || data.reason === "budget" ? data.reason : "error" });
       setStage({ name: "ready" });
