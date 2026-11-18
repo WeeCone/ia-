@@ -5,10 +5,13 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { useI18n } from "@/i18n/client";
 import { onConsentChange, onOpenConsent, openConsent, readConsent, saveConsent, type Consent } from "@/lib/consent";
+import { GTM_ID, loadGoogleTag, revokeGoogleTag } from "@/lib/google-tag";
 import { pixel, PIXEL_ID, revokePixel } from "@/lib/meta-pixel";
 
+const TRACKING = Boolean(PIXEL_ID || GTM_ID);
+
 /**
- * Asks once for advertising cookies (the Meta pixel), with "Refuser" exactly as easy as "Accepter", as the CNIL requires.
+ * Asks once for advertising cookies (the Meta pixel, Google Ads), with "Refuser" exactly as easy as "Accepter", as the CNIL requires.
  * Shown only when a pixel is configured; reopened from the footer to change the choice.
  */
 export function CookieBanner() {
@@ -19,14 +22,19 @@ export function CookieBanner() {
   const [reopened, setReopened] = useState(false);
   useEffect(() => onOpenConsent(() => setReopened(true)), []);
 
-  if (!PIXEL_ID || pathname.includes("/admin")) return null;
+  if (!TRACKING || pathname.includes("/admin")) return null;
   if (consent !== null && !reopened) return null;
 
   const choose = (value: Consent) => {
     saveConsent(value);
     setReopened(false);
-    if (value === "granted") pixel("PageView");
-    else revokePixel();
+    if (value === "granted") {
+      pixel("PageView");
+      loadGoogleTag();
+    } else {
+      revokePixel();
+      revokeGoogleTag();
+    }
   };
 
   return (
@@ -57,7 +65,7 @@ export function CookieBanner() {
 /** Footer link to change the cookie choice; absent when no pixel is configured. */
 export function CookieSettingsLink() {
   const { t } = useI18n();
-  if (!PIXEL_ID) return null;
+  if (!TRACKING) return null;
   return (
     <button type="button" onClick={openConsent} className="text-left hover:text-brand">
       {t.cookies.manage}

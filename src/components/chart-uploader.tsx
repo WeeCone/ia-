@@ -10,6 +10,7 @@ import { clearPendingChart, readPendingChart, savePendingChart } from "@/lib/pen
 import { useI18n } from "@/i18n/client";
 import { formatPrice } from "@/i18n/format";
 import { trackEvent } from "@/lib/track";
+import { googleEvent } from "@/lib/google-tag";
 import type { PreviewTeaser } from "@/lib/preview-types";
 import { AnalysisTeaser } from "./analysis-teaser";
 import { FormError } from "./auth-card";
@@ -192,8 +193,10 @@ export function ChartUploader({
         body,
       });
       const data = await response.json().catch(() => ({}));
-      if (response.ok && data.teaser) setReading({ kind: "teaser", id: data.id ?? null, teaser: data.teaser });
-      else if (data.fallback)
+      if (response.ok && data.teaser) {
+        googleEvent("free_reading");
+        setReading({ kind: "teaser", id: data.id ?? null, teaser: data.teaser });
+      } else if (data.fallback)
         setReading({ kind: "unavailable", reason: data.reason === "limit" || data.reason === "budget" ? data.reason : "error" });
       else setError(data.error ?? u.failed);
     } catch {

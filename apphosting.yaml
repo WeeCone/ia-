@@ -37,6 +37,11 @@ env:
     value: "1451450885397108"
     availability: [BUILD, RUNTIME]
 
+  # Google Tag Manager (public). Conversions Google Ads ; chargé seulement après accord dans le bandeau cookies.
+  - variable: NEXT_PUBLIC_GTM_ID
+    value: GTM-PH9GSV3Q
+    availability: [BUILD, RUNTIME]
+
   # --- Paiement (Stripe, mode test) ----------------------------------------------------
   # URL publique de l'app, pour les redirections Stripe (sinon : l'adresse de la requête).
   - variable: APP_URL

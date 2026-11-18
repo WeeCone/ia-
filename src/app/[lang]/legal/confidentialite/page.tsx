@@ -79,6 +79,13 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
         votre navigateur et vous pouvez le changer à tout moment avec le lien « Gérer les cookies » en bas de chaque page.
       </p>
       <p>
+        De la même manière, et seulement avec votre accord, le site charge Google Tag Manager (Google Ireland Ltd.) pour
+        mesurer les résultats de nos annonces Google Ads : il dépose des cookies et signale à Google certaines étapes
+        (lecture gratuite lancée, inscription, paiement lancé, achat et son montant). Google peut traiter ces données hors
+        de l&apos;Union européenne, dans le cadre de ses propres garanties. Sans votre accord, rien n&apos;est chargé ; le même
+        bandeau et le même lien « Gérer les cookies » permettent de refuser ou de retirer votre accord.
+      </p>
+      <p>
         Pour savoir combien de personnes visitent le site et quelles publicités les amènent, nous utilisons notre propre mesure
         d&apos;audience, sans cookie : votre navigateur garde pendant la visite un simple indicateur de « visite commencée », et
         pendant 30 jours au plus le nom du site ou de la campagne par lequel vous êtes arrivé. Seuls des compteurs anonymes par
@@ -173,6 +180,13 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
         link at the bottom of every page.
       </p>
       <p>
+        In the same way, and only with your consent, the site loads Google Tag Manager (Google Ireland Ltd.) to measure how
+        our Google Ads campaigns perform: it sets cookies and tells Google about certain steps (free reading started,
+        sign-up, checkout started, purchase and its amount). Google may process this data outside the European Union under
+        its own safeguards. Without your consent, nothing is loaded; the same banner and the same &quot;Cookie settings&quot;
+        link let you refuse or withdraw your consent.
+      </p>
+      <p>
         To know how many people visit the site and which ads bring them, we use our own cookie-free audience measurement: your
         browser keeps a simple &quot;visit started&quot; flag during the visit and, for 30 days at most, the name of the site or
         campaign you came from. Only anonymous daily counters are stored (pages viewed, origin, device type, language), with no
@@ -263,6 +277,13 @@ const CONTENT: Record<Locale, () => React.ReactNode> = {
         interesadas. Meta puede tratar estos datos fuera de la Unión Europea con sus propias garantías. Sin su consentimiento,
         no se carga nada. Su elección se conserva 6 meses en su navegador y puede cambiarla en cualquier momento con el enlace
         «Gestionar cookies» al pie de cada página.
+      </p>
+      <p>
+        Del mismo modo, y solo con su consentimiento, el sitio carga Google Tag Manager (Google Ireland Ltd.) para medir los
+        resultados de nuestros anuncios de Google Ads: instala cookies e informa a Google de ciertos pasos (lectura gratuita
+        iniciada, registro, pago iniciado, compra y su importe). Google puede tratar estos datos fuera de la Unión Europea con
+        sus propias garantías. Sin su consentimiento, no se carga nada; el mismo banner y el mismo enlace «Gestionar cookies»
+        permiten rechazar o retirar su consentimiento.
       </p>
       <p>
         Para saber cuántas personas visitan el sitio y qué anuncios las traen, utilizamos nuestra propia medición de audiencia,

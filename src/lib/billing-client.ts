@@ -1,6 +1,7 @@
 import type { Locale } from "@/i18n/config";
 import { DICTIONARIES } from "@/i18n/dictionaries";
 import { auth } from "./firebase";
+import { googleEvent } from "./google-tag";
 import { pixel } from "./meta-pixel";
 import { currencyFor, offerPrice, type Offer } from "./plans";
 import { checkoutAttribution, trackEvent } from "./track";
@@ -17,6 +18,7 @@ async function callBilling(route: "checkout" | "portal", body: Record<string, un
     if (offer) {
       const { amount, currency } = offerPrice(locale, offer);
       pixel("InitiateCheckout", { value: amount, currency: currency.toUpperCase() });
+      googleEvent("begin_checkout", { value: amount, currency: currency.toUpperCase() });
     }
     body = { ...body, ...checkoutAttribution() };
   }

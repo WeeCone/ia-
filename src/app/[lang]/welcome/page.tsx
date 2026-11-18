@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AuthCard } from "@/components/auth-card";
 import { auth } from "@/lib/firebase";
+import { googleEvent } from "@/lib/google-tag";
 import { pixel } from "@/lib/meta-pixel";
 import { useI18n } from "@/i18n/client";
 
@@ -48,7 +49,10 @@ export default function WelcomePage() {
         if (cancelled) return;
         if (!response?.ok || !data?.status) return setClaim({ status: "failed" });
         // Once per payment: Meta merges repeats of the same session id.
-        if (data.purchase) pixel("Purchase", { value: data.purchase.value, currency: data.purchase.currency ?? "EUR" }, data.purchase.id);
+        if (data.purchase) {
+          pixel("Purchase", { value: data.purchase.value, currency: data.purchase.currency ?? "EUR" }, data.purchase.id);
+          googleEvent("purchase", { value: data.purchase.value, currency: data.purchase.currency ?? "EUR", transaction_id: data.purchase.id });
+        }
         if (data.status === "created" && data.token) {
           try {
             await signInWithCustomToken(auth, data.token);

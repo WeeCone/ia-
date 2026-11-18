@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useI18n } from "@/i18n/client";
+import { loadGoogleTag } from "@/lib/google-tag";
 import { pixel } from "@/lib/meta-pixel";
 import { trackLeave, trackLive, trackView } from "@/lib/track";
 
@@ -21,6 +22,7 @@ export function VisitTracker() {
     trackView(path, locale);
     // Meta pixel, only with the visitor's consent (lib/meta-pixel.ts).
     pixel("PageView");
+    loadGoogleTag();
 
     const live = () => {
       if (!document.hidden) trackLive(path, locale);

@@ -25,6 +25,7 @@ import { TrialUpsell } from "@/components/dashboard/trial-upsell";
 import { UpgradeNow } from "@/components/dashboard/upgrade-now";
 import { redirectToBilling } from "@/lib/billing-client";
 import { EMBEDDED_CHECKOUT, hasPendingOffer, onOpenCheckout, onOpenOffers, openCheckout, openOffers, takePendingOffer } from "@/lib/offers-client";
+import { googleEvent } from "@/lib/google-tag";
 import { pixel } from "@/lib/meta-pixel";
 import { hasPendingChart } from "@/lib/pending-chart";
 import { availableCredits, MONTHLY_CREDITS, STARTER_DAILY_CREDITS } from "@/lib/plans";
@@ -90,7 +91,10 @@ export default function DashboardPage() {
           });
           const data = await response.json().catch(() => ({}));
           // The ad pixel's purchase event (consent permitting); the session id keeps it counted once.
-          if (data.ok && data.purchase) pixel("Purchase", { value: data.purchase.value, currency: data.purchase.currency ?? "EUR" }, data.purchase.id);
+          if (data.ok && data.purchase) {
+            pixel("Purchase", { value: data.purchase.value, currency: data.purchase.currency ?? "EUR" }, data.purchase.id);
+            googleEvent("purchase", { value: data.purchase.value, currency: data.purchase.currency ?? "EUR", transaction_id: data.purchase.id });
+          }
           if (data.ok || !data.pending) break;
         } catch {}
         await new Promise((resolve) => setTimeout(resolve, 2000));
