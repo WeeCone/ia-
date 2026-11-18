@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
+import goldBars from "@/assets/media/gold-bars.jpg";
 import { DropBar } from "@/components/drop-bar";
 import { FaqList } from "@/components/faq";
 import { ScrollReveal } from "@/components/scroll-reveal";
@@ -121,6 +123,11 @@ export default async function GoldPage() {
       <main id="contenu" className="flex-1">
         {/* Hero: the promise, then straight to the drop bar. */}
         <section className="relative isolate -mt-20 overflow-hidden pt-20">
+          {/* Gold bars on the right, fading into the page, as the bull does on the home page (photo supplied by the owner). */}
+          <div className="pointer-events-none absolute inset-y-0 right-0 -z-20 w-full sm:w-[58%] [mask-image:linear-gradient(to_right,transparent,black_45%)]" aria-hidden>
+            <Image src={goldBars} alt="" fill priority sizes="(min-width: 640px) 58vw, 100vw" className="object-cover object-[50%_40%] opacity-[0.20] sm:opacity-[0.34]" />
+          </div>
+          <div className="absolute inset-x-0 bottom-0 -z-10 h-1/3 bg-[linear-gradient(180deg,transparent,var(--background))]" aria-hidden />
           <div className="absolute -top-48 left-1/2 -z-10 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-amber-400/20 blur-[120px]" aria-hidden />
           <div className="mx-auto max-w-5xl px-4 pb-16 pt-14 text-center sm:pt-20">
             <h1 className="rise-in display mx-auto max-w-4xl text-[2.5rem] leading-[1.02] tracking-[-0.03em] sm:text-6xl lg:text-7xl">
