@@ -177,6 +177,32 @@ export default function DashboardPage() {
 
   const history = useAnalysisHistory(user?.uid ?? null, refreshKey);
 
+  // Paid for a free reading: the server noted which one on the account after the payment. Opened here, whatever became of
+  // the browser's own memory (in-app browser, 3D Secure app switch, another device). The claim is idempotent.
+  const pendingPreview = profile?.pendingPreviewId;
+  const claimedPreview = useRef<string | null>(null);
+  useEffect(() => {
+    if (!user || !pendingPreview || !hasCredits || claimedPreview.current === pendingPreview) return;
+    claimedPreview.current = pendingPreview;
+    user
+      .getIdToken()
+      .then((token) =>
+        fetch("/api/preview/claim", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json", "X-Locale": locale },
+          body: JSON.stringify({ id: pendingPreview }),
+        }),
+      )
+      .then(async (response) => {
+        if (!response.ok) return;
+        const data = await response.json();
+        show({ analysis: data.analysis, imageUrl: null, id: data.id });
+        setRefreshKey((key) => key + 1);
+      })
+      .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- show only sets state
+  }, [user, pendingPreview, hasCredits, locale]);
+
   function scrollTop() {
     requestAnimationFrame(() => mainRef.current?.scrollTo({ top: 0, behavior: "smooth" }));
     window.scrollTo({ top: 0, behavior: "smooth" });

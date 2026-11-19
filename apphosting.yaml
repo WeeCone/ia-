@@ -42,6 +42,11 @@ env:
     value: GTM-PH9GSV3Q
     availability: [BUILD, RUNTIME]
 
+  # Balise Google Ads (gtag.js, publique). Même consentement que le conteneur ci-dessus.
+  - variable: NEXT_PUBLIC_GOOGLE_ADS_ID
+    value: AW-18582142412
+    availability: [BUILD, RUNTIME]
+
   # --- Paiement (Stripe, mode test) ----------------------------------------------------
   # URL publique de l'app, pour les redirections Stripe (sinon : l'adresse de la requête).
   - variable: APP_URL

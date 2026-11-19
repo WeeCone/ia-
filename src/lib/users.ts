@@ -24,6 +24,8 @@ export type UserProfile = {
   /** Answer to "receive tips and offers by email?": absent until the account has answered. */
   marketingConsent?: boolean;
   marketingDecidedAt?: unknown;
+  /** The free reading this account paid to unlock: set by the server after the payment, opened by the dashboard. */
+  pendingPreviewId?: string;
 };
 
 /** Creates users/{uid} on first sign-in; leaves existing profiles untouched. */

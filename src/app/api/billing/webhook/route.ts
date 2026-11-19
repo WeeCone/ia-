@@ -5,6 +5,7 @@ import { creditPaidInvoice, grantLifetimeTo, subscriptionPlan } from "@/lib/bill
 import { appUrl, getStripe } from "@/lib/stripe";
 import { sendTrialEmail } from "@/lib/email";
 import { claimGuestSession } from "@/lib/guest-checkout";
+import { rememberPreview } from "@/lib/preview-link";
 import { hasLocale, type Locale } from "@/i18n/config";
 import { approxEur, fromStripeAmount } from "@/lib/plans";
 
@@ -83,6 +84,10 @@ export async function POST(request: Request) {
       await markTrial(event.data.object, appUrl(request));
       // Bought without an account: the account is made here if the buyer closed the page before it could.
       if (event.data.object.metadata?.guest === "1") await claimGuestSession(event.data.object, appUrl(request));
+      // Signed in when paying: the reading it was for is noted on the account even if the buyer never came back.
+      if (event.data.object.metadata?.uid && event.data.object.payment_status === "paid") {
+        await rememberPreview(event.data.object.metadata.uid, event.data.object).catch((err) => console.error("preview link failed", err));
+      }
       await countPurchase(event.data.object);
       break;
 

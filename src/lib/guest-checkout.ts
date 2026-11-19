@@ -6,6 +6,7 @@ import { hasLocale, localePath, type Locale } from "@/i18n/config";
 import { creditPaidInvoice, grantLifetimeTo } from "./billing-grants";
 import { sendPurchaseEmail, sendTrialEmail } from "./email";
 import { adminAuth, adminDb } from "./firebase-admin";
+import { rememberPreview } from "./preview-link";
 import { getStripe } from "./stripe";
 
 /**
@@ -150,6 +151,8 @@ export async function claimGuestSession(
     await grantLifetimeTo(uid);
     await ref.update({ lifetimeSessionId: session.id });
   }
+  // The free reading this purchase unlocks: noted on the account, the dashboard opens it.
+  await rememberPreview(uid, session).catch((err) => console.error("guest purchase: preview link failed", err));
   if (firstClaim) {
     // The confirmation, with a link to choose a password for a new account (its only way back in on another device).
     let passwordUrl: string | undefined;

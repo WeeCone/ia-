@@ -1,6 +1,7 @@
 import type Stripe from "stripe";
 import { creditPaidInvoice, grantLifetimeTo } from "@/lib/billing-grants";
 import { adminDb } from "@/lib/firebase-admin";
+import { rememberPreview } from "@/lib/preview-link";
 import { getRequestUid } from "@/lib/server-auth";
 import { getStripe, withBillingErrors } from "@/lib/stripe";
 import { DICTIONARIES } from "@/i18n/dictionaries";
@@ -49,6 +50,7 @@ async function handler(request: Request) {
       }
     }
   }
+  await rememberPreview(uid, session).catch((err) => console.error("confirm: preview link failed", err));
   // What was paid, for the ad pixel's purchase event (the session id lets Meta drop duplicates).
   return Response.json({ ok: true, purchase: { id: session.id, value: fromStripeAmount(session.currency ?? "eur", session.amount_total ?? 0), currency: (session.currency ?? "eur").toUpperCase() } });
 }

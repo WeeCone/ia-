@@ -28,16 +28,32 @@ export async function POST(request: Request) {
   const { id } = (await request.json().catch(() => ({}))) as { id?: unknown };
   if (typeof id !== "string" || !/^[A-Za-z0-9]{10,40}$/.test(id)) return error(text.failed, 404);
 
+  const userRef = adminDb.collection("users").doc(uid);
   const previewRef = adminDb.collection("previews").doc(id);
   const snapshot = await previewRef.get();
   // Previews made before the free reading went light hold no first reading: those run afresh.
   const preview = snapshot.get("preview") as ChartPreview | undefined;
-  if (!snapshot.exists || !preview) return error(text.failed, 404);
+  if (!snapshot.exists || !preview) {
+    await userRef.update({ pendingPreviewId: FieldValue.delete() }).catch(() => {});
+    return error(text.failed, 404);
+  }
   const createdAt: number = snapshot.get("createdAt")?.toMillis?.() ?? 0;
   const claimedBy: string | null = snapshot.get("claimedBy") ?? null;
-  if ((claimedBy && claimedBy !== uid) || Date.now() - createdAt > PREVIEW_TTL_MS) return error(text.failed, 410);
+  // Already unlocked by this very account (the dashboard and the browser's own memory may both ask): same report back,
+  // nothing charged twice.
+  if (claimedBy === uid && snapshot.get("analysisId")) {
+    const done = await userRef.collection("analyses").doc(snapshot.get("analysisId")).get();
+    if (done.exists) {
+      const { createdAt: _created, usage: _usage, model: _model, note: _note, imagePath: _path, ...analysis } = done.data() as Record<string, unknown>;
+      await userRef.update({ pendingPreviewId: FieldValue.delete() }).catch(() => {});
+      return Response.json({ id: done.id, analysis, charged: false });
+    }
+  }
+  if ((claimedBy && claimedBy !== uid) || Date.now() - createdAt > PREVIEW_TTL_MS) {
+    await userRef.update({ pendingPreviewId: FieldValue.delete() }).catch(() => {});
+    return error(text.failed, 410);
+  }
 
-  const userRef = adminDb.collection("users").doc(uid);
   const userData = (await userRef.get()).data() ?? {};
   if (availableCredits(userData) < 1) return error(text.noCredits, 402);
   const setup = analysisSetup(userData.plan, monthSpend(userData), daySpend(userData));
@@ -75,6 +91,7 @@ export async function POST(request: Request) {
       tx.update(userRef, {
         ...(charged && !isUnlimited(data.plan) ? { credits: credits - 1, creditsPeriod: periodFor(data.plan) } : {}),
         ...addSpend(data, spent),
+        pendingPreviewId: FieldValue.delete(),
       });
       tx.set(analysisRef, {
         ...analysis,

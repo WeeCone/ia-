@@ -3,6 +3,7 @@ import { DICTIONARIES } from "@/i18n/dictionaries";
 import { auth } from "./firebase";
 import { googleEvent } from "./google-tag";
 import { pixel } from "./meta-pixel";
+import { peekPreview } from "./offers-client";
 import { currencyFor, offerPrice, type Offer } from "./plans";
 import { checkoutAttribution, trackEvent } from "./track";
 
@@ -20,7 +21,9 @@ async function callBilling(route: "checkout" | "portal", body: Record<string, un
       pixel("InitiateCheckout", { value: amount, currency: currency.toUpperCase() });
       googleEvent("begin_checkout", { value: amount, currency: currency.toUpperCase() });
     }
-    body = { ...body, ...checkoutAttribution() };
+    // The free reading being unlocked: the server remembers it with the payment, whatever becomes of this browser.
+    const previewId = peekPreview();
+    body = { ...body, ...checkoutAttribution(), ...(previewId ? { previewId } : {}) };
   }
   const response = await fetch(`/api/billing/${route}`, {
     method: "POST",

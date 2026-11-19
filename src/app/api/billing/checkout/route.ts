@@ -8,6 +8,7 @@ import { localePath, type Locale } from "@/i18n/config";
 import { DICTIONARIES } from "@/i18n/dictionaries";
 import { requestLocale } from "@/i18n/server";
 import { statKey } from "@/lib/stats";
+import { PREVIEW_ID } from "@/lib/preview-link";
 
 const OFFERS: Offer[] = ["starter", "monthly", "lifetime"];
 
@@ -37,19 +38,23 @@ async function handler(request: Request) {
     source,
     campaign,
     currency: asked,
+    previewId,
   } = (await request.json().catch(() => ({}))) as {
     offer?: Offer;
     embedded?: boolean;
     source?: string;
     campaign?: string;
     currency?: string;
+    previewId?: string;
   };
   if (!offer || !OFFERS.includes(offer)) return Response.json({ error: text.unknownOffer }, { status: 400 });
   // The site's own currency, except that Portuguese readers in Europe are charged in euros (the browser says so).
   const currency: Currency = locale === "pt" && asked === "eur" ? "eur" : LOCALE_CURRENCY[locale];
 
   // Any offer can be bought without an account: Stripe takes the email and the account is made from it once paid.
-  if (!uid) return guestCheckout(request, locale, offer, currency, embedded, source, campaign);
+  // The free reading the buyer is paying to unlock: the server remembers it, so it survives the browser losing its state.
+  const pv = typeof previewId === "string" && PREVIEW_ID.test(previewId) ? previewId : undefined;
+  if (!uid) return guestCheckout(request, locale, offer, currency, embedded, source, campaign, pv);
 
   const userRef = adminDb.collection("users").doc(uid);
   const user = await userRef.get();
@@ -71,7 +76,7 @@ async function handler(request: Request) {
   const dashboard = `${base}${localePath(locale, "/dashboard")}`;
   // The webhook resolves the user from this metadata (subscription invoices, or the one-off checkout session).
   // src / cmp: the ad or site that brought the buyer, for the admin "Visites" tab (anonymous counters only).
-  const metadata = { uid, offer, src: statKey(source) ?? "direct", cmp: statKey(campaign) ?? "" };
+  const metadata = { uid, offer, src: statKey(source) ?? "direct", cmp: statKey(campaign) ?? "", ...(pv ? { pv } : {}) };
   // Charged in the currency of the visitor's language (yen on /ja…). A customer Stripe already bills in another
   // currency (an earlier subscription in euros) is charged in euros instead: Stripe refuses mixing them.
   const checkoutCurrency = currency;
@@ -105,11 +110,11 @@ async function handler(request: Request) {
 }
 
 /** A purchase by a visitor without an account. Stripe asks for the email; the welcome page makes the account from it. */
-async function guestCheckout(request: Request, locale: Locale, offer: Offer, currency: Currency, embedded: boolean, source?: string, campaign?: string) {
+async function guestCheckout(request: Request, locale: Locale, offer: Offer, currency: Currency, embedded: boolean, source?: string, campaign?: string, pv?: string) {
   const base = appUrl(request);
   const welcome = `${base}${localePath(locale, "/welcome")}?session_id={CHECKOUT_SESSION_ID}`;
   // guest: lets the webhook and the welcome page know the account is still to be made (no uid yet).
-  const metadata = { guest: "1", offer, locale, src: statKey(source) ?? "direct", cmp: statKey(campaign) ?? "" };
+  const metadata = { guest: "1", offer, locale, src: statKey(source) ?? "direct", cmp: statKey(campaign) ?? "", ...(pv ? { pv } : {}) };
   const session = await getStripe().checkout.sessions.create({
     ...sessionParams(request, locale, offer, embedded, welcome, base + localePath(locale, "/"), await lineFor(offer, currency), metadata),
     // A one-off payment makes no customer by default: one is needed for the receipt and the account.

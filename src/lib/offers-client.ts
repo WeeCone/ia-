@@ -16,6 +16,19 @@ export function onOpenOffers(listener: () => void) {
 export const EMBEDDED_CHECKOUT = Boolean(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 const CHECKOUT_EVENT = "scanzivo:checkout";
 
+/**
+ * Social apps open links in their own in-page browser (Instagram, TikTok, Facebook, Snapchat, LINE, WeChat). A payment
+ * form inside a pop-up inside that browser is fragile (3D Secure switches app, the page is reloaded) and looks like
+ * phishing to a cold visitor: there, Stripe's own page is used instead.
+ */
+export function inAppBrowser() {
+  if (typeof navigator === "undefined") return false;
+  return /FBAN|FBAV|FB_IAB|Instagram|TikTok|musical_ly|BytedanceWebview|Snapchat|Line\/|MicroMessenger|; wv\)/i.test(navigator.userAgent);
+}
+
+/** Stripe's form inside the site, unless this browser is a social app's. Read when the button is clicked. */
+export const embeddedCheckout = () => EMBEDDED_CHECKOUT && !inAppBrowser();
+
 export function openCheckout(offer: Offer) {
   window.dispatchEvent(new CustomEvent<Offer>(CHECKOUT_EVENT, { detail: offer }));
 }
@@ -104,6 +117,15 @@ export function savePreview(id: string) {
   try {
     sessionStorage.setItem(PREVIEW_KEY, id);
   } catch {}
+}
+
+/** The previewed analysis's id without taking it: checkout sends it to the server, which remembers it with the payment. */
+export function peekPreview() {
+  try {
+    return sessionStorage.getItem(PREVIEW_KEY);
+  } catch {
+    return null;
+  }
 }
 
 export function takePreview() {
