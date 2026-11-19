@@ -120,7 +120,7 @@ export function ChartReadyDialog() {
     <dialog
       ref={ref}
       aria-label={c.title}
-      className={`theme-dark m-auto max-h-[calc(100dvh-1.5rem)] max-sm:m-0 max-sm:h-dvh max-sm:max-h-none max-sm:w-screen max-sm:max-w-none max-sm:rounded-none max-sm:border-0 ${stage.name === "packs" ? "w-[min(40rem,calc(100%-1.5rem))]" : stage.name === "teaser" ? "w-[min(40rem,calc(100%-1.5rem))]" : "w-[min(34rem,calc(100%-1.5rem))]"} overflow-y-auto rounded-[1.75rem] border border-border bg-background p-0 text-foreground shadow-[0_40px_120px_-30px_rgb(0_0_0/0.8)] backdrop:bg-[rgb(11_14_20/0.6)] backdrop:backdrop-blur-sm open:animate-[rise-in_0.35s_cubic-bezier(0.16,1,0.3,1)]`}
+      className={`theme-dark m-auto max-h-[calc(100dvh-1.5rem)] max-lg:m-0 max-lg:h-dvh max-lg:max-h-none max-lg:w-screen max-lg:max-w-none max-lg:rounded-none max-lg:border-0 ${stage.name === "packs" ? "w-[min(40rem,calc(100%-1.5rem))]" : stage.name === "teaser" ? "w-[min(40rem,calc(100%-1.5rem))]" : "w-[min(34rem,calc(100%-1.5rem))]"} overflow-y-auto rounded-[1.75rem] border border-border bg-background p-0 text-foreground shadow-[0_40px_120px_-30px_rgb(0_0_0/0.8)] backdrop:bg-[rgb(11_14_20/0.6)] backdrop:backdrop-blur-sm open:animate-[rise-in_0.35s_cubic-bezier(0.16,1,0.3,1)]`}
     >
       <div className="p-5 sm:p-7">
         <div className="flex items-center justify-between gap-4">
