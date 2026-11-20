@@ -1,6 +1,7 @@
 "use client";
 
-import { useI18n } from "@/i18n/client";
+import { LocaleProvider, useI18n } from "@/i18n/client";
+import { hasLocale } from "@/i18n/config";
 import { keepNumbers } from "@/i18n/format";
 import { GOLD } from "@/content/gold";
 import { type ChartAnalysis, isGold, preferredPlan } from "@/lib/analysis";
@@ -192,7 +193,7 @@ function LockedProSection({ items }: { items: string[] }) {
   );
 }
 
-export function AnalysisResult({ analysis, reduced = false }: { analysis: ChartAnalysis; reduced?: boolean }) {
+function AnalysisResultInner({ analysis, reduced = false }: { analysis: ChartAnalysis; reduced?: boolean }) {
   const { t, locale } = useI18n();
   const r = t.report;
   if (!analysis.is_chart) {
@@ -295,5 +296,23 @@ export function AnalysisResult({ analysis, reduced = false }: { analysis: ChartA
         {r.footer}
       </footer>
     </article>
+  );
+}
+
+/**
+ * Wherever a report is shown (the customer's space, the admin), its labels follow the language its text was written in,
+ * so one report never mixes two languages. Reports from before the language was kept follow the page.
+ */
+export function ReportLocale({ analysis, children }: { analysis: ChartAnalysis; children: React.ReactNode }) {
+  const { locale } = useI18n();
+  const stored = analysis.locale;
+  return <LocaleProvider locale={stored && hasLocale(stored) ? stored : locale}>{children}</LocaleProvider>;
+}
+
+export function AnalysisResult(props: { analysis: ChartAnalysis; reduced?: boolean }) {
+  return (
+    <ReportLocale analysis={props.analysis}>
+      <AnalysisResultInner {...props} />
+    </ReportLocale>
   );
 }

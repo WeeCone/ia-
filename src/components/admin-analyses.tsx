@@ -6,7 +6,7 @@ import type { AdminAnalysis } from "@/lib/admin";
 import { adminFetch } from "@/lib/admin-client";
 import type { ChartAnalysis } from "@/lib/analysis";
 import { auth } from "@/lib/firebase";
-import { AnalysisResult } from "./analysis-result";
+import { AnalysisResult, ReportLocale } from "./analysis-result";
 import { AnnotatedChart } from "./annotated-chart";
 import { FormError } from "./auth-card";
 
@@ -85,8 +85,12 @@ function AnalysisDetail({ row, onClose }: { row: AdminAnalysis; onClose: () => v
         <div className="mt-6 space-y-6">
           {error && <FormError message={error} />}
           {!analysis && !error && <p className="text-sm text-muted">Chargement du rapport…</p>}
-          {imageUrl && analysis?.is_chart && <AnnotatedChart imageUrl={imageUrl} marks={analysis.level_marks ?? []} />}
-          {analysis && <AnalysisResult analysis={analysis} />}
+          {analysis && (
+            <ReportLocale analysis={analysis}>
+              {imageUrl && analysis.is_chart && <AnnotatedChart imageUrl={imageUrl} marks={analysis.level_marks ?? []} />}
+              <AnalysisResult analysis={analysis} />
+            </ReportLocale>
+          )}
         </div>
       </div>
     </div>
