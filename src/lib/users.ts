@@ -24,6 +24,8 @@ export type UserProfile = {
   /** Answer to "receive tips and offers by email?": absent until the account has answered. */
   marketingConsent?: boolean;
   marketingDecidedAt?: unknown;
+  /** Language this account's reports are written in; set from the dashboard, else the page's language is used. */
+  reportLocale?: Locale;
   /** The free reading this account paid to unlock: set by the server after the payment, opened by the dashboard. */
   pendingPreviewId?: string;
 };

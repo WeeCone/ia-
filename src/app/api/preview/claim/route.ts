@@ -10,6 +10,7 @@ import { getRequestUid } from "@/lib/server-auth";
 import { addSpend, daySpend, monthSpend } from "@/lib/usage-cost";
 import { DICTIONARIES } from "@/i18n/dictionaries";
 import { requestLocale } from "@/i18n/server";
+import { reportLocale } from "@/lib/report-locale";
 
 export const maxDuration = 120;
 
@@ -56,6 +57,7 @@ export async function POST(request: Request) {
 
   const userData = (await userRef.get()).data() ?? {};
   if (availableCredits(userData) < 1) return error(text.noCredits, 402);
+  const writtenIn = reportLocale(userData, locale);
   const setup = analysisSetup(userData.plan, monthSpend(userData), daySpend(userData));
   if (monthSpend(userData) + setup.maxCost > budgetFor(userData.plan)) return error(text.budget, 402);
 
@@ -66,7 +68,7 @@ export async function POST(request: Request) {
 
   let result: Awaited<ReturnType<typeof analyzeChart>>;
   try {
-    result = await analyzeChart(image, imageType, undefined, locale, setup.model, preview.asset, preview.trend);
+    result = await analyzeChart(image, imageType, undefined, writtenIn, setup.model, preview.asset, preview.trend);
   } catch (err) {
     const spent = err instanceof AnalysisRefusedError ? err.costEur : 0;
     await userRef.set(addSpend(userData, spent), { merge: true }).catch(() => {});
@@ -75,7 +77,7 @@ export async function POST(request: Request) {
     console.error("preview claim: analysis failed", err);
     return error(text.failed, 502);
   }
-  const analysis: ChartAnalysis = { ...result.analysis, locale };
+  const analysis: ChartAnalysis = { ...result.analysis, locale: writtenIn };
 
   const analysisRef = userRef.collection("analyses").doc();
   try {

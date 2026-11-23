@@ -7,6 +7,7 @@ import { RecentAnalyses, useAnalysisHistory, type StoredAnalysis } from "@/compo
 import { AnalysisView } from "@/components/analysis-view";
 import { useAuth } from "@/components/auth-provider";
 import { CaptureGuide } from "@/components/capture-guide";
+import { ReportLanguage } from "@/components/dashboard/report-language";
 import { ChartUploader, type AnalysisOutcome } from "@/components/chart-uploader";
 import { AccountPanel } from "@/components/dashboard/account-panel";
 import { EmailBanner } from "@/components/dashboard/email-banner";
@@ -417,7 +418,13 @@ export default function DashboardPage() {
                 </label>
               )}
 
-              <div className={`mt-8 ${tour ? "relative z-50" : ""}`}>
+              {profile && (
+                <div className="mt-6 flex justify-end">
+                  <ReportLanguage saved={profile.reportLocale} />
+                </div>
+              )}
+
+              <div className={`mt-2 ${tour ? "relative z-50" : ""}`}>
                 {tour > 0 && <TourPopover step={tour as 1 | 2} onNext={() => (tour === 1 ? setTour(2) : endTour())} onSkip={endTour} />}
                 <ChartUploader
                   disabled={noCredits}

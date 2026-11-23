@@ -11,6 +11,7 @@ import { TEST_ANALYSIS } from "@/lib/test-analysis";
 import { addSpend, daySpend, monthSpend } from "@/lib/usage-cost";
 import { DICTIONARIES } from "@/i18n/dictionaries";
 import { requestLocale } from "@/i18n/server";
+import { reportLocale } from "@/lib/report-locale";
 
 export const maxDuration = 120;
 
@@ -45,6 +46,8 @@ export async function POST(request: Request) {
   const userRef = adminDb.collection("users").doc(uid);
   const userSnap = await userRef.get();
   const userData = userSnap.data() ?? {};
+  // The report is written in the account's report language (else the page's); messages stay in the page's language.
+  const writtenIn = reportLocale(userData, locale);
   if (availableCredits(userData) < 1) return error(text.noCredits, 402);
   // Hard monthly ceiling on AI spend per customer, whatever the credits say. The admin is exempt.
   // Which model reads this chart: Starter the light one, Pro steps down as its month's spend grows (see analysisSetup).
@@ -67,7 +70,7 @@ export async function POST(request: Request) {
   if (look?.check && !look.check.is_chart) return error(text.notChart, 422);
 
   try {
-    result = await analyzeChart(bytes.toString("base64"), image.type as AllowedImageType, note || undefined, locale, setup.model, look?.check?.asset);
+    result = await analyzeChart(bytes.toString("base64"), image.type as AllowedImageType, note || undefined, writtenIn, setup.model, look?.check?.asset);
   } catch (err) {
     if (err instanceof AnalysisRefusedError) {
       await recordSpend(userRef, err.costEur);
@@ -92,7 +95,7 @@ export async function POST(request: Request) {
   // Every call counts toward the monthly budget, even one that is not charged a credit.
   await recordSpend(userRef, result.costEur);
   // Kept with the report: its labels are shown in the language its text was written in, whatever the page language.
-  const analysis = { ...result.analysis, locale };
+  const analysis = { ...result.analysis, locale: writtenIn };
 
   // Only charge for a usable chart; re-check credits inside the transaction to avoid double spending.
   const charged = result.analysis.is_chart;
