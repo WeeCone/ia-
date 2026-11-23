@@ -2,7 +2,9 @@ import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import type { Locale } from "@/i18n/config";
+import { z } from "zod";
 import { ChartAnalysis, ChartCheck, ChartPreview, isGold, type AllowedImageType } from "./analysis";
+import { reportTexts, withTranslatedTexts } from "./translate-report";
 import { callCostEur } from "./usage-cost";
 
 // Trimmed: a secret pasted with a trailing newline is otherwise sent as is and rejected as an invalid key.
@@ -211,4 +213,41 @@ ${CHAT_LANGUAGE[locale]}`,
     .join("\n")
     .trim();
   return { answer, costEur: callCostEur(response.model, response.usage) };
+}
+
+const LANGUAGE_NAME: Record<Locale, string> = {
+  fr: "français",
+  en: "anglais",
+  es: "espagnol",
+  ja: "japonais (registre poli, です・ます調)",
+  ko: "coréen (registre poli, 합니다체)",
+  vi: "vietnamien",
+  id: "indonésien",
+  it: "italien (vouvoiement : Lei)",
+  de: "allemand (vouvoiement : Sie)",
+  pt: "portugais du Brésil (você)",
+};
+
+/**
+ * The same report in another language, by the light model (a fraction of a cent). Only the words change: every price,
+ * number, asset and time frame is kept as written, and the choice fields are not touched at all.
+ */
+export async function translateAnalysis(analysis: ChartAnalysis, target: Locale) {
+  const items = reportTexts(analysis);
+  if (!items.length) return { analysis: { ...analysis, locale: target }, costEur: 0 };
+  const response = await client.beta.messages.parse({
+    model: CHAT_MODEL,
+    max_tokens: 6000,
+    betas: ["server-side-fallback-2026-07-01"],
+    fallbacks: "default",
+    output_config: { format: betaZodOutputFormat(z.object({ translations: z.array(z.string()) })) },
+    system: `Tu traduis les textes d'une analyse de graphique de trading en ${LANGUAGE_NAME[target]}.
+Reçois une liste de textes ; rends la liste des traductions, dans le même ordre et en même nombre exactement (${items.length}).
+Garde tel quel tout prix, niveau, nombre, pourcentage, symbole d'actif (BTC/USDT, XAU/USD…) et unité de temps (4H, 1D…) : ne les reformate pas. Ne change pas le sens, n'ajoute rien, ne rends aucune promesse de gain. Reste concis comme l'original.`,
+    messages: [{ role: "user", content: JSON.stringify(items.map((item) => item.text)) }],
+  });
+  const out = response.parsed_output?.translations;
+  const costEur = callCostEur(response.model, response.usage);
+  if (response.stop_reason === "refusal" || !out || out.length !== items.length) throw new AnalysisRefusedError("Traduction impossible", costEur);
+  return { analysis: { ...withTranslatedTexts(analysis, items, out), locale: target }, costEur };
 }

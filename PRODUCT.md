@@ -79,3 +79,7 @@ WCAG 2.1 AA contrast and keyboard access on public pages; meaning never carried 
 - In-app browsers (Instagram, TikTok, Facebook, Snapchat, LINE, WeChat) get Stripe's own page instead of the embedded form.
 - The free-reading dialog is full screen on phones.
 - Google tags in the page head (GTM-PH9GSV3Q and AW-18582142412 via gtag.js), consent mode "denied" until the cookie banner is accepted.
+
+## Report language, 2026-11-24
+- Each account has a report language (`users.reportLocale`): chosen with the picker above the composer on the dashboard, defaults to the browser's language, else the page's. Reports (and the free reading unlocked after payment) are written in it, whatever version of the site is open.
+- A finished report can be shown in another language from a picker above it: `/api/analyses/[id]/translate` translates the free texts with the light model (a fraction of a cent), keeps the result in `analyses/{id}.translations.<locale>` so asking again is free, and never changes the original. Prices, numbers, asset, time frame and choice fields are kept as they are. 20 new translations a day per account. The AI Q&A then answers in the language shown.
