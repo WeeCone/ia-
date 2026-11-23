@@ -109,11 +109,20 @@ function FunnelTable({
     <section className="mt-6">
       <h3 className="display text-lg">{title}</h3>
       <div className="panel mt-3 overflow-x-auto">
-        <table className="w-full min-w-[760px] text-sm">
+        <table className="w-full min-w-[980px] text-sm">
           <thead>
             <tr className="label text-left text-muted">
               <th className="px-4 py-3 font-medium">{column}</th>
               <th className="px-4 py-3 text-right font-medium">Visites</th>
+              <th className="px-4 py-3 text-right font-medium" title="Capture déposée sur la page d'accueil">
+                Captures
+              </th>
+              <th className="px-4 py-3 text-right font-medium" title="Lecture gratuite affichée">
+                Lectures gratuites
+              </th>
+              <th className="px-4 py-3 text-right font-medium" title="Clic sur « Débloquer »">
+                Débloquer
+              </th>
               <th className="px-4 py-3 text-right font-medium">Inscriptions</th>
               <th className="px-4 py-3 text-right font-medium">Analyses</th>
               <th className="px-4 py-3 text-right font-medium" title="Fenêtre de paiement ouverte">
@@ -121,8 +130,8 @@ function FunnelTable({
               </th>
               <th className="px-4 py-3 text-right font-medium">Achats</th>
               <th className="px-4 py-3 text-right font-medium">CA</th>
-              <th className="px-4 py-3 text-right font-medium" title="Inscriptions / visites">
-                Visite → inscription
+              <th className="px-4 py-3 text-right font-medium" title="Lectures gratuites / visites">
+                Visite → lecture
               </th>
             </tr>
           </thead>
@@ -131,12 +140,15 @@ function FunnelTable({
               <tr key={row.key} className="border-t border-border/70">
                 <td className="whitespace-nowrap px-4 py-3 font-sans font-medium">{row.label}</td>
                 <td className="px-4 py-3 text-right">{int(row.visits)}</td>
+                <td className="px-4 py-3 text-right">{int(row.upload)}</td>
+                <td className="px-4 py-3 text-right">{int(row.reading)}</td>
+                <td className="px-4 py-3 text-right">{int(row.unlock)}</td>
                 <td className="px-4 py-3 text-right">{int(row.signup)}</td>
                 <td className="px-4 py-3 text-right">{int(row.analysis)}</td>
                 <td className="px-4 py-3 text-right">{int(row.checkout)}</td>
                 <td className="px-4 py-3 text-right">{int(row.purchase)}</td>
                 <td className="px-4 py-3 text-right">{row.revenue ? euros(row.revenue) : "—"}</td>
-                <td className="px-4 py-3 text-right">{rate(row.signup, row.visits)}</td>
+                <td className="px-4 py-3 text-right">{rate(row.reading, row.visits)}</td>
               </tr>
             ))}
           </tbody>

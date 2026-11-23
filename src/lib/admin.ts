@@ -76,7 +76,22 @@ export type AdminAnalysis = {
   outputTokens: number | null;
 };
 
-export type FunnelCounts = { visits: number; signup: number; analysis: number; checkout: number; purchase: number; revenue: number };
+/**
+ * One row of the funnel, in the order a visitor goes through it: visit, chart dropped (upload), free reading shown
+ * (reading), unlock clicked (unlock), sign-up, analysis, payment started (checkout), purchase. Counted as steps, not
+ * people: someone who drops two charts counts twice.
+ */
+export type FunnelCounts = {
+  visits: number;
+  upload: number;
+  reading: number;
+  unlock: number;
+  signup: number;
+  analysis: number;
+  checkout: number;
+  purchase: number;
+  revenue: number;
+};
 
 /** The admin "Visites" tab, over a period. */
 /** One page open on the site right now (admin "En ce moment"). */

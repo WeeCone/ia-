@@ -19,7 +19,7 @@ export async function POST(request: Request) {
   try {
     const path = typeof body.path === "string" && /^\/[a-z0-9/_-]{0,60}$/i.test(body.path) ? body.path : null;
     const page = path === "/" ? "accueil" : path ? (statKey(path.slice(1), 60) ?? "autre") : null;
-    const device = MOBILE.test(agent) ? "mobile" : "desktop";
+    const device = MOBILE.test(agent) || body.device === "mobile" ? "mobile" : "desktop";
     const locale = statKey(body.locale, 5) ?? "fr";
     const liveId = typeof body.id === "string" && /^[a-z0-9-]{8,40}$/i.test(body.id) ? body.id : null;
     if (body.type === "view") {

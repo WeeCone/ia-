@@ -195,6 +195,7 @@ export function ChartUploader({
       const data = await response.json().catch(() => ({}));
       if (response.ok && data.teaser) {
         googleEvent("free_reading");
+        trackEvent("reading");
         setReading({ kind: "teaser", id: data.id ?? null, teaser: data.teaser });
       } else if (data.fallback)
         setReading({ kind: "unavailable", reason: data.reason === "limit" || data.reason === "budget" ? data.reason : "error" });
@@ -208,6 +209,7 @@ export function ChartUploader({
 
   /** The packs, with the chart kept: once paid, the previewed reading is unlocked, or the chart runs afresh. */
   function unlock(id: string | null) {
+    trackEvent("unlock");
     if (id) savePreview(id);
     else requestAutoAnalyze();
     openOffers();

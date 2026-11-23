@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/i18n/client";
 import { googleEvent } from "@/lib/google-tag";
+import { trackEvent } from "@/lib/track";
 import { formatPrice } from "@/i18n/format";
 import { onCheckoutClosed, onOpenChartReady, onOpenCheckout, requestAutoAnalyze, savePreview } from "@/lib/offers-client";
 import { pendingChartUrl, readPendingChart } from "@/lib/pending-chart";
@@ -43,6 +44,7 @@ export function ChartReadyDialog() {
         setStage({ name: "ready" });
         setChartUrl(pendingChartUrl());
         ref.current?.showModal();
+        trackEvent("upload");
         // The payment is the next step: fetch Stripe's script while the visitor looks at the chart.
         preloadStripe();
       }),
@@ -84,6 +86,7 @@ export function ChartReadyDialog() {
   );
 
   function pay(previewId: string | null) {
+    trackEvent("unlock");
     // Unlocks the previewed analysis after payment; without one, the dashboard runs the waiting chart.
     if (previewId) savePreview(previewId);
     else requestAutoAnalyze();
@@ -105,6 +108,7 @@ export function ChartReadyDialog() {
       const data = await response.json().catch(() => ({}));
       if (response.ok && data.teaser) {
         googleEvent("free_reading");
+        trackEvent("reading");
         return setStage({ name: "teaser", id: data.id ?? null, teaser: data.teaser });
       }
       // No free reading this time: say why, with the packs and (after an error) another try a click away.

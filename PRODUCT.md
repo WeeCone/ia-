@@ -79,3 +79,8 @@ WCAG 2.1 AA contrast and keyboard access on public pages; meaning never carried 
 - In-app browsers (Instagram, TikTok, Facebook, Snapchat, LINE, WeChat) get Stripe's own page instead of the embedded form.
 - The free-reading dialog is full screen on phones.
 - Google tags in the page head (GTM-PH9GSV3Q and AW-18582142412 via gtag.js), consent mode "denied" until the cookie banner is accepted.
+
+## Funnel steps in the audience stats (2026-11-23)
+- New anonymous counters, credited to the visit's source and campaign like sign-ups and purchases: `upload` (chart dropped, dialog opened), `reading` (free reading shown), `unlock` (click to unlock / see packs). They count steps, not people.
+- Shown in the admin "Visites" tab (sources and campaigns tables, new columns, "Visite → lecture" rate) and in the read-only /api/ops/visits (`funnel`, `funnelBySource`, `funnelByCampaign`).
+- Device: the browser now sends a touch/narrow-screen hint; a visit is "mobile" if either the user agent or the hint says so (an iPad in "desktop site" mode used to count as a computer).

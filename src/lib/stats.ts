@@ -7,7 +7,7 @@ import { adminDb } from "./firebase-admin";
  * visitor. Each day is split over a few shard documents so a burst of traffic from an ad never contends on one document.
  */
 
-export const STAT_EVENTS = ["signup", "analysis", "checkout", "purchase"] as const;
+export const STAT_EVENTS = ["upload", "reading", "unlock", "signup", "analysis", "checkout", "purchase"] as const;
 export type StatEvent = (typeof STAT_EVENTS)[number];
 
 const SHARDS = 8;
