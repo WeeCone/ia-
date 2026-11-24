@@ -88,9 +88,21 @@ function currentSource(): Omit<Source, "at"> {
   return { source: "direct", campaign: null };
 }
 
+/**
+ * What the browser says about its screen: touch first (an iPad in "desktop site" mode sends a computer's user agent),
+ * then a narrow window. The server also reads the user agent and calls the visit mobile if either says so.
+ */
+function deviceHint() {
+  try {
+    return window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 820 ? "mobile" : "desktop";
+  } catch {
+    return undefined;
+  }
+}
+
 function send(payload: Record<string, unknown>) {
   if (optedOut()) return;
-  const body = JSON.stringify({ ...payload, ...currentSource() });
+  const body = JSON.stringify({ ...payload, ...currentSource(), device: deviceHint() });
   try {
     if (navigator.sendBeacon?.(new URL("/api/track", window.location.origin), new Blob([body], { type: "application/json" }))) return;
   } catch {}
@@ -127,7 +139,7 @@ export function trackLeave() {
   if (liveId) send({ type: "leave", id: liveId });
 }
 
-export function trackEvent(event: "signup" | "analysis" | "checkout") {
+export function trackEvent(event: "upload" | "reading" | "unlock" | "signup" | "analysis" | "checkout") {
   send({ type: "event", event });
 }
 

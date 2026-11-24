@@ -5,7 +5,7 @@ import { splitCampaignKey, statDay } from "@/lib/stats";
 
 type Counters = Record<string, number | undefined>;
 
-const empty = (): FunnelCounts => ({ visits: 0, signup: 0, analysis: 0, checkout: 0, purchase: 0, revenue: 0 });
+const empty = (): FunnelCounts => ({ visits: 0, upload: 0, reading: 0, unlock: 0, signup: 0, analysis: 0, checkout: 0, purchase: 0, revenue: 0 });
 
 function add(target: FunnelCounts, counters: Counters = {}) {
   for (const key of Object.keys(target) as (keyof FunnelCounts)[]) target[key] += counters[key] ?? 0;

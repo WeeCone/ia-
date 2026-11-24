@@ -5,6 +5,12 @@ import { statDay } from "@/lib/stats";
 
 type Counters = Record<string, number | undefined>;
 
+const STEPS = ["visits", "upload", "reading", "unlock", "signup", "analysis", "checkout", "purchase", "revenue"] as const;
+const emptyFunnel = () => Object.fromEntries(STEPS.map((step) => [step, 0])) as Record<(typeof STEPS)[number], number>;
+const addFunnel = (target: Record<string, number>, counters: Counters = {}) => {
+  for (const step of STEPS) target[step] = (target[step] ?? 0) + (counters[step] ?? 0);
+};
+
 const addTo = (target: Record<string, number>, counts: Counters = {}) => {
   for (const [key, value] of Object.entries(counts)) target[key] = (target[key] ?? 0) + (value ?? 0);
 };
@@ -26,6 +32,9 @@ export async function GET(request: Request) {
   const sources: Record<string, number> = {};
   const pages: Record<string, number> = {};
   const devices: Record<string, number> = {};
+  const funnelBySource = new Map<string, Record<string, number>>();
+  const funnelByCampaign = new Map<string, Record<string, number>>();
+  const funnel = emptyFunnel() as Record<string, number>;
   let visits = 0;
   let views = 0;
   for (const doc of snap.docs) {
@@ -41,8 +50,30 @@ export async function GET(request: Request) {
     addTo(locales, data.locales);
     addTo(pages, data.pages);
     addTo(devices, data.devices);
-    for (const [source, counters] of Object.entries((data.sources ?? {}) as Record<string, Counters>)) sources[source] = (sources[source] ?? 0) + (counters.visits ?? 0);
+    addFunnel(funnel, { visits: data.visits, revenue: data.revenue, ...(data.events ?? {}) });
+    for (const [source, counters] of Object.entries((data.sources ?? {}) as Record<string, Counters>)) {
+      sources[source] = (sources[source] ?? 0) + (counters.visits ?? 0);
+      if (!funnelBySource.has(source)) funnelBySource.set(source, emptyFunnel());
+      addFunnel(funnelBySource.get(source)!, counters);
+    }
+    for (const [key, counters] of Object.entries((data.campaigns ?? {}) as Record<string, Counters>)) {
+      if (!funnelByCampaign.has(key)) funnelByCampaign.set(key, emptyFunnel());
+      addFunnel(funnelByCampaign.get(key)!, counters);
+    }
   }
   const top = (counts: Record<string, number>, limit = 20) => Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, limit);
-  return Response.json({ days, totals: { visits, views }, locales: top(locales), sources: top(sources), pages: top(pages), devices, perDay: [...perDay.values()] });
+  const byVisits = (a: [string, Record<string, number>], b: [string, Record<string, number>]) => b[1].visits - a[1].visits;
+  return Response.json({
+    days,
+    totals: { visits, views },
+    // The steps of the funnel (counted as steps, not people), in total and per source / campaign ("source__campaign").
+    funnel,
+    funnelBySource: [...funnelBySource.entries()].sort(byVisits).map(([source, counts]) => ({ source, ...counts })),
+    funnelByCampaign: [...funnelByCampaign.entries()].sort(byVisits).slice(0, 20).map(([campaign, counts]) => ({ campaign, ...counts })),
+    locales: top(locales),
+    sources: top(sources),
+    pages: top(pages),
+    devices,
+    perDay: [...perDay.values()],
+  });
 }

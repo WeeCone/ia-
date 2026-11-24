@@ -83,3 +83,8 @@ WCAG 2.1 AA contrast and keyboard access on public pages; meaning never carried 
 ## Report language, 2026-11-24
 - Each account has a report language (`users.reportLocale`): chosen with the picker above the composer on the dashboard, defaults to the browser's language, else the page's. Reports (and the free reading unlocked after payment) are written in it, whatever version of the site is open.
 - A finished report can be shown in another language from a picker above it: `/api/analyses/[id]/translate` translates the free texts with the light model (a fraction of a cent), keeps the result in `analyses/{id}.translations.<locale>` so asking again is free, and never changes the original. Prices, numbers, asset, time frame and choice fields are kept as they are. 20 new translations a day per account. The AI Q&A then answers in the language shown.
+
+## Funnel steps in the audience stats (2026-11-23)
+- New anonymous counters, credited to the visit's source and campaign like sign-ups and purchases: `upload` (chart dropped, dialog opened), `reading` (free reading shown), `unlock` (click to unlock / see packs). They count steps, not people.
+- Shown in the admin "Visites" tab (sources and campaigns tables, new columns, "Visite → lecture" rate) and in the read-only /api/ops/visits (`funnel`, `funnelBySource`, `funnelByCampaign`).
+- Device: the browser now sends a touch/narrow-screen hint; a visit is "mobile" if either the user agent or the hint says so (an iPad in "desktop site" mode used to count as a computer).
