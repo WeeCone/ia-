@@ -13,8 +13,12 @@ export type { PreviewTeaser };
  * from them, consistent with what the visitor saw. No plan exists before payment, so none can leak.
  */
 
-/** Free readings per connection (IP) per day: high enough that a person never meets it, a bound on scripted abuse. */
-const PER_VISITOR_PER_DAY = 30;
+/**
+ * Free readings per connection (IP) per day. Three is enough to try the product on a few charts; it was 30 until one
+ * person ran ten in a quarter of an hour (2026-11-24) and used it as a free analyser. After it, the page says the
+ * day's free readings are used and shows the packs. A shared connection (office, mobile network) shares the three.
+ */
+const PER_VISITOR_PER_DAY = 3;
 /** AI spend allowed on free readings per day, across all visitors (about a thousand readings): a safety net against scripted abuse. */
 const DAILY_BUDGET_EUR = 3;
 /** Worst case of one free reading: the image, a short prompt and at most 1 500 output tokens on the light model. */
