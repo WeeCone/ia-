@@ -5,14 +5,14 @@ import { useI18n } from "@/i18n/client";
 
 /** The hero's main action, shaped like a search bar: drop, paste or pick a chart screenshot, then "Analyser". */
 export function DropBar() {
-  const { dragging, busy, error, dropProps, pick, input } = useChartIntake({ listenPaste: true });
+  const { dragging, busy, error, dropProps, pick, input, takeExample, signedIn } = useChartIntake({ listenPaste: true });
   const { t } = useI18n();
 
   return (
     <div className="mx-auto w-full max-w-2xl">
       <div
         {...dropProps}
-        className={`relative isolate flex items-center gap-3 overflow-hidden rounded-full border bg-card/80 p-2 pl-5 shadow-[0_20px_50px_-20px_rgb(0_0_0/0.9)] backdrop-blur-xl transition-[border-color,box-shadow] duration-200 ${
+        className={`relative isolate flex flex-wrap items-center gap-x-3 gap-y-2 overflow-hidden rounded-[1.75rem] border bg-card/80 p-2 pl-5 sm:flex-nowrap sm:rounded-full shadow-[0_20px_50px_-20px_rgb(0_0_0/0.9)] backdrop-blur-xl transition-[border-color,box-shadow] duration-200 ${
           dragging ? "border-accent shadow-[0_0_0_4px_rgb(0_245_160/0.18)]" : "border-border hover:border-brand/60"
         }`}
       >
@@ -34,7 +34,7 @@ export function DropBar() {
           type="button"
           onClick={pick}
           disabled={busy}
-          className="min-w-0 flex-1 truncate py-2 text-left text-muted transition-colors hover:text-foreground"
+          className="min-w-0 flex-1 basis-[calc(100%-3rem)] truncate py-2 text-left text-muted transition-colors hover:text-foreground sm:basis-auto"
         >
           {busy ? (
             t.dropBar.preparing
@@ -47,11 +47,19 @@ export function DropBar() {
             </>
           )}
         </button>
-        <button type="button" onClick={pick} disabled={busy} className="btn-primary shrink-0 rounded-full px-6 py-3 text-base">
+        <button type="button" onClick={pick} disabled={busy} className="btn-primary w-full shrink-0 rounded-full px-6 py-3 text-base sm:w-auto">
           {t.dropBar.analyse}
         </button>
         <input {...input} />
       </div>
+      {/* A visitor with no chart at hand can still see what the reading looks like, on a made-up example. */}
+      {!signedIn && (
+        <p className="mt-4 text-center text-sm">
+          <button type="button" onClick={takeExample} disabled={busy} className="text-muted underline decoration-border underline-offset-4 transition-colors hover:text-foreground">
+            {t.dropBar.example}
+          </button>
+        </p>
+      )}
       {error && (
         <p role="alert" className="mt-3 text-center text-sm text-bear">
           {error} {t.dropBar.errorHint}

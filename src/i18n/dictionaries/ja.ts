@@ -78,7 +78,8 @@ export const ja: Dict = {
     preparing: "スクリーンショットを準備しています…",
     desktop: "スクリーンショットをドロップするか貼り付け",
     mobile: "チャートのスクリーンショットを選ぶ",
-    analyse: "分析する",
+    analyse: "無料で読み取る",
+    example: "サンプルチャートで試す",
     errorHint: "価格軸が見えるPNGまたはJPGのスクリーンショットでお試しください。",
   },
   demo: {

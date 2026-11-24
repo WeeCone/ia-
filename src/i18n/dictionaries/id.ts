@@ -78,7 +78,8 @@ export const id: Dict = {
     preparing: "Menyiapkan tangkapan layar…",
     desktop: "Letakkan tangkapan layar atau tempelkan di sini",
     mobile: "Pilih tangkapan layar grafik",
-    analyse: "Analisis",
+    analyse: "Baca gratis",
+    example: "Coba dengan grafik contoh",
     errorHint: "Coba tangkapan layar PNG atau JPG dengan sumbu harga yang terlihat.",
   },
   demo: {

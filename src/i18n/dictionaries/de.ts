@@ -78,7 +78,8 @@ export const de: Dict = {
     preparing: "Screenshot wird vorbereitet…",
     desktop: "Screenshot hierher ziehen oder einfügen",
     mobile: "Chart-Screenshot auswählen",
-    analyse: "Analysieren",
+    analyse: "Gratis-Auswertung",
+    example: "Mit einem Beispiel-Chart ausprobieren",
     errorHint: "Versuchen Sie einen PNG- oder JPG-Screenshot mit sichtbarer Preisachse.",
   },
   demo: {

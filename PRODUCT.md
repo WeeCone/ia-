@@ -88,3 +88,7 @@ WCAG 2.1 AA contrast and keyboard access on public pages; meaning never carried 
 - New anonymous counters, credited to the visit's source and campaign like sign-ups and purchases: `upload` (chart dropped, dialog opened), `reading` (free reading shown), `unlock` (click to unlock / see packs). They count steps, not people.
 - Shown in the admin "Visites" tab (sources and campaigns tables, new columns, "Visite → lecture" rate) and in the read-only /api/ops/visits (`funnel`, `funnelBySource`, `funnelByCampaign`).
 - Device: the browser now sends a touch/narrow-screen hint; a visit is "mobile" if either the user agent or the hint says so (an iPad in "desktop site" mode used to count as a computer).
+
+## Free reading made more visible on the landing (2026-11-25)
+- The hero's button now says "Lecture gratuite" (free reading) in all 10 languages instead of "Analyser"; the "free, no card, no sign-up" line sits under the bar, larger, with a check mark. On phones the bar is two rows (prompt, then a full-width button).
+- "Try it with an example chart" under the bar (signed-out visitors only): a made-up chart (src/assets/media/example-chart.png, titled EXEMPLE / USD, fictitious data) goes through the normal free reading, so it costs a reading and counts in the daily limit and in the stats like any capture.

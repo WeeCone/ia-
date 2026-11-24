@@ -93,7 +93,12 @@ export default async function Home() {
             <div id="analyser" style={{ "--d": "0.3s" } as React.CSSProperties} className="rise-in mt-10 scroll-mt-32">
               <DropBar />
               {/* No price on the landing: the packs appear once a chart is dropped and read. */}
-              <p className="mx-auto mt-4 max-w-xl text-sm text-muted [text-shadow:0_1px_12px_var(--background)]">{t.hero.freeLine}</p>
+              <p className="mx-auto mt-4 flex max-w-xl items-center justify-center gap-2 text-sm font-medium text-foreground sm:text-base [text-shadow:0_1px_12px_var(--background)]">
+                <svg viewBox="0 0 20 20" className="size-4 shrink-0 text-accent" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="m4 10.5 4 4 8-9" />
+                </svg>
+                {t.hero.freeLine}
+              </p>
             </div>
           </div>
           <div data-reveal="fade" className="mx-2 rounded-[2.5rem] border border-border/70 bg-card/40 py-8 backdrop-blur sm:mx-4">

@@ -143,7 +143,12 @@ export default async function GoldPage() {
             </p>
             <div id="analyser" style={{ "--d": "0.3s" } as React.CSSProperties} className="rise-in mt-10 scroll-mt-32">
               <DropBar />
-              <p className="mx-auto mt-4 max-w-xl text-sm text-muted">{t.hero.freeLine}</p>
+              <p className="mx-auto mt-4 flex max-w-xl items-center justify-center gap-2 text-sm font-medium text-foreground sm:text-base">
+                <svg viewBox="0 0 20 20" className="size-4 shrink-0 text-accent" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="m4 10.5 4 4 8-9" />
+                </svg>
+                {t.hero.freeLine}
+              </p>
             </div>
           </div>
         </section>

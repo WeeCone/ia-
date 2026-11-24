@@ -78,7 +78,8 @@ export const vi: Dict = {
     preparing: "Đang chuẩn bị ảnh chụp…",
     desktop: "Thả ảnh chụp vào hoặc dán vào đây",
     mobile: "Chọn ảnh chụp biểu đồ",
-    analyse: "Phân tích",
+    analyse: "Đọc miễn phí",
+    example: "Thử với biểu đồ mẫu",
     errorHint: "Hãy thử ảnh PNG hoặc JPG có hiển thị trục giá.",
   },
   demo: {

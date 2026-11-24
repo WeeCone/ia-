@@ -78,7 +78,8 @@ export const pt: Dict = {
     preparing: "Preparando o seu print…",
     desktop: "Arraste o seu print ou cole aqui",
     mobile: "Escolha um print de gráfico",
-    analyse: "Analisar",
+    analyse: "Leitura grátis",
+    example: "Experimentar com um gráfico de exemplo",
     errorHint: "Tente um print em PNG ou JPG com o eixo de preços visível.",
   },
   demo: {

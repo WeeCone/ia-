@@ -78,7 +78,8 @@ export const it: Dict = {
     preparing: "Preparazione dello screenshot…",
     desktop: "Trascini lo screenshot o lo incolli",
     mobile: "Scelga lo screenshot di un grafico",
-    analyse: "Analizza",
+    analyse: "Lettura gratuita",
+    example: "Provi con un grafico di esempio",
     errorHint: "Provi con uno screenshot PNG o JPG con l'asse dei prezzi visibile.",
   },
   demo: {

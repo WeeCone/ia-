@@ -78,7 +78,8 @@ export const ko: Dict = {
     preparing: "스크린샷을 준비하고 있습니다…",
     desktop: "스크린샷을 끌어다 놓거나 붙여 넣으세요",
     mobile: "차트 스크린샷 선택",
-    analyse: "분석하기",
+    analyse: "무료 분석",
+    example: "예시 차트로 해보기",
     errorHint: "가격 축이 보이는 PNG 또는 JPG 스크린샷으로 시도해 보세요.",
   },
   demo: {

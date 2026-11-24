@@ -78,7 +78,8 @@ export const en: Dict = {
     preparing: "Preparing your screenshot…",
     desktop: "Drop your screenshot or paste it",
     mobile: "Choose a chart screenshot",
-    analyse: "Analyse",
+    analyse: "Free reading",
+    example: "Try it with an example chart",
     errorHint: "Try a PNG or JPG screenshot with the price axis visible.",
   },
   demo: {

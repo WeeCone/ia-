@@ -77,7 +77,8 @@ export const fr = {
     preparing: "Préparation de votre capture…",
     desktop: "Glissez votre capture ou collez-la",
     mobile: "Choisissez une capture de graphique",
-    analyse: "Analyser",
+    analyse: "Lecture gratuite",
+    example: "Essayer avec un graphique d'exemple",
     errorHint: "Essayez une capture PNG ou JPG avec l'axe des prix visible.",
   },
   demo: {

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/components/auth-provider";
+import example from "@/assets/media/example-chart.png";
 import { prepareImage } from "@/lib/image";
 import { openChartReady } from "@/lib/offers-client";
 import { savePendingChart } from "@/lib/pending-chart";
@@ -36,6 +37,20 @@ export function useChartIntake({ listenPaste = false }: { listenPaste?: boolean 
     } catch (err) {
       setError(err instanceof Error ? err.message : t.intake.readError);
       setBusy(false);
+    }
+  }
+
+  /** For a visitor with no chart at hand: a made-up example chart goes through the same free reading as any capture. */
+  async function takeExample() {
+    if (busy) return;
+    setError(null);
+    try {
+      const response = await fetch(example.src);
+      if (!response.ok) throw new Error();
+      const blob = await response.blob();
+      await take(new File([blob], "exemple.png", { type: "image/png" }));
+    } catch {
+      setError(t.intake.readError);
     }
   }
 
@@ -81,5 +96,5 @@ export function useChartIntake({ listenPaste = false }: { listenPaste?: boolean 
     },
   };
 
-  return { dragging, busy, error, dropProps, pick, input };
+  return { dragging, busy, error, dropProps, pick, input, takeExample, signedIn: Boolean(user) };
 }

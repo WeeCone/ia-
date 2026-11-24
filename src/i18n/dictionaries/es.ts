@@ -78,7 +78,8 @@ export const es: Dict = {
     preparing: "Preparando tu captura…",
     desktop: "Arrastra tu captura o pégala",
     mobile: "Elige una captura de un gráfico",
-    analyse: "Analizar",
+    analyse: "Lectura gratis",
+    example: "Probar con un gráfico de ejemplo",
     errorHint: "Prueba con una captura PNG o JPG con el eje de precios visible.",
   },
   demo: {
