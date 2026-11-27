@@ -23,6 +23,11 @@ import { ARTICLES_ES } from "./blog-es";
 import { ARTICLES_ES_2 } from "./blog-es-2";
 import { ARTICLES_FR_2 } from "./blog-fr-2";
 import { ARTICLES_FR_3 } from "./blog-fr-3";
+import { ARTICLES_FR_4A } from "./blog-fr-4a";
+import { ARTICLES_FR_4B } from "./blog-fr-4b";
+import { ARTICLES_FR_4C } from "./blog-fr-4c";
+import { ARTICLES_FR_4D } from "./blog-fr-4d";
+import { ARTICLES_FR_4E } from "./blog-fr-4e";
 import { ARTICLES_FR_GOLD } from "./blog-fr-gold";
 import { ARTICLES_ID } from "./blog-id";
 import { ARTICLES_JA } from "./blog-ja";
@@ -509,6 +514,7 @@ const ARTICLES_FR: Omit<Article, "locale" | "key">[] = [
 
 export const ARTICLES: Article[] = [
   // Newest first: the blog index lists them in this order.
+  ...[...ARTICLES_FR_4A, ...ARTICLES_FR_4B, ...ARTICLES_FR_4C, ...ARTICLES_FR_4D, ...ARTICLES_FR_4E].map((article) => ({ ...article, key: article.slug, locale: "fr" as const })),
   ...ARTICLES_FR_3.map((article) => ({ ...article, key: article.slug, locale: "fr" as const })),
   ...ARTICLES_FR_GOLD.map((article) => ({ ...article, key: article.slug, locale: "fr" as const, topic: "gold" as const })),
   ...[...ARTICLES_FR_2, ...ARTICLES_FR].map((article) => ({ ...article, key: article.slug, locale: "fr" as const })),
