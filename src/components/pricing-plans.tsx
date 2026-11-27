@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useI18n } from "@/i18n/client";
-import { formatPrice } from "@/i18n/format";
-import { type Offer, type Plan } from "@/lib/plans";
+import { formatMoney, formatPrice } from "@/i18n/format";
+import { useBlackFriday } from "@/hooks/use-black-friday";
+import { blackFridayPrice } from "@/lib/promo";
+import { offerPrice, type Offer, type Plan } from "@/lib/plans";
 import { BillingButton } from "./billing-button";
 
 const OFFERS: Offer[] = ["starter", "monthly", "lifetime"];
@@ -33,6 +35,10 @@ export function PackCard({ offer, compact = false, current = false }: { offer: O
   const pro = offer === "monthly";
   const lifetime = offer === "lifetime";
 
+  // Black Friday: Starter's first month at a tenth of the price, the normal price said right beside it.
+  const promo = useBlackFriday(offer);
+  const first = promo ? offerPrice(locale, offer) : null;
+
   const [fullCapacity] = pack.features;
   // The card says one thing, how many analyses the pack holds ("1 analyse par jour", "Analyses illimitées", "30 analyses
   // complètes chaque mois"), first clause only. The detail of what each pack holds is shown in the payment window beside
@@ -51,10 +57,14 @@ export function PackCard({ offer, compact = false, current = false }: { offer: O
         </span>
       )}
       <h3 className="display text-base">{name}</h3>
+      {first && <p className="label mt-1 w-fit rounded-full bg-accent/15 px-2.5 py-1 text-accent">{p.blackFriday.badge}</p>}
       <p className="mt-1 flex flex-wrap items-baseline gap-x-1.5">
-        <span className={`display text-3xl tabular-nums ${lifetime ? "text-warn" : ""}`}>{formatPrice(locale, offer)}</span>
-        <span className="whitespace-nowrap text-xs text-muted">{lifetime ? p.oneOff : p.perMonth}</span>
+        <span className={`display text-3xl tabular-nums ${lifetime ? "text-warn" : ""}`}>
+          {first ? formatMoney(locale, blackFridayPrice(first.amount), first.currency) : formatPrice(locale, offer)}
+        </span>
+        <span className="whitespace-nowrap text-xs text-muted">{first ? p.blackFriday.firstMonth : lifetime ? p.oneOff : p.perMonth}</span>
       </p>
+      {first && <p className="mt-0.5 text-xs leading-snug text-muted">{p.blackFriday.then(formatPrice(locale, offer))}</p>}
       <p className="mt-3 flex items-start gap-2 rounded-lg bg-accent/10 px-3 py-2.5 text-[15px] font-bold leading-snug">
         <Check />
         {capacity}
@@ -81,6 +91,7 @@ export function PricingPlans({ compact = false, currentPlan = null }: { compact?
   const { t, locale } = useI18n();
   const offers = compact ? buyableOffers(currentPlan) : OFFERS;
   // Phones: one pack at a time behind a three-way switch, Pro shown first, instead of three tall cards in a column.
+  const starterPromo = useBlackFriday("starter");
   const [picked, setPicked] = useState<Offer>(offers.includes("monthly") ? "monthly" : (offers[0] ?? "monthly"));
   if (!offers.length) return null;
   const shown = offers.includes(picked) ? picked : offers[0];
@@ -102,8 +113,8 @@ export function PricingPlans({ compact = false, currentPlan = null }: { compact?
                 >
                   <span className="block text-sm font-semibold leading-tight">{t.common[offer]}</span>
                   <span className={`block text-xs ${active ? "opacity-80" : ""}`}>
-                    {formatPrice(locale, offer)}
-                    {offer === "lifetime" ? "" : t.pricing.perMonth}
+                    {offer === "starter" && starterPromo ? formatMoney(locale, blackFridayPrice(offerPrice(locale, offer).amount), offerPrice(locale, offer).currency) : formatPrice(locale, offer)}
+                    {offer === "lifetime" ? "" : offer === "starter" && starterPromo ? ` · ${t.pricing.blackFriday.firstMonth}` : t.pricing.perMonth}
                   </span>
                 </button>
               );

@@ -92,3 +92,8 @@ WCAG 2.1 AA contrast and keyboard access on public pages; meaning never carried 
 ## Free reading made more visible on the landing (2026-11-25)
 - The hero's button now says "Lecture gratuite" (free reading) in all 10 languages instead of "Analyser"; the "free, no card, no sign-up" line sits under the bar, larger, with a check mark. On phones the bar is two rows (prompt, then a full-width button).
 - "Try it with an example chart" under the bar (signed-out visitors only): a made-up chart (src/assets/media/example-chart.png, titled EXEMPLE / USD, fictitious data) goes through the normal free reading, so it costs a reading and counts in the daily limit and in the stats like any capture.
+
+## Black Friday 2026 (2026-11-27 to 2026-11-30)
+- Starter's first month at a tenth of the price (1 € on the euro grid; 150 yen, 1 490 won, 14 900 dong, 9 900 rupiah, 3,99 R$), then the normal price, cancel any time. Shown on the Starter card (badge "Black Friday · jusqu'au 30 nov.", the promo price, "puis 10 €/mois, sans engagement") in the packs and in the payment window, in the 10 languages. Not on the landing page (no price there).
+- Mechanism: a Stripe coupon `BLACKFRIDAY2026STARTER` (percent off, first invoice only, `redeem_by` = the end), created by the checkout route the first time it is needed (src/lib/promo.ts, promo-server.ts); the session metadata carries `promo: "bf2026"`. Ends Monday 30 Nov at midnight Paris (23:00 UTC): the screens go back to the normal price by themselves (the clock is read in the browser) and Stripe refuses the coupon.
+- To retire it early: remove the `blackFridayActive` uses (packs, payment window, checkout route) or delete the coupon in Stripe.

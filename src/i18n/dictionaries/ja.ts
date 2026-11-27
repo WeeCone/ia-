@@ -194,6 +194,7 @@ export const ja: Dict = {
     cta: (pack: string) => `${pack}を選ぶ`,
     current: "現在のパック",
     compactNote: "Stripeによる安全な決済 · 縛りなし",
+    blackFriday: { badge: "ブラックフライデー · 11月30日まで", firstMonth: "初月", then: (price: string) => `その後は月額${price}、いつでも解約可` },
     priceNote: (price: string) => ({ before: "", price: `${price}/月から`, after: " · 縛りなし" }),
     faqTitle: "お支払いの前に",
     faq: [

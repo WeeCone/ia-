@@ -193,6 +193,7 @@ export const fr = {
     cta: (pack: string) => `Choisir ${pack}`,
     current: "Votre pack actuel",
     compactNote: "Paiement sécurisé par Stripe · sans engagement",
+    blackFriday: { badge: "Black Friday · jusqu'au 30 nov.", firstMonth: "le 1er mois", then: (price: string) => `puis ${price}/mois, sans engagement` },
     priceNote: (price: string) => ({ before: "Dès ", price: `${price}/mois`, after: " · sans engagement" }),
     faqTitle: "Avant de payer",
     faq: [

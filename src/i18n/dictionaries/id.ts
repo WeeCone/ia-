@@ -194,6 +194,7 @@ export const id: Dict = {
     cta: (pack: string) => `Pilih ${pack}`,
     current: "Paket Anda saat ini",
     compactNote: "Pembayaran aman oleh Stripe · tanpa ikatan",
+    blackFriday: { badge: "Black Friday · sampai 30 Nov", firstMonth: "bulan pertama", then: (price: string) => `lalu ${price}/bulan, bebas berhenti kapan saja` },
     priceNote: (price: string) => ({ before: "Mulai ", price: `${price}/bulan`, after: " · tanpa ikatan" }),
     faqTitle: "Sebelum Anda membayar",
     faq: [

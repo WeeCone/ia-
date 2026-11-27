@@ -9,6 +9,8 @@ import { DICTIONARIES } from "@/i18n/dictionaries";
 import { requestLocale } from "@/i18n/server";
 import { statKey } from "@/lib/stats";
 import { PREVIEW_ID } from "@/lib/preview-link";
+import { blackFridayActive } from "@/lib/promo";
+import { blackFridayCoupon } from "@/lib/promo-server";
 
 const OFFERS: Offer[] = ["starter", "monthly", "lifetime"];
 
@@ -76,13 +78,17 @@ async function handler(request: Request) {
   const dashboard = `${base}${localePath(locale, "/dashboard")}`;
   // The webhook resolves the user from this metadata (subscription invoices, or the one-off checkout session).
   // src / cmp: the ad or site that brought the buyer, for the admin "Visites" tab (anonymous counters only).
-  const metadata = { uid, offer, src: statKey(source) ?? "direct", cmp: statKey(campaign) ?? "", ...(pv ? { pv } : {}) };
+  // Black Friday: the first month of Starter at 1 € for any account that can buy Starter (the screens show the same price
+  // to everyone who sees the pack, so what is shown is what is charged).
+  const promo = blackFridayActive(offer);
+  const coupon = promo ? await blackFridayCoupon() : undefined;
+  const metadata = { uid, offer, src: statKey(source) ?? "direct", cmp: statKey(campaign) ?? "", ...(pv ? { pv } : {}), ...(promo ? { promo: "bf2026" } : {}) };
   // Charged in the currency of the visitor's language (yen on /ja…). A customer Stripe already bills in another
   // currency (an earlier subscription in euros) is charged in euros instead: Stripe refuses mixing them.
   const checkoutCurrency = currency;
   const createSession = async (customer: string, currency: Currency = checkoutCurrency) =>
     stripe.checkout.sessions.create({
-      ...sessionParams(request, locale, offer, embedded, `${dashboard}?checkout=success&session_id={CHECKOUT_SESSION_ID}`, dashboard, await lineFor(offer, currency), metadata),
+      ...sessionParams(request, locale, offer, embedded, `${dashboard}?checkout=success&session_id={CHECKOUT_SESSION_ID}`, dashboard, await lineFor(offer, currency), metadata, coupon),
       customer,
       client_reference_id: uid,
     });
@@ -114,9 +120,11 @@ async function guestCheckout(request: Request, locale: Locale, offer: Offer, cur
   const base = appUrl(request);
   const welcome = `${base}${localePath(locale, "/welcome")}?session_id={CHECKOUT_SESSION_ID}`;
   // guest: lets the webhook and the welcome page know the account is still to be made (no uid yet).
-  const metadata = { guest: "1", offer, locale, src: statKey(source) ?? "direct", cmp: statKey(campaign) ?? "", ...(pv ? { pv } : {}) };
+  // Black Friday: any visitor buying Starter gets the first month at 1 € (an existing account is refused or refunded later by the guest-claim rules).
+  const coupon = blackFridayActive(offer) ? await blackFridayCoupon() : undefined;
+  const metadata = { guest: "1", offer, locale, src: statKey(source) ?? "direct", cmp: statKey(campaign) ?? "", ...(pv ? { pv } : {}), ...(coupon ? { promo: "bf2026" } : {}) };
   const session = await getStripe().checkout.sessions.create({
-    ...sessionParams(request, locale, offer, embedded, welcome, base + localePath(locale, "/"), await lineFor(offer, currency), metadata),
+    ...sessionParams(request, locale, offer, embedded, welcome, base + localePath(locale, "/"), await lineFor(offer, currency), metadata, coupon),
     // A one-off payment makes no customer by default: one is needed for the receipt and the account.
     ...(offer === "lifetime" ? { customer_creation: "always" as const } : {}),
   });
@@ -133,6 +141,7 @@ function sessionParams(
   cancelUrl: string,
   line: Awaited<ReturnType<typeof lineFor>>,
   metadata: Record<string, string>,
+  coupon?: string,
 ) {
   const text = DICTIONARIES[locale].api;
   const base = appUrl(request);
@@ -141,6 +150,8 @@ function sessionParams(
     line_items: [line],
     locale,
     metadata,
+    // Black Friday: the coupon takes the first invoice down; the next ones are at the normal price.
+    ...(coupon ? { discounts: [{ coupon }] } : {}),
     ...(subscription
       ? { mode: "subscription" as const, subscription_data: { metadata } }
       : { mode: "payment" as const, payment_intent_data: { metadata } }),

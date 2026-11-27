@@ -194,6 +194,7 @@ export const es: Dict = {
     cta: (pack: string) => `Elegir ${pack}`,
     current: "Tu pack actual",
     compactNote: "Pago seguro con Stripe · sin permanencia",
+    blackFriday: { badge: "Black Friday · hasta el 30 nov.", firstMonth: "el primer mes", then: (price: string) => `luego ${price}/mes, sin permanencia` },
     priceNote: (price: string) => ({ before: "Desde ", price: `${price}/mes`, after: " · sin permanencia" }),
     faqTitle: "Antes de pagar",
     faq: [

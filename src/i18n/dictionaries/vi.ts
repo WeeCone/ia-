@@ -194,6 +194,7 @@ export const vi: Dict = {
     cta: (pack: string) => `Chọn ${pack}`,
     current: "Gói hiện tại",
     compactNote: "Thanh toán an toàn qua Stripe · không ràng buộc",
+    blackFriday: { badge: "Black Friday · đến 30/11", firstMonth: "tháng đầu", then: (price: string) => `sau đó ${price}/tháng, hủy bất cứ lúc nào` },
     priceNote: (price: string) => ({ before: "Từ ", price: `${price}/tháng`, after: " · không ràng buộc" }),
     faqTitle: "Trước khi thanh toán",
     faq: [

@@ -9,7 +9,9 @@ import { pendingChartUrl } from "@/lib/pending-chart";
 import { useI18n } from "@/i18n/client";
 import { INTL_LOCALE } from "@/i18n/config";
 import { formatMoney, formatPrice } from "@/i18n/format";
-import type { Currency, Offer } from "@/lib/plans";
+import { useBlackFriday } from "@/hooks/use-black-friday";
+import { blackFridayPrice } from "@/lib/promo";
+import { offerPrice, type Currency, type Offer } from "@/lib/plans";
 import { useAuth } from "./auth-provider";
 import { LogoMark } from "./logo";
 
@@ -34,6 +36,7 @@ export function CheckoutDialog() {
   const { t, locale } = useI18n();
   const { user } = useAuth();
   const c = t.checkout;
+  const promoOn = useBlackFriday(offer);
   // Starter to Pro: a one-click switch on the card on file, when the server can do it; otherwise Stripe's form.
   const [upgrade, setUpgrade] = useState<
     | { stage: "checking" | "paying" | "done" }
@@ -122,7 +125,10 @@ export function CheckoutDialog() {
   if (!EMBEDDED_CHECKOUT) return null;
   const close = () => ref.current?.close();
 
-  const price = offer ? formatPrice(locale, offer) : "";
+  const normal = offer ? formatPrice(locale, offer) : "";
+  // Black Friday: Starter's first month at a tenth of the price, said with the normal price that follows.
+  const promoAmount = offer && promoOn ? offerPrice(locale, offer) : null;
+  const price = promoAmount ? formatMoney(locale, blackFridayPrice(promoAmount.amount), promoAmount.currency) : normal;
   const name = offer ? t.common[offer] : "";
 
   return (
@@ -158,8 +164,9 @@ export function CheckoutDialog() {
                 <p className="display text-lg md:mt-2 md:text-2xl">{name}</p>
                 <p className="flex flex-wrap items-baseline gap-x-2 md:mt-3">
                   <span className="display text-2xl md:text-5xl">{price}</span>
-                  <span className="text-sm text-muted">{offer === "lifetime" ? c.oneOffPeriod : c.monthlyPeriod}</span>
+                  <span className="text-sm text-muted">{promoAmount ? t.pricing.blackFriday.firstMonth : offer === "lifetime" ? c.oneOffPeriod : c.monthlyPeriod}</span>
                 </p>
+                {promoAmount && <p className="mt-1 text-xs leading-snug text-muted md:text-sm">{t.pricing.blackFriday.badge} · {t.pricing.blackFriday.then(normal)}</p>}
                 </div>
                 {/* Signed out: no sign-up step, the email typed beside it becomes the account. */}
                 {!user && <p className="mt-2 text-xs leading-snug text-muted md:mt-4 md:text-sm md:leading-relaxed">{c.guestHint}</p>}

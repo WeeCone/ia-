@@ -194,6 +194,7 @@ export const ko: Dict = {
     cta: (pack: string) => `${pack} 선택`,
     current: "현재 팩",
     compactNote: "Stripe 안전 결제 · 약정 없음",
+    blackFriday: { badge: "블랙프라이데이 · 11월 30일까지", firstMonth: "첫 달", then: (price: string) => `이후 월 ${price}, 언제든 해지 가능` },
     priceNote: (price: string) => ({ before: "", price: `월 ${price}부터`, after: " · 약정 없음" }),
     faqTitle: "결제 전에",
     faq: [
